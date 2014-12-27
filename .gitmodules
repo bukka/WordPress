@@ -4,3 +4,6 @@
 [submodule "wp-content/plugins/footnotes"]
 	path = wp-content/plugins/footnotes
 	url = git@github.com:wp-plugins/footnotes.git
+[submodule "wp-content/plugins/redux-framework"]
+	path = wp-content/plugins/redux-framework
+	url = git@github.com:ReduxFramework/redux-framework.git
