@@ -1,3 +1,6 @@
 [submodule "wp-content/plugins/polylang"]
 	path = wp-content/plugins/polylang
 	url = git@github.com:wp-plugins/polylang.git
+[submodule "wp-content/plugins/footnotes"]
+	path = wp-content/plugins/footnotes
+	url = git@github.com:wp-plugins/footnotes.git
