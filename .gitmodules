@@ -7,3 +7,6 @@
 [submodule "wp-content/plugins/redux-framework"]
 	path = wp-content/plugins/redux-framework
 	url = git@github.com:ReduxFramework/redux-framework.git
+[submodule "wp-content/plugins/wordpress-importer"]
+	path = wp-content/plugins/wordpress-importer
+	url = git@github.com:wp-plugins/wordpress-importer.git
