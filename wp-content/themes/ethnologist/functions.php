@@ -1,44 +1,10 @@
 <?php
 
+require_once 'inc/class-ethnologist-nav-menus.php';
+
 function ethnologist_navmenu_register() {
-	register_nav_menus( array(
-	'ethnologist-top' => __( 'Top Navigation' ),
-	)
-	);
-
-	// Check if Top menu exists and make it if not
-	if ( ! is_nav_menu( 'ethnologist-top'  )) {
-		$menu_id = wp_create_nav_menu( 'ethnologist-top' );
-	} else {
-		$menu = wp_get_nav_menu_object( 'ethnologist-top' );
-		$menu_id = (int) $menu->term_id;
-		//$menu_item_id =
-	}
-	/*
-	 var_dump(wp_get_nav_menu_items( $menu_id) );
-	// home
-
-	var_dump(wp_update_nav_menu_item( $menu_id, 0, array(
-		'menu-item-title' => __( 'Home', 'ethnologist' ),
-		'menu-item-type' => 'custom',
-		'menu-item-url' => home_url('/'),
-		'menu-item-classes' => 'ethnologist-nav-home',
-		'menu-item-status' => 'publish',
-	) ) );
-
-	wp_update_nav_menu_item( $menu_id, 0, array(
-		'menu-item-title' => __( 'Gallery', 'ethnologist' ),
-		'menu-item-type' => 'custom',
-		'menu-item-url' => home_url('/gallery'),
-		'menu-item-status' => 'publish',
-	) );
-	wp_update_nav_menu_item( $menu_id, 0, array(
-		'menu-item-title' => __( 'Contact Us', 'ethnologist' ),
-		'menu-item-type' => 'custom',
-		'menu-item-url' => home_url('/contact'),
-		'menu-item-status' => 'publish',
-
-	) );*/
+	$nav_menus = new Ethnologis_NavMenus();
+	$nav_menus->register()->update();
 }
 add_action( 'after_setup_theme', 'ethnologist_navmenu_register' );
 
