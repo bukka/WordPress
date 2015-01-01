@@ -57,7 +57,7 @@ class Ethnologis_NavMenus
 		// Check if Top menu exists and make it if not
 		if ( ! is_nav_menu( self::TOP_MENU_NAME  ) ) {
 			$menu_id = wp_create_nav_menu( self::TOP_MENU_NAME );
-			if ( $menu_id instanceof WP_Error ) {
+			if ( is_wp_error( $menu_id ) ) {
 				return $menu_id;
 			}
 			$menu_items = array();
@@ -75,19 +75,45 @@ class Ethnologis_NavMenus
 			'menu-item-url' => home_url('/'),
 			'menu-item-classes' => 'ethnologist-nav-home',
 			'menu-item-status' => 'publish',
+			'menu-item-position' => 1,
 		) );
-
+		$this->update_item( $menu_id, $menu_items, array(
+			'menu-item-title' => __( 'Sections', 'ethnologist' ),
+			'menu-item-type' => 'custom',
+			'menu-item-url' => home_url('/sections'),
+			'menu-item-classes' => 'ethnologist-nav-sections',
+			'menu-item-status' => 'publish',
+			'menu-item-position' => 2,
+		) );
+		$this->update_item( $menu_id, $menu_items, array(
+			'menu-item-title' => __( 'Interviews', 'ethnologist' ),
+			'menu-item-type' => 'custom',
+			'menu-item-url' => home_url('/interviews'),
+			'menu-item-classes' => 'ethnologist-nav-interviews',
+			'menu-item-status' => 'publish',
+			'menu-item-position' => 3,
+		) );
 		$this->update_item( $menu_id, $menu_items, array(
 			'menu-item-title' => __( 'Gallery', 'ethnologist' ),
 			'menu-item-type' => 'custom',
 			'menu-item-url' => home_url('/gallery'),
 			'menu-item-status' => 'publish',
+			'menu-item-position' => 4,
+		) );
+		$this->update_item( $menu_id, $menu_items, array(
+			'menu-item-title' => __( 'Blog', 'ethnologist' ),
+			'menu-item-type' => 'custom',
+			'menu-item-url' => home_url('/blog'),
+			'menu-item-classes' => 'ethnologist-nav-blog',
+			'menu-item-status' => 'publish',
+			'menu-item-position' => 5,
 		) );
 		$this->update_item( $menu_id, $menu_items, array(
 			'menu-item-title' => __( 'Contact Us', 'ethnologist' ),
 			'menu-item-type' => 'custom',
 			'menu-item-url' => home_url('/contact'),
 			'menu-item-status' => 'publish',
+			'menu-item-position' => 6,
 
 		) );
 	}
