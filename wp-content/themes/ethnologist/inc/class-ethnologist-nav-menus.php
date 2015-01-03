@@ -37,6 +37,7 @@ class Ethnologis_NavMenus
 	 * @param int $menu_id
 	 * @param array $menu_items
 	 * @param array $menu_item_data
+	 * @return int|WP_Error The menu item's database ID or WP_Error object on failure.
 	 */
 	protected function update_item( $menu_id, $menu_items, $menu_item_data ) {
 		if ( ! empty( $menu_items ) && isset( $menu_items[ $menu_item_data['menu-item-title'] ] ) )
@@ -44,7 +45,7 @@ class Ethnologis_NavMenus
 		else
 			$menu_item_db_id = 0;
 
-		wp_update_nav_menu_item( $menu_id, $menu_item_db_id, $menu_item_data );
+		return wp_update_nav_menu_item( $menu_id, $menu_item_db_id, $menu_item_data );
 	}
 
 	/**
@@ -77,7 +78,7 @@ class Ethnologis_NavMenus
 			'menu-item-status' => 'publish',
 			'menu-item-position' => 1,
 		) );
-		$this->update_item( $menu_id, $menu_items, array(
+		$section_menu_db_id = $this->update_item( $menu_id, $menu_items, array(
 			'menu-item-title' => __( 'Sections', 'ethnologist' ),
 			'menu-item-type' => 'custom',
 			'menu-item-url' => home_url('/sections'),
@@ -85,6 +86,23 @@ class Ethnologis_NavMenus
 			'menu-item-status' => 'publish',
 			'menu-item-position' => 2,
 		) );
+		if ( !  is_wp_error( $section_menu_db_id ) ) {
+			$section_posts = get_posts(array(
+				'post_type' => 'section'
+			));
+			$section_pos = 0;
+			foreach ( $section_posts as $section_post ) {
+				$this->update_item( $menu_id, $menu_items, array(
+					'menu-item-title' => $section_post->post_title,
+					'menu-item-type' => 'custom',
+					'menu-item-url' => get_permalink( $sction_post->ID ),
+					'menu-item-classes' => 'ethnologist-nav-section-item',
+					'menu-item-status' => 'publish',
+					'menu-item-position' => ++$section_pos,
+					'menu-item-parent-id' => $section_menu_db_id,
+				) );
+			}
+		}
 		$this->update_item( $menu_id, $menu_items, array(
 			'menu-item-title' => __( 'Interviews', 'ethnologist' ),
 			'menu-item-type' => 'custom',
