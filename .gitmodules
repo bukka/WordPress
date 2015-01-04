@@ -10,3 +10,6 @@
 [submodule "wp-content/plugins/wordpress-importer"]
 	path = wp-content/plugins/wordpress-importer
 	url = git@github.com:wp-plugins/wordpress-importer.git
+[submodule "wp-content/plugins/wordpress-mu-domain-mapping"]
+	path = wp-content/plugins/wordpress-mu-domain-mapping
+	url = git@github.com:wp-plugins/wordpress-mu-domain-mapping.git
