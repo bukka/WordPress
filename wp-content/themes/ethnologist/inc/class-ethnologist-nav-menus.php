@@ -88,7 +88,8 @@ class Ethnologis_NavMenus
 		) );
 		if ( !  is_wp_error( $section_menu_db_id ) ) {
 			$section_posts = get_posts(array(
-				'post_type' => 'section'
+				'post_type' => 'section',
+				'numberposts' => -1,
 			));
 			$section_pos = 0;
 			foreach ( $section_posts as $section_post ) {
