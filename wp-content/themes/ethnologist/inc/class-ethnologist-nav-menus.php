@@ -96,7 +96,7 @@ class Ethnologis_NavMenus
 				$this->update_item( $menu_id, $menu_items, array(
 					'menu-item-title' => $section_post->post_title,
 					'menu-item-type' => 'custom',
-					'menu-item-url' => get_permalink( $sction_post->ID ),
+					'menu-item-url' => get_permalink( $section_post->ID ),
 					'menu-item-classes' => 'ethnologist-nav-section-item',
 					'menu-item-status' => 'publish',
 					'menu-item-position' => ++$section_pos,
