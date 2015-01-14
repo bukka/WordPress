@@ -3,6 +3,9 @@
 require_once 'inc/class-ethnologist-nav-menus.php';
 
 function ethnologist_navmenu_register() {
+	global $pinnacle;
+	$pinnacle['single_post_header_title'] = 'posttitle';
+
 	$nav_menus = new Ethnologis_NavMenus();
 	$nav_menus->register()->update();
 }
