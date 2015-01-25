@@ -3,13 +3,21 @@
 require_once 'inc/class-ethnologist-nav-menus.php';
 
 function ethnologist_navmenu_register() {
-	global $pinnacle;
-	$pinnacle['single_post_header_title'] = 'posttitle';
-
 	$nav_menus = new Ethnologis_NavMenus();
 	$nav_menus->register()->update();
 }
-add_action( 'after_setup_theme', 'ethnologist_navmenu_register' );
+
+function ethnologist_after_setup_theme() {
+	global $pinnacle;
+	// setup pinnacle
+	$pinnacle['single_post_header_title'] = 'posttitle';
+	$pinnacle['home_pagetitle_background'] = array();
+
+	// register nav menus
+	ethnologist_navmenu_register();
+}
+
+add_action( 'after_setup_theme', 'ethnologist_after_setup_theme' );
 
 function ethnologist_register_sections() {
 	// labels for section post type
