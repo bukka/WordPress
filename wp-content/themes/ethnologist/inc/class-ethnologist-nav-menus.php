@@ -32,7 +32,7 @@ class Ethnologis_NavMenus
 	}
 
 	/**
-	 * Update item
+	 * Update menu item
 	 *
 	 * @param int $menu_id
 	 * @param array $menu_items
@@ -86,7 +86,7 @@ class Ethnologis_NavMenus
 			'menu-item-status' => 'publish',
 			'menu-item-position' => 2,
 		) );
-		if ( !  is_wp_error( $section_menu_db_id ) ) {
+		if ( ! is_wp_error( $section_menu_db_id ) ) {
 			$section_posts = get_posts(array(
 				'post_type' => 'section',
 				'numberposts' => -1,
@@ -133,6 +133,14 @@ class Ethnologis_NavMenus
 			'menu-item-url' => home_url('/contact'),
 			'menu-item-status' => 'publish',
 			'menu-item-position' => 6,
+
+		) );
+		$this->update_item( $menu_id, $menu_items, array(
+			'menu-item-title' => __( 'Language', 'ethnologist' ),
+			'menu-item-type' => 'custom',
+			'menu-item-url' => '#',
+			'menu-item-status' => 'publish',
+			'menu-item-position' => 7,
 
 		) );
 	}
