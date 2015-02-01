@@ -1,0 +1,11 @@
+TODO list
+
+Nav menu class
+- Register menus and save them in property (for re-using in add_menu)
+- Create add_menu function
+  - simple key (no 'menu-item-' prefix)
+  - auto counter for postion based on menu_id
+  - default status to publish
+  - title accept lang array
+  - support for multiple menus (based on title translation)
+  - automatically create page for page template if not exist
