@@ -7,10 +7,118 @@ class Ethnologis_NavMenus
 {
 	const TOP_MENU_NAME = 'ethnologist-top';
 
+	/**
+	 * Supported languages
+	 *
+	 * @var array
+	 */
+	protected $languages = array('en', 'cs');
+
+	/**
+	 * Navigation menus
+	 *
+	 * @var array
+	 */
+	protected $menus = array(
+		'home' => array(
+			'title' => array(
+				'en' => 'Home',
+				'cs' => 'Úvod',
+			),
+			'slug' => array(
+				'en' => 'en',
+				'cs' => 'cs',
+			),
+		),
+		'sections' => array(
+			'title' => array(
+				'en' => 'Sections',
+				'cs' => 'Sekce',
+			),
+			'slug' => array(
+				'en' => 'sections',
+				'cs' => 'sekce',
+			),
+			'submenu' => array(
+				'post_type' => 'section',
+			),
+		),
+		'interviews' => array(
+			'title' => array(
+				'en' => 'Interviews',
+				'cs' => 'Rozhovory',
+			),
+			'slug' => array(
+				'en' => 'interviews',
+				'cs' => 'rozhovory',
+			),
+		),
+		'gallery' => array(
+			'title' => array(
+				'en' => 'Gallery',
+				'cs' => 'Galerie',
+			),
+			'slug' => array(
+				'en' => 'gallery',
+				'cs' => 'galerie',
+			),
+		),
+		'blog' => array(
+			'title' => array(
+				'en' => 'Blog',
+				'cs' => 'Blog',
+			),
+			'slug' => array(
+				'en' => 'blog',
+				'cs' => 'blog-cs',
+			),
+		),
+		'contact' => array(
+			'title' => array(
+				'en' => 'Contact Us',
+				'cs' => 'Kontakt',
+			),
+			'slug' => array(
+				'en' => 'contact',
+				'cs' => 'kontakt',
+			),
+		),
+		'language' => array(
+			'type'  => 'lang',
+			'title' => array(
+				'en' => 'Language',
+				'cs' => 'Jazyk',
+			)
+		),
+
+	);
+
+	/**
+	 * Get top menu name
+	 *
+	 * @param string $lang
+	 * @return string
+	 */
+	protected function get_top_menu_name($lang) {
+		return self::TOP_MENU_NAME . '-' . $lang;
+	}
+
+	/**
+	 * Register nav menus
+	 *
+	 * @return Ethnologis_NavMenus
+	 */
 	public function register() {
-		register_nav_menus( array(
-			self::TOP_MENU_NAME => __( 'Top Navigation', 'ethnologist' ),
-		) );
+
+		$menu_desc_prefix = __( 'Top Navigation', 'ethnologist' );
+
+		$nav_menus = array();
+		foreach ( $this->languages as $lang ) {
+			$nav_menus[ $this->get_top_menu_name( $lang ) ] = $menu_desc_prefix . ' ' . strtoupper( $lang );
+		}
+
+		// register menus
+		register_nav_menus( $nav_menus );
 
 		return $this;
 	}
@@ -49,15 +157,19 @@ class Ethnologis_NavMenus
 	}
 
 	/**
-	 * Update menu items
+	 * Update nav menu for language
 	 *
-	 * @param string $create_only If true only create an item (do not update existing items)
+	 * @param string $lang
+	 * @param boolean $create_only If true only create an item (do not update existing items)
 	 * @return boolean|WP_Error
 	 */
-	public function update( $create_only = false ) {
+	public function update_nav_menu( $lang, $create_only ) {
+		// Get menu name
+		$menu_name = $this->get_top_menu_name( $lang );
+
 		// Check if Top menu exists and make it if not
-		if ( ! is_nav_menu( self::TOP_MENU_NAME  ) ) {
-			$menu_id = wp_create_nav_menu( self::TOP_MENU_NAME );
+		if ( ! is_nav_menu( $menu_name  ) ) {
+			$menu_id = wp_create_nav_menu( $menu_name );
 			if ( is_wp_error( $menu_id ) ) {
 				return $menu_id;
 			}
@@ -65,83 +177,57 @@ class Ethnologis_NavMenus
 		} elseif ( $create_only ) {
 			return true;
 		} else {
-			$menu = wp_get_nav_menu_object( self::TOP_MENU_NAME );
+			$menu = wp_get_nav_menu_object( $menu_name );
 			$menu_id =  (int) $menu->term_id;
 			$menu_items = $this->get_menu_items( $menu_id );
 		}
 
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Home', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/'),
-			'menu-item-classes' => 'ethnologist-nav-home',
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 1,
-		) );
-		$section_menu_db_id = $this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Sections', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/sections'),
-			'menu-item-classes' => 'ethnologist-nav-sections',
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 2,
-		) );
-		if ( ! is_wp_error( $section_menu_db_id ) ) {
-			$section_posts = get_posts(array(
-				'post_type' => 'section',
-				'numberposts' => -1,
-			));
-			$section_pos = 0;
-			foreach ( $section_posts as $section_post ) {
-				$this->update_item( $menu_id, $menu_items, array(
-					'menu-item-title' => $section_post->post_title,
-					'menu-item-type' => 'custom',
-					'menu-item-url' => get_permalink( $section_post->ID ),
-					'menu-item-classes' => 'ethnologist-nav-section-item',
-					'menu-item-status' => 'publish',
-					'menu-item-position' => ++$section_pos,
-					'menu-item-parent-id' => $section_menu_db_id,
-				) );
+		$pos = 1;
+		foreach ( $this->menus as $slug => $menu ) {
+			$type = isset( $menu['type'] ) ? $menu['type'] : 'link';
+			$url = ( $type === 'link' ) ? home_url( $menu['slug'][$lang] . '/' ) : '#';
+
+			$menu_db_id = $this->update_item( $menu_id, $menu_items, array(
+				'menu-item-title'    => $menu['title'][$lang],
+				'menu-item-type'     => 'custom',
+				'menu-item-url'      => $url,
+				'menu-item-status'   => 'publish',
+				'menu-item-position' => $pos,
+			) );
+
+			if ( isset( $menu['submenu'] ) ) {
+				$submenu_posts = get_posts(array(
+					'post_type'   => $menu['submenu']['post_type'],
+					'numberposts' => -1,
+				));
+				$submenu_pos = 0;
+				foreach ( $submenu_posts as $submenu_post ) {
+					$this->update_item( $menu_id, $menu_items, array(
+						'menu-item-title' => $submenu_post->post_title,
+						'menu-item-type' => 'custom',
+						'menu-item-url' => get_permalink( $submenu_post->ID ),
+						'menu-item-classes' => 'ethnologist-nav-section-item',
+						'menu-item-status' => 'publish',
+						'menu-item-position' => ++$submenu_pos,
+						'menu-item-parent-id' => $menu_db_id,
+					) );
+				}
 			}
+
+			++$pos;
 		}
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Interviews', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/interviews'),
-			'menu-item-classes' => 'ethnologist-nav-interviews',
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 3,
-		) );
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Gallery', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/gallery'),
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 4,
-		) );
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Blog', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/blog'),
-			'menu-item-classes' => 'ethnologist-nav-blog',
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 5,
-		) );
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Contact Us', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => home_url('/contact'),
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 6,
+	}
 
-		) );
-		$this->update_item( $menu_id, $menu_items, array(
-			'menu-item-title' => __( 'Language', 'ethnologist' ),
-			'menu-item-type' => 'custom',
-			'menu-item-url' => '#',
-			'menu-item-status' => 'publish',
-			'menu-item-position' => 7,
+	/**
+	 * Update menu items
+	 *
+	 * @param boolean $create_only If true only create an item (do not update existing items)
+	 * @return boolean|WP_Error
+	 */
+	public function update( $create_only = false ) {
 
-		) );
+		foreach ( $this->languages as $lang ) {
+			$this->update_nav_menu( $lang, $create_only );
+		}
 	}
 }
