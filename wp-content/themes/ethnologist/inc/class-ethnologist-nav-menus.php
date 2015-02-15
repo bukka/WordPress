@@ -157,6 +157,27 @@ class Ethnologis_NavMenus
 	}
 
 	/**
+	 * Return posts for post_type and lang
+	 *
+	 * @param string $post_type
+	 * @param string $lang
+	 * @return array
+	 */
+	protected function get_posts( $post_type, $lang ) {
+		$query = new WP_Query();
+		$query->query(array(
+			'numberposts' => -1,
+			'post_type'  => $post_type,
+			'lang'       => $lang,
+		));
+		$posts = array();
+		while ( $query->have_posts() ) {
+			$posts[] = $query->next_post();
+		}
+		return $posts;
+	}
+
+	/**
 	 * Update nav menu for language
 	 *
 	 * @param string $lang
@@ -196,10 +217,7 @@ class Ethnologis_NavMenus
 			) );
 
 			if ( isset( $menu['submenu'] ) ) {
-				$submenu_posts = get_posts(array(
-					'post_type'   => $menu['submenu']['post_type'],
-					'numberposts' => -1,
-				));
+				$submenu_posts = $this->get_posts( $menu['submenu']['post_type'], $lang );
 				$submenu_pos = 0;
 				foreach ( $submenu_posts as $submenu_post ) {
 					$this->update_item( $menu_id, $menu_items, array(
