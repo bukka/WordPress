@@ -53,16 +53,6 @@ class Ethnologis_NavMenus
 				'cs' => 'rozhovory',
 			),
 		),
-		'gallery' => array(
-			'title' => array(
-				'en' => 'Gallery',
-				'cs' => 'Galerie',
-			),
-			'slug' => array(
-				'en' => 'gallery',
-				'cs' => 'galerie',
-			),
-		),
 		'blog' => array(
 			'title' => array(
 				'en' => 'Blog',
@@ -71,6 +61,16 @@ class Ethnologis_NavMenus
 			'slug' => array(
 				'en' => 'blog',
 				'cs' => 'blog-cs',
+			),
+		),
+		'gallery' => array(
+			'title' => array(
+				'en' => 'Gallery',
+				'cs' => 'Galerie',
+			),
+			'slug' => array(
+				'en' => 'gallery',
+				'cs' => 'galerie',
 			),
 		),
 		'contact' => array(
