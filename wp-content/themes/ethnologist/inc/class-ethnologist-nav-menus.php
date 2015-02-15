@@ -148,12 +148,27 @@ class Ethnologis_NavMenus
 	 * @return int|WP_Error The menu item's database ID or WP_Error object on failure.
 	 */
 	protected function update_item( $menu_id, $menu_items, $menu_item_data ) {
-		if ( ! empty( $menu_items ) && isset( $menu_items[ $menu_item_data['menu-item-title'] ] ) )
+		if ( ! empty( $menu_items ) && isset( $menu_items[ $menu_item_data['menu-item-title'] ] ) ) {
 			$menu_item_db_id = $menu_items[ $menu_item_data['menu-item-title'] ]->ID;
-		else
+			$menu_items[ $menu_item_data['menu-item-title'] ]->_used_in_menu = true;
+		} else {
 			$menu_item_db_id = 0;
+		}
 
 		return wp_update_nav_menu_item( $menu_id, $menu_item_db_id, $menu_item_data );
+	}
+
+	/**
+	 * Clean up unused menu items
+	 *
+	 * @param array $menu_items
+	 */
+	protected function clean_up_items( $menu_items ) {
+		foreach ( $menu_items as $menu_item ) {
+			if ( ! isset($menu_item->_used_in_menu ) && $menu_item->url !== '#pll_switcher' ) {
+				wp_delete_post( $menu_item->ID );
+			}
+		}
 	}
 
 	/**
@@ -234,6 +249,8 @@ class Ethnologis_NavMenus
 
 			++$pos;
 		}
+
+		$this->clean_up_items( $menu_items );
 	}
 
 	/**
