@@ -1,11 +1,17 @@
 TODO list
 
+Front-End
+- Sticky footer
+- Change text in footer
+
+Template
+- clean up template-section
+- create template-interviews
+- create gallery page
+- create contact/about us page
+- transate widgets for home page (titles)
+  - e.g. Latest from the Blog
+- translate welcome text in home page
+
 Nav menu class
-- Register menus and save them in property (for re-using in add_menu)
-- Create add_menu function
-  - simple key (no 'menu-item-' prefix)
-  - auto counter for postion based on menu_id
-  - default status to publish
-  - title accept lang array
-  - support for multiple menus (based on title translation)
-  - automatically create page for page template if not exist
+- Create pll_switcher in the script
