@@ -37,7 +37,7 @@ get_template_part('templates/content', 'page');
 
 global $post;
 $blog_category = get_post_meta( $post->ID, '_kad_blog_cat', true );
-$blog_cat= get_term_by ('id',$blog_category,'category');
+$blog_cat = get_term_by( 'id',$blog_category, 'category' );
 if ( $blog_category == '-1' || $blog_category == '' ) {
 	$blog_cat_slug = '';
 } else {
@@ -58,7 +58,7 @@ $wp_query->query(array(
 	'post_type'      => 'section',
 ));
 $count =0;
-if ( $wp_query ):
+if ( $wp_query->have_posts() ) {
 	while ( $wp_query->have_posts() ) {
 		$wp_query->the_post();
 		if ( $summery == 'full' ) {
@@ -75,13 +75,13 @@ if ( $wp_query ):
 			}
 		}
 	}
-else: ?>
+} else { ?>
 			<li class="error-not-found"><?php _e( 'Sorry, no sections found.', 'ethnologist' ); ?></li>
 <?php
-endif;
+}
 
-if ($wp_query->max_num_pages > 1) :
-	if ( function_exists ('kad_wp_pagenavi' ) ) {
+if ( $wp_query->max_num_pages > 1 ) {
+	if ( function_exists ( 'kad_wp_pagenavi' ) ) {
 		kad_wp_pagenavi();
 	} else { ?>
 			<nav class="post-nav">
@@ -92,7 +92,7 @@ if ($wp_query->max_num_pages > 1) :
 			</nav>
 <?php
 	}
-endif;
+}
 $wp_query = null;
 $wp_query = $temp;  // Reset
 wp_reset_query();
