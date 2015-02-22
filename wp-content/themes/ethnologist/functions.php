@@ -3,7 +3,7 @@
 require_once 'inc/class-ethnologist-nav-menus.php';
 
 function ethnologist_navmenu_register() {
-	$nav_menus = new Ethnologis_NavMenus();
+	$nav_menus = new Ethnologist_NavMenus();
 	$nav_menus->register()->update();
 }
 

@@ -3,7 +3,7 @@
 /**
  * Ethnologist Nav Menus
  */
-class Ethnologis_NavMenus
+class Ethnologist_NavMenus
 {
 	const TOP_MENU_NAME = 'ethnologist-top';
 
@@ -106,7 +106,7 @@ class Ethnologis_NavMenus
 	/**
 	 * Register nav menus
 	 *
-	 * @return Ethnologis_NavMenus
+	 * @return Ethnologist_NavMenus
 	 */
 	public function register() {
 
