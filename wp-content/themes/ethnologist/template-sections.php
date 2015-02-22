@@ -29,15 +29,13 @@ if( get_post_meta( $post->ID, '_kad_blog_summery', true ) == 'full' ) {
 	$postclass = 'postlist';
 }
 ?>
-
 		<div class="main <?php echo kadence_main_class();?> <?php echo $postclass . ' ' . $fullclass; ?>" role="main">
-
 <?php
 get_template_part('templates/content', 'page');
 
 global $post;
 $blog_category = get_post_meta( $post->ID, '_kad_blog_cat', true );
-$blog_cat = get_term_by( 'id',$blog_category, 'category' );
+$blog_cat = get_term_by( 'id', $blog_category, 'category' );
 if ( $blog_category == '-1' || $blog_category == '' ) {
 	$blog_cat_slug = '';
 } else {
@@ -63,15 +61,15 @@ if ( $wp_query->have_posts() ) {
 		$wp_query->the_post();
 		if ( $summery == 'full' ) {
 			if ( $display_sidebar ){
-				get_template_part('templates/content', 'fullpost');
+				get_template_part( 'templates/content', 'fullpost' );
 			} else {
-				get_template_part('templates/content', 'fullpostfull');
+				get_template_part( 'templates/content', 'fullpostfull' );
 			}
 		} else {
 			if ( $display_sidebar ){
-				get_template_part('templates/content', get_post_format());
+				get_template_part( 'templates/content', get_post_format() );
 			} else {
-				get_template_part('templates/content', 'fullwidth');
+				get_template_part( 'templates/content', 'fullwidth' );
 			}
 		}
 	}
