@@ -79,7 +79,7 @@ class Ethnologist_Template
 				}
 			}
 		} else { ?>
-					<li class="error-not-found"><?php _e( 'Sorry, no sections found.', 'ethnologist' ); ?></li>
+					<li class="error-not-found"><?php echo $this->get_not_found_message(); ?></li>
 		<?php
 		}
 
@@ -117,5 +117,14 @@ class Ethnologist_Template
 	 */
 	protected function get_post_type() {
 		return 'post';
+	}
+
+	/**
+	 * Get message when there are no items
+	 *
+	 * @return string
+	 */
+	protected function get_not_found_message() {
+		return __( 'Not found.', 'ethnologist' );
 	}
 }
