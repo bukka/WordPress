@@ -10,3 +10,17 @@
  License URI:  http://www.gnu.org/licenses/gpl-2.0.html
  Tags:         responsive-layout, two-columns, one-column, custom-colors, custom-header, custom-menu, featured-images, translation-ready, theme-options
 */
+
+#logo a {
+	font-weight: bold !important;
+	text-transform: uppercase;
+}
+.home-page-title {
+	font-weight: bold;
+	font-size: 120px;
+	line-height: 120px;
+	text-transform: uppercase;
+}
+.home-page-subtitle {
+	font-size: 22px !important;
+}
