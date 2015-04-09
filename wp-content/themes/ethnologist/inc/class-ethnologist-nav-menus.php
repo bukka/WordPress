@@ -52,6 +52,9 @@ class Ethnologist_NavMenus
 				'en' => 'interviews',
 				'cs' => 'rozhovory',
 			),
+			'submenu' => array(
+				'post_type' => 'interview',
+			),
 		),
 		'blog' => array(
 			'title' => array(
