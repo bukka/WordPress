@@ -129,9 +129,10 @@ add_action ( 'init', 'ethnologist_init' );
 
 function ethnologist_admin_init() {
 	if ( function_exists( 'pll_register_string' ) ) {
-		pll_register_string('ethnologist_title', 'Ethnologist', 'ethnologist');
-		pll_register_string('ethnologist_sub_title', 'Welcome to Ethnologist Site', 'ethnologist');
-		pll_register_string('ethnologist_blog_latest_title', 'Latest from the Blog', 'ethnologist');
+		pll_register_string( 'ethnologist_title', 'Ethnologist', 'ethnologist' );
+		pll_register_string( 'ethnologist_sub_title', 'Welcome to Ethnologist Site', 'ethnologist' );
+		pll_register_string( 'ethnologist_blog_latest_title', 'Latest from the Blog', 'ethnologist' );
+		pll_register_string( 'ethnologist_no_entries', 'Sorry, no entries found.', 'ethnologist' );
 	}
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );
