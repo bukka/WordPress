@@ -55,18 +55,18 @@ function ethnologist_register_sections() {
 	);
 	// register section post type
 	register_post_type( 'section',  array(
-	'labels'              => $labels,
-	'public'              => true,
-	'publicly_queryable'  => true,
-	'show_ui'             => true,
-	'show_in_menu'        => true,
-	'menu_position'       => 5,
-	'capability_type'     => 'page',
-	'capabilities'        => $capabilities,
-	'has_archive'         => true,
-	'hierarchical'        => false,
-	'supports'            => array( 'title', 'thumbnail', 'editor' ),
-	'taxonomies'          => array( 'mm' ),
+		'labels'              => $labels,
+		'public'              => true,
+		'publicly_queryable'  => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'menu_position'       => 5,
+		'capability_type'     => 'page',
+		'capabilities'        => $capabilities,
+		'has_archive'         => true,
+		'hierarchical'        => false,
+		'supports'            => array( 'title', 'thumbnail', 'editor' ),
+		'taxonomies'          => array( 'mm' ),
 	) );
 }
 
@@ -106,18 +106,18 @@ function ethnologist_register_interviews() {
 	);
 	// register interview post type
 	register_post_type( 'interview',  array(
-	'labels'              => $labels,
-	'public'              => true,
-	'publicly_queryable'  => true,
-	'show_ui'             => true,
-	'show_in_menu'        => true,
-	'menu_position'       => 6,
-	'capability_type'     => 'page',
-	'capabilities'        => $capabilities,
-	'has_archive'         => true,
-	'hierarchical'        => false,
-	'supports'            => array( 'title', 'thumbnail', 'editor' ),
-	'taxonomies'          => array( 'mm' ),
+		'labels'              => $labels,
+		'public'              => true,
+		'publicly_queryable'  => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'menu_position'       => 6,
+		'capability_type'     => 'page',
+		'capabilities'        => $capabilities,
+		'has_archive'         => true,
+		'hierarchical'        => false,
+		'supports'            => array( 'title', 'thumbnail', 'editor' ),
+		'taxonomies'          => array( 'mm' ),
 	) );
 }
 
