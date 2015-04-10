@@ -133,6 +133,9 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_sub_title', 'Welcome to Ethnologist Site', 'ethnologist' );
 		pll_register_string( 'ethnologist_blog_latest_title', 'Latest from the Blog', 'ethnologist' );
 		pll_register_string( 'ethnologist_no_entries', 'Sorry, no entries found.', 'ethnologist' );
+		pll_register_string( 'ethnologist_no_sections', 'Sorry, no sections found.', 'ethnologist' );
+		pll_register_string( 'ethnologist_posts_newer', 'Newer posts &rarr;', 'ethnologist' );
+		pll_register_string( 'ethnologist_posts_older', '&larr; Older posts', 'ethnologist' );
 	}
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );

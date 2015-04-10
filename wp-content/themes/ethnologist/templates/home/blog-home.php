@@ -41,7 +41,7 @@ if ( $wp_query->have_posts() ) : while ( $wp_query->have_posts() ) : $wp_query->
 			<?php get_template_part('templates/content', 'post-grid');?>
 		</div>
 <?php endwhile; else: ?>
-		<div class="error-not-found"><?php pll_e( 'Sorry, no entries found.' );?></div>
+		<div class="error-not-found"><?php pll_e( 'Sorry, no entries found.' ); ?></div>
 <?php endif; ?>
 
 <?php

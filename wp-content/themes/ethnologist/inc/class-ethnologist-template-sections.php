@@ -22,6 +22,6 @@ class Ethnologist_TemplateSections extends Ethnologist_Template
 	 * @return string
 	 */
 	protected function get_not_found_message() {
-		return __( 'Sorry, no sections found.', 'ethnologist' );
+		return pll__( 'Sorry, no sections found.' );
 	}
 }

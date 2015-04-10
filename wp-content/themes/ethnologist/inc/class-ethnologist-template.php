@@ -79,7 +79,7 @@ class Ethnologist_Template
 				}
 			}
 		} else { ?>
-					<li class="error-not-found"><?php echo $this->get_not_found_message(); ?></li>
+					<div class="error-not-found"><?php echo $this->get_not_found_message(); ?></div>
 		<?php
 		}
 
@@ -89,8 +89,8 @@ class Ethnologist_Template
 			} else { ?>
 					<nav class="post-nav">
 						<ul class="pager">
-							<li class="previous"><?php next_posts_link( __( '&larr; Older posts', 'ethnologist' ) ); ?></li>
-							<li class="next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'ethnologist' ) ); ?></li>
+							<li class="previous"><?php next_posts_link( pll__( '&larr; Older posts' ) ); ?></li>
+							<li class="next"><?php previous_posts_link( pll__( 'Newer posts &rarr;' ) ); ?></li>
 						</ul>
 					</nav>
 		<?php
@@ -125,6 +125,6 @@ class Ethnologist_Template
 	 * @return string
 	 */
 	protected function get_not_found_message() {
-		return __( 'Not found.', 'ethnologist' );
+		return pll__( 'Sorry, no entries found.' );
 	}
 }
