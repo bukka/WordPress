@@ -140,8 +140,65 @@ function ethnologist_admin_init() {
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );
 
+
+function ethnologist_register_sidebar( $options ) {
+
+	register_sidebar( array_merge( $options, array(
+		'before_widget' => '<section id="%1$s" class="widget %2$s"><div class="widget-inner">',
+		'after_widget'  => '</div></section>',
+		'before_title'  => '<h5 class="widget-title">',
+		'after_title'   => '</h5>',
+	) ) );
+}
+
+function ethnologist_register_sidebars() {
+	// kadence sidebars
+	unregister_sidebar('sidebar-primary');
+	unregister_sidebar('footer_1');
+	unregister_sidebar('footer_1');
+	unregister_sidebar('footer_1');
+	unregister_sidebar('footer_1');
+
+	$sidebars = array(
+		array(
+			'name' => __( 'Primary Sidebar', 'ethnologist' ),
+			'id'   => 'sidebar-primary',
+		),
+		array(
+			'name' => __( 'Footer Column 1', 'ethnologist' ),
+			'id'   => 'footer_1',
+		),
+		array(
+			'name' => __( 'Footer Column 2', 'ethnologist' ),
+			'id'   => 'footer_2',
+		),
+		array(
+			'name' => __( 'Footer Column 3', 'ethnologist' ),
+			'id'   => 'footer_3',
+		),
+		array(
+			'name' => __( 'Footer Column 4', 'ethnologist' ),
+			'id'   => 'footer_4',
+		),
+	);
+
+	foreach ( $sidebars as $sidebar_options ) {
+		ethnologist_register_sidebar( $sidebar_options );
+	}
+}
+
+function ethnologist_widgets_init() {
+	ethnologist_register_sidebars();
+}
+add_action ( 'widgets_init', 'ethnologist_widgets_init' );
+
+
 function ethnologist_enqueue_styles() {
 	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
 	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'parent-style' ) );
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_styles' );
+
+// kadence actions clean up
+remove_action( 'init', 'kadence_sidebar_list' );
+remove_action( 'widgets_init', 'kadence_register_sidebars' );
