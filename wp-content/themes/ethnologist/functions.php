@@ -1,8 +1,19 @@
 <?php
 
-require_once 'inc/class-ethnologist-nav-menus.php';
+/**
+ * Include view for ethnologist
+ *
+ * @param string $type
+ * @param string $name
+ * @param mixed  $params
+ * @param mixed  $context
+ */
+function ethnologist_view( $type, $name, $params = array(), $context = null ) {
+	include __DIR__ . "/views/" . $type . "/" . $name . ".php";
+}
 
 function ethnologist_navmenu_register() {
+	require_once 'inc/class-ethnologist-nav-menus.php';
 	$nav_menus = new Ethnologist_NavMenus();
 	$nav_menus->register()->update();
 }
