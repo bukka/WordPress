@@ -27,17 +27,17 @@ class Ethnologist_Widget_Contact extends WP_Widget {
 	 */
 	public function __construct() {
 		$widget_ops = array(
-			'classname'   => 'widget_kadence_contact',
+			'classname'   => 'Ethnologist_Widget_Contact',
 			'description' => __( 'Use this widget to add a Vcard to your site', 'ethnologist' )
 		);
 
 		parent::__construct(
-				'widget_kadence_contact',
-				__('Pinnacle: Contact/Vcard', 'pinnacle'),
-				$widget_ops
+			'ethnologist_widget_contact',
+			__( 'Ethnologist: Contact/Vcard', 'ethnologist' ),
+			$widget_ops
 		);
 
-		$this->alt_option_name = 'widget_kadence_contact';
+		$this->alt_option_name = 'ethnologist_widget_contact';
 
 		add_action( 'save_post', array( $this, 'flush_widget_cache' ) );
 		add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
@@ -50,7 +50,7 @@ class Ethnologist_Widget_Contact extends WP_Widget {
 	 * @see WP_Widget::widget()
 	 */
 	public function widget( $args, $instance ) {
-		$cache = wp_cache_get( 'widget_kadence_contact', 'widget' );
+		$cache = wp_cache_get( 'ethnologist_widget_contact', 'widget' );
 
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -88,7 +88,7 @@ class Ethnologist_Widget_Contact extends WP_Widget {
 		echo $after_widget;
 
 		$cache[$args['widget_id']] = ob_get_flush();
-		wp_cache_set( 'widget_ethnologist_contact', $cache, 'widget' );
+		wp_cache_set( 'ethnologist_widget_contact', $cache, 'widget' );
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Ethnologist_Widget_Contact extends WP_Widget {
 	 * Flush widget cache action
 	 */
 	function flush_widget_cache() {
-		wp_cache_delete( 'widget_ethnologist_contact', 'widget');
+		wp_cache_delete( 'ethnologist_widget_contact', 'widget');
 	}
 
 	/**
