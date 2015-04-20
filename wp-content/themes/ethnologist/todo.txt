@@ -4,14 +4,16 @@ Front-End
 - Sticky footer
 - Change text in footer
 
-Template
-- clean up template-section
-- create template-interviews
+Back-End
+- clean up templates
+  - more customization
 - create gallery page
 - create contact/about us page
-- transate widgets for home page (titles)
-  - e.g. Latest from the Blog
-- translate welcome text in home page
+- refactore all widgets and move them to ethnologist theme
+  - social
+  - image
+  - recent posts
+  - post grid
 
 Nav menu class
 - Create pll_switcher in the script
