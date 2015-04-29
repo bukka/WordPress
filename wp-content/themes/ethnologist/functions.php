@@ -147,6 +147,15 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_no_sections', 'Sorry, no sections found.', 'ethnologist' );
 		pll_register_string( 'ethnologist_posts_newer', 'Newer posts &rarr;', 'ethnologist' );
 		pll_register_string( 'ethnologist_posts_older', '&larr; Older posts', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_required_field', 'This field is required.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_enter_valid_email', 'Please enter a valid email address.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_enter_email', 'Please enter your email address.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_captcha_math', 'Check your math.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_enter_name', 'Please enter your name.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_email_invalid', 'You entered an invalid email address.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_enter_message', 'Please enter a message.', 'ethnologist' );
+		//pll_register_string( 'ethnologist_contact_', '', 'ethnologist' );
+		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );

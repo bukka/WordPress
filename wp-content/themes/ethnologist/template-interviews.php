@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Interviews
+Template Name: Ethnologist Interviews
 */
 
 require_once __DIR__ . '/inc/class-ethnologist-template-interviews.php';
