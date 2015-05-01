@@ -162,17 +162,17 @@ get_header();
       			} ?>
 				<?php if(isset($emailSent) && $emailSent == true) { ?>
 							<div class="thanks">
-								<p><?php _e('Thanks, your email was sent successfully.', 'pinnacle');?></p>
+								<p><?php pll_e( 'Thanks, your email was sent successfully.' );?></p>
 							</div>
 						<?php } else { ?>
 							<?php if(isset($hasError) || isset($captchaError)) { ?>
-								<p class="error"><?php _e('Sorry, an error occured.', 'pinnacle');?><p>
+								<p class="error"><?php pll_e( 'Sorry, an error occured.' );?><p>
 							<?php } ?>
 
 						<form action="<?php the_permalink(); ?>" id="contactForm" method="post">
 							<div class="contactform">
 							<p>
-								<label for="contactName"><b><?php _e('Name:', 'pinnacle');?></b></label><?php if(isset($nameError)) { ?>
+								<label for="contactName"><b><?php pll_e( 'Name:' );?></b></label><?php if(isset($nameError)) { ?>
 									<span class="error"><?php $nameError;?></span>
 								<?php } ?>
 
@@ -181,13 +181,13 @@ get_header();
 							</p>
 
 							<p>
-								<label for="email"><b><?php _e('Email:', 'pinnacle'); ?></b></label> <?php if(isset($emailError)) { ?>
+								<label for="email"><b><?php pll_e( 'Email:' ); ?></b></label> <?php if(isset($emailError)) { ?>
 									<span class="error"><?php $emailError;?></span>
 								<?php } ?>
 								<input type="text" name="email" id="email" value="<?php if(isset($_POST['email']))  echo $_POST['email'];?>" class="required requiredField email full" />
 							</p>
 
-							<p><label for="commentsText"><b><?php _e('Message:', 'pinnacle'); ?></b></label>	<?php if(isset($commentError)) { ?>
+							<p><label for="commentsText"><b><?php pll_e( 'Message:' ); ?></b></label>	<?php if(isset($commentError)) { ?>
 									<span class="error"><?php $commentError;?></span>
 								<?php } ?>
 								<textarea name="comments" id="commentsText" rows="10" class="required requiredField"><?php if(isset($_POST['comments'])) { if(function_exists('stripslashes')) { echo stripslashes($_POST['comments']); } else { echo $_POST['comments']; } } ?></textarea>
@@ -204,7 +204,7 @@ get_header();
 								</p>
 							<?php } ?>
 							<p>
-								<input type="submit" class="kad-btn kad-btn-primary" id="submit" tabindex="5" value="<?php _e('Send Email', 'pinnacle'); ?>" ></input>
+								<input type="submit" class="kad-btn kad-btn-primary" id="submit" tabindex="5" value="<?php pll_e( 'Send Email' ); ?>" ></input>
 							</p>
 						</div><!-- /.contactform-->
 						<input type="hidden" name="submitted" id="submitted" value="true" />

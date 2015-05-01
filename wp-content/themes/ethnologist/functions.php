@@ -140,6 +140,7 @@ add_action ( 'init', 'ethnologist_init' );
 
 function ethnologist_admin_init() {
 	if ( function_exists( 'pll_register_string' ) ) {
+		pll_register_string( 'ethnologist_error', 'Sorry, an error occured.', 'ethnologist' );
 		pll_register_string( 'ethnologist_title', 'Ethnologist', 'ethnologist' );
 		pll_register_string( 'ethnologist_sub_title', 'Welcome to Ethnologist Site', 'ethnologist' );
 		pll_register_string( 'ethnologist_blog_latest_title', 'Latest from the Blog', 'ethnologist' );
@@ -154,7 +155,11 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_contact_enter_name', 'Please enter your name.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_email_invalid', 'You entered an invalid email address.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_message', 'Please enter a message.', 'ethnologist' );
-		//pll_register_string( 'ethnologist_contact_', '', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_email_sent', 'Thanks, your email was sent successfully.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_label_email', 'Email:', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_label_name', 'Name:', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_label_message', 'Message:', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_submit_email', 'Send Email', 'ethnologist' );
 		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
