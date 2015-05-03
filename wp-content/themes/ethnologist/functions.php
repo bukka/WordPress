@@ -225,11 +225,15 @@ function ethnologist_widgets_init() {
 add_action ( 'widgets_init', 'ethnologist_widgets_init' );
 
 
-function ethnologist_enqueue_styles() {
+function ethnologist_enqueue_scripts() {
 	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
 	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'parent-style' ) );
+
+	if ( is_page_template( 'template-contact.php' ) ) {
+		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js'  );
+	}
 }
-add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_styles' );
+add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
 
 // kadence actions clean up
 remove_action( 'init', 'kadence_sidebar_list' );

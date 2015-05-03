@@ -24,62 +24,7 @@ get_header();
 							    $mapzoom = get_post_meta( $post->ID, '_kad_contact_zoom', true );
 							    if($mapzoom != '') $zoom = $mapzoom; else $zoom = 15;
 		    ?>
-		    <script type="text/javascript">
-					jQuery(window).load(function() {
-
-					jQuery('#map_address').gmap3({
-			map: {
-			    address:"<?php echo $address;?>",
-				options: {
-              		zoom:<?php echo $zoom;?>,
-					draggable: true,
-					mapTypeControl: true,
-					mapTypeId: google.maps.MapTypeId.<?php echo $maptype;?>,
-					scrollwheel: false,
-					panControl: true,
-					rotateControl: false,
-					scaleControl: true,
-					streetViewControl: true,
-					zoomControl: true
-				}
-			},
-			marker:{
-            values:[
-            		 {address: "<?php echo $address;?>",
-			 	    data:"<div class='mapinfo'>'<?php echo $address;?>'</div>",
-			 	},
-            ],
-            options:{
-              draggable: false,
-            },
-			events:{
-              click: function(marker, event, context){
-                var map = jQuery(this).gmap3("get"),
-                  infowindow = jQuery(this).gmap3({get:{name:"infowindow"}});
-                if (infowindow){
-                  infowindow.open(map, marker);
-                  infowindow.setContent(context.data);
-                } else {
-                  jQuery(this).gmap3({
-                    infowindow:{
-                      anchor:marker,
-                      options:{content: context.data}
-                    }
-                  });
-                }
-              },
-              closeclick: function(){
-                var infowindow = jQuery(this).gmap3({get:{name:"infowindow"}});
-                if (infowindow){
-                  infowindow.close();
-                }
-			  }
-			}
-          }
-        });
-
-      });
-			</script>
+		    <script type="text/javascript"></script>
 	<?php echo '<style type="text/css" media="screen">#map_address {height:'.$mapheight.'px;}</style>'; ?>
     <?php
 
@@ -138,8 +83,7 @@ get_header();
 }  ?>
 			<?php get_template_part('templates/page', 'header'); ?>
 
-		            <div id="map_address">
-		            </div>
+	<div id="map_address" data-address="<?php echo $address;?>" data-zoom="<?php echo $zoom;?>" data-maptype="<?php echo $maptype;?>"></div>
 
 	<div id="content" class="container">
    		<div class="row">
@@ -169,7 +113,9 @@ get_header();
 								<p class="error"><?php pll_e( 'Sorry, an error occured.' );?><p>
 							<?php } ?>
 
-						<form action="<?php the_permalink(); ?>" id="contactForm" method="post">
+						<form action="<?php the_permalink(); ?>" id="contactForm" method="post"
+							data-msg-required="<?php pll_e( 'This field is required.' ); ?>"
+							data-msg-email="<?php pll_e( 'Please enter a valid email address.' ); ?>">
 							<div class="contactform">
 							<p>
 								<label for="contactName"><b><?php pll_e( 'Name:' );?></b></label><?php if(isset($nameError)) { ?>
