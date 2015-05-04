@@ -4,33 +4,21 @@ Template Name: Ethnologist Contact
 */
 
 get_header();
-?>
-	<script type="text/javascript">
-	jQuery(document).ready(function ($) {
-		$.extend($.validator.messages, {
-	        required: "<?php pll_e( 'This field is required.' ); ?>",
-			email: "<?php pll_e( 'Please enter a valid email address.' ); ?>",
-		 });
-		$("#contactForm").validate();
-	});
-	</script>
-	<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/js/jquery.validate-ck.js"></script>
-	<?php global $pinnacle, $post; ?>
-		    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
-		    <?php global $post; $address = get_post_meta( $post->ID, '_kad_contact_address', true );
-							    $maptype = get_post_meta( $post->ID, '_kad_contact_maptype', true );
-							    $height = get_post_meta( $post->ID, '_kad_contact_mapheight', true );
-							    if($height != '') {$mapheight = $height;} else {$mapheight = 300;}
-							    $mapzoom = get_post_meta( $post->ID, '_kad_contact_zoom', true );
-							    if($mapzoom != '') $zoom = $mapzoom; else $zoom = 15;
-		    ?>
-		    <script type="text/javascript"></script>
-	<?php echo '<style type="text/css" media="screen">#map_address {height:'.$mapheight.'px;}</style>'; ?>
-    <?php
 
-    $pageemail = get_post_meta( $post->ID, '_kad_contact_form_email', true );
-	$form_math = get_post_meta( $post->ID, '_kad_contact_form_math', true );
-	if(isset($_POST['submitted'])) {
+global $pinnacle, $post;
+
+$address = get_post_meta( $post->ID, '_kad_contact_address', true );
+$maptype = get_post_meta( $post->ID, '_kad_contact_maptype', true );
+$mapzoom = get_post_meta( $post->ID, '_kad_contact_zoom', true );
+if($mapzoom != '')
+	$zoom = $mapzoom;
+else
+	$zoom = 15;
+
+$pageemail = get_post_meta( $post->ID, '_kad_contact_form_email', true );
+$form_math = get_post_meta( $post->ID, '_kad_contact_form_math', true );
+
+if(isset($_POST['submitted'])) {
 		if(isset($form_math) && $form_math == 'yes') {
 			if(md5($_POST['kad_captcha']) != $_POST['hval']) {
 				$kad_captchaError = pll__( 'Check your math.' );

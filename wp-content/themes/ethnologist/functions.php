@@ -230,7 +230,9 @@ function ethnologist_enqueue_scripts() {
 	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'parent-style' ) );
 
 	if ( is_page_template( 'template-contact.php' ) ) {
-		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js'  );
+		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js' );
+		wp_enqueue_script( 'ethnologist-validate-ck', get_stylesheet_directory_uri() . '/js/jquery.validate-ck.js' );
+		wp_enqueue_script( 'ethnologist-gmap', 'https://maps.google.com/maps/api/js?sensor=false' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
