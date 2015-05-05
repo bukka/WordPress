@@ -16,7 +16,7 @@ jQuery(document).ready( function($) {
 				zoom: $map.data( 'zoom' ),
 				draggable: true,
 				mapTypeControl: true,
-				mapTypeId: google.maps.MapTypeId[$map.data( 'maptype' )],
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				scrollwheel: false,
 				panControl: true,
 				rotateControl: false,

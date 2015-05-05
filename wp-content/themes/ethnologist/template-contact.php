@@ -71,7 +71,7 @@ if(isset($_POST['submitted'])) {
 }  ?>
 			<?php get_template_part('templates/page', 'header'); ?>
 
-	<div id="map_address" data-address="<?php echo $address;?>" data-zoom="<?php echo $zoom;?>" data-maptype="<?php echo $maptype;?>"></div>
+	<div id="map_address" data-address="<?php echo $address;?>" data-zoom="<?php echo $zoom;?>"></div>
 
 	<div id="content" class="container">
    		<div class="row">
