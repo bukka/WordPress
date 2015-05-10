@@ -148,6 +148,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_no_sections', 'Sorry, no sections found.', 'ethnologist' );
 		pll_register_string( 'ethnologist_posts_newer', 'Newer posts &rarr;', 'ethnologist' );
 		pll_register_string( 'ethnologist_posts_older', '&larr; Older posts', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_form_title', 'Send us an email', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_required_field', 'This field is required.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_valid_email', 'Please enter a valid email address.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_email', 'Please enter your email address.', 'ethnologist' );
@@ -230,8 +231,8 @@ function ethnologist_enqueue_scripts() {
 	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'parent-style' ) );
 
 	if ( is_page_template( 'template-contact.php' ) ) {
-		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js' );
-		wp_enqueue_script( 'ethnologist-validate-ck', get_stylesheet_directory_uri() . '/js/jquery.validate-ck.js' );
+		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js', array( 'jquery' ) );
+		wp_enqueue_script( 'ethnologist-validate-ck', get_stylesheet_directory_uri() . '/js/jquery.validate-ck.js', array( 'jquery' ) );
 		wp_enqueue_script( 'ethnologist-gmap', 'https://maps.google.com/maps/api/js?sensor=false' );
 	}
 }
