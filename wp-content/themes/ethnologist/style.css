@@ -31,3 +31,6 @@
 #map_address {
 	height: 300px;
 }
+.titleclass-nobg {
+	background: #444;
+}

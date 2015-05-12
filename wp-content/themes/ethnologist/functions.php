@@ -241,3 +241,59 @@ add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
 // kadence actions clean up
 remove_action( 'init', 'kadence_sidebar_list' );
 remove_action( 'widgets_init', 'kadence_register_sidebars' );
+
+/**
+ * Page titles
+ */
+function ethnologist_title() {
+	if ( is_home() ) {
+		if ( get_option( 'page_for_posts', true ) ) {
+			echo get_the_title( get_option( 'page_for_posts', true ) );
+		} else {
+			pll_e( 'Latest Posts' );
+		}
+	} elseif ( is_archive() ) {
+		$term = get_term_by( 'slug', get_query_var('term'), get_query_var('taxonomy') );
+		if ( $term ) {
+			echo $term->name;
+		} elseif ( is_post_type_archive() ) {
+			echo get_queried_object()->labels->name;
+		} elseif ( is_day() ) {
+			echo pll__( 'Daily Archives:' ) . ' ' . get_the_date();
+		} elseif ( is_month() ) {
+			echo pll__( 'Monthly Archives:' ) . ' ' . get_the_date('F Y');
+		} elseif ( is_year() ) {
+			echo pll__( 'Yearly Archives:' ) . ' ' . get_the_date('Y');
+		} elseif ( is_author() ) {
+			echo pll__( 'Author Archives:' ) . ' ' . get_the_author();
+		} else {
+			single_cat_title();
+		}
+	} elseif (is_search()) {
+		echo pll__( 'Search Results for' ) . ' ' . get_search_query();
+	} elseif (is_404()) {
+		pll_e( 'Not Found' );
+	} else {
+		the_title();
+	}
+}
+
+/**
+ * Page subtitles
+ */
+function ethnologist_subtitle() {
+	global $post;
+
+	$before = '<div class="subtitle">';
+	$after = '</div>';
+
+	if(is_page()) {
+		$bsub = get_post_meta( $post->ID, '_kad_subtitle', true );
+	} else if( is_category() ) {
+		$bsub = category_description();
+	} else if( is_tag() ) {
+		$bsub = tag_description();
+	}
+
+	echo $before . $bsub . $after;
+}

@@ -131,8 +131,10 @@ class Ethnologist_TemplateContact
 			$params['comment_value'] = $params['email_value'] = $params['name_value'] = '';
 		}
 
-		get_template_part('templates/page', 'header');
-
+		ethnologist_view( 'page', 'header', array(
+			'show_page_header' => false,
+			'title_class'      => 'titleclass-nobg',
+		) );
 		ethnologist_view( 'template', 'contact', $params );
 
 		get_footer();
