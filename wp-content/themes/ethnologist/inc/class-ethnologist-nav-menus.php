@@ -248,7 +248,14 @@ class Ethnologist_NavMenus
 						'menu-item-parent-id' => $menu_db_id,
 					) );
 				}
-			}
+			} /* elseif ( $type === 'lang' ) {
+				$this->update_item( $menu_id, $menu_items, array(
+					'menu-item-title' => __('Language switcher', 'polylang'),
+					'menu-item-url' => '#pll_switcher',
+					'menu-item-status' => 'publish',
+					'menu-item-parent-id' => $menu_db_id,
+				) );
+			} */
 
 			++$pos;
 		}

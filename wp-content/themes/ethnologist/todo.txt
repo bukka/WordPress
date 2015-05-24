@@ -16,4 +16,90 @@ Back-End
   - post grid
 
 Nav menu class
-- Create pll_switcher in the script
+- Create pll_switcher in the script (see bellow dumped menu objects)
+
+-----------------------------------------------------------------------------------------
+Dumped menu objects:
+
+object(WP_Post)[35]
+  public 'ID' => int 97
+  public 'post_author' => string '1' (length=1)
+  public 'post_date' => string '2015-02-06 12:25:08' (length=19)
+  public 'post_date_gmt' => string '2015-02-06 12:25:08' (length=19)
+  public 'post_content' => string '' (length=0)
+  public 'post_title' => string 'Jazyk' (length=5)
+  public 'post_excerpt' => string '' (length=0)
+  public 'post_status' => string 'publish' (length=7)
+  public 'comment_status' => string 'open' (length=4)
+  public 'ping_status' => string 'open' (length=4)
+  public 'post_password' => string '' (length=0)
+  public 'post_name' => string 'jazyk' (length=5)
+  public 'to_ping' => string '' (length=0)
+  public 'pinged' => string '' (length=0)
+  public 'post_modified' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_modified_gmt' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_content_filtered' => string '' (length=0)
+  public 'post_parent' => int 0
+  public 'guid' => string 'http://ethnologist.wp.local/2015/02/06/jazyk/' (length=45)
+  public 'menu_order' => int 8
+  public 'post_type' => string 'nav_menu_item' (length=13)
+  public 'post_mime_type' => string '' (length=0)
+  public 'comment_count' => string '0' (length=1)
+  public 'filter' => string 'raw' (length=3)
+  public 'db_id' => int 97
+  public 'menu_item_parent' => string '0' (length=1)
+  public 'object_id' => string '97' (length=2)
+  public 'object' => string 'custom' (length=6)
+  public 'type' => string 'custom' (length=6)
+  public 'type_label' => string 'Custom' (length=6)
+  public 'title' => string 'Jazyk' (length=5)
+  public 'url' => string '#' (length=1)
+  public 'target' => string '' (length=0)
+  public 'attr_title' => string '' (length=0)
+  public 'description' => string '' (length=0)
+  public 'classes' => 
+    array (size=1)
+      0 => string '' (length=0)
+  public 'xfn' => string '' (length=0)
+  public '_used_in_menu' => boolean true
+
+object(WP_Post)[201]
+  public 'ID' => int 175
+  public 'post_author' => string '1' (length=1)
+  public 'post_date' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_date_gmt' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_content' => string '' (length=0)
+  public 'post_title' => string 'Language switcher' (length=17)
+  public 'post_excerpt' => string '' (length=0)
+  public 'post_status' => string 'publish' (length=7)
+  public 'comment_status' => string 'open' (length=4)
+  public 'ping_status' => string 'open' (length=4)
+  public 'post_password' => string '' (length=0)
+  public 'post_name' => string 'language-switcher-2' (length=19)
+  public 'to_ping' => string '' (length=0)
+  public 'pinged' => string '' (length=0)
+  public 'post_modified' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_modified_gmt' => string '2015-05-13 12:41:00' (length=19)
+  public 'post_content_filtered' => string '' (length=0)
+  public 'post_parent' => int 0
+  public 'guid' => string 'http://ethnologist.wp.local/?p=175' (length=34)
+  public 'menu_order' => int 9
+  public 'post_type' => string 'nav_menu_item' (length=13)
+  public 'post_mime_type' => string '' (length=0)
+  public 'comment_count' => string '0' (length=1)
+  public 'filter' => string 'raw' (length=3)
+  public 'db_id' => int 175
+  public 'menu_item_parent' => string '97' (length=2)
+  public 'object_id' => string '175' (length=3)
+  public 'object' => string 'custom' (length=6)
+  public 'type' => string 'custom' (length=6)
+  public 'type_label' => string 'Custom' (length=6)
+  public 'title' => string 'Language switcher' (length=17)
+  public 'url' => string '#pll_switcher' (length=13)
+  public 'target' => string '' (length=0)
+  public 'attr_title' => string '' (length=0)
+  public 'description' => string '' (length=0)
+  public 'classes' => 
+    array (size=1)
+      0 => string '' (length=0)
+  public 'xfn' => string '' (length=0)
