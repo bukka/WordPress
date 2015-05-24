@@ -3,11 +3,48 @@
 
 <div id="content" class="container">
 	<div class="row">
-		<div id="main" class="main col-md-<? echo $params['form'] ? 5 : 12; ?>" role="main">
-			<div class="postclass pageclass">
-				<?php get_template_part('templates/content', 'page'); ?>
+		<div id="main" class="main col-md-<?php echo $params['form'] ? 5 : 12; ?>" role="main">
+			<div class="postclass pageclass contact-info-box">
+
+				<div class="contact-info-field">
+					<h3 class="widget-title"><?php pll_e( 'Location' ); ?></h3>
+					<div class="textwidget">
+						<h5 style="text-align: center;">
+							<span style="color: #444444;"></span>
+						</h5>
+						<p style="text-align: center;">
+							We are based in London!
+						</p>
+					</div>
+				</div>
+				<div class="contact-info-field">
+					<h3 class="widget-title"><?php pll_e( 'Phone' ); ?></h3>
+					<div class="textwidget">
+						<h5 style="text-align: center;">
+							<span style="color: #444444;">444-555-6767</span>
+						</h5>
+						<p style="text-align: center;">
+							You can call us on our UK number.
+						</p>
+					</div>
+				</div>
+
+				<div class="contact-info-field">
+					<h3 class="widget-title"><?php pll_e( 'Email' ); ?></h3>
+					<div class="textwidget">
+						<h5 style="text-align: center;">
+							<span style="color: #444444;">info@ethnologist.info</span>
+						</h5>
+						<p style="text-align: center;">
+							You can either email using the contact form on the right side
+							or email us directly on the address above.
+						</p>
+					</div>
+				</div>
+
 			</div>
 		</div>
+
 		<?php if ( $params['form'] ): ?>
 		<div class="contactformcase col-md-7">
 			<h3><?php pll_e( 'Send us an email' ); ?></h3>
@@ -16,15 +53,15 @@
 				<p><?php pll_e( 'Thanks, your email was sent successfully.' );?></p>
 			</div>
 			<?php else: ?>
-			<?php 	if ( $params['has_error'] ): ?>
+			<?php	if ( $params['has_error'] ): ?>
 			<p class="error"><?php pll_e( 'Sorry, an error occured.' );?><p>
-			<?php 	endif; ?>
+			<?php	endif; ?>
 			<form action="<?php the_permalink(); ?>" id="contactForm" method="post"
 					data-msg-required="<?php pll_e( 'This field is required.' ); ?>"
 					data-msg-email="<?php pll_e( 'Please enter a valid email address.' ); ?>">
 				<div class="contactform">
 					<p>
-						<label for="contactName"><b><?php pll_e( 'Name:' );?></b></label>
+						<label for="contactName"><b><?php pll_e( 'Name' );?></b></label>
 						<?php if ( $params['name_error_msg'] ): ?>
 						<span class="error"><?php $params['name_error_msg'];?></span>
 						<?php endif; ?>
@@ -33,7 +70,7 @@
 								class="required requiredField full" />
 					</p>
 					<p>
-						<label for="email"><b><?php pll_e( 'Email:' ); ?></b></label>
+						<label for="email"><b><?php pll_e( 'Email' ); ?></b></label>
 						<?php if ( $params['email_error_msg'] ): ?>
 						<span class="error"><?php $params['email_error_msg']; ?></span>
 						<?php endif; ?>
@@ -42,7 +79,7 @@
 								class="required requiredField email full" />
 					</p>
 					<p>
-						<label for="commentsText"><b><?php pll_e( 'Message:' ); ?></b></label>
+						<label for="commentsText"><b><?php pll_e( 'Message' ); ?></b></label>
 						<?php if ( $params['comment_error_msg'] ): ?>
 						<span class="error"><?php echo $params['comment_error_msg'];?></span>
 						<?php endif; ?>
