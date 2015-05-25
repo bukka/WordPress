@@ -10,22 +10,22 @@
 					<h3 class="widget-title"><?php pll_e( 'Location' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
-							<span style="color: #444444;"></span>
+							<span style="color: #444444;"><?php the_field( 'address_name' ); ?></span>
 						</h5>
-						<p style="text-align: center;">
-							We are based in London!
-						</p>
+						<div style="text-align: center;">
+							<?php the_field( 'address_description' ); ?>
+						</div>
 					</div>
 				</div>
 				<div class="contact-info-field">
 					<h3 class="widget-title"><?php pll_e( 'Phone' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
-							<span style="color: #444444;">444-555-6767</span>
+							<span style="color: #444444;"><?php the_field( 'phone_number' ); ?></span>
 						</h5>
-						<p style="text-align: center;">
-							You can call us on our UK number.
-						</p>
+						<div style="text-align: center;">
+							<?php the_field( 'phone_description' ); ?>
+						</div>
 					</div>
 				</div>
 
@@ -33,12 +33,11 @@
 					<h3 class="widget-title"><?php pll_e( 'Email' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
-							<span style="color: #444444;">info@ethnologist.info</span>
+							<span style="color: #444444;"><?php the_field( 'email_address' ); ?></span>
 						</h5>
-						<p style="text-align: center;">
-							You can either email using the contact form on the right side
-							or email us directly on the address above.
-						</p>
+						<div style="text-align: center;">
+							<?php the_field( 'email_description' ); ?>
+						</div>
 					</div>
 				</div>
 
