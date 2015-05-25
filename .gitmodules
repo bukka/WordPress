@@ -13,3 +13,6 @@
 [submodule "wp-content/plugins/wordpress-mu-domain-mapping"]
 	path = wp-content/plugins/wordpress-mu-domain-mapping
 	url = git@github.com:wp-plugins/wordpress-mu-domain-mapping.git
+[submodule "wp-content/plugins/acf"]
+	path = wp-content/plugins/acf
+	url = git@github.com:elliotcondon/acf.git
