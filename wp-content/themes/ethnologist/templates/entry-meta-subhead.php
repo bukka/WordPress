@@ -6,7 +6,7 @@
 	</span>
 	<span class="updated postdate">
 		<?php pll_e( 'on' ); ?>
-		<span class="postday"><?php echo get_the_date() ?></span>
+		<span class="postday"><?php echo get_the_date( pll__( 'ethnologist_post_date' ) ) ?></span>
 	</span>
 	<span class="postcommentscount">
 		<?php pll_e( 'with' ); ?>
