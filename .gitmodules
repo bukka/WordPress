@@ -16,3 +16,6 @@
 [submodule "wp-content/plugins/acf"]
 	path = wp-content/plugins/acf
 	url = git@github.com:elliotcondon/acf.git
+[submodule "wp-content/plugins/grand-media"]
+	path = wp-content/plugins/grand-media
+	url = git@github.com:wp-plugins/grand-media.git
