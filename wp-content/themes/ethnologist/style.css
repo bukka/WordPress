@@ -40,3 +40,6 @@
 .page-header {
 	padding: 170px 0;
 }
+.gmPhantom_thumbsWrapper {
+	width: 100% !important;
+}
