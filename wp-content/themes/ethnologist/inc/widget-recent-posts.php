@@ -55,7 +55,7 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 		if ( empty( $instance['number'] ) || ! $number = absint( $instance['number'] ) )
 			$number = 10;
 
-		$r = new WP_Query(
+		$query = new WP_Query(
 			apply_filters(
 				'widget_posts_args',
 				array(
@@ -68,35 +68,25 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 			)
 		);
 
-		// TODO: move to view
-		if ($r->have_posts()) :
-		?>
-    <?php echo $before_widget; ?>
-    <?php if ( $title ) echo $before_title . $title . $after_title; ?>
-    <ul>
-    <?php  while ($r->have_posts()) : $r->the_post(); ?>
-    <li class="clearfix postclass">
-        <a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>" class="recentpost_featimg">
-          <?php global $post; if(has_post_thumbnail( $post->ID ) ) {
-            the_post_thumbnail( 'widget-thumb' );
-          } else {
-            $image_url = pinnacle_img_placeholder_small();
-            echo '<img width="60" height="60" src="'.$image_url.'" class="attachment-widget-thumb wp-post-image" alt="">'; } ?></a>
-        <a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>" class="recentpost_title"><?php if ( get_the_title() ) the_title(); else the_ID(); ?></a>
-        <span class="recentpost_date color_gray"><?php echo get_the_date(get_option( 'date_format' )); ?></span>
-        </li>
-    <?php endwhile; ?>
-    </ul>
-    <?php echo $after_widget; ?>
-<?php
-    // Reset the global $the_post as this query will have stomped on it
-    wp_reset_postdata();
+		if ( $query->have_posts() ) {
+			echo $before_widget;
 
-    endif;
+			if ( $title ) {
+				echo $before_title . $title . $after_title;
+			}
 
-    $cache[$args['widget_id']] = ob_get_flush();
-    wp_cache_set('kadence_recent_posts', $cache, 'widget');
-  }
+			ethnologist_view( 'widget', 'recent-posts-widget', array( 'query' => $query ) );
+
+			echo $after_widget;
+
+			// Reset the global $the_post as this query will have stomped on it
+			wp_reset_postdata();
+
+		}
+
+		$cache[$args['widget_id']] = ob_get_flush();
+		wp_cache_set('kadence_recent_posts', $cache, 'widget');
+	}
 
   function update( $new_instance, $old_instance ) {
     $instance = $old_instance;
