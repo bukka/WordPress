@@ -59,10 +59,10 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 			apply_filters(
 				'widget_posts_args',
 				array(
-					'posts_per_page' => $number,
-					'category_name' => $instance['thecate'],
-					'no_found_rows' => true,
-					'post_status' => 'publish',
+					'posts_per_page'      => $number,
+					'category_name'       => $instance['thecate'],
+					'no_found_rows'       => true,
+					'post_status'         => 'publish',
 					'ignore_sticky_posts' => true
 				)
 			)
@@ -85,50 +85,51 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 		}
 
 		$cache[$args['widget_id']] = ob_get_flush();
-		wp_cache_set('kadence_recent_posts', $cache, 'widget');
+		wp_cache_set( 'ethnologist_widget_recent_posts', $cache, 'widget' );
 	}
 
-  function update( $new_instance, $old_instance ) {
-    $instance = $old_instance;
-    $instance['title'] = strip_tags($new_instance['title']);
-    $instance['number'] = (int) $new_instance['number'];
-    $instance['thecate'] = $new_instance['thecate'];
-    $this->flush_widget_cache();
+	/**
+	 * Update widget
+	 *
+	 * @param array $new_instance New settings for this instance as input by the user via
+	 *                            {@see WP_Widget::form()}.
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Settings to save or bool false to cancel saving.
+	 * @see WP_Widget::update()
+	 */
+	function update( $new_instance, $old_instance ) {
 
-    $alloptions = wp_cache_get( 'alloptions', 'options' );
-    if ( isset($alloptions['kadence_recent_entries']) )
-      delete_option('kadence_recent_entries');
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['number'] = (int) $new_instance['number'];
+		$instance['thecate'] = $new_instance['thecate'];
+		$this->flush_widget_cache();
 
-    return $instance;
-  }
+		return $instance;
+	}
 
-  function flush_widget_cache() {
-    wp_cache_delete('kadence_recent_posts', 'widget');
-  }
+	/**
+	 * Flush widget cache
+	 */
+	function flush_widget_cache() {
+		wp_cache_delete( 'ethnologist_widget_recent_posts', 'widget' );
+	}
 
-  function form( $instance ) {
-    $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-    $number = isset($instance['number']) ? absint($instance['number']) : 5;
-    if (isset($instance['thecate'])) { $thecate = esc_attr($instance['thecate']); } else {$thecate = '';}
-     $categories= get_categories();
-     $cate_options = array();
-          $cate_options[] = '<option value="">All</option>';
+	/**
+	 * Output the settings update form.
+	 *
+	 * @param array $instance Current settings.
+	 * @return string Default return is 'noform'.
+	 * @see WP_Widget::form()
+	 */
+	function form( $instance ) {
 
-    foreach ($categories as $cate) {
-      if ($thecate==$cate->slug) { $selected=' selected="selected"';} else { $selected=""; }
-      $cate_options[] = '<option value="' . $cate->slug .'"' . $selected . '>' . $cate->name . '</option>';
-    }
+		$params = array(
+			'title'   => isset($instance['title'])   ? esc_attr($instance['title'])   : '',
+			'number'  => isset($instance['number'])  ? absint($instance['number'])    : 5,
+			'thecate' => isset($instance['thecate']) ? esc_attr($instance['thecate']) : '',
+		);
 
-?>
-    <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'pinnacle'); ?></label>
-    <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
-
-    <p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'pinnacle'); ?></label>
-    <input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
-        <p>
-    <label for="<?php echo $this->get_field_id('thecate'); ?>"><?php _e('Limit to Catagory (Optional):', 'pinnacle'); ?></label>
-    <select id="<?php echo $this->get_field_id('thecate'); ?>" name="<?php echo $this->get_field_name('thecate'); ?>"><?php echo implode('', $cate_options); ?></select>
-  </p>
-<?php
-  }
+		ethnologist_view( 'widget', 'recent-posts-form', $params, $this );
+	}
 }
