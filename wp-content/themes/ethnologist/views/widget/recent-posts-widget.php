@@ -1,4 +1,4 @@
-<ul>
+<ul class="kadence_recent_posts">
 	<?php  while ( $params['query']->have_posts() ) : $params['query']->the_post(); ?>
 	<li class="clearfix postclass">
 		<a href="<?php the_permalink() ?>"
@@ -7,7 +7,7 @@
 			<?php if ( has_post_thumbnail() ): ?>
 			<?php the_post_thumbnail( 'widget-thumb' ); ?>
 			<?php else: ?>
-			<img width="60" height="60" src="'.pinnacle_img_placeholder_small().'" class="attachment-widget-thumb wp-post-image" alt="">
+			<img width="60" height="60" src="<?php echo pinnacle_img_placeholder_small() ?>" class="attachment-widget-thumb wp-post-image" alt="">
 			<?php endif; ?>
 		</a>
 		<a href="<?php the_permalink() ?>"

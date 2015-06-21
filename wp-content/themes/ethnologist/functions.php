@@ -223,8 +223,10 @@ function ethnologist_register_sidebars() {
 
 function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-contact.php';
-
 	register_widget( 'Ethnologist_Widget_Contact' );
+
+	require_once __DIR__ . '/inc/widget-recent-posts.php';
+	register_widget( 'Ethnologist_Widget_RecentPosts' );
 }
 
 function ethnologist_widgets_init() {

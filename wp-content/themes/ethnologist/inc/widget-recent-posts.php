@@ -9,11 +9,11 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 	 */
 	public function __construct() {
 		$widget_ops = array(
-			'classname' => 'kadence_recent_posts',
+			'classname' => 'Ethnologist_Widget_RecentPosts',
 			'description' => __( 'This shows the most recent posts on your site with a thumbnail', 'ethnologist' )
 		);
 		parent::__construct(
-				'kadence_recent_posts',
+				'ethnologist_widget_recent_posts',
 				__('Ethnologist: Recent Posts', 'ethnologist'),
 				$widget_ops
 		);
@@ -48,7 +48,7 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 
 		$title = apply_filters(
 			'widget_title',
-			empty($instance['title']) ? __( 'Recent Posts', 'ethnologist' ) : $instance['title'],
+			empty($instance['title']) ? __( 'Ethnologist: Recent Posts', 'ethnologist' ) : $instance['title'],
 			$instance,
 			$this->id_base
 		);
