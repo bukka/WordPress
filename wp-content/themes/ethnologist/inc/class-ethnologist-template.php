@@ -14,28 +14,28 @@ class Ethnologist_Template
 		get_header();
 		get_template_part('templates/page', 'header');
 
-		?>
-		<div id="content" class="container">
-			<div class="row">
-		<?php
+		$params = array();
 
 		if ( kadence_display_sidebar() ) {
-			$display_sidebar = true;
-			$fullclass = '';
+			$params['display_sidebar'] = true;
+			$params['fullclass'] = '';
 		} else {
-			$display_sidebar = false;
-			$fullclass = 'fullwidth';
+			$params['disaplay_sidebar'] = false;
+			$params['fullclass'] = 'fullwidth';
 		}
 
 		if( get_post_meta( $post->ID, '_kad_blog_summery', true ) == 'full' ) {
-			$summery = 'full';
-			$postclass = "single-article fullpost";
+			$params['summery'] = 'full';
+			$params['postclass'] = "single-article fullpost";
 		} else {
-			$summery = 'normal';
-			$postclass = 'postlist';
+			$params['summery']= 'normal';
+			$params['postclass'] = 'postlist';
 		}
+
 		?>
-				<div class="main <?php echo kadence_main_class();?> <?php echo $postclass . ' ' . $fullclass; ?>" role="main">
+		<div id="content" class="container">
+			<div class="row">
+				<div class="main <?php echo kadence_main_class();?> <?php echo $params['postclass'] . ' ' . $params['fullclass']; ?>" role="main">
 		<?php
 		get_template_part('templates/content', 'page');
 
@@ -64,14 +64,14 @@ class Ethnologist_Template
 		if ( $wp_query->have_posts() ) {
 			while ( $wp_query->have_posts() ) {
 				$wp_query->the_post();
-				if ( $summery == 'full' ) {
-					if ( $display_sidebar ){
+				if ( $params['summery'] == 'full' ) {
+					if ( $params['disaplay_sidebar'] ){
 						get_template_part( 'templates/content', 'fullpost' );
 					} else {
 						get_template_part( 'templates/content', 'fullpostfull' );
 					}
 				} else {
-					if ( $display_sidebar ){
+					if ( $params['disaplay_sidebar'] ){
 						get_template_part( 'templates/content', get_post_format() );
 					} else {
 						get_template_part( 'templates/content', 'fullwidth' );
