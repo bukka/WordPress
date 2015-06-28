@@ -40,6 +40,9 @@
 .page-header {
 	padding: 170px 0;
 }
+.ethnologist-interview-content img.alignleft {
+	margin-right: 10px
+}
 .gmPhantom_thumbsWrapper {
 	width: 100% !important;
 }
