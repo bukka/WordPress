@@ -40,6 +40,12 @@
 .page-header {
 	padding: 170px 0;
 }
+#content .interview {
+	padding-top: 0 !important;
+}
+#content .interview p {
+	text-align: justify;
+}
 .ethnologist-interview-content img.alignleft {
 	margin-right: 10px
 }
