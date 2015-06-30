@@ -76,7 +76,7 @@ function ethnologist_register_sections() {
 		'capabilities'        => $capabilities,
 		'has_archive'         => true,
 		'hierarchical'        => false,
-		'supports'            => array( 'title', 'thumbnail', 'editor' ),
+		'supports'            => array( 'title', 'thumbnail', 'editor', 'author' ),
 		'taxonomies'          => array( 'mm' ),
 	) );
 }
@@ -127,7 +127,7 @@ function ethnologist_register_interviews() {
 		'capabilities'        => $capabilities,
 		'has_archive'         => true,
 		'hierarchical'        => false,
-		'supports'            => array( 'title', 'thumbnail', 'editor' ),
+		'supports'            => array( 'title', 'thumbnail', 'editor', 'author' ),
 		'taxonomies'          => array( 'mm' ),
 	) );
 }
