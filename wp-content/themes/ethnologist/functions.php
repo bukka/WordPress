@@ -269,6 +269,18 @@ function ethnologist_language_link( $url, $slug, $locale ) {
 add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
 
 /**
+ * Print author content
+ */
+function ethnologist_author_content() {
+	global $wp_query;
+
+	$field_name = 'content_' . pll_current_language();
+
+	$content = get_the_author_meta($field_name);
+	echo '<p>' . preg_replace("/\s*&nbsp;\s*/", "</p></p>", $content) . '</p>';
+}
+
+/**
  * Page titles
  */
 function ethnologist_title() {
