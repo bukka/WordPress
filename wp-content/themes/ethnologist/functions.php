@@ -253,6 +253,22 @@ remove_action( 'init', 'kadence_sidebar_list' );
 remove_action( 'widgets_init', 'kadence_register_sidebars' );
 
 /**
+ * Filter for Polylang lanuguage link to fix author page link for switcher
+ * @param string $url
+ * @param string $slug
+ * @param string $locale
+ * @return string
+ */
+function ethnologist_language_link( $url, $slug, $locale ) {
+
+	if ( preg_match( '#/\w{2}(/author/\w+)#', $url, $matches) ) {
+		return "/$slug" . $matches[1];
+	}
+	return $url;
+}
+add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
+
+/**
  * Page titles
  */
 function ethnologist_title() {
