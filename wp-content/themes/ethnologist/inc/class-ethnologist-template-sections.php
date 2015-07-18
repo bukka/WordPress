@@ -17,6 +17,15 @@ class Ethnologist_TemplateSections extends Ethnologist_Template
 	}
 
 	/**
+	 * Get content template part
+	 *
+	 * @return string
+	 */
+	protected function get_content_template_part() {
+		return 'fullwidth-section';
+	}
+
+	/**
 	 * Get message when there are no items
 	 *
 	 * @return string

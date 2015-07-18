@@ -39,6 +39,7 @@ class Ethnologist_Template
 			'post_type'      => $this->get_post_type(),
 		) );
 		$params['not_found_msg'] = $this->get_not_found_message();
+		$params['content_template_part'] = $this->get_content_template_part();
 
 		ethnologist_view( 'template', 'content', $params );
 
@@ -53,6 +54,15 @@ class Ethnologist_Template
 	 */
 	protected function get_post_type() {
 		return 'post';
+	}
+
+	/**
+	 * Get content template part
+	 *
+	 * @return string
+	 */
+	protected function get_content_template_part() {
+		return 'fullwidth';
 	}
 
 	/**

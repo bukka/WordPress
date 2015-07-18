@@ -7,7 +7,7 @@
 		<?php endwhile; ?>
 		<?php if ( $params['query']->have_posts() ): ?>
 		<?php 	while ( $params['query']->have_posts() ) : $params['query']->the_post(); ?>
-			<?php get_template_part( 'templates/content', 'fullwidth' ); ?>
+			<?php get_template_part( 'templates/content', $params['content_template_part'] ); ?>
 		<?php 	endwhile; ?>
 		<?php 	if ($params['query']->max_num_pages > 1): ?>
 			<?php kad_wp_pagenavi(); ?>
