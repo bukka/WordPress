@@ -1,12 +1,6 @@
-<?php get_header(); ?>
-	<?php get_template_part( 'templates/blog', 'post-header' ); ?>
+<?php
 
-	<div id="content" class="container">
-		<div class="row single-article">
-			<?php get_template_part( 'templates/content', 'single' ); ?>
-			<?php get_sidebar(); ?>
-		</div><!-- /.row-->
-	</div><!-- /.content -->
+require_once __DIR__ . '/inc/class-ethnologist-single.php';
 
-</div><!-- /.wrap -->
-<?php get_footer(); ?>
+$ethnologist_single = new Ethnologist_Single();
+$ethnologist_single->render();
