@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Ethnologist Template class
+ * Ethnologist Template Listing class
  */
-class Ethnologist_Template
+class Ethnologist_TemplateListing
 {
 	/**
 	 * Render template

@@ -1,11 +1,11 @@
 <?php
 
-require_once __DIR__ . '/class-ethnologist-template.php';
+require_once __DIR__ . '/class-ethnologist-template-listing.php';
 
 /**
  * Ethnologist Template Interviews class
  */
-class Ethnologist_TemplateInterviews extends Ethnologist_Template
+class Ethnologist_TemplateInterviews extends Ethnologist_TemplateListing
 {
 	/**
 	 * Get post type
