@@ -49,6 +49,10 @@
 .ethnologist-interview-content img.alignleft {
 	margin-right: 10px
 }
+.ethnologist-template-listing-article footer {
+	border-top-width: 0 !important;
+
+}
 .gmPhantom_thumbsWrapper {
 	width: 100% !important;
 }

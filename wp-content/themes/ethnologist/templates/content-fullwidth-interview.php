@@ -1,5 +1,5 @@
 <article id="post-<?php the_ID(); ?>"
-		<?php post_class('kad_blog_item postclass kad-animation'); ?>
+		<?php post_class('kad_blog_item postclass kad-animation ethnologist-template-listing-article'); ?>
 		data-animation="fade-in" data-delay="0">
 	<div class="row">
 		<div class="col-md-12 postcontent">

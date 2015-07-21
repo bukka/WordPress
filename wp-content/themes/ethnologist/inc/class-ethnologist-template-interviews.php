@@ -17,6 +17,16 @@ class Ethnologist_TemplateInterviews extends Ethnologist_TemplateListing
 	}
 
 	/**
+	 * Get content template part
+	 *
+	 * @return string
+	 */
+	protected function get_content_template_part() {
+		return 'fullwidth-interview';
+	}
+
+
+	/**
 	 * Get message when there are no items
 	 *
 	 * @return string
