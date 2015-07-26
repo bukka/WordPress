@@ -8,6 +8,17 @@ require_once __DIR__ . '/class-ethnologist-template-listing.php';
 class Ethnologist_TemplateSections extends Ethnologist_TemplateListing
 {
 	/**
+	 * Get query params
+	 *
+	 * @return array
+	 */
+	protected function get_query_params() {
+		return array_merge(parent::get_query_params(), array(
+			'post_parent' => 0,
+		));
+	}
+
+	/**
 	 * Get post type
 	 *
 	 * @return string

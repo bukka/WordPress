@@ -9,7 +9,7 @@ class Ethnologist_TemplateListing
 	 * Render template
 	 */
 	public function render() {
-		global $post, $wp_query, $paged;
+		global $post, $wp_query;
 
 		get_header();
 		get_template_part('templates/page', 'header');
@@ -33,11 +33,7 @@ class Ethnologist_TemplateListing
 		}
 
 		$params['main_class'] = kadence_main_class() . ' ' . $postclass . ' ' . $fullclass;
-		$params['query'] = new WP_Query(array(
-			'paged'          => $paged,
-			'posts_per_page' => 10,
-			'post_type'      => $this->get_post_type(),
-		) );
+		$params['query'] = new WP_Query( $this->get_query_params() );
 		$params['not_found_msg'] = $this->get_not_found_message();
 		$params['content_template_part'] = $this->get_content_template_part();
 
@@ -45,6 +41,21 @@ class Ethnologist_TemplateListing
 
 		get_footer();
 
+	}
+
+	/**
+	 * Get query params
+	 *
+	 * @return array
+	 */
+	protected function get_query_params() {
+		global $paged;
+
+		return array(
+			'paged'          => $paged,
+			'posts_per_page' => 10,
+			'post_type'      => $this->get_post_type(),
+		);
 	}
 
 	/**

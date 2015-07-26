@@ -75,8 +75,8 @@ function ethnologist_register_sections() {
 		'capability_type'     => 'page',
 		'capabilities'        => $capabilities,
 		'has_archive'         => true,
-		'hierarchical'        => false,
-		'supports'            => array( 'title', 'thumbnail', 'editor', 'author' ),
+		'hierarchical'        => true,
+		'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'page-attributes' ),
 		'taxonomies'          => array( 'mm' ),
 	) );
 }
