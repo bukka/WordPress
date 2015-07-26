@@ -150,6 +150,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_posts_older', '&larr; Older posts', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_next', 'Next  Post', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_prev', 'Previous Post', 'ethnologist' );
+		pll_register_string( 'ethnologist_singe_link_pages', 'Pages:', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_form_title', 'Send us an email', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_required_field', 'This field is required.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_valid_email', 'Please enter a valid email address.', 'ethnologist' );
