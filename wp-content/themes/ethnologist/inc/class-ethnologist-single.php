@@ -24,7 +24,7 @@ class Ethnologist_Single
 	 */
 	protected function get_params() {
 		return array(
-			'content_template_part' => $this->get_content_template_part(),
+			'content_template_part' => $this->get_content_template_part()
 		);
 	}
 
