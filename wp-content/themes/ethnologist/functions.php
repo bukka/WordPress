@@ -79,6 +79,8 @@ function ethnologist_register_sections() {
 		'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'page-attributes' ),
 		'taxonomies'          => array( 'mm' ),
 	) );
+
+	//flush_rewrite_rules();
 }
 
 function ethnologist_register_interviews() {

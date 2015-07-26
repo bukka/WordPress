@@ -11,6 +11,11 @@
 			<?php get_template_part( 'templates/entry', 'meta-footer' ); ?>
 		</footer>
 	</article>
+
+	<?php 	$subquery = new WP_Query( array( 'post_parent' => get_the_ID(), 'post_type' => 'section', 'posts_per_page' => -1 ) ); ?>
+	<?php 	while ( $subquery->have_posts() ): $subquery->the_post(); ?>
+	<?php 		get_template_part( 'templates/content', 'fullwidth-section' ); ?>
+	<?php 	endwhile; ?>
 	<?php endwhile; ?>
 </div>
 
