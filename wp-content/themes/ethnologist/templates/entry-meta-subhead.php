@@ -2,7 +2,10 @@
 	<span class="postauthortop author vcard">
 		<?php pll_e( 'by' ); ?>
 		<a href="<?php echo esc_attr( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>"
-			class="fn" rel="author"><?php echo get_the_author() ?></a>
+			class="fn" rel="author">
+				<?php echo get_the_author_meta( 'first_name' ) ?>
+				<?php echo get_the_author_meta( 'last_name' ) ?>
+			</a>
 	</span>
 	<span class="updated postdate">
 		<?php pll_e( 'on' ); ?>
