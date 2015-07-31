@@ -47,10 +47,10 @@ function ethnologist_register_sections() {
 		'parent_item_colon'    => '',
 		'menu_name'            => __( 'Sections', 'ethnologist' )
 	);
-	// capabilities for accessing vection post type
+	// capabilities for accessing vection post type (not used)
 	$capabilities = array(
-		'edit_post'               => 'edit_vection',
-		'read_post'               => 'read_vection',
+		'edit_post'               => 'edit_section',
+		'read_post'               => 'read_section',
 		'delete_post'             => 'delete_section',
 		'edit_posts'              => 'edit_sections',
 		'edit_others_posts'       => 'edit_others_sections',
@@ -73,7 +73,7 @@ function ethnologist_register_sections() {
 		'show_in_menu'        => true,
 		'menu_position'       => 5,
 		'capability_type'     => 'page',
-		'capabilities'        => $capabilities,
+		'capabilities'        => array(),
 		'has_archive'         => true,
 		'hierarchical'        => true,
 		'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'page-attributes' ),
@@ -100,10 +100,10 @@ function ethnologist_register_interviews() {
 		'parent_item_colon'    => '',
 		'menu_name'            => __( 'Interviews', 'ethnologist' )
 	);
-	// capabilities for accessing vection post type
+	// capabilities for accessing interview post type (not used)
 	$capabilities = array(
-		'edit_post'               => 'edit_vection',
-		'read_post'               => 'read_vection',
+		'edit_post'               => 'edit_interview',
+		'read_post'               => 'read_interview',
 		'delete_post'             => 'delete_interview',
 		'edit_posts'              => 'edit_interviews',
 		'edit_others_posts'       => 'edit_others_interviews',
@@ -126,7 +126,7 @@ function ethnologist_register_interviews() {
 		'show_in_menu'        => true,
 		'menu_position'       => 6,
 		'capability_type'     => 'page',
-		'capabilities'        => $capabilities,
+		'capabilities'        => array(),
 		'has_archive'         => true,
 		'hierarchical'        => false,
 		'supports'            => array( 'title', 'thumbnail', 'editor', 'author' ),
