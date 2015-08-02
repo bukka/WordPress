@@ -30,6 +30,52 @@ function ethnologist_after_setup_theme() {
 
 add_action( 'after_setup_theme', 'ethnologist_after_setup_theme' );
 
+function ethnologist_map_meta_cap( $caps, $cap, $user_id, $args )
+{
+	foreach ( $caps as $key => $capability ) {
+
+		if( $capability != 'do_not_allow' )
+			continue;
+
+		switch ( $cap ) {
+			case 'edit_user':
+			case 'edit_users':
+				$caps[$key] = 'edit_users';
+				break;
+			case 'delete_user':
+			case 'delete_users':
+				$caps[$key] = 'delete_users';
+				break;
+			case 'create_users':
+				$caps[$key] = $cap;
+				break;
+		}
+	}
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', 'ethnologist_map_meta_cap', 10, 4 );
+
+/*
+ * Let Editors manage users, and run this only once.
+ */
+function ethnologist_editor_manage_users() {
+
+	if ( get_option( 'ethnologist_add_cap_editor_once' ) != 'v1' ) {
+
+		// let editor manage users
+		$edit_editor = get_role('editor'); // Get the user role
+		$edit_editor->add_cap('edit_users');
+		$edit_editor->add_cap('list_users');
+		$edit_editor->add_cap('promote_users');
+		$edit_editor->add_cap('create_users');
+		$edit_editor->add_cap('add_users');
+		$edit_editor->add_cap('delete_users');
+
+		update_option( 'ethnologist_add_cap_editor_once', 'v1' );
+	}
+}
+
 function ethnologist_register_sections() {
 	// labels for section post type
 	$labels = array(
@@ -137,6 +183,7 @@ function ethnologist_register_interviews() {
 function ethnologist_init() {
 	ethnologist_register_sections();
 	ethnologist_register_interviews();
+	ethnologist_editor_manage_users();
 }
 add_action ( 'init', 'ethnologist_init' );
 
