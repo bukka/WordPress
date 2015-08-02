@@ -404,3 +404,12 @@ function ethnologist_author_avatar() {
 	echo '<img class="avatar pull-left media-object avatar-100 photo"' .
 			' width="100" height="100" src="' . $photo['url'] . '" alt="' . $photo['alt']. '" />';
 }
+
+function ethnologist_author_query_args() {
+	return array(
+		'post_type' => array( 'post', 'page', 'interview', 'section' ),
+		'author_name' => get_query_var('author_name'),
+		'posts_per_page' => 1,
+		'lang' => get_query_var('lang'),
+	);
+}
