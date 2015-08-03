@@ -219,6 +219,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_post_with', 'with', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_on', 'on', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_date', 'ethnologist_post_date', 'ethnologist' );
+		pll_register_string( 'ethnologist_post_read_more', 'Read More', 'ethnologist' );
 		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
@@ -298,9 +299,23 @@ function ethnologist_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
 
+/**
+ * Set more message
+ * @param string $more
+ * @return string
+ */
+function ethnologist_excerpt_more($more) {
+	$readmore =  pll__( 'Read More' );
+	return ' &hellip; <a href="' . get_permalink() . '">' . $readmore . '</a>';
+}
+add_filter( 'excerpt_more', 'ethnologist_excerpt_more', 20 );
+
 // kadence actions clean up
 remove_action( 'init', 'kadence_sidebar_list' );
 remove_action( 'widgets_init', 'kadence_register_sidebars' );
+// kadence filters clean up
+remove_filter('excerpt_length', 'kadence_excerpt_length');
+remove_filter('excerpt_more', 'kadence_excerpt_more');
 
 /**
  * Filter for Polylang lanuguage link to fix author page link for switcher
