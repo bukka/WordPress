@@ -220,6 +220,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_post_on', 'on', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_date', 'ethnologist_post_date', 'ethnologist' );
 		pll_register_string( 'ethnologist_post_read_more', 'Read More', 'ethnologist' );
+		pll_register_string( 'ethnologist_search', 'Search', 'ethnologist' );
 		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
