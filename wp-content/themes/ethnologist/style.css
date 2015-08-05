@@ -28,6 +28,9 @@
 	padding-top: 180px;
 	padding-bottom: 180px;
 }
+.entry-content {
+	font-size: 15px;
+}
 #map_address {
 	height: 300px;
 }
