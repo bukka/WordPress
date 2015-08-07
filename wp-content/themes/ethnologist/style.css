@@ -31,6 +31,24 @@
 .entry-content {
 	font-size: 15px;
 }
+.entry-content .footnote_plugin_tooltip_text {
+    vertical-align: top !important;
+    position: relative !important;
+    top: 6px !important;
+    cursor: pointer;
+    color: #f3690e;
+}
+.entry-content .footnote_container_prepare > p {
+    border-bottom: 1px solid #eee !important;
+}
+.entry-content .footnote_plugin_index {
+    color: #f3690e;
+}
+.entry-content .footnote-reference-container {
+    width: 100%;
+    border: none;
+    margin: 20px 0 10px;
+}
 #map_address {
 	height: 300px;
 }
