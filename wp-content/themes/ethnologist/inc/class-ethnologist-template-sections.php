@@ -15,6 +15,7 @@ class Ethnologist_TemplateSections extends Ethnologist_TemplateListing
 	protected function get_query_params() {
 		return array_merge(parent::get_query_params(), array(
 			'post_parent' => 0,
+			'orderby'     => array( 'menu_order' => 'ASC', 'title' => 'ASC' ),
 		));
 	}
 
