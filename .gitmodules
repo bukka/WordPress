@@ -19,3 +19,6 @@
 [submodule "wp-content/plugins/grand-media"]
 	path = wp-content/plugins/grand-media
 	url = git@github.com:wp-plugins/grand-media.git
+[submodule "wp-content/plugins/simple-page-ordering"]
+	path = wp-content/plugins/simple-page-ordering
+	url = git@github.com:jakemgold/simple-page-ordering.git
