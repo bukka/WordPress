@@ -82,9 +82,8 @@
 						<?php if ( $params['comment_error_msg'] ): ?>
 						<span class="error"><?php echo $params['comment_error_msg'];?></span>
 						<?php endif; ?>
-						<textarea name="comments" id="commentsText" rows="10" class="required requiredField">
-							<?php echo $params['comment_value']; ?>
-						</textarea>
+						<textarea name="comments" id="commentsText" rows="10"
+							class="required requiredField"><?php echo $params['comment_value']; ?></textarea>
 					</p>
 					<?php if ( $params['captcha_math'] ): ?>
 					<p>
@@ -101,6 +100,7 @@
 					</p>
 				</div><!-- /.contactform-->
 				<input type="hidden" name="submitted" id="submitted" value="true" />
+				<input type="hidden" name="action" id="ethnologist_contact_email" value="true" />
 			</form>
 			<?php endif; ?>
 		</div><!--contactform-->
@@ -108,4 +108,5 @@
 		<?php get_sidebar(); ?>
 	</div><!-- /.row-->
 </div><!-- /.content -->
+
 </div><!-- /.wrap -->

@@ -2,12 +2,35 @@ jQuery(document).ready( function($) {
 	var $contactForm = $( '#contactForm' ),
 		$map = $( '#map_address' );
 	
+	function showMessage(type, msg) {
+		alert( msg );
+	}
+
 	$.extend( $.validator.messages, {
 		required: $contactForm.data( 'msg-required' ),
 		email: $contactForm.data( 'msg-email' ),
 	});
-	
-	$( '#contactForm' ).validate();
+
+	$contactForm
+		.validate();
+
+	$contactForm
+		.submit( function (event) {
+			var $this = $(this);
+			event.preventDefault();
+
+			$.post( '/wp-admin/admin-ajax.php', $this.serialize() )
+				.done( function( result ) {
+					if ( result.error ) {
+						showMessage( 'warning', $this.data( 'msg-form-warning') );
+					} else {
+						showMessage( 'success', $this.data( 'msg-form-success') );
+					}
+				})
+				.fail(function() {
+					showMessage( 'error', $this.data( 'msg-form-error') );
+				});
+		});
 
 	$map.gmap3( {
 		map: {
