@@ -57,7 +57,9 @@
 			<?php	endif; ?>
 			<form action="<?php the_permalink(); ?>" id="contactForm" method="post"
 					data-msg-required="<?php pll_e( 'This field is required.' ); ?>"
-					data-msg-email="<?php pll_e( 'Please enter a valid email address.' ); ?>">
+					data-msg-email="<?php pll_e( 'Please enter a valid email address.' ); ?>"
+					data-msg-form-success="<?php pll_e( 'The email has been successfully delivered.' ); ?>"
+					data-msg-form-error="<?php pll_e( 'The email sending failed. Please email us directly.' ); ?>">
 				<div class="contactform">
 					<p>
 						<label for="contactName"><b><?php pll_e( 'Name' );?></b></label>

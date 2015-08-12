@@ -21,10 +21,10 @@ jQuery(document).ready( function($) {
 
 			$.post( '/wp-admin/admin-ajax.php', $this.serialize() )
 				.done( function( result ) {
-					if ( result.error ) {
-						showMessage( 'warning', $this.data( 'msg-form-warning') );
-					} else {
+					if ( result.success ) {
 						showMessage( 'success', $this.data( 'msg-form-success') );
+					} else {
+						showMessage( 'error', $this.data( 'msg-form-error') );
 					}
 				})
 				.fail(function() {

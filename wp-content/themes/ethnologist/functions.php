@@ -204,6 +204,8 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_contact_required_field', 'This field is required.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_valid_email', 'Please enter a valid email address.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_email', 'Please enter your email address.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_email_success', 'The email has been successfully delivered.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_email_error', 'The email sending failed. Please email us directly.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_captcha_math', 'Check your math.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_name', 'Please enter your name.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_email_invalid', 'You entered an invalid email address.', 'ethnologist' );
