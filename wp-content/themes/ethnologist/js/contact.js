@@ -1,4 +1,4 @@
-jQuery(document).ready( function($) {
+jQuery(document).ready( function($ ) {
 	var $contactForm = $( '#contactForm' ),
 		$map = $( '#map_address' );
 	
@@ -15,20 +15,20 @@ jQuery(document).ready( function($) {
 		.validate();
 
 	$contactForm
-		.submit( function (event) {
-			var $this = $(this);
+		.submit( function( event ) {
+			var $this = $( this );
 			event.preventDefault();
 
 			$.post( '/wp-admin/admin-ajax.php', $this.serialize() )
 				.done( function( result ) {
 					if ( result.success ) {
-						showMessage( 'success', $this.data( 'msg-form-success') );
+						showMessage( 'success', $this.data( 'msg-form-success' ) );
 					} else {
-						showMessage( 'error', $this.data( 'msg-form-error') );
+						showMessage( 'error', $this.data( 'msg-form-error' ) );
 					}
 				})
-				.fail(function() {
-					showMessage( 'error', $this.data( 'msg-form-error') );
+				.fail( function() {
+					showMessage( 'error', $this.data( 'msg-form-error' ) );
 				});
 		});
 
