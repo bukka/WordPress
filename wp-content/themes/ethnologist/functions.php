@@ -302,6 +302,15 @@ function ethnologist_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
 
+function ethnologist_contact_email() {
+	check_ajax_referer( 'ethnologist_contact_form' );
+
+
+	echo json_encode( array( 'success' => true ) );
+}
+add_action( 'wp_ajax_ethnologist_contact_email', 'ethnologist_contact_email' );
+add_action( 'wp_ajax_nopriv_ethnologist_contact_email', 'ethnologist_contact_email' );
+
 /**
  * Set more message
  * @param string $more

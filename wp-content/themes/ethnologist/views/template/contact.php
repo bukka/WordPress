@@ -103,6 +103,7 @@
 				</div><!-- /.contactform-->
 				<input type="hidden" name="submitted" id="submitted" value="true" />
 				<input type="hidden" name="action" id="ethnologist_contact_email" value="true" />
+				<?php wp_nonce_field( 'ethnologist_contact_form' ); ?>
 			</form>
 			<?php endif; ?>
 		</div><!--contactform-->
