@@ -306,7 +306,8 @@ function ethnologist_contact_email() {
 	check_ajax_referer( 'ethnologist_contact_form' );
 
 
-	echo json_encode( array( 'success' => true ) );
+
+	wp_send_json_success();
 }
 add_action( 'wp_ajax_ethnologist_contact_email', 'ethnologist_contact_email' );
 add_action( 'wp_ajax_nopriv_ethnologist_contact_email', 'ethnologist_contact_email' );
