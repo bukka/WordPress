@@ -23,6 +23,8 @@ jQuery(document).ready( function($ ) {
 				.done( function( result ) {
 					if ( result.success ) {
 						showMessage( 'success', $this.data( 'msg-form-success' ) );
+					} else if ( result.data ) {
+						showMessage( 'warning', result.data );
 					} else {
 						showMessage( 'error', $this.data( 'msg-form-error' ) );
 					}

@@ -211,6 +211,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_contact_email_invalid', 'You entered an invalid email address.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_enter_message', 'Please enter a message.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_email_sent', 'Thanks, your email was sent successfully.', 'ethnologist' );
+		pll_register_string( 'ethnologist_contact_email_failed', 'Sending email failed.', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_label_email', 'Email', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_label_name', 'Name', 'ethnologist' );
 		pll_register_string( 'ethnologist_contact_label_message', 'Message', 'ethnologist' );
@@ -302,10 +303,61 @@ function ethnologist_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
 
+function ethnologist_contact_email_error( $msg, $lang )
+{
+	$msg = pll_translate_string( $msg, $lang );
+	wp_send_json_error( $msg );
+}
+
 function ethnologist_contact_email() {
 	check_ajax_referer( 'ethnologist_contact_form' );
 
+	$lang = isset( $_POST['lang'] ) ? $_POST['lang'] : 'en';
 
+	// check captcha
+	if ( isset( $_POST['kad_captcha'] ) && md5( $_POST['kad_captcha'] ) != $_POST['hval'] ) {
+		ethnologist_contact_email_error( 'Check your math.', $lang );
+	}
+
+	// check name
+	if ( trim( $_POST['contactName'] ) === '' ) {
+		ethnologist_contact_email_error( 'Please enter your name.', $lang );
+	}
+
+	$name = trim( $_POST['contactName'] );
+
+	// check email
+	if ( trim( $_POST['email'] ) === '' )  {
+		ethnologist_contact_email_error( 'Please enter your email address.', $lang );
+	}
+	if ( ! preg_match( "/^[[:alnum:]][a-z0-9_.-]*@[a-z0-9.-]+\.[a-z]{2,4}$/i", trim( $_POST['email'] ) ) ) {
+		ethnologist_contact_email_error( 'You entered an invalid email address.', $lang );
+	}
+	$email = trim( $_POST['email'] );
+
+	// check comment
+	if ( trim( $_POST['comments'] ) === '') {
+		ethnologist_contact_email_error( 'Please enter a message.', $lang );
+	}
+	$comments = stripslashes( trim( $_POST['comments'] ) );
+
+	$email_to = get_option( 'admin_email' );
+
+	// email subject
+	$subject = sprintf("[%s %s] %s %s", get_bloginfo( 'name' ),
+			__( "Contact", "ethnologist" ), __( "From", "ethnologist" ), $name);
+	// email body
+	$body_parts = array();
+	$body_parts[] = __( 'Name',  'ethnologist' ) . ': ' . $name;
+	$body_parts[] = __( 'Email', 'ethnologist' ) . ': ' . $email;
+	$body_parts[] = __( 'Name',  'ethnologist' ) . ': ' . $comments;
+	$body = implode( "\n\n", $body_parts );
+	// email headers
+	$headers = 'From: ' . $name . ' <' . $email_to . '>' . "\r\n" . 'Reply-To: ' . $email;
+	// send email
+	if ( ! wp_mail( $email_to, $subject, $body, $headers ) ) {
+		ethnologist_contact_email_error( 'Sending email failed.', $lang );
+	}
 
 	wp_send_json_success();
 }

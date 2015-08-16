@@ -101,8 +101,8 @@
 						<input type="submit" class="kad-btn kad-btn-primary" id="submit" tabindex="5" value="<?php pll_e( 'Send Email' ); ?>" ></input>
 					</p>
 				</div><!-- /.contactform-->
-				<input type="hidden" name="submitted" id="submitted" value="true" />
 				<input type="hidden" name="action" value="ethnologist_contact_email" />
+				<input type="hidden" name="lang" value="<?php echo pll_current_language(); ?>" />
 				<?php wp_nonce_field( 'ethnologist_contact_form' ); ?>
 			</form>
 			<?php endif; ?>
