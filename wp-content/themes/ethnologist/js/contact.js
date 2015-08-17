@@ -11,28 +11,25 @@ jQuery(document).ready( function($ ) {
 		email: $contactForm.data( 'msg-email' ),
 	});
 
-	$contactForm
-		.validate();
+	$contactForm.validate({
+		submitHandler: function(form) {
+			var $form = $(form);
 
-	$contactForm
-		.submit( function( event ) {
-			var $this = $( this );
-			event.preventDefault();
-
-			$.post( '/wp-admin/admin-ajax.php', $this.serialize() )
+			$.post( '/wp-admin/admin-ajax.php', $form.serialize() )
 				.done( function( result ) {
 					if ( result.success ) {
-						showMessage( 'success', $this.data( 'msg-form-success' ) );
+						showMessage( 'success', $form.data( 'msg-form-success' ) );
 					} else if ( result.data ) {
 						showMessage( 'warning', result.data );
 					} else {
-						showMessage( 'error', $this.data( 'msg-form-error' ) );
+						showMessage( 'error', $form.data( 'msg-form-error' ) );
 					}
 				})
 				.fail( function() {
-					showMessage( 'error', $this.data( 'msg-form-error' ) );
+					showMessage( 'error', $form.data( 'msg-form-error' ) );
 				});
-		});
+		}
+	});
 
 	$map.gmap3( {
 		map: {
