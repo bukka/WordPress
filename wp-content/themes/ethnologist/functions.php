@@ -341,7 +341,11 @@ function ethnologist_contact_email() {
 	}
 	$comments = stripslashes( trim( $_POST['comments'] ) );
 
-	$email_to = get_option( 'admin_email' );
+	if ( defined( 'ETHNOLOGIST_CONTACT_EMAIL' ) ) {
+		$email_to = constant( 'ETHNOLOGIST_CONTACT_EMAIL' );
+	} else {
+		$email_to = get_option( 'admin_email' );
+	}
 
 	// email subject
 	$subject = sprintf("[%s %s] %s %s", get_bloginfo( 'name' ),
@@ -359,7 +363,12 @@ function ethnologist_contact_email() {
 		ethnologist_contact_email_error( 'Sending email failed.', $lang );
 	}
 
-	wp_send_json_success();
+	wp_send_json_success( WP_DEBUG ? array(
+			'email_to' => $email_to,
+			'subject'  => $subject,
+			'body'     => $body,
+			'headers'  => $headers,
+		) : null );
 }
 add_action( 'wp_ajax_ethnologist_contact_email', 'ethnologist_contact_email' );
 add_action( 'wp_ajax_nopriv_ethnologist_contact_email', 'ethnologist_contact_email' );
