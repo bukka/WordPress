@@ -28,3 +28,6 @@
 [submodule "wp-content/plugins/wordpress-seo"]
 	path = wp-content/plugins/wordpress-seo
 	url = git@github.com:Yoast/wordpress-seo.git
+[submodule "wp-content/plugins/wf-cookie-consent"]
+	path = wp-content/plugins/wf-cookie-consent
+	url = git@github.com:wp-plugins/wf-cookie-consent.git
