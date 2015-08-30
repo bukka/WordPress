@@ -414,9 +414,8 @@ function ethnologist_author_content() {
 	global $wp_query;
 
 	$field_name = 'content_' . pll_current_language();
-
-	$content = get_the_author_meta($field_name);
-	echo '<p>' . preg_replace("/\s*&nbsp;\s*/", "</p></p>", $content) . '</p>';
+	$author_id = get_the_author_meta( 'ID' );
+	echo get_field( $field_name, 'user_' . $author_id );
 }
 
 /**
