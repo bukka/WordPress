@@ -185,8 +185,11 @@ class Ethnologist_NavMenus
 		$query = new WP_Query();
 		$query->query(array(
 			'numberposts' => -1,
-			'post_type'  => $post_type,
-			'lang'       => $lang,
+			'post_type'   => $post_type,
+			'lang'        => $lang,
+			'post_parent' => 0,
+			'orderby'     => 'title',
+			'order'       => 'ASC',
 		));
 		$posts = array();
 		while ( $query->have_posts() ) {
