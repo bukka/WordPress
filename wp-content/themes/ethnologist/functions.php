@@ -463,12 +463,14 @@ function ethnologist_subtitle() {
 	$before = '<div class="subtitle">';
 	$after = '</div>';
 
-	if(is_page()) {
+	if ( is_page() ) {
 		$bsub = get_post_meta( $post->ID, '_kad_subtitle', true );
-	} else if( is_category() ) {
+	} else if ( is_category() ) {
 		$bsub = category_description();
-	} else if( is_tag() ) {
+	} else if ( is_tag() ) {
 		$bsub = tag_description();
+	} else {
+		return;
 	}
 
 	echo $before . $bsub . $after;
