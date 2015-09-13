@@ -408,6 +408,17 @@ function ethnologist_language_link( $url, $slug, $locale ) {
 add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
 
 /**
+ * Filter for Polylang home redirect
+ * @param string $url
+ * @return string
+ */
+function ethnologist_redirect_home( $url ) {
+
+	return str_replace(parse_url($url, PHP_URL_HOST), $_SERVER['SERVER_NAME'], $url);
+}
+add_filter( 'pll_redirect_home', 'ethnologist_redirect_home', 10, 1 );
+
+/**
  * Print author content
  */
 function ethnologist_author_content() {
