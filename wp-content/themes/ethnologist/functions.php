@@ -436,7 +436,6 @@ add_filter( 'wpseo_opengraph_url', 'ethnologist_url', 10, 1 );
 add_filter( 'post_type_link', 'ethnologist_url', 10, 1 );
 add_filter( 'post_link', 'ethnologist_url', 10, 1 );
 add_filter( 'page_link', 'ethnologist_url', 10, 1 );
-add_filter( 'attachment_link', 'ethnologist_url', 10, 1 );
 
 /**
  * Print author content
