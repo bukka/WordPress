@@ -384,6 +384,21 @@ function ethnologist_excerpt_more($more) {
 }
 add_filter( 'excerpt_more', 'ethnologist_excerpt_more', 20 );
 
+/**
+ * Modify shortlink
+ *
+ * @param string  $shortlink
+ * @param int     $id
+ * @param string  $context
+ * @param boolean $allow_slugs
+ */
+function ethnologist_get_shortlink( $shortlink, $id, $context, $allow_slugs ) {
+	if ( $context === 'query' ) {
+		return null;
+	}
+}
+add_filter( 'get_shortlink', 'ethnologist_get_shortlink', 20, 4 );
+
 // kadence actions clean up
 remove_action( 'init', 'kadence_sidebar_list' );
 remove_action( 'widgets_init', 'kadence_register_sidebars' );
