@@ -427,11 +427,12 @@ add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
  * @param string $url
  * @return string
  */
-function ethnologist_redirect_home( $url ) {
+function ethnologist_url( $url ) {
 
 	return str_replace(parse_url($url, PHP_URL_HOST), $_SERVER['SERVER_NAME'], $url);
 }
-add_filter( 'pll_redirect_home', 'ethnologist_redirect_home', 10, 1 );
+add_filter( 'pll_redirect_home', 'ethnologist_url', 10, 1 );
+add_filter( 'wpseo_opengraph_url', 'ethnologist_url', 10, 1 );
 
 /**
  * Print author content
