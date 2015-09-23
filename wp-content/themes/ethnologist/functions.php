@@ -432,6 +432,7 @@ function ethnologist_url( $url ) {
 	return str_replace(parse_url($url, PHP_URL_HOST), $_SERVER['SERVER_NAME'], $url);
 }
 add_filter( 'pll_redirect_home', 'ethnologist_url', 10, 1 );
+add_filter( 'pll_translation_url', 'ethnologist_url', 10, 1 );
 add_filter( 'wpseo_opengraph_url', 'ethnologist_url', 10, 1 );
 add_filter( 'post_type_link', 'ethnologist_url', 10, 1 );
 add_filter( 'post_link', 'ethnologist_url', 10, 1 );
