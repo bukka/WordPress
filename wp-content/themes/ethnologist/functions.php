@@ -437,6 +437,8 @@ add_filter( 'wpseo_opengraph_url', 'ethnologist_url', 10, 1 );
 add_filter( 'post_type_link', 'ethnologist_url', 10, 1 );
 add_filter( 'post_link', 'ethnologist_url', 10, 1 );
 add_filter( 'page_link', 'ethnologist_url', 10, 1 );
+//add_filter( 'attachment_link', 'ethnologist_url', 10, 1 );
+add_filter( 'home_url', 'ethnologist_url', 10, 1 );
 
 // disable feed links
 remove_action( 'wp_head', 'feed_links_extra', 3 ); // Display the links to the extra feeds such as category feeds
