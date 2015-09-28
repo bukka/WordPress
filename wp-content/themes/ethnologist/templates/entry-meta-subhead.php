@@ -1,11 +1,11 @@
 <div class="subhead">
 	<span class="postauthortop author vcard">
 		<?php pll_e( 'by' ); ?>
-		<a href="<?php echo esc_attr( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>"
+		<a href="<?php echo ethnologist_author_href(); ?>"
 			class="fn" rel="author">
-				<?php echo get_the_author_meta( 'first_name' ) ?>
-				<?php echo get_the_author_meta( 'last_name' ) ?>
-			</a>
+			<?php echo get_the_author_meta( 'first_name' ) ?>
+			<?php echo get_the_author_meta( 'last_name' ) ?>
+		</a>
 	</span>
 	<span class="updated postdate">
 		<?php pll_e( 'on' ); ?>

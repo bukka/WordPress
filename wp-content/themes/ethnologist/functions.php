@@ -464,6 +464,20 @@ function ethnologist_author_content() {
 }
 
 /**
+ * Get author link (content of href for author)
+ *
+ * @return string
+ */
+function ethnologist_author_href() {
+	$ourl = get_author_posts_url( get_the_author_meta( 'ID' ) );
+	$purl = parse_url( $ourl );
+	$url = sprintf("%s://%s/%s%s", $purl['scheme'], $purl['host'],
+			pll_current_language(), $purl['path']);
+
+	return esc_attr( $url );
+}
+
+/**
  * Page titles
  */
 function ethnologist_title() {
