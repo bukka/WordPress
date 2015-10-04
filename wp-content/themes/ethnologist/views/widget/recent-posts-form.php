@@ -15,6 +15,20 @@
 			type="text" value="<?php echo $params['number']; ?>" size="3" />
 </p>
 <p>
+	<label for="<?php echo $context->get_field_id( 'type' ); ?>">
+		<?php _e('Type:', 'ethnologist'); ?>
+	</label>
+	<select id="<?php echo $context->get_field_id( 'type' ); ?>"
+			name="<?php echo $context->get_field_name( 'type' ); ?>">
+		<?php foreach ( $params['types'] as $type_slug => $type_name ): ?>
+		<option value="<?php echo $type_slug ?>"
+				<?php if ( $params['type'] === $type_slug ) echo 'selected="selected"'?>>
+			<?php echo $type_name; ?>
+		</option>
+		<?php endforeach; ?>
+	</select>
+</p>
+<p>
 	<label for="<?php echo $context->get_field_id( 'thecate' ); ?>">
 		<?php _e('Limit to Catagory (Optional):', 'ethnologist'); ?>
 	</label>

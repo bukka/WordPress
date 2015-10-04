@@ -4,6 +4,12 @@
  */
 class Ethnologist_Widget_RecentPosts extends WP_Widget {
 
+	private $types = array(
+		'post'      => 'Posts',
+		'interview' => 'Interviews',
+		'section'   => 'Sections',
+	);
+
 	/**
 	 * Widget constructor
 	 */
@@ -48,17 +54,22 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 
 		$title = apply_filters(
 			'widget_title',
-			empty($instance['title']) ? __( 'Ethnologist: Recent Posts', 'ethnologist' ) : $instance['title'],
+			empty($instance['title']) ? __( 'Recent Posts', 'ethnologist' ) : $instance['title'],
 			$instance,
 			$this->id_base
 		);
 		if ( empty( $instance['number'] ) || ! $number = absint( $instance['number'] ) )
 			$number = 10;
+		if ( !isset( $instance['type'] ) || empty( $instance['type'] ) )
+			$post_type = 'post';
+		else
+			$post_type = $instance['type'];
 
 		$query = new WP_Query(
 			apply_filters(
 				'widget_posts_args',
 				array(
+					'post_type'           => $post_type,
 					'posts_per_page'      => $number,
 					'category_name'       => $instance['thecate'],
 					'no_found_rows'       => true,
@@ -97,12 +108,13 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 	 * @return array Settings to save or bool false to cancel saving.
 	 * @see WP_Widget::update()
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['number'] = (int) $new_instance['number'];
 		$instance['thecate'] = $new_instance['thecate'];
+		$instance['type'] = $new_instance['type'];
 		$this->flush_widget_cache();
 
 		return $instance;
@@ -111,7 +123,7 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 	/**
 	 * Flush widget cache
 	 */
-	function flush_widget_cache() {
+	public function flush_widget_cache() {
 		wp_cache_delete( 'ethnologist_widget_recent_posts', 'widget' );
 	}
 
@@ -122,12 +134,14 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 	 * @return string Default return is 'noform'.
 	 * @see WP_Widget::form()
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		$params = array(
 			'title'   => isset($instance['title'])   ? esc_attr($instance['title'])   : '',
 			'number'  => isset($instance['number'])  ? absint($instance['number'])    : 5,
 			'thecate' => isset($instance['thecate']) ? esc_attr($instance['thecate']) : '',
+			'type' => isset($instance['type']) ? esc_attr($instance['type']) : '',
+			'types'   => $this->types,
 		);
 
 		ethnologist_view( 'widget', 'recent-posts-form', $params, $this );
