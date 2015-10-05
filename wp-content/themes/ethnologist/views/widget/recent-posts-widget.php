@@ -7,7 +7,7 @@
 			<?php if ( has_post_thumbnail() ): ?>
 			<?php the_post_thumbnail( 'widget-thumb' ); ?>
 			<?php else: ?>
-			<img width="60" height="60" src="<?php echo pinnacle_img_placeholder_small() ?>"
+			<img width="60" height="60" src="<?php echo $params['image']; ?>"
 				class="attachment-widget-thumb wp-post-image" alt="">
 			<?php endif; ?>
 		</a>

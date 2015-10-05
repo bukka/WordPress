@@ -30,7 +30,7 @@
 </p>
 <p>
 	<label for="<?php echo $context->get_field_id( 'thecate' ); ?>">
-		<?php _e('Limit to Catagory (Optional):', 'ethnologist'); ?>
+		<?php _e( 'Limit to Catagory (Optional):', 'ethnologist' ); ?>
 	</label>
 	<select id="<?php echo $context->get_field_id( 'thecate' ); ?>"
 			name="<?php echo $context->get_field_name( 'thecate' ); ?>">

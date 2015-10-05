@@ -86,7 +86,19 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 				echo $before_title . $title . $after_title;
 			}
 
-			ethnologist_view( 'widget', 'recent-posts-widget', array( 'query' => $query ) );
+			switch ($instance['type']) {
+				case 'interview':
+				case 'section':
+				default:
+					// $image = get_stylesheet_directory_uri() . '/images/';
+					$image = get_template_directory_uri() . '/assets/img/post_standard-60x60.jpg';
+			}
+
+
+			ethnologist_view( 'widget', 'recent-posts-widget', array(
+					'query' => $query,
+					'image' => $image,
+			) );
 
 			echo $after_widget;
 
