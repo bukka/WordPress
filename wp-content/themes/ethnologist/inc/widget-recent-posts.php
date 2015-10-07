@@ -86,7 +86,7 @@ class Ethnologist_Widget_RecentPosts extends WP_Widget {
 				echo $before_title . $title . $after_title;
 			}
 
-			switch ($instance['type']) {
+			switch ( $post_type ) {
 				case 'interview':
 				case 'section':
 				default:
