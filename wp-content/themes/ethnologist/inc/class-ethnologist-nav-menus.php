@@ -186,6 +186,7 @@ class Ethnologist_NavMenus
 		$query->query(array(
 			'numberposts' => -1,
 			'post_type'   => $post_type,
+			'post_status' => 'publish',
 			'lang'        => $lang,
 			'post_parent' => 0,
 			'orderby'     => 'title',
