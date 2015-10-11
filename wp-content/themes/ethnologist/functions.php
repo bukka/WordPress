@@ -15,7 +15,9 @@ function ethnologist_view( $type, $name, $params = array(), $context = null ) {
 function ethnologist_navmenu_register() {
 	require_once 'inc/class-ethnologist-nav-menus.php';
 	$nav_menus = new Ethnologist_NavMenus();
-	$nav_menus->register()->update( true );
+	$nav_menu_create_only = ! defined( 'ETHNOLOGIST_MENU_CREATE_ONLY' ) ||
+		constant( 'ETHNOLOGIST_MENU_CREATE_ONLY' );
+	$nav_menus->register()->update( $nav_menu_create_only );
 }
 
 function ethnologist_after_setup_theme() {
