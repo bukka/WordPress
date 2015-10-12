@@ -33,9 +33,12 @@
 				<?php wp_nav_menu( array( 'theme_location' => 'footer_navigation', 'menu_class' => 'footermenu' ) ); ?>
 			</div>
 			<?php endif; ?>
-        	<p>&copy; <?php echo date('Y'); ?> Ethnologist</p>
-    	</div><!-- credits -->
-    </div><!-- container -->
+			<div class="ethnologist-copyright">
+				<div>&copy; <?php echo date('Y'); ?> The Ethnologist.</div>
+				<div><?php pll_e( 'All rights reserved' ); ?></div>
+			</div>
+		</div><!-- credits -->
+	</div><!-- container -->
 </footer>
 
 <?php wp_footer(); ?>
