@@ -295,8 +295,12 @@ add_action ( 'widgets_init', 'ethnologist_widgets_init' );
 
 
 function ethnologist_enqueue_scripts() {
+	// enqueue ethnologist original pinnacle style
 	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
-	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'parent-style' ) );
+	// enqueue ethnologist style
+	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'ethnologist-parent-style' ), 1 );
+	// remove duplicated ethnologist style
+	wp_dequeue_style( 'pinnacle_child' );
 
 	if ( is_page_template( 'template-contact.php' ) ) {
 		wp_enqueue_script( 'ethnologist-contact-script', get_stylesheet_directory_uri() . '/js/contact.js', array( 'jquery' ) );
@@ -304,7 +308,7 @@ function ethnologist_enqueue_scripts() {
 		wp_enqueue_script( 'ethnologist-gmap', 'https://maps.google.com/maps/api/js?sensor=false' );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 
 function ethnologist_contact_email_error( $msg, $lang )
 {
