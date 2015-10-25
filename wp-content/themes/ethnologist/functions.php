@@ -12,6 +12,9 @@ function ethnologist_view( $type, $name, $params = array(), $context = null ) {
 	include __DIR__ . "/views/" . $type . "/" . $name . ".php";
 }
 
+/**
+ * Register navigation menu
+ */
 function ethnologist_navmenu_register() {
 	require_once 'inc/class-ethnologist-nav-menus.php';
 	$nav_menus = new Ethnologist_NavMenus();
@@ -20,6 +23,11 @@ function ethnologist_navmenu_register() {
 	$nav_menus->register()->update( $nav_menu_create_only );
 }
 
+/**
+ * Rewrite some pinnacle default setting and register menu
+ *
+ * Action callback - after_setup_theme
+ */
 function ethnologist_after_setup_theme() {
 	global $pinnacle;
 	// setup pinnacle
@@ -29,9 +37,18 @@ function ethnologist_after_setup_theme() {
 	// register nav menus
 	ethnologist_navmenu_register();
 }
-
 add_action( 'after_setup_theme', 'ethnologist_after_setup_theme' );
 
+/**
+ * Give editor privilege to manage users (extra setting in the map)
+ *
+ * Filter callback - map_meta_cap
+ *
+ * @param array  $caps
+ * @param string $cap
+ * @param int    $user_id
+ * @param mixed  $args
+ */
 function ethnologist_map_meta_cap( $caps, $cap, $user_id, $args )
 {
 	foreach ( $caps as $key => $capability ) {
@@ -58,8 +75,8 @@ function ethnologist_map_meta_cap( $caps, $cap, $user_id, $args )
 }
 add_filter( 'map_meta_cap', 'ethnologist_map_meta_cap', 10, 4 );
 
-/*
- * Let Editors manage users, and run this only once.
+/**
+ * Let Editors manage users, and run this only once
  */
 function ethnologist_editor_manage_users() {
 
@@ -78,6 +95,9 @@ function ethnologist_editor_manage_users() {
 	}
 }
 
+/**
+ * Register sections post type
+ */
 function ethnologist_register_sections() {
 	// labels for section post type
 	$labels = array(
@@ -131,6 +151,9 @@ function ethnologist_register_sections() {
 	//flush_rewrite_rules();
 }
 
+/**
+ * Register interviews post type
+ */
 function ethnologist_register_interviews() {
 	// labels for interview post type
 	$labels = array(
@@ -182,6 +205,11 @@ function ethnologist_register_interviews() {
 	) );
 }
 
+/**
+ * Initialiaze all
+ *
+ * Action callback - init
+ */
 function ethnologist_init() {
 	ethnologist_register_sections();
 	ethnologist_register_interviews();
@@ -189,6 +217,11 @@ function ethnologist_init() {
 }
 add_action ( 'init', 'ethnologist_init' );
 
+/**
+ * Initialize admin by registering string translations
+ *
+ * Action callback - admin_init
+ */
 function ethnologist_admin_init() {
 	if ( function_exists( 'pll_register_string' ) ) {
 		pll_register_string( 'ethnologist_error', 'Sorry, an error occured.', 'ethnologist' );
@@ -232,7 +265,11 @@ function ethnologist_admin_init() {
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );
 
-
+/**
+ * Register a single sidebar
+ *
+ * @param array $options
+ */
 function ethnologist_register_sidebar( $options ) {
 
 	register_sidebar( array_merge( $options, array(
@@ -243,6 +280,9 @@ function ethnologist_register_sidebar( $options ) {
 	) ) );
 }
 
+/**
+ * Register all sidebars
+ */
 function ethnologist_register_sidebars() {
 	// kadence sidebars
 	unregister_sidebar('sidebar-primary');
@@ -279,6 +319,9 @@ function ethnologist_register_sidebars() {
 	}
 }
 
+/**
+ * Regester widgets
+ */
 function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-contact.php';
 	register_widget( 'Ethnologist_Widget_Contact' );
@@ -287,13 +330,22 @@ function ethnologist_register_widgets() {
 	register_widget( 'Ethnologist_Widget_RecentPosts' );
 }
 
+/**
+ * Initialize widget
+ *
+ * Actions callback - widget_init
+ */
 function ethnologist_widgets_init() {
 	ethnologist_register_sidebars();
 	ethnologist_register_widgets();
 }
 add_action ( 'widgets_init', 'ethnologist_widgets_init' );
 
-
+/**
+ * Enqueue styles and scripts
+ *
+ * Actions callback - wp_enqueue_scripts
+ */
 function ethnologist_enqueue_scripts() {
 	// enqueue ethnologist original pinnacle style
 	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
@@ -310,12 +362,22 @@ function ethnologist_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 
+/**
+ * Error for contact email
+ * @param string $msg
+ * @param string $lang
+ */
 function ethnologist_contact_email_error( $msg, $lang )
 {
 	$msg = pll_translate_string( $msg, $lang );
 	wp_send_json_error( $msg );
 }
 
+/**
+ * Send contact email
+ *
+ * Action callback - wp_ajax_ethnologist_contact_email, wp_ajax_nopriv_ethnologist_contact_email
+ */
 function ethnologist_contact_email() {
 	check_ajax_referer( 'ethnologist_contact_form' );
 
@@ -382,10 +444,13 @@ add_action( 'wp_ajax_nopriv_ethnologist_contact_email', 'ethnologist_contact_ema
 
 /**
  * Set more message
+ *
+ * Filter callback - excerpt_more
+ *
  * @param string $more
  * @return string
  */
-function ethnologist_excerpt_more($more) {
+function ethnologist_excerpt_more(  ) {
 	$readmore =  pll__( 'Read More' );
 	return ' &hellip; <a href="' . get_permalink() . '">' . $readmore . '</a>';
 }
@@ -393,6 +458,8 @@ add_filter( 'excerpt_more', 'ethnologist_excerpt_more', 20 );
 
 /**
  * Modify shortlink
+ *
+ * Filter callback - get_shortlink
  *
  * @param string  $shortlink
  * @param int     $id
@@ -415,6 +482,9 @@ remove_filter('excerpt_more', 'kadence_excerpt_more');
 
 /**
  * Filter for Polylang lanuguage link to fix author page link for switcher
+ *
+ * Filter callback - pll_the_language_link
+ *
  * @param string $url
  * @param string $slug
  * @param string $locale
@@ -431,12 +501,16 @@ add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
 
 /**
  * Filter for Polylang home redirect
+ *
+ * Filter callback - pll_redirect_home, pll_translation_url, wpseo_opengraph_url,
+ *                   post_type_link, post_link, page_link, home_url
+ *
  * @param string $url
  * @return string
  */
 function ethnologist_url( $url ) {
 
-	return str_replace(parse_url($url, PHP_URL_HOST), $_SERVER['SERVER_NAME'], $url);
+	return str_replace( parse_url( $url, PHP_URL_HOST ), $_SERVER['SERVER_NAME'], $url );
 }
 add_filter( 'pll_redirect_home', 'ethnologist_url', 10, 1 );
 add_filter( 'pll_translation_url', 'ethnologist_url', 10, 1 );
@@ -447,16 +521,28 @@ add_filter( 'page_link', 'ethnologist_url', 10, 1 );
 //add_filter( 'attachment_link', 'ethnologist_url', 10, 1 );
 add_filter( 'home_url', 'ethnologist_url', 10, 1 );
 
-// disable feed links
-remove_action( 'wp_head', 'feed_links_extra', 3 ); // Display the links to the extra feeds such as category feeds
-remove_action( 'wp_head', 'feed_links', 2 ); // Display the links to the general feeds: Post and Comment Feed
-remove_action( 'wp_head', 'rsd_link' ); // Display the link to the Really Simple Discovery service endpoint, EditURI link
-remove_action( 'wp_head', 'wlwmanifest_link' ); // Display the link to the Windows Live Writer manifest file.
-remove_action( 'wp_head', 'index_rel_link' ); // index link
-remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); // prev link
-remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); // start link
-remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); // Display relational links for the posts adjacent to the current post.
-remove_action( 'wp_head', 'wp_generator' ); // Display the XHTML generator that is generated on the wp_head hook, WP version
+
+/*
+ *  disable feed links
+ */
+// Display the links to the extra feeds such as category feeds
+remove_action( 'wp_head', 'feed_links_extra', 3 );
+// Display the links to the general feeds: Post and Comment Feed
+remove_action( 'wp_head', 'feed_links', 2 );
+// Display the link to the Really Simple Discovery service endpoint, EditURI link
+remove_action( 'wp_head', 'rsd_link' );
+// Display the link to the Windows Live Writer manifest file.
+remove_action( 'wp_head', 'wlwmanifest_link' );
+// Display the index link.
+remove_action( 'wp_head', 'index_rel_link' );
+// Display the prev link.
+remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 );
+// Display the start link.
+remove_action( 'wp_head', 'start_post_rel_link', 10, 0 );
+// Display relational links for the posts adjacent to the current post.
+remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 );
+// Display the XHTML generator that is generated on the wp_head hook, WP version.
+remove_action( 'wp_head', 'wp_generator' );
 
 
 /**
@@ -478,8 +564,8 @@ function ethnologist_author_content() {
 function ethnologist_author_href() {
 	$ourl = get_author_posts_url( get_the_author_meta( 'ID' ) );
 	$purl = parse_url( $ourl );
-	$url = sprintf("%s://%s/%s%s", $purl['scheme'], $purl['host'],
-			pll_current_language(), $purl['path']);
+	$url = sprintf( "%s://%s/%s%s", $purl['scheme'], $purl['host'],
+			pll_current_language(), $purl['path'] );
 
 	return esc_attr( $url );
 }
@@ -561,11 +647,16 @@ function ethnologist_author_avatar() {
 			' width="100" height="100" src="' . $photo['url'] . '" alt="' . $photo['alt']. '" />';
 }
 
+/**
+ * Get author query args
+ *
+ * @return array
+ */
 function ethnologist_author_query_args() {
 	return array(
-		'post_type' => array( 'post', 'page', 'interview', 'section' ),
-		'author_name' => get_query_var('author_name'),
+		'post_type'      => array( 'post', 'page', 'interview', 'section' ),
+		'author_name'    => get_query_var( 'author_name' ),
 		'posts_per_page' => 1,
-		'lang' => get_query_var('lang'),
+		'lang'           => get_query_var( 'lang' ),
 	);
 }
