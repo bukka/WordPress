@@ -145,7 +145,7 @@ function ethnologist_register_sections() {
 		'has_archive'         => true,
 		'hierarchical'        => true,
 		'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'page-attributes', 'revisions' ),
-		'taxonomies'          => array( 'mm' ),
+		'taxonomies'          => array( 'category' ),
 	) );
 
 	//flush_rewrite_rules();
@@ -201,7 +201,7 @@ function ethnologist_register_interviews() {
 		'has_archive'         => true,
 		'hierarchical'        => false,
 		'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'revisions' ),
-		'taxonomies'          => array( 'mm' ),
+		'taxonomies'          => array( 'category' ),
 	) );
 }
 
