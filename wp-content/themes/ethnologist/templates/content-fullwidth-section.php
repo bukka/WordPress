@@ -8,7 +8,9 @@
 			</header>
 		</div><!-- Text size -->
 		<div class="col-md-12 postfooterarea">
-			<footer class="clearfix "></footer>
+			<footer class="clearfix ">
+				<?php get_template_part('templates/entry', 'meta-footer'); ?>
+			</footer>
 		</div>
 	</div><!-- row-->
 </article> <!-- Article -->
