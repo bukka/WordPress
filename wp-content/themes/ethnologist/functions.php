@@ -689,8 +689,8 @@ function ethnologist_display_sidebar() {
  *
  * @return string
  */
-function ethnologist_main_class()
-{
+function ethnologist_main_class() {
+
 	if ( ethnologist_display_sidebar() ) {
 		// with sidebar
 		return 'col-lg-9 col-md-8 kt-sidebar';
@@ -706,5 +706,24 @@ function ethnologist_main_class()
  * @return string
  */
 function ethnologist_sidebar_class() {
+
 	return 'col-lg-3 col-md-4';
+}
+
+/**
+ * Whether ethnologist is displayed on mobile
+ *
+ * @return boolean
+ */
+function ethnologist_is_mobile() {
+
+	require_once __DIR__ . '/inc/class-ethnologist-mobile-detect.php';
+
+	if ( defined( 'ETHNOLOGIST_USE_MOBILE' ) && constant( 'ETHNOLOGIST_USE_MOBILE' ) ) {
+		$mobile_detecte = new Ethnologist_Mobile_Detect();
+
+		return $detect->isMobile() && !$detect->isTablet();
+	}
+
+	return false;
 }
