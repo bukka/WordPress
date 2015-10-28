@@ -18,6 +18,7 @@
 #logo a {
 	font-weight: bold !important;
 	text-transform: uppercase;
+	line-height: 120px !important;
 }
 .home-page-title {
 	font-weight: bold;
