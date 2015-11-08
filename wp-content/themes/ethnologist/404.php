@@ -10,10 +10,14 @@
 			<ul>
 				<li><?php pll_e( 'a mistyped address' ); ?></li>
 				<li><?php pll_e( 'an out-of-date link' ); ?></li>
-				<li><?php pll_e( 'incorrect permalink settings' ); ?></li>
+				<li><?php pll_e( 'internal page error' ); ?></li>
 			</ul>
-			<p><?php pll_e( "You can return back to the site's homepage and see if you can " .
-							"find what you are looking for or use the search form below." ); ?></p>
+			<!--
+				Alternative text:
+				You can return back to the site's homepage and see if you can
+				find what you are looking for or use the search form below.
+			-->
+			<p><?php pll_e( "Please return back to the homepage or try searching bellow." ); ?></p>
 			<div class="search_form_404"><?php get_search_form(); ?></div>
 		</div>
 	<?php get_sidebar(); ?>

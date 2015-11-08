@@ -260,6 +260,12 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_post_read_more', 'Read More', 'ethnologist' );
 		pll_register_string( 'ethnologist_search', 'Search', 'ethnologist' );
 		pll_register_string( 'ethnologist_rights', 'All rights reserved', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_top_msg', 'Sorry, but the page you were trying to view does not exist.', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_reason_title', 'It looks like this was the result of either:', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_reason_1', 'a mistyped address', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_reason_2', 'an out-of-date link', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_reason_3', 'internal page error', 'ethnologist' );
+		pll_register_string( 'ethnologist_404_search', 'Please return back to the homepage or try searching bellow.', 'ethnologist' );
 		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
