@@ -336,6 +336,9 @@ function ethnologist_register_widgets() {
 
 	require_once __DIR__ . '/inc/widget-recent-posts.php';
 	register_widget( 'Ethnologist_Widget_RecentPosts' );
+
+	require_once __DIR__ . '/inc/widget-social-icons.php';
+	register_widget( 'Ethnologist_Widget_SocialIcons' );
 }
 
 /**
