@@ -75,7 +75,7 @@ class Ethnologist_Widget_Image extends WP_Widget {
 	 * @see WP_Widget::update()
 	 */
 	public function update( $new_instance, $old_instance ) {
-		instance = $old_instance;
+		$instance = $old_instance;
         $instance['text'] = strip_tags( $new_instance['text'] );
         $instance['image_uri'] = strip_tags( $new_instance['image_uri'] );
         $instance['image_link'] = $new_instance['image_link'];
@@ -100,6 +100,29 @@ class Ethnologist_Widget_Image extends WP_Widget {
 	 * @see WP_Widget::form()
 	 */
 	function form( $instance ) {
+		$image_uri = isset( $instance['image_uri'] ) ? esc_attr($instance['image_uri']) : '';
+		$image_link = isset( $instance['image_link'] ) ? esc_attr($instance['image_link']) : '';
+		$image_link_open = isset($instance['image_link_open']) ? esc_attr($instance['image_link_open']) : 'lightbox';
 
+		$link_options = array();
+		$link_options_array = array();
+		$link_options[] = array("slug" => "lightbox", "name" => __('Lightbox', 'ethnologist'));
+		$link_options[] = array("slug" => "_blank", "name" => __('New Window', 'ethnologist'));
+		$link_options[] = array("slug" => "_self", "name" => __('Same Window', 'ethnologist'));
+		$link_options[] = array("slug" => "none", "name" => __('No Link', 'ethnologist'));
+
+		foreach ($link_options as $link_option) {
+			$selected ($image_link_open == $link_option['slug'])  ? ' selected="selected"': '';
+			$link_options_array[] = '<option value="' . $link_option['slug'] .'"' . $selected . '>' . $link_option['name'] . '</option>';
+		}
+
+		$params = array(
+			'link_options_array' => $link_options_array,
+			'image_uri'          => $image_uri,
+			'image_link'         => $image_link,
+			'image_link_open'    => $image_link_open,
+		);
+
+		ethnologist_view( 'widget', 'image-form', $params, $this );
 	}
 }
