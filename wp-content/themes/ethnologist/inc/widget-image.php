@@ -103,6 +103,7 @@ class Ethnologist_Widget_Image extends WP_Widget {
 		$image_uri = isset( $instance['image_uri'] ) ? esc_attr($instance['image_uri']) : '';
 		$image_link = isset( $instance['image_link'] ) ? esc_attr($instance['image_link']) : '';
 		$image_link_open = isset($instance['image_link_open']) ? esc_attr($instance['image_link_open']) : 'lightbox';
+		$text = isset($instance['text']) ? esc_attr($instance['text']) : '';
 
 		$link_options = array();
 		$link_options_array = array();
@@ -121,6 +122,7 @@ class Ethnologist_Widget_Image extends WP_Widget {
 			'image_uri'          => $image_uri,
 			'image_link'         => $image_link,
 			'image_link_open'    => $image_link_open,
+			'text'               => $text,
 		);
 
 		ethnologist_view( 'widget', 'image-form', $params, $this );
