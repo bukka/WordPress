@@ -53,9 +53,11 @@ class Ethnologist_Widget_Image extends WP_Widget {
 		}
 
 		$params = array(
-			'uselink'  => $uselink,
-			'link'     => $link,
-			'linktype' => $linktype,
+			'uselink'    => $uselink,
+			'link'       => $link,
+			'link_type'  => $linktype,
+			'image_href' => esc_url( $instance['image_uri'] ),
+			'text'       => $instance['text'],
 		);
 
 		echo $before_widget;
