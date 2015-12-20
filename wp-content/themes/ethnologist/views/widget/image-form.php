@@ -7,13 +7,13 @@
 	</p>
 	<?php endif; ?>
 	<p>
-		<label for="<?php echo $this->get_field_id( 'image_uri' ); ?>"><?php _e( 'Image URL', 'ethnologist' ); ?></label><br />
-		<input type="text" class="widefat kad_custom_media_url" name="<?php echo $this->get_field_name( 'image_uri' ); ?>"
-			id="<?php echo $this->get_field_id( 'image_uri' ); ?>" value="<?php echo $params['image_uri']; ?>" />
+		<label for="<?php echo $context->get_field_id( 'image_uri' ); ?>"><?php _e( 'Image URL', 'ethnologist' ); ?></label><br />
+		<input type="text" class="widefat kad_custom_media_url" name="<?php echo $context->get_field_name( 'image_uri' ); ?>"
+			id="<?php echo $context->get_field_id( 'image_uri' ); ?>" value="<?php echo $params['image_uri']; ?>" />
 		<input type="button" value="<?php _e( 'Upload', 'ethnologist' ); ?>" class="button kad_custom_media_upload" id="kad_custom_image_uploader" />
 	</p>
 	<p>
-		<label for="<?php echo $this->get_field_id( 'image_link_open' ); ?>"><?php _e( 'Image opens in', 'ethnologist' ); ?></label><br />
+		<label for="<?php echo $context->get_field_id( 'image_link_open' ); ?>"><?php _e( 'Image opens in', 'ethnologist' ); ?></label><br />
 		<select id="<?php echo $context->get_field_id( 'image_link_open' ); ?>" name="<?php echo $context->get_field_name( 'image_link_open' ); ?>">
 			<?php echo implode( '', $params['link_options_array'] );?>
 		</select>

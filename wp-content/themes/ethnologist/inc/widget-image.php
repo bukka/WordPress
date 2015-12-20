@@ -115,7 +115,7 @@ class Ethnologist_Widget_Image extends WP_Widget {
 		$link_options[] = array("slug" => "none", "name" => __('No Link', 'ethnologist'));
 
 		foreach ($link_options as $link_option) {
-			$selected ($image_link_open == $link_option['slug'])  ? ' selected="selected"': '';
+			$selected = ( $image_link_open == $link_option['slug'] )  ? ' selected="selected"' : '';
 			$link_options_array[] = '<option value="' . $link_option['slug'] .'"' . $selected . '>' . $link_option['name'] . '</option>';
 		}
 
