@@ -343,6 +343,12 @@ function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-social-icons.php';
 	register_widget( 'Ethnologist_Widget_SocialIcons' );
 
+	// unregister pinnacle widget as we don't need them
+	unregister_widget( 'kad_contact_widget' );
+	unregister_widget( 'kad_social_widget' );
+	unregister_widget( 'kad_recent_posts_widget' );
+	unregister_widget( 'kad_post_grid_widget' );
+	unregister_widget( 'kad_image_widget' );
 }
 
 /**
@@ -354,7 +360,7 @@ function ethnologist_widgets_init() {
 	ethnologist_register_sidebars();
 	ethnologist_register_widgets();
 }
-add_action ( 'widgets_init', 'ethnologist_widgets_init' );
+add_action( 'widgets_init', 'ethnologist_widgets_init', 20 );
 
 /**
  * Enqueue styles and scripts
