@@ -567,6 +567,26 @@ remove_action( 'wp_head', 'wp_generator' );
 
 
 /**
+ * Filter error warning for deprecated constructor
+ */
+function ethnologist_deprecated_constructor_trigger_error() {
+
+	$const_name = "ETHNOLOGIST_SHOW_DEPRECATED_WIDGET_CONSTRUCTOR_ERROR";
+	if ( ( defined( $const_name ) && constant( $const_name ) ) ) {
+		echo "<pre>";
+		print_r(debug_backtrace());
+		echo "</pre>";
+
+		return true;
+	}
+
+	return false;
+}
+add_filter( 'deprecated_constructor_trigger_error',
+		'ethnologist_deprecated_constructor_trigger_error' );
+
+
+/**
  * Print author content
  */
 function ethnologist_author_content() {
