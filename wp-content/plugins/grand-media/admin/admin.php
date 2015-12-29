@@ -24,8 +24,10 @@ class GmediaAdmin
         add_filter('screen_settings', array(&$this, 'screen_settings'), 10, 2);
         add_filter('set-screen-option', array(&$this, 'screen_settings_save'), 11, 3);
 
-        if (('admin.php' == $pagenow) && isset($_GET['page']) && (false !== strpos($_GET['page'], 'GrandMedia')) && isset($_GET['gmediablank'])) {
-            add_action('admin_init', array(&$this, 'gmedia_blank_page'));
+        if(isset($_GET['page']) && (false !== strpos($_GET['page'], 'GrandMedia'))) {
+            if(('admin.php' == $pagenow) && isset($_GET['gmediablank'])) {
+                add_action('admin_init', array(&$this, 'gmedia_blank_page'));
+            }
         }
 
     }

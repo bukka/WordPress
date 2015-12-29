@@ -29,13 +29,14 @@ class GmediaProcessor {
      */
     public function controller() {
 
-        auth_redirect();
-
         $this->user_options = self::user_options();
 
         if(!$this->page || strpos($this->page, 'GrandMedia') === false) {
             return;
         }
+
+        auth_redirect();
+
 
         $this->processor();
     }
@@ -141,7 +142,7 @@ class GmediaProcessor {
      */
     public static function autoload() {
         $path_ = GMEDIA_ABSPATH . '/admin/class.processor.';
-        $page = !isset($_GET['page'])?: $_GET['page'];
+        $page = isset($_GET['page'])? $_GET['page'] : '';
         switch($page) {
             case 'GrandMedia':
                 include_once($path_ . 'library.php');
