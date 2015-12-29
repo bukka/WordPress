@@ -30,7 +30,7 @@
 </div><!-- /.wrap -->
 
 <script type="text/javascript">
-jQuery( window ).load( function($) {
+jQuery( document ).load( function( $ ) {
 	$( '.ethnologist-front-page-grid' ).masonry({
 		itemSelector: '.b_item'
 	});
