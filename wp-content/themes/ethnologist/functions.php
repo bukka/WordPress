@@ -383,6 +383,12 @@ function ethnologist_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 
+// FACEBOOK
+require_once __DIR__ . '/inc/class-ethnologist-facebook.php';;
+add_action( 'wp_head', 'Ethnologist_Facebook::display_header_script' );
+
+// CONTACT
+
 /**
  * Error for contact email
  * @param string $msg
