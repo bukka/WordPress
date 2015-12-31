@@ -19,8 +19,14 @@ class Ethnologist_Facebook
 
 	}
 
-	public static function display_like_box()
+	public static function display_like_box( $args )
 	{
+		$args = wp_parse_args( $args, array(
+			'href'       => get_the_permalink(),
+			'layout'     => 'standard',
+			'show-faces' => true,
+		) );
 
+		ethnologist_view( 'facebook', 'like-button', $args );
 	}
 }

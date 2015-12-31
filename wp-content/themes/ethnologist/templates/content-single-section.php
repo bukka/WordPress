@@ -13,6 +13,7 @@
 		<footer class="single-footer clearfix">
 			<?php get_template_part( 'templates/entry', 'meta-footer' ); ?>
 		</footer>
+		<?php ethnologist_facebook_like_button(); ?>
 	</article>
 
 	<?php 	$subquery = new WP_Query( array( 'post_parent' => get_the_ID(), 'post_type' => 'section', 'posts_per_page' => -1 ) ); ?>

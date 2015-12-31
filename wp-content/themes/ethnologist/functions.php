@@ -384,8 +384,16 @@ function ethnologist_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 
 // FACEBOOK
+
 require_once __DIR__ . '/inc/class-ethnologist-facebook.php';;
 add_action( 'wp_head', 'Ethnologist_Facebook::display_header_script' );
+
+/**
+ * Wrapper for like box
+ */
+function ethnologist_facebook_like_button( $args = array() ) {
+	Ethnologist_Facebook::display_like_box( $args );
+}
 
 // CONTACT
 

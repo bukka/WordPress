@@ -8,6 +8,7 @@
 			<?php get_template_part( 'templates/entry', 'meta-subhead' ); ?>
 			<?php get_template_part( 'templates/entry', 'meta-footer' ); ?>
 		</footer>
+		<?php ethnologist_facebook_like_button(); ?>
 	</article>
 
    	<?php // comments_template('/templates/comments.php'); ?>
