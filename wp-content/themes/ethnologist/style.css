@@ -79,10 +79,13 @@
 	border-top-width: 0 !important;
 
 }
-.gmPhantom_thumbsWrapper {
-	width: 100% !important;
-}
 .ethnologist-copyright {
 	padding: 20px 0 25px 40px;
 	font-size: 80%;
+}
+.gmPhantom_thumbsWrapper {
+	width: 100% !important;
+}
+.fb-like {
+	margin-top: 20px;
 }
