@@ -11,9 +11,18 @@ class Ethnologist_Facebook
 	{
 		if ( defined( self::CONST_API_ID ) ) {
 
+			switch (pll_current_language()) {
+				case 'cs':
+					$lang = 'cs_CZ';
+					break;
+				default:
+					$lang = 'en_GB';
+					break;
+			}
+
 			ethnologist_view( 'facebook', 'header-script', array(
 				'api_id' => constant( self::CONST_API_ID ),
-				'lang'   => 'en_US',
+				'lang'   => $lang,
 			) );
 		}
 
