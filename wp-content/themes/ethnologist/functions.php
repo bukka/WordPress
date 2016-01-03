@@ -617,12 +617,8 @@ function ethnologist_author_content() {
  * @return string
  */
 function ethnologist_author_href() {
-	$ourl = get_author_posts_url( get_the_author_meta( 'ID' ) );
-	$purl = parse_url( $ourl );
-	$url = sprintf( "%s://%s/%s%s", $purl['scheme'], $purl['host'],
-			pll_current_language(), $purl['path'] );
 
-	return esc_attr( $url );
+	return esc_attr( get_author_posts_url( get_the_author_meta( 'ID' ) ) );
 }
 
 /**
