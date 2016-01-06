@@ -3,5 +3,6 @@
 		<div class="entry-content clearfix">
 			<?php echo ethnologist_author_content(); ?>
 		</div>
+		<?php ethnologist_facebook_like_button(); ?>
 	</article>
 </div>
