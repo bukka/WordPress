@@ -76,9 +76,19 @@ class Ethnologist_NavMenus
 				'cs' => 'galerie',
 			),
 		),
+		'about' => array(
+			'title' => array(
+				'en' => 'About Us',
+				'cs' => 'O nás',
+			),
+			'slug' => array(
+				'en' => 'about-us',
+				'cs' => 'o-nas',
+			),
+		),
 		'contact' => array(
 			'title' => array(
-				'en' => 'Contact Us',
+				'en' => 'Contact',
 				'cs' => 'Kontakt',
 			),
 			'slug' => array(
