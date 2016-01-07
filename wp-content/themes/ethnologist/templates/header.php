@@ -1,42 +1,14 @@
 <?php
-global $pinnacle, $post;
+global $pinnacle;
 
 if ( isset( $pinnacle['header_height'] ) ) {
 	$header_height = $pinnacle['header_height'];
 } else {
 	$header_height = 90;
 }
-
-if( ! kadence_pagetitle_behind_header() ) {
-	$pageheaderbg = '0';
-} else {
-	$pageheaderbg = '1';
-}
-
-if ( isset( $pinnacle['logo_container_width'] ) ) {
-	if ( $pinnacle['logo_container_width'] == '50' ) {
-		$logocclass = 'col-md-6 col-sm-9 col-ss-10';
-		$menulclass = 'col-md-6 col-sm-3 col-ss-2';
-	} elseif ( $pinnacle['logo_container_width'] == '41' ) {
-		$logocclass = 'col-md-5 col-sm-9 col-ss-10';
-		$menulclass = 'col-md-7 col-sm-3 col-ss-2';
-	} elseif($pinnacle['logo_container_width'] == '33') {
-		$logocclass = 'col-md-4 col-sm-8 col-ss-10';
-		$menulclass = 'col-md-8 col-sm-4 col-ss-2';
-	} elseif ( $pinnacle['logo_container_width'] == '25' ) {
-		$logocclass = 'col-md-3 col-sm-8 col-ss-9';
-		$menulclass = 'col-md-9 col-sm-4 col-ss-3';
-	} else {
-		$logocclass = 'col-md-2 col-sm-8 col-ss-9';
-		$menulclass = 'col-md-10 col-sm-4 col-ss-3';
-	}
-} else {
-	$logocclass = 'col-md-4 col-sm-8 col-ss-9';
-	$menulclass = 'col-md-8 col-sm-4 col-ss-3';
-}
 ?>
 <header id="kad-banner" class="banner headerclass kad-header-style-basic" role="banner"
-	data-pageheaderbg="<?php echo $pageheaderbg;?>" data-header-base-height="<?php echo $header_height;?>">
+	data-pageheaderbg="<?php echo kadence_pagetitle_behind_header() ? '1' : '0'; ?>" data-header-base-height="<?php echo $header_height;?>">
 
 	<?php if (kadence_display_topbar()) : ?>
 		<?php get_template_part('templates/header', 'topbar'); ?>
@@ -51,7 +23,7 @@ if ( isset( $pinnacle['logo_container_width'] ) ) {
 		style="height:<?php echo $header_height;?>px; line-height:<?php echo $header_height;?>px;">
 
 		<div class="row">
-			<div class="<?php echo $logocclass; ?> clearfix kad-header-left">
+			<div class="col-md-3 col-sm-8 col-ss-9 clearfix kad-header-left">
 				<div id="logo" class="logocase">
 					<a class="brand logofont"
 							tyle="height:<?php echo $header_height;?>px; line-height:<?php echo $header_height;?>px; display:block;"
@@ -79,7 +51,7 @@ if ( isset( $pinnacle['logo_container_width'] ) ) {
 					</a>
 				</div> <!-- Close #logo -->
 			</div><!-- close col -->
-			<div class="<?php echo $menulclass; ?> kad-header-right">
+			<div class="col-md-9 col-sm-4 col-ss-3 kad-header-right">
 				<?php if ( has_nav_menu( 'primary_navigation' ) ) : ?>
 				<nav id="nav-main" class="clearfix kad-primary-nav" role="navigation">
 					<?php wp_nav_menu( array( 'theme_location' => 'primary_navigation', 'menu_class' => 'sf-menu' ) );?>
