@@ -16,8 +16,14 @@
 		<?php ethnologist_facebook_like_button(); ?>
 	</article>
 
-	<?php 	$subquery = new WP_Query( array( 'post_parent' => get_the_ID(), 'post_type' => 'section', 'posts_per_page' => -1 ) ); ?>
-	<?php 	while ( $subquery->have_posts() ): $subquery->the_post(); ?>
+	<?php
+			$subquery = new WP_Query( array(
+				'post_parent' => get_the_ID(),
+				'post_type' => 'section',
+				'posts_per_page' => -1,
+				'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' )
+			) );
+			while ( $subquery->have_posts() ): $subquery->the_post(); ?>
 	<?php 		get_template_part( 'templates/content', 'fullwidth-section' ); ?>
 	<?php 	endwhile; ?>
 	<?php endwhile; ?>
