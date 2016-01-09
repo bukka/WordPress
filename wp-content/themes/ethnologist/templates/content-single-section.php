@@ -21,7 +21,7 @@
 				'post_parent' => get_the_ID(),
 				'post_type' => 'section',
 				'posts_per_page' => -1,
-				'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' )
+				'orderby' => array( 'title' => 'ASC' )
 			) );
 			while ( $subquery->have_posts() ): $subquery->the_post(); ?>
 	<?php 		get_template_part( 'templates/content', 'fullwidth-section' ); ?>
