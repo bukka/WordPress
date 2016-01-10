@@ -713,13 +713,33 @@ function ethnologist_author_query_args() {
 }
 
 /**
+ * Check if page has sidebar
+ *
+ * @todo Rid of kadence checks
+ */
+function ethnologist_sidebar_page() {
+	if ( is_page() &&
+			!is_page_template('template-sidebar-page.php') &&
+			!is_page_template('template-portfolio-grid.php') &&
+			!is_page_template('template-contact.php') ) {
+		global $post;
+
+		$postsidebar = get_post_meta( $post->ID, '_kad_page_sidebar', true );
+
+		return $postsidebar != 'yes';
+	} else {
+		return false;
+	}
+}
+
+/**
  * Check which pages should not have sidebar
  *
  * @todo Rid of kadence calls and all unused stuff (e.g. portfolio)
  */
 function ethnologist_display_sidebar() {
 
-	if ( kadence_sidebar_page() ||
+	if ( ethnologist_sidebar_page() ||
 			kadence_sidebar_on_post() ||
 			is_404() ||
 			kadence_sidebar_on_home_page() ||
