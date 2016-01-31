@@ -23,6 +23,9 @@ class Ethnologist_Facebook
 			ethnologist_view( 'facebook', 'header-script', array(
 				'api_id' => constant( self::CONST_API_ID ),
 				'lang'   => $lang,
+				'type'   => 'website',
+				'title'  => get_the_title(),
+				'url'    => get_the_permalink(),
 			) );
 		}
 
@@ -34,6 +37,7 @@ class Ethnologist_Facebook
 			'href'       => get_the_permalink(),
 			'layout'     => 'standard',
 			'show-faces' => true,
+			'share'      => true,
 		) );
 
 		ethnologist_view( 'facebook', 'like-button', $args );
