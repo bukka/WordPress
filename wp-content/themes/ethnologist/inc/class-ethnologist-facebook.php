@@ -20,12 +20,23 @@ class Ethnologist_Facebook
 					break;
 			}
 
+			if ( is_author() ) {
+				$user_id = get_the_author_meta( 'ID' );
+				$url = get_author_posts_url( $user_id );
+				var_dump(get_the_author_meta());
+				$title = get_the_author_meta( 'first_name', $user_id ) . ' '
+						. get_the_author_meta( 'last_name', $user_id );
+			} else {
+				$url = get_the_permalink();
+				$title = get_the_title();
+			}
+
 			ethnologist_view( 'facebook', 'header-script', array(
 				'api_id' => constant( self::CONST_API_ID ),
 				'lang'   => $lang,
 				'type'   => 'website',
-				'title'  => get_the_title(),
-				'url'    => get_the_permalink(),
+				'title'  => $title,
+				'url'    => $url,
 			) );
 		}
 
@@ -33,6 +44,9 @@ class Ethnologist_Facebook
 
 	public static function display_like_box( $args )
 	{
+		if ( ! isset( $args['href'] ) && is_author() ) {
+			 $args['href'] = get_author_posts_url( get_the_author_meta( 'ID' ) );
+		}
 		$args = wp_parse_args( $args, array(
 			'href'       => get_the_permalink(),
 			'layout'     => 'standard',
