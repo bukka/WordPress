@@ -23,7 +23,6 @@ class Ethnologist_Facebook
 			if ( is_author() ) {
 				$user_id = get_the_author_meta( 'ID' );
 				$url = get_author_posts_url( $user_id );
-				var_dump(get_the_author_meta());
 				$title = get_the_author_meta( 'first_name', $user_id ) . ' '
 						. get_the_author_meta( 'last_name', $user_id );
 			} else {
