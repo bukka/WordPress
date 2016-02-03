@@ -34,7 +34,7 @@
 			</div>
 			<?php endif; ?>
 			<div class="ethnologist-copyright">
-				<div>&copy; <?php echo date('Y'); ?> The Ethnologist.</div>
+				<div>&copy; 2015 - <?php echo date('Y'); ?> The Ethnologist.</div>
 				<div><?php pll_e( 'All rights reserved' ); ?></div>
 			</div>
 		</div><!-- credits -->
