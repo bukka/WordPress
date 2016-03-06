@@ -4,9 +4,6 @@
 [submodule "wp-content/plugins/wordpress-importer"]
 	path = wp-content/plugins/wordpress-importer
 	url = git@github.com:wp-plugins/wordpress-importer.git
-[submodule "wp-content/plugins/acf"]
-	path = wp-content/plugins/acf
-	url = git@github.com:elliotcondon/acf.git
 [submodule "wp-content/plugins/google-analytics-for-wordpress"]
 	path = wp-content/plugins/google-analytics-for-wordpress
 	url = git@github.com:Yoast/google-analytics-for-wordpress.git
