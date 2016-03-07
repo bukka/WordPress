@@ -1,19 +1,19 @@
 === Plugin Name ===
 Contributors: wunderfarm
 Donate link: http://wunderfarm.com/
-Tags: compliance, cookie law, cookielaw, cookies, cookiebar, policy, bar, eu cookie law, cookie law banner, cookiechoices, eu privacy directive, privacy, privacy directive, cookie consent, cookieconsent, Multi language, WPML, polylang, responsive, admin, code, content, embed, google, html, integration, javascript, links, login, marketing, page, pages, plugin, simple, text, url, wordpress, law, 
+Tags: compliance, cookie law, cookielaw, cookies, cookiebar, policy, bar, eu cookie law, cookie law banner, cookiechoices, eu privacy directive, privacy, privacy directive, cookie consent, cookieconsent, Multi language, WPML, polylang, responsive, admin, code, content, embed, google, html, integration, javascript, links, login, marketing, page, pages, plugin, simple, text, url, wordpress, law, lightweight,
 Requires at least: 3.0.1
 Tested up to: 4.4
-Stable tag: 0.9.8
+Stable tag: 0.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The `wunderfarm-way` to show how your website complies with the EU Cookie Law - 100% responsive and with multi-language support!
+The `wunderfarm-way` to show how your website complies with the EU Cookie Law - very easy, 100% responsive and with multi-language support!
 
 == Description ==
 
-WF Cookie Consent shows the user a clear message that the site uses cookies. 
-This plugin supports multi-language installations with the polylang-plugin from Chouby or WPML-plugin from wpml.org. It has a wide array of settings for controlling the style and contents. 
+WF Cookie Consent shows the user a clear message that the site uses cookies.
+This plugin supports multi-language installations with the polylang-plugin from Chouby or WPML-plugin from wpml.org. It has a wide array of settings for controlling the style and contents.
 WF Cookie Consent is the "wunderfarm-way" to show how your website complies with the EU Cookie Law.
 
 == Installation ==
@@ -29,14 +29,17 @@ WF Cookie Consent is the "wunderfarm-way" to show how your website complies with
 
 == Changelog ==
 
+= 0.9.9 =
+Compatibility for Polylang Version 1.8
+
 = 0.9.8 =
-Added compatibility for WPML Version: 3.2 and above
+Compatibility for WPML Version 3.2 and above
 
 = 0.9.7 =
 Improved compatibility with WPML Multilingual CMS 3.2.6
 
 = 0.9.5 =
-Added compatibility for IE8 and previous IE versions
+Compatibility for IE8 and previous IE versions
 
 = 0.9.4 =
 Bugfix: The page-selector is now showing all entries.

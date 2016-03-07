@@ -1,9 +1,9 @@
-<?php 
+<?php
 	/*
 	Plugin Name: WF Cookie Consent
 	Plugin URI: http://www.wunderfarm.com/plugins/wf-cookie-consent
 	Description: The wunderfarm-way to show how your website complies with the EU Cookie Law.
-	Version: 0.9.8
+	Version: 0.9.9
 	License: GNU General Public License v2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Author: wunderfarm
@@ -21,7 +21,7 @@
 		wp_enqueue_script( 'wf-cookiechoices', plugin_dir_url( __FILE__ ) . 'js/cookiechoices.js', array(), '0.0.4', true );
 
 	}
-	
+
 	add_action( 'wp_enqueue_scripts', 'wf_cookieconsent_scripts' );
 
 /*
@@ -40,7 +40,7 @@
 
 		if(is_numeric($linkHref))
 			$linkHref = get_page_link($linkHref);
-	
+
 ?>
 	<script type="text/javascript">
 
@@ -52,7 +52,7 @@
 				document.addEventListener('DOMContentLoaded', cookieBar);
 			}
 			else {
-				document.attachEvent('onreadystatechange', function(event) { 
+				document.attachEvent('onreadystatechange', function(event) {
 		            if ( document.readyState === "complete" ) {
 		            	cookieBar();
 					}
@@ -89,12 +89,12 @@ function wf_cookieconsent_options_page(){
 		<form action="options.php" method="post">
 		<?php settings_fields('wf_cookieconsent_options'); ?>
 		<?php do_settings_sections('wf-cookieconsent'); ?>
-		 
+
 		<input name="Submit" type="submit" class="button button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
 		</form>
 	</div>
 
-<?php 
+<?php
 
 }
 
@@ -118,7 +118,7 @@ function wf_cookieconsent_admin_init(){
 
 function wf_cookieconsent_setting_string($args) {
 	$options = get_option('wf_cookieconsent_options');
-	
+
 	if(empty($options[$args['lang']][$args['fieldname']]))
 		$options[$args['lang']][$args['fieldname']] = '';
 		$esc_value = esc_attr($options[$args['lang']][$args['fieldname']]);
@@ -128,14 +128,14 @@ function wf_cookieconsent_setting_string($args) {
 
 function wf_cookieconsent_setting_page_selector($args) {
 	$options = get_option('wf_cookieconsent_options');
-	
+
 	if(empty($options[$args['lang']][$args['fieldname']]))
 		$options[$args['lang']][$args['fieldname']] = '';
 
-	$wf_page_query = new WP_Query( array( 
+	$wf_page_query = new WP_Query( array(
 	     'post_type' => 'page',
 	     'suppress_filters' => true, // With this option, WPML will not use any filter
-	     'orderby' => 'title', 
+	     'orderby' => 'title',
 	     'order'=>'asc',
 	     'lang'=>'all', // With this option, Polylang will return all languages
 	     'nopaging'=>true
@@ -146,7 +146,7 @@ function wf_cookieconsent_setting_page_selector($args) {
 		$wf_language_information = wf_get_language_information($post->ID);
 		if(!empty($wf_language_information))
 			$wf_language_information = "(" .  $wf_language_information . ")";
- 
+
 		if($options[$args['lang']][$args['fieldname']] == $post->ID)
 		    echo "<option class='level-0' value='" . $post->ID . "' selected='selected'>" . $post->post_title . " " . $wf_language_information . "</option>";
 		else
@@ -160,7 +160,7 @@ function wf_cookieconsent_setting_page_selector($args) {
 
 function wf_cookieconsent_setting_radio($args) {
 	$options = get_option('wf_cookieconsent_options');
-	
+
 	if(empty($options[$args['fieldname']]))
 		$options[$args['fieldname']] = '';
 
@@ -203,9 +203,15 @@ if (!function_exists('wf_get_languages')) {
 		$languages = array();
 		//get all languages from polylang plugin https://wordpress.org/plugins/polylang/
 		global $polylang;
-		if (isset($polylang)) {
-			//get all languages
+		if (function_exists('PLL')) {
+			// for polylang versions > 1.8
+			$pl_languages = PLL()->model->get_languages_list();
+		} else if (isset($polylang)) {
+			// for older polylang version
 			$pl_languages = $polylang->model->get_languages_list();
+		}
+		if (isset($pl_languages)) {
+			// iterate through polylang language list
 			foreach ($pl_languages as $pl_language) {
 				$languages[] = $pl_language->slug;
 			}
@@ -229,19 +235,21 @@ if (!function_exists('wf_get_language_information')) {
 
 	function wf_get_language_information($post_id) {
 		$locale = '';
+		$language_information = '';
 		if (function_exists('pll_get_post_language')) {
+			// for polylang versions > 1.7
 			$locale = pll_get_post_language($post_id);
 		} else if (has_filter('wpml_post_language_details') ) {
+			// for wpml versions > 3.2
 			$language_information = apply_filters( 'wpml_post_language_details', NULL, $post_id ) ;
 		} else if (function_exists('wpml_get_language_information') ) {
-			$language_information = wpml_get_language_information($post_id);		
+			// for older wpml versions
+			$language_information = wpml_get_language_information($post_id);
 		}
-		
-		if(is_wp_error($language_information))
-				$locale = '';
-			else
-				$locale = $language_information['display_name'];
-		
+		if(is_wp_error($language_information) || empty($language_information))
+			$locale = '';
+		else
+			$locale = $language_information['display_name'];
 		return $locale;
 	}
 
