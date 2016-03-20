@@ -5,6 +5,7 @@
 class GmediaProcessor {
 
     public $page;
+    public $url;
     public $msg;
     public $error;
     public $user_options = array();
@@ -16,8 +17,12 @@ class GmediaProcessor {
         global $pagenow, $gmCore;
         // GET variables
         $this->page = $gmCore->_get('page');
+        $this->url = add_query_arg(array('page' => $this->page), admin_url('admin.php'));
         if('media.php' === $pagenow) {
             add_filter('wp_redirect', array($this, 'redirect'), 10, 2);
+        }
+        if('edit-comments.php' === $pagenow) {
+            add_filter('get_comment_text', array($this, 'gmedia_comment_text'), 10, 3);
         }
 
         add_action('init', array($this, 'controller'));
@@ -36,7 +41,6 @@ class GmediaProcessor {
         }
 
         auth_redirect();
-
 
         $this->processor();
     }
@@ -61,22 +65,39 @@ class GmediaProcessor {
     }
 
     /**
-     * @param $cookie_key
+     * @param string $cookie_key
+     *
+     * @param string $post_key
      *
      * @return array
      */
-    public static function selected_items($cookie_key) {
+    public static function selected_items($cookie_key, $post_key = 'selected_items') {
 
         $selected_items = array();
         if($cookie_key) {
-            if(isset($_POST['selected_items'])) {
-                $selected_items = array_filter(explode(',', $_POST['selected_items']), 'is_numeric');
+            if(isset($_POST[$post_key])) {
+                $selected_items = array_filter(explode(',', $_POST[$post_key]), 'is_numeric');
             } elseif(isset($_COOKIE[$cookie_key])) {
                 $selected_items = array_filter(explode(',', $_COOKIE[$cookie_key]), 'is_numeric');
             }
         }
 
         return $selected_items;
+    }
+
+    /**
+     * @param string $cookie_key
+     *
+     * @return array
+     */
+    public function clear_selected_items($cookie_key) {
+        global $user_ID;
+
+        if($cookie_key) {
+            setcookie("gmuser_{$user_ID}_{$cookie_key}", '', time() - 3600);
+            unset($_COOKIE["gmuser_{$user_ID}_{$cookie_key}"]);
+        }
+        return array();
     }
 
     /**
@@ -91,29 +112,13 @@ class GmediaProcessor {
         if($gmCore->caps['gmedia_show_others_media']) {
             if(!empty($author_id_list)) {
                 $author = wp_parse_id_list($author_id_list);
+                $author = array_intersect(array($user_ID, 0), $author);
             }
         } else {
-            $author = array($user_ID);
+            $author = array($user_ID, 0);
         }
 
         return $author;
-    }
-
-    /**
-     * @param string $type
-     * @param string $content
-     *
-     * @return string
-     */
-    public function alert($type = 'info', $content = '') {
-        if(empty($content)) {
-            return '';
-        } elseif(is_array($content)) {
-            $content = implode('<br />', array_filter($content));
-        }
-        $alert = '<div class="alert alert-' . $type . ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $content . '</div>';
-
-        return $alert;
     }
 
     /**
@@ -138,10 +143,34 @@ class GmediaProcessor {
     }
 
     /**
+     * Add thumb to gmedia comment text in admin
+     *
+     * @param $comment_content
+     * @param $comment
+     * @param $args
+     *
+     * @return string $comment_content
+     */
+    function gmedia_comment_text($comment_content, $comment, $args) {
+        global $post;
+        if(!$post){
+            return $comment_content;
+        }
+        //if('gmedia' == substr($post->post_type, 0, 6)) {
+        if('gmedia' == $post->post_type) {
+            global $gmDB, $gmCore;
+            $gmedia = $gmDB->get_post_gmedia($post->ID);
+            $thumb = '<div class="alignright"><img class="gmedia-thumb" style="max-height:72px;" src="' . $gmCore->gm_get_media_image($gmedia, 'thumb', false) . '" alt=""/></div>';
+            $comment_content = $thumb . $comment_content;
+        }
+        return $comment_content;
+    }
+
+    /**
      * Autoloader
      */
     public static function autoload() {
-        $path_ = GMEDIA_ABSPATH . '/admin/class.processor.';
+        $path_ = GMEDIA_ABSPATH . '/admin/processor/class.processor.';
         $page = isset($_GET['page'])? $_GET['page'] : '';
         switch($page) {
             case 'GrandMedia':

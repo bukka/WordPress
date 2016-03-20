@@ -130,7 +130,7 @@ class GmediaCore {
         if(true === $uri) {
             $uri = admin_url('admin.php');
         }
-        $remove_args = empty($remove_args)? array() : (array) $remove_args;
+        $remove_args = empty($remove_args)? array() : (array)$remove_args;
         $remove_args = array_unique(array_merge(array('doing_wp_cron', '_wpnonce', 'delete', 'update_meta'), $remove_args, array_keys($add_args)));
         $new_uri     = remove_query_arg($remove_args, $uri);
         if(!empty($add_args)) {
@@ -247,6 +247,11 @@ class GmediaCore {
         if(!is_object($item)) {
             $item = $gmDB->get_gmedia($item);
         }
+        if(empty($item)) {
+            $image = $this->gmedia_url . '/admin/assets/img/blank.gif';
+
+            return $image;
+        }
         $type = explode('/', $item->mime_type);
 
         if('image' == $type[0]) {
@@ -271,7 +276,7 @@ class GmediaCore {
             if(!$type = wp_ext2type($ext)) {
                 $type = 'application';
             }
-            $image = $this->gmedia_url . '/admin/img/' . $type . '.png';
+            $image = $this->gmedia_url . '/admin/assets/img/' . $type . '.png';
 
             if($cover) {
                 $cover = $gmDB->get_metadata('gmedia', $item->ID, '_cover', true);
@@ -690,6 +695,23 @@ class GmediaCore {
         return $array;
     }
 
+    /**
+     * @param string $type
+     * @param string $content
+     *
+     * @return string
+     */
+    public function alert($type = 'info', $content = '') {
+        if(empty($content)) {
+            return '';
+        } elseif(is_array($content)) {
+            $content = array_filter($content);
+            $content = implode('<br />', $content);
+        }
+        $alert = '<div class="alert alert-' . $type . ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $content . '</div>';
+
+        return $alert;
+    }
 
     /**
      * @param $photo
@@ -1811,7 +1833,7 @@ class GmediaCore {
                         $webimg   = $gmGallery->options['image'];
                         $thumbimg = $gmGallery->options['thumb'];
 
-                        $webimg['resize']   = (($webimg['width'] < $size[0]) || ($webimg['height'] < $size[1]))? true : false;
+                        $webimg['resize'] = (($webimg['width'] < $size[0]) || ($webimg['height'] < $size[1]))? true : false;
 
                         if($webimg['resize']) {
                             rename($fileinfo['filepath'], $fileinfo['filepath_original']);
@@ -1819,7 +1841,7 @@ class GmediaCore {
                             copy($fileinfo['filepath'], $fileinfo['filepath_original']);
                         }
 
-                        $size_ratio = $size[0]/$size[1];
+                        $size_ratio = $size[0] / $size[1];
 
                         $angle      = 0;
                         $image_meta = @$gmCore->wp_read_image_metadata($fileinfo['filepath_original']);
@@ -1829,12 +1851,12 @@ class GmediaCore {
                                     $angle = 180;
                                 break;
                                 case 6:
-                                    $angle = -90;
-                                    $size_ratio = $size[1]/$size[0];
+                                    $angle      = 270;
+                                    $size_ratio = $size[1] / $size[0];
                                 break;
                                 case 8:
-                                    $angle = 90;
-                                    $size_ratio = $size[1]/$size[0];
+                                    $angle      = 90;
+                                    $size_ratio = $size[1] / $size[0];
                                 break;
                             }
                         }
@@ -1963,7 +1985,7 @@ class GmediaCore {
                 if($size) {
                     if(!empty($image_meta)) {
                         if('exif' == $post_data['set_title']) {
-                            if(!empty($image_meta['title']) && trim($image_meta['title']) && !is_numeric(sanitize_title($image_meta['title']))) {
+                            if(!empty($image_meta['title']) && trim($image_meta['title'])) {
                                 $title = $image_meta['title'];
                             }
                         }
@@ -1978,7 +2000,7 @@ class GmediaCore {
                     $file_meta = $this->get_file_metadata($fileinfo['filepath_original'], $fileinfo);
                     if(!empty($file_meta)) {
                         if('exif' == $post_data['set_title']) {
-                            if(!empty($file_meta['title']) && trim($file_meta['title']) && !is_numeric(sanitize_title($file_meta['title']))) {
+                            if(!empty($file_meta['title']) && trim($file_meta['title'])) {
                                 $title = $file_meta['title'];
                             }
                         }
@@ -1994,18 +2016,22 @@ class GmediaCore {
                     $title = $fileinfo['title'];
                 }
 
+                if('public' == $post_data['set_status']) {
+                    $post_data['set_status'] = 'publish';
+                }
+
                 $status = $post_data['set_status'];
                 if('inherit' == $post_data['set_status']) {
                     $gmedia_album = isset($post_data['terms']['gmedia_album'])? $post_data['terms']['gmedia_album'] : false;
                     if($gmedia_album && $this->is_digit($gmedia_album)) {
                         $album = $gmDB->get_term($gmedia_album, 'gmedia_album');
                         if(empty($album) || is_wp_error($album)) {
-                            $status = 'public';
+                            $status = 'publish';
                         } else {
                             $status = $album->status;
                         }
                     } else {
-                        $status = 'public';
+                        $status = 'publish';
                     }
                 }
 
@@ -2175,13 +2201,13 @@ class GmediaCore {
         if($gmedia_album && $gmCore->is_digit($gmedia_album)) {
             $album = $gmDB->get_term($gmedia_album, 'gmedia_album');
             if(empty($album) || is_wp_error($album)) {
-                $_status = 'public';
+                $_status = 'publish';
             } else {
                 $_status    = $album->status;
                 $album_name = $album->name;
             }
         } else {
-            $_status = 'public';
+            $_status = 'publish';
         }
 
         $c = count($files);
@@ -2323,7 +2349,7 @@ class GmediaCore {
                     $webimg   = $gmGallery->options['image'];
                     $thumbimg = $gmGallery->options['thumb'];
 
-                    $webimg['resize']   = (($webimg['width'] < $size[0]) || ($webimg['height'] < $size[1]))? true : false;
+                    $webimg['resize'] = (($webimg['width'] < $size[0]) || ($webimg['height'] < $size[1]))? true : false;
 
                     if($webimg['resize']) {
                         rename($fileinfo['filepath'], $fileinfo['filepath_original']);
@@ -2331,7 +2357,7 @@ class GmediaCore {
                         copy($fileinfo['filepath'], $fileinfo['filepath_original']);
                     }
 
-                    $size_ratio = $size[0]/$size[1];
+                    $size_ratio = $size[0] / $size[1];
 
                     $angle      = 0;
                     $image_meta = @$gmCore->wp_read_image_metadata($fileinfo['filepath_original']);
@@ -2341,12 +2367,12 @@ class GmediaCore {
                                 $angle = 180;
                             break;
                             case 6:
-                                $angle = -90;
-                                $size_ratio = $size[1]/$size[0];
+                                $angle      = 270;
+                                $size_ratio = $size[1] / $size[0];
                             break;
                             case 8:
-                                $angle = 90;
-                                $size_ratio = $size[1]/$size[0];
+                                $angle      = 90;
+                                $size_ratio = $size[1] / $size[0];
                             break;
                         }
                     }
@@ -2515,79 +2541,125 @@ class GmediaCore {
 
     /**
      * @param string $service
-     * @param array  $data
      *
      * @return array json
      */
-    function app_service($service, $data = array()) {
-        global $gmProcessor;
+    function app_service($service) {
+        global $gmGallery, $gmDB;
 
+        if('127.0.0.1' == $_SERVER['SERVER_ADDR']) {
+            return false;
+        }
         if(!current_user_can('manage_options')) {
             die('-1');
         }
-        if(!$service || !is_array($data)) {
+        if(!$service) {
             die('0');
         }
 
-        $result   = array();
-        $defaults = array('email' => '', 'category' => '');
-        $data     = array_merge($defaults, $data);
-
-        $gm_options = get_option('gmediaOptions');
-
-        $gm_options['site_email']    = $data['email'];
-        $gm_options['site_category'] = $data['category'];
+        $result  = array();
+        $data    = array();
+        $options = $gmGallery->options;
 
         if($service == 'app_deactivate') {
-            $gm_options['mobile_app'] = 0;
+            $options['mobile_app'] = 0;
         }
 
-        if(in_array($service, array('app_activate', 'app_updateinfo')) && !is_email($data['email'])) {
-            $result['error'] = $gmProcessor->alert('danger', __('Enter valid email, please', 'grand-media'));
+        $data['site_email'] = $options['site_email'];
+        if(in_array($service, array('app_updateinfo')) && !is_email($data['site_email'])) {
+            $result['error'][] = __('Enter valid email, please', 'grand-media');
         } else {
+
+            $url         = home_url();
+            $post_data = array('url' => $url);
+
+            if('app_uninstallplugin' == $service){
+                if(!empty($options['site_ID'])) {
+                    $post_data['site_id'] = $options['site_ID'];
+                    wp_remote_post('http://gmediaservice.codeasily.com/?gmService=' . $service, array(
+                            'method'  => 'POST',
+                            'timeout' => 5,
+                            'body'    => $post_data
+                    ));
+                }
+                return false;
+            }
 
             $hash = wp_generate_password('6', false);
 
+            if(in_array($service, array('app_activate', 'app_updateinfo'))) {
+                $status = 1;
+            } else {
+                $status = $options['mobile_app'];
+            }
+            $install_date = get_option('gmediaInstallDate');
+
             $data['service']     = $service;
-            $data['title']       = get_bloginfo('name');
-            $data['description'] = get_bloginfo('description');
-            $data['url']         = home_url();
-            $data['license']     = $gm_options['license_key'];
-            $data['site_ID']     = $gm_options['site_ID'];
             $data['site_hash']   = $hash;
+            $data['site_ID']     = $options['site_ID'];
+            $data['title']       = empty($options['site_title'])? get_bloginfo('name') : $options['site_title'];
+            $data['description'] = empty($options['site_description'])? get_bloginfo('description') : $options['site_description'];
+            $data['url']         = $url;
+            $data['license']     = $options['license_key'];
+            $data['status']      = $status;
+            $data['install_date']= $install_date? $install_date : time();
+
+            $tagslist = $gmDB->get_terms('gmedia_tag', array(
+                    'hide_empty'    => true,
+                    'fields'        => 'names',
+                    'no_found_rows' => true
+            ));
+            if(!is_wp_error($tagslist)) {
+                $data['tags'] = (array)$tagslist;
+            } else {
+                $data['tags'] = array();
+            }
 
             set_transient($hash, $data, 45);
 
-            $pgcpost = wp_remote_post('http://mypgc.co/?gmservice=' . $service, array(
+            $post_data['hash'] = $hash;
+            $gms_post = wp_remote_post('http://gmediaservice.codeasily.com/?gmService=' . $service, array(
                     'method'  => 'POST',
                     'timeout' => 45,
-                    'body'    => array('hash' => $hash, 'url' => $data['url']),
+                    'body'    => $post_data
             ));
-
-            if(is_wp_error($pgcpost)) {
-                $result['error'] = $gmProcessor->alert('danger', $pgcpost->get_error_message());
+            if(is_wp_error($gms_post)) {
+                $result['error'][] = $gms_post->get_error_message();
             }
-            $pgcpost_body = wp_remote_retrieve_body($pgcpost);
-            $result       = (array)json_decode($pgcpost_body);
-            if(isset($result['error'])) {
-                $result['error'] = $gmProcessor->alert('danger', $result['error']);
+            $gms_post_body = wp_remote_retrieve_body($gms_post);
+            $_result       = (array)json_decode($gms_post_body);
+            if(isset($_result['error'])) {
+                if(!isset($result['error'])) {
+                    $result['error'] = array();
+                }
+                $_result['error'] = (array)$_result['error'];
+                $_result['error'] = array_filter($_result['error'], 'is_string');
+                $result['error']  = array_merge($result['error'], $_result['error']);
             } else {
+                $result = array_merge($_result, $result);
+                //$result['gms_post'] = $gms_post;
+                //$result['gms_post_body'] = $gms_post_body;
                 if(isset($result['message'])) {
-                    $result['message'] = $gmProcessor->alert('info', $result['message']);
+                    $result['message'] = $this->alert('info', $result['message']);
                 }
 
                 if(isset($result['site_ID'])) {
-                    $gm_options['site_ID'] = $result['site_ID'];
+                    $options['site_ID'] = $result['site_ID'];
                 }
                 if(isset($result['mobile_app'])) {
-                    $gm_options['mobile_app'] = $result['mobile_app'];
-                }
-                if(isset($result['site_category'])) {
-                    $gm_options['site_category'] = $result['site_category'];
+                    $options['mobile_app'] = $result['mobile_app'];
                 }
             }
+            if(isset($result['error'])) {
+                $result['error'] = $this->alert('danger', $result['error']);
+            }
         }
-        update_option('gmediaOptions', $gm_options);
+        update_option('gmediaOptions', $options);
+
+        if(in_array($service, array('app_activate', 'app_updateinfo'))) {
+            wp_clear_scheduled_hook('gmedia_app_cronjob');
+            wp_schedule_event(time(), 'gmedia_app', 'gmedia_app_cronjob');
+        }
 
         return $result;
     }
@@ -3112,7 +3184,6 @@ class GmediaCore {
                 , 'gmedia_settings'
         );
     }
-
 }
 
 global $gmCore;
