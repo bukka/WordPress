@@ -2,10 +2,15 @@
 	<div class="row">
 		<div class="main <?php echo ethnologist_main_class(); ?>" role="main">
 
-			<?php foreach ( $params['lists'] as $list ): ?>
+			<?php foreach ( $params['lists'] as $list_idx => $list ): ?>
 			<div class="home_blog home-margin clearfix home-padding">
 				<div class="clearfix">
+					<?php if ($list_idx === 0): ?>
+					<div class="ethnologist-front-page-search-form"><?php get_search_form(); ?></div>
+					<h3 class="hometitle ethnologist-hometitle-with-search-form"><?php echo $list['title']; ?></h3>
+					<?php else: ?>
 					<h3 class="hometitle"><?php echo $list['title']; ?></h3>
+					<?php endif; ?>
 				</div>
 				<div class="ethnologist-front-page-grid row" data-fade-in="<?php echo $list['animate'];?>">
 					<?php $list_query = new WP_Query( $list['query_args'] ); ?>

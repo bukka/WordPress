@@ -33,6 +33,19 @@
 	padding-top: 180px;
 	padding-bottom: 180px;
 }
+.home-padding {
+	padding-top: 20px;
+}
+.ethnologist-hometitle-with-search-form {
+	margin-left: 250px;
+}
+.ethnologist-hometitle-with-search-form:after {
+	margin: 0 280px;
+}
+.ethnologist-front-page-search-form {
+	float: right;
+	width: 250px;
+}
 .entry-content {
 	font-size: 15px;
 }
