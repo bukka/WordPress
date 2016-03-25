@@ -52,36 +52,7 @@
                 } ?>
             </div>
             <div class="col-lg-6">
-                <?php if(('image' != $item->type)) { ?>
-                    <div class="form-group">
-                        <label><?php _e('Custom Cover', 'grand-media'); echo ' <small>('.__('media image ID', 'grand-media').')</small>'; ?></label>
-                        <input name="meta[_cover]" type="text" class="form-control input-sm gmedia-cover" value="<?php echo isset($item->meta['_cover'][0])? $item->meta['_cover'][0] : ''; ?>" placeholder="<?php _e('Gmedia ID or Image URL', 'grand-media'); ?>"/>
-                    </div>
-                <?php } ?>
                 <?php if(gm_user_can('terms')) { ?>
-                    <?php if($item->editor) { ?>
-                        <?php
-                        $cat_name  = empty($item->category)? 0 : reset($item->category)->name;
-                        $term_type = 'gmedia_category';
-                        $gm_terms  = $gmGallery->options['taxonomies'][$term_type];
-
-                        $terms_category = '';
-                        if(count($gm_terms)) {
-                            foreach($gm_terms as $term_name => $term_title) {
-                                $selected_option = ($cat_name === $term_name)? ' selected="selected"' : '';
-                                $terms_category .= '<option' . $selected_option . ' value="' . $term_name . '">' . esc_html($term_title) . '</option>' . "\n";
-                            }
-                        }
-                        ?>
-                        <div class="form-group">
-                            <label><?php _e('Category', 'grand-media'); ?> </label>
-                            <select name="terms[gmedia_category]" class="gmedia_category form-control input-sm">
-                                <option<?php echo $cat_name? '' : ' selected="selected"'; ?> value=""><?php _e('Uncategorized', 'grand-media'); ?></option>
-                                <?php echo $terms_category; ?>
-                            </select>
-                        </div>
-                    <?php } ?>
-
                     <?php
                     $alb_id    = empty($item->album)? 0 : reset($item->album)->term_id;
                     $term_type = 'gmedia_album';
@@ -123,6 +94,23 @@
                             <?php echo $terms_album; ?>
                         </select>
                     </div>
+
+                    <?php
+                    if(!empty($item->categories)) {
+                        $terms_category = array();
+                        foreach($item->categories as $c) {
+                            $terms_category[] = esc_html($c->name);
+                        }
+                        $terms_category = join(', ', $terms_category);
+                    } else {
+                        $terms_category = '';
+                    }
+                    ?>
+                    <div class="form-group">
+                        <label><?php _e('Categories', 'grand-media'); ?></label>
+                        <input name="terms[gmedia_category]" data-create="<?php echo gm_user_can('category_manage')? 'true' : 'false'; ?>" class="combobox_gmedia_category form-control input-sm" value="<?php echo $terms_category; ?>" placeholder="<?php _e('Uncategorized', 'grand-media'); ?>"/>
+                    </div>
+
                     <?php
                     if(!empty($item->tags)) {
                         $terms_tag = array();
@@ -200,6 +188,12 @@
                     }
                     ?>
                 </div>
+                <?php if(('image' != $item->type)) { ?>
+                    <div class="form-group">
+                        <label><?php _e('Custom Cover', 'grand-media'); echo ' <small>('.__('media image ID', 'grand-media').')</small>'; ?></label>
+                        <input name="meta[_cover]" type="text" class="form-control input-sm gmedia-cover" value="<?php echo isset($item->meta['_cover'][0])? $item->meta['_cover'][0] : ''; ?>" placeholder="<?php _e('Gmedia ID or Image URL', 'grand-media'); ?>"/>
+                    </div>
+                <?php } ?>
                 <?php if(('image' == $item->type) || ('video' == $item->type)) { ?>
                     <div class="form-group">
                         <label><?php _e('GPS Location', 'grand-media'); ?></label>

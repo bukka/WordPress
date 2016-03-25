@@ -77,33 +77,31 @@ function gmedia_term_item_actions($item) {
         $actions['share'] = "<span class='action-inactive'>$share_icon</span>";
     }
 
-    if('gmedia_category' != $item->taxonomy) {
-        if('gmedia_tag' != $item->taxonomy) {
-            $edit_icon = '<span class="glyphicon glyphicon-edit"></span>';
-            if($item->allow_edit) {
-                $actions['edit'] = '<a title="' . __('Edit', 'grand-media') . '" href="' . add_query_arg(array("edit_item" => $item->term_id), $gmProcessor->url) . '">' . $edit_icon . '</a>';
-            } else {
-                $actions['edit'] = "<span class='action-inactive'>$edit_icon</span>";
-            }
-        }
-
-        $trash_icon = '<span class="glyphicon glyphicon-trash"></span>';
-        if($item->allow_delete) {
-            $actions['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('delete' => $item->term_id), $gmProcessor->url), 'gmedia_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
+    if('gmedia_tag' != $item->taxonomy) {
+        $edit_icon = '<span class="glyphicon glyphicon-edit"></span>';
+        if($item->allow_edit) {
+            $actions['edit'] = '<a title="' . __('Edit', 'grand-media') . '" href="' . add_query_arg(array("edit_item" => $item->term_id), $gmProcessor->url) . '">' . $edit_icon . '</a>';
         } else {
-            $actions['delete'] = "<span class='action-inactive'>$trash_icon</span>";
+            $actions['edit'] = "<span class='action-inactive'>$edit_icon</span>";
         }
-
-        /*if(gm_user_can("{$item->taxonomy}_manage")) {
-            if((int)$item->global === get_current_user_id() || gm_user_can('edit_others_media')) {
-                $action['edit'] = '<a title="' . __('Edit', 'grand-media') . '" href="' . add_query_arg(array("edit_item" => $item->term_id), $gmProcessor->url) . '">' . $edit_icon . '</a>';
-
-                if(gm_user_can('terms_delete')) {
-                    $action['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('delete' => $item->term_id), $gmProcessor->url), 'gmedia_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
-                }
-            }
-        }*/
     }
+
+    $trash_icon = '<span class="glyphicon glyphicon-trash"></span>';
+    if($item->allow_delete) {
+        $actions['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('delete' => $item->term_id), $gmProcessor->url), 'gmedia_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
+    } else {
+        $actions['delete'] = "<span class='action-inactive'>$trash_icon</span>";
+    }
+
+    /*if(gm_user_can("{$item->taxonomy}_manage")) {
+        if((int)$item->global === get_current_user_id() || gm_user_can('edit_others_media')) {
+            $action['edit'] = '<a title="' . __('Edit', 'grand-media') . '" href="' . add_query_arg(array("edit_item" => $item->term_id), $gmProcessor->url) . '">' . $edit_icon . '</a>';
+
+            if(gm_user_can('terms_delete')) {
+                $action['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('delete' => $item->term_id), $gmProcessor->url), 'gmedia_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
+            }
+        }
+    }*/
 
 
     return apply_filters('gmedia_term_item_actions', $actions);
@@ -111,7 +109,7 @@ function gmedia_term_item_actions($item) {
 
 
 function gmedia_term_item_more_data(&$item) {
-    global $gmDB, $gmGallery;
+    global $gmDB;
 
     $meta       = $gmDB->get_metadata('gmedia_term', $item->term_id);
     $item->meta = $meta;
@@ -134,9 +132,6 @@ function gmedia_term_item_more_data(&$item) {
                 $item->comment_status = $post_item->comment_status;
             }
         }
-    } elseif('gmedia_category' == $item->taxonomy) {
-        $item->slug = $item->name;
-        $item->name = $gmGallery->options['taxonomies']['gmedia_category'][$item->slug];
     }
 
 
@@ -145,6 +140,10 @@ function gmedia_term_item_more_data(&$item) {
 
 function gmedia_terms_create_album_tpl() {
     include(dirname(__FILE__) . '/tpl/album-create-item.php');
+}
+
+function gmedia_terms_create_category_tpl() {
+    include(dirname(__FILE__) . '/tpl/category-create-item.php');
 }
 
 function gmedia_terms_create_tag_tpl() {
@@ -186,6 +185,11 @@ function gmedia_term_choose_author_field($selected = false) {
 add_action('gmedia_term_album_after_panel', 'gmedia_term_album_after_panel');
 function gmedia_term_album_after_panel($term){
     include(dirname(__FILE__) . '/tpl/album-sort-gmedia.php');
+}
+
+add_action('gmedia_term_category_after_panel', 'gmedia_term_category_after_panel');
+function gmedia_term_category_after_panel($term){
+    include(dirname(__FILE__) . '/tpl/category-preview-gmedia.php');
 }
 
 add_action('gmedia_term_filter_after_panel', 'gmedia_term_filter_after_panel');

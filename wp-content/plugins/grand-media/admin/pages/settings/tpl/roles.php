@@ -86,6 +86,12 @@
             <p class="help-block"><?php _e('Who can create and edit own custom filters. It is required "Edit Others Media" capability to edit filters you do not own', 'grand-media'); ?></p>
         </div>
         <div class="form-group">
+            <label><?php _e('Manage Categories', 'grand-media') ?>:</label>
+            <select name="capability[gmedia_category_manage]" class="form-control input-sm"><?php wp_dropdown_roles($gmDB->get_role('gmedia_category_manage')); ?></select>
+
+            <p class="help-block"><?php _e('Who can create new categories. It is required "Edit Others Media" capability to edit categories', 'grand-media'); ?></p>
+        </div>
+        <div class="form-group">
             <label><?php _e('Manage Tags', 'grand-media') ?>:</label>
             <select name="capability[gmedia_tag_manage]" class="form-control input-sm"><?php wp_dropdown_roles($gmDB->get_role('gmedia_tag_manage')); ?></select>
 

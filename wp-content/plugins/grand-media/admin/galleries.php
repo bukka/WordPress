@@ -285,7 +285,7 @@ function gmediaGalleries()
                                     if ('gmedia_category' == $tax_tabs) {
                                         _e('Categories', 'grand-media');
                                         foreach ($tabs as $t) {
-                                            $terms_source[] = sprintf('<a class="gm_gallery_source gm_category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => $t->term_id), $lib_url)), esc_html($gmGallery->options['taxonomies']['gmedia_category'][$t->name]));
+                                            $terms_source[] = sprintf('<a class="gm_gallery_source gm_category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => $t->term_id), $lib_url)), esc_html($t->name));
                                         }
                                     } elseif ('gmedia_album' == $tax_tabs) {
                                         _e('Albums', 'grand-media');
@@ -723,14 +723,13 @@ function gmediaGalleryEdit()
                                 <div class="form-group" id="div_gmedia_category">
                                     <?php
                                     $term_type    = 'gmedia_category';
-                                    $gm_terms_all = $gmGallery->options['taxonomies'][$term_type];
                                     $gm_terms     = $gmDB->get_terms($term_type, array('fields' => 'names_count'));
 
                                     $terms_items = '';
                                     if (count($gm_terms)) {
                                         foreach ($gm_terms as $id => $term) {
                                             $selected = (isset($gallery['_query'][$term_type]) && in_array($id, $gallery['_query'][$term_type])) ? ' selected="selected"' : '';
-                                            $terms_items .= '<option value="' . $id . '"' . $selected . '>' . esc_html($gm_terms_all[$term['name']]) . ' (' . $term['count'] . ')</option>' . "\n";
+                                            $terms_items .= '<option value="' . $id . '"' . $selected . '>' . esc_html($term['name']) . ' (' . $term['count'] . ')</option>' . "\n";
                                         }
                                     }
                                     $setvalue = isset($gallery['_query'][$term_type]) ? 'data-setvalue="' . implode(',', $gallery['_query'][$term_type]) . '"' : '';

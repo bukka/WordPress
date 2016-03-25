@@ -99,14 +99,13 @@
         <div class="form-group">
             <?php
             $term_type    = 'gmedia_category';
-            $gm_terms_all = $gmGallery->options['taxonomies'][$term_type];
             $gm_terms     = $gmDB->get_terms($term_type, array('fields' => 'names_count'));
 
             $terms_items = '';
             if(count($gm_terms)) {
                 foreach($gm_terms as $id => $_term) {
                     $selected = (in_array($id, $gmedia_category))? ' selected="selected"' : '';
-                    $terms_items .= '<option value="' . $id . '"' . $selected . '>' . esc_html($gm_terms_all[$_term['name']]) . ' (' . $_term['count'] . ')</option>' . "\n";
+                    $terms_items .= '<option value="' . $id . '"' . $selected . '>' . esc_html($_term['name']) . ' (' . $_term['count'] . ')</option>' . "\n";
                 }
             }
             $setvalue = !empty($gmedia_category)? 'data-setvalue="' . implode(',', $gmedia_category) . '"' : '';

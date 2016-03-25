@@ -214,8 +214,8 @@ class GmediaAdmin {
             break;
             case 'GrandMedia_Terms':
                 if(isset($_GET['edit_item'])) {
-                    if('gmedia_album' == $gmProcessor->taxonomy){
-                        include_once(dirname(__FILE__) . '/pages/taxonomy/edit-album.php');
+                    if(in_array($gmProcessor->taxonomy, array('gmedia_album', 'gmedia_category'))){
+                        include_once(dirname(__FILE__) . '/pages/taxonomy/edit-term.php');
                     } elseif('gmedia_filter' == $gmProcessor->taxonomy) {
                         include_once(dirname(__FILE__) . '/pages/taxonomy/edit-filter.php');
                     }

@@ -131,10 +131,13 @@
 
                 <li class="divider"></li>
                 <li class="<?php echo $rel_selected_show . (gm_user_can('terms')? '' : ' disabled'); ?>">
-                    <a href="#libModal" data-modal="assign_category" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Assign Category...', 'grand-media'); ?></a>
+                    <a href="#libModal" data-modal="assign_album" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Move to Album...', 'grand-media'); ?></a>
                 </li>
                 <li class="<?php echo $rel_selected_show . (gm_user_can('terms')? '' : ' disabled'); ?>">
-                    <a href="#libModal" data-modal="assign_album" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Move to Album...', 'grand-media'); ?></a>
+                    <a href="#libModal" data-modal="assign_category" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Assign Categories...', 'grand-media'); ?></a>
+                </li>
+                <li class="<?php echo $rel_selected_show . (gm_user_can('terms')? '' : ' disabled'); ?>">
+                    <a href="#libModal" data-modal="unassign_category" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Unassign Categories...', 'grand-media'); ?></a>
                 </li>
                 <li class="<?php echo $rel_selected_show . (gm_user_can('terms')? '' : ' disabled'); ?>">
                     <a href="#libModal" data-modal="add_tags" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Add Tags...', 'grand-media'); ?></a></li>

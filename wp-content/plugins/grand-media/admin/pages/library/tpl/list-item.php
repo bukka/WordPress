@@ -40,22 +40,20 @@
                         $terms_album = sprintf('<a class="album" href="%s">%s</a>', esc_url(add_query_arg(array('alb' => 0), $gmedia_url)), '&#8212;');
                     }
                     echo $terms_album;
-
-                    if($item->editor) {
-                        ?>
-                        <br/><span class="label label-default"><?php _e('Category', 'grand-media'); ?>:</span>
-                        <?php
-                        if($item->category) {
-                            $terms_category = array();
-                            foreach($item->category as $c) {
-                                $terms_category[] = sprintf('<a class="category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => $c->term_id), $gmedia_url)), esc_html($gmGallery->options['taxonomies']['gmedia_category'][$c->name]));
-                            }
-                            $terms_category = join(', ', $terms_category);
-                        } else {
-                            $terms_category = sprintf('<a class="category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => 0), $gmedia_url)), __('Uncategorized', 'grand-media'));
+                    ?>
+                    <br/><span class="label label-default"><?php _e('Category', 'grand-media'); ?>:</span>
+                    <?php
+                    if($item->categories) {
+                        $terms_category = array();
+                        foreach($item->categories as $c) {
+                            $terms_category[] = sprintf('<a class="category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => $c->term_id), $gmedia_url)), esc_html($c->name));
                         }
-                        echo $terms_category;
-                    } ?>
+                        $terms_category = join(', ', $terms_category);
+                    } else {
+                        $terms_category = sprintf('<a class="category" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => 0), $gmedia_url)), __('Uncategorized', 'grand-media'));
+                    }
+                    echo $terms_category;
+                    ?>
                     <br/><span class="label label-default"><?php _e('Tags', 'grand-media'); ?>:</span>
                     <?php
                     if($item->tags) {

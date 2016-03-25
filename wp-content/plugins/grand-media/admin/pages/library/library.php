@@ -60,6 +60,12 @@ if($gmProcessor->user_options['grid_cell_fit_gmedia']) {
                     include(dirname(__FILE__) . '/tpl/' . $gmedia_user_options['display_mode_gmedia'] . '-item.php');
                 }
             } elseif(gm_user_can('edit_media')) {
+                $gm_category_terms  = $gmDB->get_terms('gmedia_category', array('fields' => 'names'));
+                ?>
+                <script type="text/javascript">
+                    var gmedia_categories = <?php echo json_encode($gm_category_terms); ?>;
+                </script>
+                <?php
                 foreach($gmedia_query as &$item) {
                     gmedia_item_more_data($item);
 

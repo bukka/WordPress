@@ -90,6 +90,13 @@ class GmediaProcessor_Terms extends GmediaProcessor {
                     add_action('gmedia_before_terms_list', 'gmedia_terms_create_alert_tpl');
                 }
             break;
+            case 'gmedia_category':
+                if(gm_user_can('category_manage')) {
+                    add_action('gmedia_before_terms_list', 'gmedia_terms_create_category_tpl');
+                } else {
+                    add_action('gmedia_before_terms_list', 'gmedia_terms_create_alert_tpl');
+                }
+            break;
             case 'gmedia_tag':
                 if(gm_user_can('tag_manage')) {
                     add_action('gmedia_before_terms_list', 'gmedia_terms_create_tag_tpl');
@@ -328,6 +335,55 @@ class GmediaProcessor_Terms extends GmediaProcessor {
 
                     $this->msg[] = sprintf(__('Album `%s` successfuly saved', 'grand-media'), $_term->name);
                 }
+
+            } while(0);
+        } elseif(isset($_POST['gmedia_category_save'])) {
+            check_admin_referer('GmediaTerms', 'term_save_wpnonce');
+            $edit_term = (int)$gmCore->_get('edit_item');
+            do {
+                if(!$gmCore->caps['gmedia_category_manage']) {
+                    $this->error[] = __('You are not allowed to manage categories', 'grand-media');
+                    break;
+                }
+                $term = $gmCore->_post('term');
+                if(($meta = $gmCore->_post('meta'))) {
+                    $term = array_merge_recursive(array('meta' => $meta), $term);
+                }
+                $term['name'] = trim($term['name']);
+                if(empty($term['name'])) {
+                    $this->error[] = __('Term Name is not specified', 'grand-media');
+                    break;
+                }
+                if($gmCore->is_digit($term['name'])) {
+                    $this->error[] = __("Term Name can't be only digits", 'grand-media');
+                    break;
+                }
+                $taxonomy = 'gmedia_category';
+                if($edit_term && !$gmDB->term_exists($edit_term, $taxonomy)) {
+                    $this->error[] = __('A term with the id provided do not exists', 'grand-media');
+                    $edit_term     = false;
+                }
+                if(($term_id = $gmDB->term_exists($term['name'], $taxonomy))) {
+                    if($term_id != $edit_term) {
+                        $this->error[] = __('A term with the name provided already exists', 'grand-media');
+                        break;
+                    }
+                }
+                if($edit_term) {
+                    if(!current_user_can('gmedia_edit_others_media')) {
+                        $this->error[] = __('You are not allowed to edit others media', 'grand-media');
+                        break;
+                    }
+                    $term_id = $gmDB->update_term($edit_term, $term['taxonomy'], $term);
+                } else {
+                    $term_id = $gmDB->insert_term($term['name'], $term['taxonomy'], $term);
+                }
+                if(is_wp_error($term_id)) {
+                    $this->error[] = $term_id->get_error_message();
+                    break;
+                }
+
+                $this->msg[] = sprintf(__('Category `%s` successfuly saved', 'grand-media'), $term['name']);
 
             } while(0);
         } elseif(isset($_POST['gmedia_tag_add'])) {

@@ -36,7 +36,7 @@
     </div>
     <div class="form-group row">
         <div class="col-xs-6">
-            <label><?php _e('In Category order gmedia', 'grand-media'); ?></label>
+            <label><?php _e('In Category order gmedia (set default order)', 'grand-media'); ?></label>
             <select name="set[in_category_orderby]" class="form-control input-sm">
                 <option value="ID" <?php selected($gmGallery->options['in_category_orderby'], 'ID'); ?>><?php _e('by ID', 'grand-media'); ?></option>
                 <option value="title" <?php selected($gmGallery->options['in_category_orderby'], 'title'); ?>><?php _e('by title', 'grand-media'); ?></option>
@@ -53,6 +53,7 @@
                 <option value="ASC" <?php selected($gmGallery->options['in_category_order'], 'ASC'); ?>><?php _e('ASC', 'grand-media'); ?></option>
             </select>
         </div>
+        <p class="help-block"><?php _e('This option could be rewritten by individual category settings.', 'grand-media'); ?></p>
     </div>
     <div class="form-group">
         <label><?php _e('Forbid other plugins to load their JS and CSS on Gmedia admin pages', 'grand-media') ?>:</label>

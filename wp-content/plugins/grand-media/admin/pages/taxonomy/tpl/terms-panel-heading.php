@@ -10,31 +10,26 @@
 <div class="panel-heading-fake"></div>
 <div class="panel-heading clearfix">
 
-    <?php if('gmedia_category' != $gmedia_term_taxonomy) {
-
-        include(GMEDIA_ABSPATH . 'admin/tpl/search-form.php');
-
-        echo $gmedia_terms_pager;
-
-    } ?>
+    <?php
+    include(GMEDIA_ABSPATH . 'admin/tpl/search-form.php');
+    echo $gmedia_terms_pager;
+    ?>
 
     <div class="btn-toolbar pull-left">
-        <?php if('gmedia_category' != $gmedia_term_taxonomy) { ?>
-            <div class="btn-group gm-checkgroup" id="cb_global-btn">
-                    <span class="btn btn-default active"><input class="doaction" id="cb_global"
-                                                                data-group="cb_term-object" type="checkbox"/></span>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only"><?php _e('Toggle Dropdown', 'grand-media'); ?></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a data-select="total" href="#"><?php _e('All', 'grand-media'); ?></a></li>
-                    <li><a data-select="none" href="#"><?php _e('None', 'grand-media'); ?></a></li>
-                    <li class="divider"></li>
-                    <li><a data-select="reverse" href="#" title="<?php _e('Reverse only visible items', 'grand-media'); ?>"><?php _e('Reverse', 'grand-media'); ?></a></li>
-                </ul>
-            </div>
-        <?php } ?>
+        <div class="btn-group gm-checkgroup" id="cb_global-btn">
+                <span class="btn btn-default active"><input class="doaction" id="cb_global"
+                                                            data-group="cb_term-object" type="checkbox"/></span>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only"><?php _e('Toggle Dropdown', 'grand-media'); ?></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a data-select="total" href="#"><?php _e('All', 'grand-media'); ?></a></li>
+                <li><a data-select="none" href="#"><?php _e('None', 'grand-media'); ?></a></li>
+                <li class="divider"></li>
+                <li><a data-select="reverse" href="#" title="<?php _e('Reverse only visible items', 'grand-media'); ?>"><?php _e('Reverse', 'grand-media'); ?></a></li>
+            </ul>
+        </div>
 
         <?php
         switch($gmedia_term_taxonomy) {
@@ -70,7 +65,7 @@
             <a class="btn btn-success pull-left" href="<?php echo add_query_arg(array('edit_item' => '0'), $gmedia_url); ?>"><?php _e('Create Filter', 'grand-media'); ?></a>
         <?php } ?>
 
-        <?php if(('gmedia_category' != $gmedia_term_taxonomy) && !empty($gmedia_terms)) { ?>
+        <?php if(!empty($gmedia_terms)) { ?>
             <div class="btn-group">
                 <a class="btn btn-default" href="#"><?php _e('Action', 'grand-media'); ?></a>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

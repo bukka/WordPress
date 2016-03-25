@@ -515,6 +515,14 @@ function gmedia_get_modal() {
             $modal_title  = __('Assign Category for Selected Images', 'grand-media');
             $modal_button = __('Assign Category', 'grand-media');
         break;
+        case 'unassign_category':
+            if(!current_user_can('gmedia_terms')) {
+                die('-1');
+            }
+            $button_class = 'btn-danger';
+            $modal_title  = __('Unassign Categories from Selected Items', 'grand-media');
+            $modal_button = __('Unassign Categories', 'grand-media');
+        break;
         case 'exclude_albums':
         case 'filter_albums':
             $modal_title  = __('Filter Albums', 'grand-media');
@@ -662,36 +670,6 @@ function gmedia_get_modal() {
                 </div>
             <?php
             break;
-            case 'exclude_categories':
-            case 'filter_categories':
-                $gm_terms = $gmDB->get_terms('gmedia_category');
-                ?>
-                    <div class="checkbox"><label><input type="checkbox" name="cat[]" value="0"> <?php _e('Uncategorized', 'grand-media'); ?></label></div>
-                    <?php
-                    if(count($gm_terms)) {
-                        foreach($gm_terms as $term) {
-                            if($term->count) {
-                                ?>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" name="cat[]" value="<?php echo $term->term_id; ?>"> <?php echo esc_html($term->name); ?></label>
-                                    <span class="badge pull-right"><?php echo $term->count; ?></span>
-                                </div>
-                            <?php
-                            }
-                        }
-                    }
-            break;
-            case 'assign_category':
-            $term_type = 'gmedia_category';
-            $gm_terms  = $gmGallery->options['taxonomies'][$term_type];
-            ?>
-                <div class="radio"><label><input type="radio" name="cat" value="0"> <?php _e('Uncategorized', 'grand-media'); ?></label></div>
-            <?php if(count($gm_terms)) {
-                foreach($gm_terms as $term_name => $term_title) {
-                    echo '<div class="radio"><label><input type="radio" name="cat" value="' . $term_name . '"> ' . esc_html($term_title) . '</label></div>';
-                }
-            }
-            break;
             case 'exclude_albums':
             case 'filter_albums':
             if($gmCore->caps['gmedia_show_others_media']) {
@@ -769,6 +747,7 @@ function gmedia_get_modal() {
                         <option value="0"><?php _e('No Album', 'grand-media'); ?></option>
                         <?php echo $terms_album; ?>
                     </select>
+                    <small class="help-block" style="margin-top:0;"><?php _e('Choose "No Album" to delete albums from selected items', 'grand-media'); ?></small>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">
@@ -819,6 +798,96 @@ function gmedia_get_modal() {
                 </script>
             <?php
             break;
+            case 'exclude_categories':
+            case 'filter_categories':
+                $gm_terms = $gmDB->get_terms('gmedia_category');
+                ?>
+                    <div class="checkbox"><label><input type="checkbox" name="cat[]" value="0"> <?php _e('Uncategorized', 'grand-media'); ?></label></div>
+                    <?php
+                    if(count($gm_terms)) {
+                        foreach($gm_terms as $term) {
+                            if($term->count) {
+                                ?>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="cat[]" value="<?php echo $term->term_id; ?>"> <?php echo esc_html($term->name); ?></label>
+                                    <span class="badge pull-right"><?php echo $term->count; ?></span>
+                                </div>
+                            <?php
+                            }
+                        }
+                    }
+            break;
+            case 'assign_category':
+            $gm_terms = $gmDB->get_terms('gmedia_category', array('fields' => 'names_count'));
+            $gm_terms = array_values($gm_terms);
+            ?>
+                <div class="form-group">
+                    <input id="combobox_gmedia_category" name="cat_names" class="form-control input-sm" value="" placeholder="<?php _e('Add to Categories...', 'grand-media'); ?>"/>
+                </div>
+                <script type="text/javascript">
+                    jQuery(function($) {
+                        var gm_terms = <?php echo json_encode($gm_terms); ?>;
+                        //noinspection JSUnusedAssignment
+                        var items = gm_terms.map(function(x) {
+                            //noinspection JSUnresolvedVariable
+                            return {id: x.term_id, name: x.name, count: x.count};
+                        });
+                        //noinspection JSDuplicatedDeclaration
+                        $('#combobox_gmedia_category').selectize({
+                            delimiter: ',',
+                            maxItems: null,
+                            openOnFocus: false,
+                            labelField: 'name',
+                            hideSelected: true,
+                            options: items,
+                            searchField: ['name'],
+                            valueField: 'name',
+                            persist: false,
+                            <?php if($gmCore->caps['gmedia_category_manage']){ ?>
+                            createOnBlur: true,
+                            create: function(input) {
+                                return {
+                                    name: input
+                                }
+                            },
+                            <?php } else{ ?>
+                            create: false,
+                            <?php } ?>
+                            render: {
+                                item: function(item, escape) {
+                                    return '<div>' + escape(item.name) + '</div>';
+                                },
+                                option: function(item, escape) {
+                                    return '<div>' + escape(item.name) + ' <span class="badge">' + escape(item.count) + '</span></div>';
+                                }
+                            }
+                        });
+                    });
+                </script>
+            <?php
+            break;
+            case 'unassign_category':
+            // get selected items in Gmedia Library
+            $ckey           = "gmuser_{$user_ID}_library";
+            $selected_items = array_filter(explode(',', $_COOKIE[$ckey]), 'is_numeric');
+            if(!empty($selected_items)) {
+                $gm_terms = $gmDB->get_gmedia_terms($selected_items, 'gmedia_category');
+            }
+            if(count($gm_terms)){
+            foreach($gm_terms as $term){
+            ?>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="category_id[]" value="<?php echo $term->term_id; ?>"> <?php echo esc_html($term->name); ?></label>
+                    <span class="badge pull-right"><?php echo $term->count; ?></span>
+                </div>
+                <?php
+            }
+            } else {
+                $modal_button = false; ?>
+                <p class="noterms"><?php _e('No categories', 'grand-media'); ?></p>
+            <?php
+            }
+            break;
             case 'exclude_tags':
             case 'filter_tags':
             $gm_terms = $gmDB->get_terms('gmedia_tag', array('fields' => 'names_count'));
@@ -859,7 +928,7 @@ function gmedia_get_modal() {
             <?php
             } else {
             $modal_button = false; ?>
-                <p class="notags"><?php _e('No tags', 'grand-media'); ?></p>
+                <p class="noterms"><?php _e('No tags', 'grand-media'); ?></p>
             <?php
             }
             break;
@@ -933,7 +1002,7 @@ function gmedia_get_modal() {
             }
             } else {
                 $modal_button = false; ?>
-                <p class="notags"><?php _e('No tags', 'grand-media'); ?></p>
+                <p class="noterms"><?php _e('No tags', 'grand-media'); ?></p>
             <?php
             }
             break;
@@ -1296,14 +1365,12 @@ function gmedia_module_install() {
 
 add_action('wp_ajax_gmedia_import_wpmedia_modal', 'gmedia_import_wpmedia_modal');
 function gmedia_import_wpmedia_modal() {
-    global $user_ID, $gmDB, $gmCore, $gmGallery;
+    global $user_ID, $gmDB, $gmCore;
 
     check_ajax_referer('GmediaGallery');
     if(!current_user_can('gmedia_import')) {
         die('-1');
     }
-
-    $gm_terms = array();
     ?>
     <div class="modal-content">
         <div class="modal-header">
@@ -1320,27 +1387,6 @@ function gmedia_import_wpmedia_modal() {
                     echo $_COOKIE[$ckey];
                 } ?>"/>
                 <?php if($gmCore->caps['gmedia_terms']) { ?>
-                    <div class="form-group">
-                        <?php
-                        $term_type = 'gmedia_category';
-                        $gm_terms  = $gmGallery->options['taxonomies'][$term_type];
-
-                        $terms_category = '';
-                        if(count($gm_terms)) {
-                            foreach($gm_terms as $term_name => $term_title) {
-                                $terms_category .= '<option value="' . $term_name . '">' . esc_html($term_title) . '</option>' . "\n";
-                            }
-                        }
-                        ?>
-                        <label><?php _e('Assign Category', 'grand-media'); ?>
-                            <small><?php _e('(for images only)') ?></small>
-                        </label>
-                        <select id="gmedia_category" name="terms[gmedia_category]" class="form-control input-sm">
-                            <option value=""><?php _e('Uncategorized', 'grand-media'); ?></option>
-                            <?php echo $terms_category; ?>
-                        </select>
-                    </div>
-
                     <div class="form-group">
                         <?php
                         $term_type = 'gmedia_album';
@@ -1362,60 +1408,99 @@ function gmedia_import_wpmedia_modal() {
 
                     <div class="form-group">
                         <?php
+                        $term_type = 'gmedia_category';
+                        $gm_cat_terms  = $gmDB->get_terms($term_type, array('fields' => 'names'));
+                        ?>
+                        <label><?php _e('Assign Categories', 'grand-media'); ?></label>
+                        <input id="combobox_gmedia_category" name="terms[gmedia_category]" class="form-control input-sm" value="" placeholder="<?php _e('Uncategorized', 'grand-media'); ?>"/>
+                    </div>
+
+                    <div class="form-group">
+                        <?php
                         $term_type = 'gmedia_tag';
-                        $gm_terms  = $gmDB->get_terms($term_type, array('fields' => 'names'));
+                        $gm_tag_terms  = $gmDB->get_terms($term_type, array('fields' => 'names'));
                         ?>
                         <label><?php _e('Add Tags', 'grand-media'); ?> </label>
                         <input id="combobox_gmedia_tag" name="terms[gmedia_tag]" class="form-control input-sm" value="" placeholder="<?php _e('Add Tags...', 'grand-media'); ?>"/>
                     </div>
+                    <script type="text/javascript">
+                        jQuery(function($) {
+                            //noinspection JSDuplicatedDeclaration
+                            $('#combobox_gmedia_album').selectize({
+                                <?php if($gmCore->caps['gmedia_album_manage']){ ?>
+                                create: true,
+                                createOnBlur: true,
+                                <?php } else{ ?>
+                                create: false,
+                                <?php } ?>
+                                persist: false
+                            });
+
+                            var gm_cat_terms = <?php echo json_encode($gm_cat_terms); ?>;
+                            //noinspection JSUnusedAssignment
+                            var cat_items = gm_cat_terms.map(function(x) {
+                                return {item: x};
+                            });
+                            //noinspection JSDuplicatedDeclaration
+                            $('#combobox_gmedia_category').selectize({
+                                <?php if($gmCore->caps['gmedia_category_manage']){ ?>
+                                create: function(input) {
+                                    return {
+                                        item: input
+                                    }
+                                },
+                                createOnBlur: true,
+                                <?php } else{ ?>
+                                create: false,
+                                <?php } ?>
+                                delimiter: ',',
+                                maxItems: null,
+                                openOnFocus: false,
+                                persist: false,
+                                options: cat_items,
+                                labelField: 'item',
+                                valueField: 'item',
+                                searchField: ['item'],
+                                hideSelected: true
+                            });
+
+                            var gm_tag_terms = <?php echo json_encode($gm_tag_terms); ?>;
+                            //noinspection JSUnusedAssignment
+                            var tag_items = gm_tag_terms.map(function(x) {
+                                return {item: x};
+                            });
+                            //noinspection JSDuplicatedDeclaration
+                            $('#combobox_gmedia_tag').selectize({
+                                <?php if($gmCore->caps['gmedia_tag_manage']){ ?>
+                                create: function(input) {
+                                    return {
+                                        item: input
+                                    }
+                                },
+                                createOnBlur: true,
+                                <?php } else{ ?>
+                                create: false,
+                                <?php } ?>
+                                delimiter: ',',
+                                maxItems: null,
+                                openOnFocus: false,
+                                persist: false,
+                                options: tag_items,
+                                labelField: 'item',
+                                valueField: 'item',
+                                searchField: ['item'],
+                                hideSelected: true
+                            });
+                        });
+                    </script>
                 <?php } else { ?>
                     <p><?php _e('You are not allowed to assign terms', 'grand-media') ?></p>
                 <?php } ?>
                 <div class="checkbox">
-                    <label><input type="checkbox" name="skip_exists" value="skip"> <?php _e('Skip if file with the same name already exists in Gmedia Library', 'grand-media'); ?>
-                    </label></div>
+                    <label><input type="checkbox" name="skip_exists" value="skip"> <?php _e('Skip if file with the same name already exists in Gmedia Library', 'grand-media'); ?></label>
+                </div>
                 <script type="text/javascript">
                     jQuery(function($) {
-                        <?php if($gmCore->caps['gmedia_terms']){ ?>
-                        //noinspection JSDuplicatedDeclaration
-                        $('#combobox_gmedia_album').selectize({
-                            <?php if($gmCore->caps['gmedia_album_manage']){ ?>
-                            create: true,
-                            createOnBlur: true,
-                            <?php } else{ ?>
-                            create: false,
-                            <?php } ?>
-                            persist: false
-                        });
-                        var gm_terms = <?php echo json_encode($gm_terms); ?>;
-                        //noinspection JSUnusedAssignment
-                        var items = gm_terms.map(function(x) {
-                            return {item: x};
-                        });
-                        //noinspection JSDuplicatedDeclaration
-                        $('#combobox_gmedia_tag').selectize({
-                            <?php if($gmCore->caps['gmedia_tag_manage']){ ?>
-                            create: function(input) {
-                                return {
-                                    item: input
-                                }
-                            },
-                            createOnBlur: true,
-                            <?php } else{ ?>
-                            create: false,
-                            <?php } ?>
-                            delimiter: ',',
-                            maxItems: null,
-                            openOnFocus: false,
-                            persist: false,
-                            options: items,
-                            labelField: 'item',
-                            valueField: 'item',
-                            searchField: ['item'],
-                            hideSelected: true
-                        });
-                        <?php } ?>
-
                         $('#import-done').one('click', function() {
                             $('#import_form').submit();
                             $(this).text($(this).data('loading-text')).prop('disabled', true);
@@ -1424,7 +1509,6 @@ function gmedia_import_wpmedia_modal() {
                                 $('#importModal').modal('hide');
                             });
                         });
-
                     });
                 </script>
             </form>

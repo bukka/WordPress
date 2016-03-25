@@ -2036,12 +2036,19 @@ class GmediaCore {
                 }
 
                 unset($post_data['gmuid'], $post_data['mime_type'], $post_data['set_title'], $post_data['set_status']);
-                if(!$is_webimage && isset($post_data['terms']['gmedia_category'])) {
-                    unset($post_data['terms']['gmedia_category']);
+
+                if(isset($post_data['terms']['gmedia_category']) && !empty($post_data['terms']['gmedia_category'])) {
+                    if(!is_array($post_data['terms']['gmedia_category'])) {
+                        $post_data['terms']['gmedia_category'] = explode(',', $post_data['terms']['gmedia_category']);
+                    }
+                } else {
+                    $post_data['terms']['gmedia_category'] = array();
                 }
 
-                if(isset($post_data['terms']['gmedia_tag']) && !empty($post_data['terms']['gmedia_tag']) && !is_array($post_data['terms']['gmedia_tag'])) {
-                    $post_data['terms']['gmedia_tag'] = explode(',', $post_data['terms']['gmedia_tag']);
+                if(isset($post_data['terms']['gmedia_tag']) && !empty($post_data['terms']['gmedia_tag'])) {
+                    if(!is_array($post_data['terms']['gmedia_tag'])) {
+                        $post_data['terms']['gmedia_tag'] = explode(',', $post_data['terms']['gmedia_tag']);
+                    }
                 } else {
                     $post_data['terms']['gmedia_tag'] = array();
                 }
@@ -2208,6 +2215,21 @@ class GmediaCore {
             }
         } else {
             $_status = 'publish';
+        }
+
+        if(isset($_terms['gmedia_category']) && !empty($_terms['gmedia_category'])) {
+            if(!is_array($_terms['gmedia_category'])) {
+                $_terms['gmedia_category'] = explode(',', $_terms['gmedia_category']);
+            }
+        } else {
+            $_terms['gmedia_category'] = array();
+        }
+        if(isset($_terms['gmedia_tag']) && !empty($_terms['gmedia_tag'])) {
+            if(!is_array($_terms['gmedia_tag'])) {
+                $_terms['gmedia_tag'] = explode(',', $_terms['gmedia_tag']);
+            }
+        } else {
+            $_terms['gmedia_tag'] = array();
         }
 
         $c = count($files);
@@ -2487,10 +2509,6 @@ class GmediaCore {
                 $title = $fileinfo['title'];
             }
 
-            if(!$is_webimage) {
-                unset($terms['gmedia_category']);
-            }
-
             // Construct the media_data array
             $media_data = array(
                     'mime_type'   => $fileinfo['mime_type'],
@@ -2531,7 +2549,7 @@ class GmediaCore {
 
         }
 
-        echo '<p><b>' . __('Category') . ':</b> ' . ((isset($_terms['gmedia_category']) && !empty($_terms['gmedia_category']))? esc_html($gmGallery->options['taxonomies']['gmedia_category'][$_terms['gmedia_category']]) : '-') . PHP_EOL;
+        echo '<p><b>' . __('Category') . ':</b> ' . ((isset($_terms['gmedia_category']) && !empty($_terms['gmedia_category']))? esc_html(str_replace(',', ', ', $_terms['gmedia_category'])) : '-') . PHP_EOL;
         echo '<br /><b>' . __('Album') . ':</b> ' . ((isset($_terms['gmedia_album']) && !empty($_terms['gmedia_album']))? (isset($album_name)? $album_name : esc_html($_terms['gmedia_album'])) : '-') . PHP_EOL;
         echo '<br /><b>' . __('Tags') . ':</b> ' . ((isset($_terms['gmedia_tag']) && !empty($_terms['gmedia_tag']))? esc_html(str_replace(',', ', ', $_terms['gmedia_tag'])) : '-') . '</p>' . PHP_EOL;
 
@@ -3176,6 +3194,7 @@ class GmediaCore {
                 , 'gmedia_import'
                 , 'gmedia_terms'
                 , 'gmedia_album_manage'
+                , 'gmedia_category_manage'
                 , 'gmedia_filter_manage'
                 , 'gmedia_tag_manage'
                 , 'gmedia_terms_delete'

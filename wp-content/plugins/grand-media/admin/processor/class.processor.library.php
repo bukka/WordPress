@@ -141,9 +141,6 @@ class GmediaProcessor_Library extends GmediaProcessor {
         if(!empty($query_args['category__in'])) {
             $category_names = $gmDB->get_terms('gmedia_category', array('fields' => 'names', 'include' => $query_args['category__in']));
             if(!empty($category_names)) {
-                foreach($category_names as $i => $name) {
-                    $category_names[$i] = $gmGallery->options['taxonomies']['gmedia_category'][$name];
-                }
                 $this->filters['filter_categories'] = array(
                     'title'  => __('Filter Category', 'grand-media'),
                     'filter' => $category_names
@@ -153,9 +150,6 @@ class GmediaProcessor_Library extends GmediaProcessor {
         if(!empty($query_args['category__not_in'])) {
             $category_names = $gmDB->get_terms('gmedia_category', array('fields' => 'names', 'include' => $query_args['category__not_in']));
             if(!empty($category_names)) {
-                foreach($category_names as $i => $name) {
-                    $category_names[$i] = $gmGallery->options['taxonomies']['gmedia_category'][$name];
-                }
                 $this->filters['exclude_categories'] = array(
                     'title'  => __('Exclude Category', 'grand-media'),
                     'filter' => $category_names
@@ -301,48 +295,6 @@ class GmediaProcessor_Library extends GmediaProcessor {
         }
 
         if(!empty($this->selected_items)) {
-            if(isset($_POST['assign_category'])) {
-                check_admin_referer('gmedia_modal');
-                if($gmCore->caps['gmedia_terms']) {
-                    if(!$gmCore->caps['gmedia_edit_others_media']) {
-                        $selected_items = $gmDB->get_gmedias(array('fields' => 'ids', 'author' => $user_ID, 'gmedia__in' => $this->selected_items));
-                        if(count($selected_items) < count($this->selected_items)) {
-                            $this->error[] = __('You are not allowed to edit others media', 'grand-media');
-                        }
-                    } else {
-                        $selected_items = $this->selected_items;
-                    }
-                    $term = $gmCore->_post('cat');
-                    if((false !== $term) && ($count = count($selected_items))) {
-                        if('0' == $term) {
-                            foreach($selected_items as $item) {
-                                $gmDB->delete_gmedia_term_relationships($item, 'gmedia_category');
-                            }
-                            $this->msg[] = sprintf(__('%d item(s) was uncategorized', 'grand-media'), $count);
-                        } else {
-                            foreach($selected_items as $item) {
-                                $result = $gmDB->set_gmedia_terms($item, $term, 'gmedia_category', $append = 0);
-                                if(is_wp_error($result)) {
-                                    $this->error[] = $result;
-                                    $count--;
-                                } elseif(!$result) {
-                                    $count--;
-                                }
-                            }
-                            if(isset($gmGallery->options['taxonomies']['gmedia_category'][$term])) {
-                                $cat_name    = $gmGallery->options['taxonomies']['gmedia_category'][$term];
-                                $this->msg[] = sprintf(__("Category `%s` assigned to %d image(s).", 'grand-media'), esc_html($cat_name), $count);
-                            } else {
-                                $this->error[] = sprintf(__("Category `%s` can't be assigned.", 'grand-media'), $term);
-                            }
-                        }
-
-                        $this->selected_items = $this->clear_selected_items('library');
-                    }
-                } else {
-                    $this->error[] = __('You are not allowed to assign terms', 'grand-media');
-                }
-            }
             if(isset($_POST['assign_album'])) {
                 check_admin_referer('gmedia_modal');
                 if($gmCore->caps['gmedia_terms']) {
@@ -394,6 +346,68 @@ class GmediaProcessor_Library extends GmediaProcessor {
                                 }
                             }
                         }
+
+                        $this->selected_items = $this->clear_selected_items('library');
+                    }
+                } else {
+                    $this->error[] = __('You are not allowed to assign terms', 'grand-media');
+                }
+            }
+            if(isset($_POST['assign_category'])) {
+                check_admin_referer('gmedia_modal');
+                if($gmCore->caps['gmedia_terms']) {
+                    if(!$gmCore->caps['gmedia_edit_others_media']) {
+                        $selected_items = $gmDB->get_gmedias(array('fields' => 'ids', 'author' => $user_ID, 'gmedia__in' => $this->selected_items));
+                        if(count($selected_items) < count($this->selected_items)) {
+                            $this->error[] = __('You are not allowed to edit others media', 'grand-media');
+                        }
+                    } else {
+                        $selected_items = $this->selected_items;
+                    }
+                    $term = $gmCore->_post('cat_names');
+                    $term = explode(',', $term);
+                    if(!empty($term) && ($count = count($selected_items))) {
+                        foreach($selected_items as $item) {
+                            $result = $gmDB->set_gmedia_terms($item, $term, 'gmedia_category', $append = 1);
+                            if(is_wp_error($result)) {
+                                $this->error[] = $result;
+                                $count--;
+                            } elseif(!$result) {
+                                $count--;
+                            }
+                        }
+
+                        $this->msg[] = sprintf(__("Categories assigned to %d image(s).", 'grand-media'), $count);
+
+                        $this->selected_items = $this->clear_selected_items('library');
+                    }
+                } else {
+                    $this->error[] = __('You are not allowed to assign terms', 'grand-media');
+                }
+            }
+            if(isset($_POST['unassign_category'])) {
+                check_admin_referer('gmedia_modal');
+                if(($term = $gmCore->_post('category_id')) && $gmCore->caps['gmedia_terms']) {
+                    if(!$gmCore->caps['gmedia_edit_others_media']) {
+                        $selected_items = $gmDB->get_gmedias(array('fields' => 'ids', 'author' => $user_ID, 'gmedia__in' => $this->selected_items));
+                        if(count($selected_items) < count($this->selected_items)) {
+                            $this->error[] = __('You are not allowed to edit others media', 'grand-media');
+                        }
+                    } else {
+                        $selected_items = $this->selected_items;
+                    }
+                    $term = array_map('intval', $term);
+                    if(($count = count($selected_items))) {
+                        foreach($selected_items as $item) {
+                            $result = $gmDB->set_gmedia_terms($item, $term, 'gmedia_category', $append = -1);
+                            if(is_wp_error($result)) {
+                                $this->error[] = $result;
+                                $count--;
+                            } elseif(!$result) {
+                                $count--;
+                            }
+                        }
+                        $this->msg[] = sprintf(__('%d category(ies) deleted from %d item(s)', 'grand-media'), count($term), $count);
 
                         $this->selected_items = $this->clear_selected_items('library');
                     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Gmedia Term (Album) Edit
+ * Gmedia Term (Album, Category) Edit
  */
 
 // don't load directly

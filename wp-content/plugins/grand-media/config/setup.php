@@ -68,35 +68,7 @@ function gmedia_default_options() {
     $gm['license_key']  = '';
     $gm['license_key2'] = '';
 
-    $gm['taxonomies']['gmedia_category'] = array(
-        'abstract'              => __('Abstract', 'grand-media'),
-        'animals'               => __('Animals', 'grand-media'),
-        'black-and-white'       => __('Black and White', 'grand-media'),
-        'celebrities'           => __('Celebrities', 'grand-media'),
-        'city-and-architecture' => __('City & Architecture', 'grand-media'),
-        'commercial'            => __('Commercial', 'grand-media'),
-        'concert'               => __('Concert', 'grand-media'),
-        'family'                => __('Family', 'grand-media'),
-        'fashion'               => __('Fashion', 'grand-media'),
-        'film'                  => __('Film', 'grand-media'),
-        'fine-art'              => __('Fine Art', 'grand-media'),
-        'food'                  => __('Food', 'grand-media'),
-        'journalism'            => __('Journalism', 'grand-media'),
-        'landscapes'            => __('Landscapes', 'grand-media'),
-        'macro'                 => __('Macro', 'grand-media'),
-        'nature'                => __('Nature', 'grand-media'),
-        'nude'                  => __('Nude', 'grand-media'),
-        'people'                => __('People', 'grand-media'),
-        'performing-arts'       => __('Performing Arts', 'grand-media'),
-        'sport'                 => __('Sport', 'grand-media'),
-        'still-life'            => __('Still Life', 'grand-media'),
-        'street'                => __('Street', 'grand-media'),
-        'transportation'        => __('Transportation', 'grand-media'),
-        'travel'                => __('Travel', 'grand-media'),
-        'underwater'            => __('Underwater', 'grand-media'),
-        'urban-exploration'     => __('Urban Exploration', 'grand-media'),
-        'wedding'               => __('Wedding', 'grand-media')
-    );
+    $gm['taxonomies']['gmedia_category'] = array();
     $gm['taxonomies']['gmedia_tag']      = array();
     $gm['taxonomies']['gmedia_album']    = array();
 

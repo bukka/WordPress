@@ -116,11 +116,8 @@ function gmedia_title($sep = '|', $display = true)
 
     $_title = __('GmediaGallery', 'grand-media');
     if (is_object($gmedia) && ! is_wp_error($gmedia)) {
-        if (in_array($gmedia_type, array('gallery', 'album', 'tag', 'filter'))) {
+        if (in_array($gmedia_type, array('gallery', 'album', 'category', 'tag', 'filter'))) {
             $_title = $gmedia->name;
-        } elseif ('category' == $gmedia_type) {
-            $gm_terms_all = $gmGallery->options['taxonomies']['gmedia_category'];
-            $_title       = $gm_terms_all[$gmedia->name];
         } elseif ('single' == $gmedia_type) {
             $_title = $gmedia->title;
         }
@@ -161,11 +158,8 @@ function the_gmedia_title($return = false)
 
     $title = __('GmediaGallery', 'grand-media');
     if (is_object($gmedia) && ! is_wp_error($gmedia)) {
-        if (in_array($gmedia_type, array('gallery', 'album', 'tag', 'filter'))) {
+        if (in_array($gmedia_type, array('gallery', 'album', 'category', 'tag', 'filter'))) {
             $title = $gmedia->name;
-        } elseif ('category' == $gmedia_type) {
-            $gm_terms_all = $gmGallery->options['taxonomies']['gmedia_category'];
-            $title        = $gm_terms_all[$gmedia->name];
         } elseif ('single' == $gmedia_type) {
             $title = $gmedia->title;
         }

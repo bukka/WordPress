@@ -30,6 +30,37 @@ var GmediaLibrary = {
             persist: false
         });
 
+        if(window.gmedia_categories) {
+            var categories = jQuery('.combobox_gmedia_category');
+            if(categories.length) {
+                var categories_data = window.gmedia_categories.map(function(x) {
+                    return {item: x};
+                });
+
+                categories.selectize({
+                    create: function(input) {
+                        if(categories.data('create')) {
+                            return {
+                                item: input
+                            }
+                        } else {
+                            return false;
+                        }
+                    },
+                    createOnBlur: true,
+                    delimiter: ',',
+                    maxItems: null,
+                    openOnFocus: false,
+                    persist: false,
+                    options: categories_data,
+                    labelField: 'item',
+                    valueField: 'item',
+                    searchField: ['item'],
+                    hideSelected: true
+                });
+            }
+        }
+
         // Date/Time picker
         var gmedia_date_temp;
         jQuery('.input-group.gmedia_date').datetimepicker({useSeconds: true}).on('dp.show', function() {
@@ -140,6 +171,36 @@ var GmediaAddMedia = {
                     openOnFocus: false,
                     persist: false,
                     options: tags_data,
+                    labelField: 'item',
+                    valueField: 'item',
+                    searchField: ['item'],
+                    hideSelected: true
+                });
+            }
+        }
+        if(window.gmedia_categories) {
+            var categories = jQuery('#combobox_gmedia_category');
+            if(categories.length) {
+                var categories_data = window.gmedia_categories.map(function(x) {
+                    return {item: x};
+                });
+
+                categories.selectize({
+                    create: function(input) {
+                        if(categories.data('create')) {
+                            return {
+                                item: input
+                            }
+                        } else {
+                            return false;
+                        }
+                    },
+                    createOnBlur: true,
+                    delimiter: ',',
+                    maxItems: null,
+                    openOnFocus: false,
+                    persist: false,
+                    options: categories_data,
                     labelField: 'item',
                     valueField: 'item',
                     searchField: ['item'],

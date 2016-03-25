@@ -457,7 +457,7 @@ class GmediaDB {
         if(isset($terms) && is_array($terms) && count($terms)) {
             foreach($terms as $taxonomy => $_terms) {
                 $taxonomy = trim($taxonomy);
-                if(('gmedia_tag' == $taxonomy) && !is_array($_terms)) {
+                if(in_array($taxonomy, array('gmedia_tag', 'gmedia_category')) && !is_array($_terms)) {
                     $_terms = explode(',', $_terms);
                 } else {
                     $_terms = (array)$_terms;
@@ -3444,13 +3444,6 @@ class GmediaDB {
             return new WP_Error('gm_invalid_taxonomy', __('Invalid Taxonomy'));
         }
 
-        if('gmedia_category' == $taxonomy) {
-            $object = $this->get_gmedia($object_id);
-            if(!in_array($object->mime_type, array('image/jpeg', 'image/png', 'image/gif'))) {
-                return false;
-            }
-        }
-
         if(!is_array($terms)) {
             $terms = array($terms);
         }
@@ -3481,7 +3474,7 @@ class GmediaDB {
                 }
                 if(!$term_id = $this->term_exists($term, $taxonomy, $global)) {
                     // Skip if a non-existent term ID is passed or if taxonomy is category or if user is not allowed to add new terms.
-                    if($gmCore->is_digit($term) || ($append < 0) || ('gmedia_category' == $taxonomy && !array_key_exists($term, $gmGallery->options['taxonomies']['gmedia_category'])) || ('gmedia_category' != $taxonomy && !current_user_can($taxonomy . '_manage'))) {
+                    if($gmCore->is_digit($term) || ($append < 0) || !current_user_can($taxonomy . '_manage')) {
                         continue;
                     }
                     if($global) {
@@ -3494,7 +3487,7 @@ class GmediaDB {
                         return $term_id;
                     }
                 } else {
-                    if(('gmedia_album' == $taxonomy) && !current_user_can('gmedia_edit_others_media')) {
+                    if(in_array($taxonomy, array('gmedia_album')) && !current_user_can('gmedia_edit_others_media')) {
                         $alb = $this->get_term($term_id, 'gmedia_album');
                         if($alb->global && ($alb->global != get_current_user_id())) {
                             continue;
