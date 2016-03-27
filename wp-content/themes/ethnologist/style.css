@@ -46,6 +46,16 @@
 	float: right;
 	width: 250px;
 }
+.ethnologist-front-page-grid .postcontent header {
+	padding: 1px 8px;
+}
+.ethnologist-front-page-grid .postcontent .entry-content {
+	padding: 0 8px;
+	text-align: justify;
+}
+.ethnologist-front-page-grid .postcontent .postedinbottom {
+	padding: 0 8px;
+}
 .entry-content {
 	font-size: 15px;
 }
