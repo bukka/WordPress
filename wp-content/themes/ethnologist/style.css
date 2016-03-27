@@ -96,6 +96,16 @@
 	padding: 20px 0 25px 40px;
 	font-size: 80%;
 }
+#comments .comment .avatar {
+    padding: 5px 5px 0 0;
+    margin-right: 0;
+}
+#comments .comment-meta {
+	float: left;
+}
+#comments .comment-body > p {
+	clear: both;
+}
 .gmPhantom_thumbsWrapper {
 	width: 100% !important;
 }
