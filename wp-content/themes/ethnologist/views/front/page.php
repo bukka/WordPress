@@ -12,18 +12,7 @@
 					<h3 class="hometitle"><?php echo $list['title']; ?></h3>
 					<?php endif; ?>
 				</div>
-				<div class="ethnologist-front-page-grid row" data-fade-in="<?php echo $list['animate'];?>">
-					<?php $list_query = new WP_Query( $list['query_args'] ); ?>
-					<?php if ( $list_query->have_posts() ) : ?>
-					<?php   while ( $list_query->have_posts() ) : $list_query->the_post(); ?>
-					<div class="<?php echo $list['grid_style']; ?> b_item kad_blog_item">
-						<?php get_template_part('templates/content', 'post-grid');?>
-					</div>
-					<?php   endwhile; ?>
-					<?php else: ?>
-					<div class="error-not-found"><?php pll_e( 'Sorry, no entries found.' ); ?></div>
-					<?php endif; ?>
-				</div><!-- .ethnologist-front-page-grid -->
+				<?php ethnologist_view( 'page', 'grid', array( 'list' => $list ) ); ?>
 			</div><!--.home-blog -->
 			<?php endforeach; ?>
 
@@ -36,7 +25,7 @@
 
 <script type="text/javascript">
 jQuery( document ).load( function( $ ) {
-	$( '.ethnologist-front-page-grid' ).masonry({
+	$( '.ethnologist-grid' ).masonry({
 		itemSelector: '.b_item'
 	});
 });

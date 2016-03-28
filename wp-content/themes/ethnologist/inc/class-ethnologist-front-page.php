@@ -1,20 +1,13 @@
 <?php
 
+require_once __DIR__ . '/class-ethnologist-grid.php';
+
 /**
  * Ethnologist Front Page class
  */
-class Ethnologist_FrontPage
+class Ethnologist_FrontPage extends Ethnologist_Grid
 {
 	const LIST_ITEMS_COUNT = 3;
-
-	/**
-	 * Possible grid styels (key is items count
-	 */
-	private $grid_styles = array(
-		2 => 'tcol-md-6 tcol-sm-6 tcol-xs-12 tcol-ss-12',
-		3 => 'tcol-md-4 tcol-sm-4 tcol-xs-6 tcol-ss-12',
-		4 => 'tcol-md-3 tcol-sm-4 tcol-xs-6 tcol-ss-12',
-	);
 
 	/**
 	 * Render single page
@@ -29,26 +22,14 @@ class Ethnologist_FrontPage
 
 		$params = array(
 			'lists' => array(
-				$this->get_list( 'Latest from the Blog', 'post' ),
-				$this->get_list( 'Latest from the Interviews', 'interview' ),
-				$this->get_list( 'Latest from the Sections', 'section' ),
+				$this->get_list( 'Latest from the Blog', 'post', self::LIST_ITEMS_COUNT ),
+				$this->get_list( 'Latest from the Interviews', 'interview', self::LIST_ITEMS_COUNT ),
+				$this->get_list( 'Latest from the Sections', 'section', self::LIST_ITEMS_COUNT ),
 			)
 		);
 
 		ethnologist_view( 'front', 'page', $params );
 
 		get_footer();
-	}
-
-	private function get_list( $title, $post_type ) {
-		return array(
-			'title'      => pll__( $title ),
-			'animate'    => 0,
-			'grid_style' => $this->grid_styles[self::LIST_ITEMS_COUNT],
-			'query_args' => array(
-				'posts_per_page' => self::LIST_ITEMS_COUNT,
-				'post_type'      => $post_type,
-			),
-		);
 	}
 }

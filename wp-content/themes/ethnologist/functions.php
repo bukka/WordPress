@@ -206,6 +206,60 @@ function ethnologist_register_interviews() {
 }
 
 /**
+ * Register interviews post type
+ */
+function ethnologist_register_aboutus() {
+	// labels for aboutus post type
+	$labels = array(
+			'name'                 => _x( 'About Us', 'About Us general name', 'ethnologist' ),
+			'singular_name'        => _x( 'About Us entry', 'About Us singular name', 'ethnologist' ),
+			'add_new'              => _x( 'Add New', 'New About Us Entry', 'ethnologist' ),
+			'add_new_item'         => __( 'Add New Entry', 'ethnologist' ),
+			'edit_item'            => __( 'Edit Entry', 'ethnologist' ),
+			'new_item'             => __( 'New Entry', 'ethnologist' ),
+			'all_items'            => __( 'All Entries', 'ethnologist' ),
+			'view_item'            => __( 'View About Us Entry', 'ethnologist' ),
+			'search_items'         => __( 'Search About Us Entry', 'ethnologist' ),
+			'not_found'            => __( 'No entries found', 'ethnologist' ),
+			'not_found_in_trash'   => __( 'No entries found in Trash', 'ethnologist' ),
+			'parent_item_colon'    => '',
+			'menu_name'            => __( 'About Us', 'ethnologist' )
+	);
+	// capabilities for accessing aboutus post type (not used)
+	$capabilities = array(
+			'edit_post'               => 'edit_aboutus',
+			'read_post'               => 'read_aboutus',
+			'delete_post'             => 'delete_aboutus',
+			'edit_posts'              => 'edit_aboutus',
+			'edit_others_posts'       => 'edit_others_aboutus',
+			'publish_posts'           => 'publish_aboutus',
+			'read_private_posts'      => 'read_private_aboutus',
+			'read'                    => 'read',
+			'delete_posts'            => 'delete_aboutus',
+			'delete_private_posts'    => 'delete_private_aboutus',
+			'delete_published_posts'  => 'delete_published_aboutus',
+			'delete_others_posts'     => 'delete_others_aboutus',
+			'edit_private_posts'      => 'edit_private_aboutus',
+			'edit_published_posts'    => 'edit_published_aboutus',
+	);
+	// register aboutus post type
+	register_post_type( 'aboutus',  array(
+			'labels'              => $labels,
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'menu_position'       => 6,
+			'capability_type'     => 'page',
+			'capabilities'        => array(),
+			'has_archive'         => true,
+			'hierarchical'        => false,
+			'supports'            => array( 'title', 'thumbnail', 'editor', 'author', 'revisions' ),
+			'taxonomies'          => array(),
+	) );
+}
+
+/**
  * Initialiaze all
  *
  * Action callback - init
@@ -213,6 +267,7 @@ function ethnologist_register_interviews() {
 function ethnologist_init() {
 	ethnologist_register_sections();
 	ethnologist_register_interviews();
+	ethnologist_register_aboutus();
 	ethnologist_editor_manage_users();
 }
 add_action ( 'init', 'ethnologist_init' );

@@ -47,14 +47,14 @@
 	float: right;
 	width: 250px;
 }
-.ethnologist-front-page-grid .postcontent header {
+.ethnologist-grid .postcontent header {
 	padding: 1px 8px;
 }
-.ethnologist-front-page-grid .postcontent .entry-content {
+.ethnologist-grid .postcontent .entry-content {
 	padding: 0 8px;
 	text-align: justify;
 }
-.ethnologist-front-page-grid .postcontent footer {
+.ethnologist-grid .postcontent footer {
 	padding: 5px 8px !important;
 }
 .entry-content {
