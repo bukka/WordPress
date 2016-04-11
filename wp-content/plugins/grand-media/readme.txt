@@ -135,6 +135,9 @@ Use [Gmedia Gallery support forum](http://codeasily.com/community/forum/gmedia-g
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= 1.8.14 =
+* Fixed: Multiple categories in Edit Mode
+
 = 1.8.12 =
 * New: Ability to create own categories
 * New: Ability to assign few categories to one item

@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.8.12
+ * Version: 1.8.14
  * Author: Rattus
  * Author URI: http://codeasily.com/
  * Requires at least: 3.6
@@ -42,7 +42,7 @@ if(!class_exists('Gmedia')) {
      */
     class Gmedia {
 
-        var $version = '1.8.12';
+        var $version = '1.8.14';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.6';
         var $options = '';
@@ -617,14 +617,14 @@ if(!class_exists('Gmedia')) {
                     }
                 } else {
                     $term_id     = get_post_meta($post->ID, '_gmedia_term_ID', true);
-                    $gmedia_term = $gmDB->get_term($term_id, $post->post_type);
-                    if($gmedia_term) {
-                        if($post->post_type == 'gmedia_album') {
-                            $link = admin_url("admin.php?page=GrandMedia_Terms&taxonomy={$post->post_type}&edit_item={$gmedia_term->term_id}");
-                        } elseif($post->post_type == 'gmedia_filter') {
-                            $link = admin_url("admin.php?page=GrandMedia_Terms&taxonomy={$post->post_type}&edit_item={$gmedia_term->term_id}");
-                        } elseif($post->post_type == 'gmedia_gallery') {
-                            $link = admin_url("admin.php?page=GrandMedia_Galleries&edit_item={$gmedia_term->term_id}");
+                    $term = $gmDB->get_term($term_id);
+                    if($term) {
+                        if($term->taxonomy == 'gmedia_album') {
+                            $link = admin_url("admin.php?page=GrandMedia_Terms&taxonomy={$term->taxonomy}&edit_item={$term->term_id}");
+                        } elseif($term->taxonomy == 'gmedia_filter') {
+                            $link = admin_url("admin.php?page=GrandMedia_Terms&taxonomy={$term->taxonomy}&edit_item={$term->term_id}");
+                        } elseif($term->taxonomy == 'gmedia_gallery') {
+                            $link = admin_url("admin.php?page=GrandMedia_Galleries&edit_item={$term->term_id}");
                         }
                     } else {
                         wp_delete_post($post->ID, true);

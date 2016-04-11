@@ -101,7 +101,7 @@
                         foreach($item->categories as $c) {
                             $terms_category[] = esc_html($c->name);
                         }
-                        $terms_category = join(', ', $terms_category);
+                        $terms_category = join(',', $terms_category);
                     } else {
                         $terms_category = '';
                     }
