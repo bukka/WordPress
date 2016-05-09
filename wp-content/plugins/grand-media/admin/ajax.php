@@ -114,7 +114,7 @@ function gmedia_update_data() {
             }
             if(!empty($gmedia['terms']['gmedia_album'])) {
                 $alb_id               = (int)$gmedia['terms']['gmedia_album'];
-                $alb                  = $gmDB->get_term($alb_id, 'gmedia_album');
+                $alb                  = $gmDB->get_term($alb_id);
                 $result->album_status = $alb->status;
             } else {
                 $result->album_status = 'none';
@@ -202,6 +202,9 @@ function gmedit_save() {
 
                 if(-1 != $current_limit && $memoryNeeded > $current_limit_int) {
                     $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
+                    if($newLimit < 256){
+                        $newLimit = 256;
+                    }
                     @ini_set('memory_limit', $newLimit . 'M');
                 }
             }
@@ -362,6 +365,9 @@ function gmedit_restore() {
 
                 if(-1 != $current_limit && $memoryNeeded > $current_limit_int) {
                     $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
+                    if($newLimit < 256){
+                        $newLimit = 256;
+                    }
                     @ini_set('memory_limit', $newLimit . 'M');
                 }
             }
@@ -601,35 +607,13 @@ function gmedia_get_modal() {
             case 'quick_gallery':
             case 'quick_gallery_stack':
                 if(!empty($ckey)) {
-                    $selected = isset($_COOKIE[$ckey])? $_COOKIE[$ckey] : '';
+                    $selected_in_library = isset($_COOKIE[$ckey])? $_COOKIE[$ckey] : '';
                 }
-                if(empty($selected)) {
+                if(empty($selected_in_library)) {
                     _e('No selected Gmedia. Select at least one item in library.', 'grand-media');
                     break;
                 }
-                $modules = array();
-                if(($plugin_modules = glob(GMEDIA_ABSPATH . 'module/*', GLOB_ONLYDIR | GLOB_NOSORT))) {
-                    foreach($plugin_modules as $path) {
-                        $mfold           = basename($path);
-                        $modules[$mfold] = array(
-                                'place'       => 'plugin',
-                                'module_name' => $mfold,
-                                'module_url'  => "{$gmCore->gmedia_url}/module/{$mfold}",
-                                'module_path' => $path
-                        );
-                    }
-                }
-                if(($upload_modules = glob($gmCore->upload['path'] . '/' . $gmGallery->options['folder']['module'] . '/*', GLOB_ONLYDIR | GLOB_NOSORT))) {
-                    foreach($upload_modules as $path) {
-                        $mfold           = basename($path);
-                        $modules[$mfold] = array(
-                                'place'       => 'upload',
-                                'module_name' => $mfold,
-                                'module_url'  => "{$gmCore->upload['url']}/{$gmGallery->options['folder']['module']}/{$mfold}",
-                                'module_path' => $path
-                        );
-                    }
-                }
+                $gmedia_modules = get_gmedia_modules(false);
                 ?>
                 <div class="form-group">
                     <label><?php _e('Gallery Name', 'grand-media'); ?></label>
@@ -638,35 +622,29 @@ function gmedia_get_modal() {
                 <div class="form-group">
                     <label><?php _e('Modue', 'grand-media'); ?></label>
                     <select class="form-control input-sm" name="gallery[module]">
-                        <?php
-                        if(!empty($modules)) {
-                            foreach($modules as $m) {
-                                /**
-                                 * @var $module_name
-                                 * @var $module_url
-                                 * @var $module_path
-                                 */
-                                extract($m);
-                                if(!file_exists($module_path . '/index.php')) {
-                                    continue;
+                        <?php foreach($gmedia_modules['in'] as $mfold => $module) {
+                            echo '<optgroup label="' . esc_attr($module['title']) . '">';
+                            $presets           = $gmDB->get_terms('gmedia_module', array('global' => $user_ID, 'status' => $mfold));
+                            $selected          = selected($gmGallery->options['default_gmedia_module'], esc_attr($mfold), false);
+                            $option            = array();
+                            $option['default'] = '<option ' . $selected . ' value="' . esc_attr($mfold) . '">' . $module['title'] . ' - ' . __('Default Settings') . '</option>';
+                            foreach($presets as $preset) {
+                                $selected = ''; //selected($gmGallery->options['default_gmedia_module'], $preset->term_id, false);
+                                if('[' . $mfold . ']' == $preset->name) {
+                                    $option['default'] = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . ' - ' . __('Default Settings') . '</option>';
+                                } else {
+                                    $preset_name = str_replace('[' . $mfold . '] ', '', $preset->name);
+                                    $option[] = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . ' - ' . $preset_name . '</option>';
                                 }
-                                $module_info = array();
-                                /** @noinspection PhpIncludeInspection */
-                                include($module_path . '/index.php');
-                                if(empty($module_info)) {
-                                    continue;
-                                }
-                                ?>
-                                <option value="<?php echo $module_name; ?>"><?php echo $module_info['title']; ?></option>
-                                <?php
                             }
-                        }
-                        ?>
+                            echo implode('', $option);
+                            echo '</optgroup>';
+                        } ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label><?php _e('Selected IDs', 'grand-media'); ?></label>
-                    <input type="text" name="gallery[query][gmedia__in][]" class="form-control input-sm" value="<?php echo $selected; ?>" required="required"/>
+                    <input type="text" name="gallery[query][gmedia__in]" class="form-control input-sm" value="<?php echo $selected_in_library; ?>" required="required"/>
                 </div>
             <?php
             break;
@@ -1006,76 +984,6 @@ function gmedia_get_modal() {
             <?php
             }
             break;
-            case 'custom_filter':
-            if($gmCore->caps['gmedia_show_others_media']) {
-                $args = array();
-            } else {
-                $args = array(
-                        'global'  => array(0, $user_ID),
-                        'orderby' => 'global_desc_name'
-                );
-            }
-            $gm_terms = $gmDB->get_terms('gmedia_filter', $args);
-
-            if(count($gm_terms)) { ?>
-                <div class="form-group">
-                    <label><?php _e('Choose Filter', 'grand-media'); ?> </label>
-                    <select id="combobox_gmedia_filter" name="custom_filter_id" class="form-control" placeholder="<?php _e('Filter Name...', 'grand-media'); ?>">
-                        <option></option>
-                        <?php foreach($gm_terms as $term) {
-                            $author_name = '';
-                            if($term->global) {
-                                if($gmCore->caps['gmedia_show_others_media']) {
-                                    $author_name .= ' &nbsp; ' . sprintf(__('by %s', 'grand-media'), get_the_author_meta('display_name', $term->global));
-                                }
-                            } else {
-                                $author_name .= ' &nbsp; (' . __('shared', 'grand-media') . ')';
-                            }
-                            echo '<option value="' . $term->term_id . '" data-name="' . esc_html($term->name) . '" data-meta="' . esc_attr($author_name) . '">' . esc_html($term->name) . $author_name . '</option>' . "\n";
-                        } ?>
-                    </select>
-                </div>
-                <script type="text/javascript">
-                    jQuery(function($) {
-                        var items = $('#combobox_gmedia_filter');
-                        var items_data = $('option', items);
-                        items.selectize({
-                            create: false,
-                            persist: false,
-                            render: {
-                                item: function(item, escape) {
-                                    if(0 === (parseInt(item.value, 10) || 0)) {
-                                        return '<div>' + escape(item.text) + '</div>';
-                                    }
-                                    if(item.$order) {
-                                        var data = $(items_data[item.$order]).data();
-                                        return '<div>' + escape(data.name) + ' <small>' + escape(data.meta) + '</small></div>';
-                                    }
-                                },
-                                option: function(item, escape) {
-                                    if(0 === (parseInt(item.value) || 0)) {
-                                        return '<div>' + escape(item.text) + '</div>';
-                                    }
-                                    if(item.$order) {
-                                        var data = $(items_data[item.$order]).data();
-                                        return '<div>' + escape(data.name) + ' <small>' + escape(data.meta) + '</small></div>';
-                                    }
-                                }
-                            }
-
-                        });
-                    });
-                </script>
-            <?php } else { ?>
-                <p><?php
-                    _e('There is no Filters created yet.');
-                    if($gmCore->caps['gmedia_filter_manage']) {
-                        ?>
-                        <a href="<?php echo add_query_arg(array('page' => 'GrandMedia_Terms', 'taxonomy' => 'gmedia_filter', 'edit_item' => '0'), admin_url('admin.php')); ?>"><?php _e('Create Filter', 'grand-media'); ?></a>
-                    <?php } ?>
-                </p>
-            <?php }
-            break;
             case 'filter_author':
             case 'select_author':
             if($gmCore->caps['gmedia_show_others_media']){
@@ -1247,9 +1155,9 @@ function gmedia_tag_edit() {
     $term['name']    = trim($gmCore->_post('tag_name', ''));
     $term['term_id'] = intval($gmCore->_post('tag_id', 0));
     if($term['name'] && !$gmCore->is_digit($term['name'])) {
-        if(($term_id = $gmDB->term_exists($term['term_id'], $term['taxonomy']))) {
+        if(($term_id = $gmDB->term_exists($term['term_id']))) {
             if(!$gmDB->term_exists($term['name'], $term['taxonomy'])) {
-                $term_id = $gmDB->update_term($term['term_id'], $term['taxonomy'], $term);
+                $term_id = $gmDB->update_term($term['term_id'], $term);
                 if(is_wp_error($term_id)) {
                     $out['error'] = $gmCore->alert('danger', $term_id->get_error_message());
                 } else {
@@ -1281,9 +1189,8 @@ function gmedia_module_preset_delete() {
     if(!current_user_can('gmedia_gallery_manage')) {
         $out['error'] = $gmCore->alert('danger', __("You are not allowed to manage galleries", 'grand-media'));
     } else {
-        $taxonomy = 'gmedia_module';
         $term_id  = intval($gmCore->_post('preset_id', 0));
-        $delete   = $gmDB->delete_term($term_id, $taxonomy);
+        $delete   = $gmDB->delete_term($term_id);
         if(is_wp_error($delete)) {
             $out['error'] = $delete->get_error_message();
         }
@@ -2224,12 +2131,13 @@ function gmedia_term_add_custom_field() {
     $meta_type = 'gmedia_term';
 
     $pid      = (int)$_POST['ID'];
-    $taxonomy = 'gmedia_album';
-    $post     = $gmDB->get_term($pid, $taxonomy);
+    $post     = $gmDB->get_term($pid);
+
+    $taxonomy = $post->taxonomy;
 
     header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
 
-    if(!current_user_can('gmedia_album_manage') || ($user_ID != $post->global && !current_user_can('gmedia_edit_others_media'))) {
+    if(!current_user_can($taxonomy.'_manage') || ($user_ID != $post->global && !current_user_can('gmedia_edit_others_media'))) {
         echo json_encode(array('error' => array('code' => 100, 'message' => __('You are not allowed to edit others media', 'grand-media')), 'id' => $pid));
         die();
     }
@@ -2272,10 +2180,13 @@ function gmedia_term_delete_custom_field() {
     $meta_type = 'gmedia_term';
 
     $pid      = (int)$_POST['ID'];
-    $taxonomy = 'gmedia_album';
-    $post     = $gmDB->get_term($pid, $taxonomy);
+    $post     = $gmDB->get_term($pid);
 
-    if(!current_user_can('gmedia_album_manage') || ($user_ID != $post->global && !current_user_can('gmedia_edit_others_media'))) {
+    $taxonomy = $post->taxonomy;
+
+    header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+
+    if(!current_user_can($taxonomy.'_manage') || ($user_ID != $post->global && !current_user_can('gmedia_edit_others_media'))) {
         echo json_encode(array('error' => array('code' => 100, 'message' => __('You are not allowed to edit others media', 'grand-media')), 'id' => $pid));
         die();
     }
@@ -2301,7 +2212,6 @@ function gmedia_term_delete_custom_field() {
         }
     }
 
-    header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
     echo json_encode($result);
     die();
 

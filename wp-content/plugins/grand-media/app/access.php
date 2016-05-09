@@ -202,9 +202,11 @@ function gmedia_ios_app_library_data(
     }
 
     if(in_array('site', $data)) {
+        $site_name = get_bloginfo('name');
+        $site_description = get_bloginfo('description');
         $out['site'] = array(
-            'title'       => get_bloginfo('name'),
-            'description' => get_bloginfo('description')
+            'title'       => $site_name? $site_name : '',
+            'description' => $site_description? $site_description : ''
         );
     }
     if(in_array('authors', $data)) {
@@ -248,7 +250,8 @@ function gmedia_ios_app_library_data(
         } else{
             $cap = 0;
         }
-        $default_args = array('fields' => 'name=>all');
+        //$default_args = array('fields' => 'name=>all');
+        $default_args = array();
         if(isset($args['per_page'])) {
             $args['number'] = $args['per_page'];
         }
@@ -316,6 +319,9 @@ function gmedia_ios_app_library_data(
         foreach($gmediaTerms as $i => $term) {
             gmedia_ios_app_term_data_extend($gmediaTerms[$i], $share_link_base, $logic, $cap);
         }
+        $gmediaTerms = array_filter($gmediaTerms);
+        $props['items_count'] = count($gmediaTerms);
+
         $out['albums'] = array(
             'cap'        => $cap,
             'properties' => $props,
@@ -379,7 +385,7 @@ function gmedia_ios_app_term_data_extend(&$term, $share_link_base, $logic = 0, $
         $author_id = (int)$term->global;
         if($author_id) {
             if(($author_id != $user_ID) && ('draft' == $term->status) && !current_user_can('gmedia_edit_others_media')) {
-                unset($term);
+                $term = null;
                 return;
             }
             $authordata = get_userdata($author_id);
@@ -424,8 +430,12 @@ function gmedia_ios_app_term_data_extend(&$term, $share_link_base, $logic = 0, $
 
     $term_meta = $gmDB->get_metadata('gmedia_term', $term->term_id);
     foreach($term_meta as $key => $value) {
-        if(is_array($value) && 1 === count($value)) {
-            $term_meta[$key] = $value[0];
+        if(is_array($value)) {
+            if(is_protected_meta($key, 'gmedia_term')) {
+                $term_meta[$key] = $value[0];
+            } elseif(1 === count($value)) {
+                $term_meta[$key] = $value[0];
+            }
         }
     }
     $term_meta            = array_merge($default_meta, $term_meta);
@@ -690,7 +700,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                             }
                         }
                         if($gmCore->is_digit($term)) {
-                            $alb_name = $gmDB->get_alb_name($term);
+                            $alb_name = $gmDB->get_term_name($term);
                         } else {
                             $alb_name = $term;
                         }
@@ -856,21 +866,27 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                 'data'       => array()
             ));
 
-            $terms_ids = array();
+            $terms_ids_query = array();
             if(!empty($data['album__in'])) {
-                $terms_ids = array_merge($terms_ids, $data['album__in']);
+                $terms_ids_query = array_merge($terms_ids_query, $data['album__in']);
             }
             if(!empty($data['category__in'])) {
-                $terms_ids = array_merge($terms_ids, $data['category__in']);
+                $terms_ids_query = array_merge($terms_ids_query, $data['category__in']);
             }
             if(!empty($data['tag__in'])) {
-                $terms_ids = array_merge($terms_ids, $data['tag__in']);
+                $terms_ids_query = array_merge($terms_ids_query, $data['tag__in']);
             }
-            if(!empty($terms_ids)){
-                $terms_ids = $gmDB->get_terms(array('gmedia_album', 'gmedia_category', 'gmedia_tag'), array('include' => $terms_ids));
+            $terms_ids = array();
+            if(!empty($terms_ids_query)){
+                $terms_ids = $gmDB->get_terms(array('gmedia_album', 'gmedia_category', 'gmedia_tag'), array('include' => $terms_ids_query));
                 if(!empty($terms_ids) && !is_wp_error($terms_ids)){
                     foreach($terms_ids as $i => $term){
                         gmedia_ios_app_term_data_extend($terms_ids[$i], $share_link_base);
+                    }
+                    $terms_ids = array_filter($terms_ids);
+                    if(empty($terms_ids)){
+                        $out = $false_out;
+                        break;
                     }
                 } else {
                     $terms_ids = array();
@@ -1065,7 +1081,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                             continue;
                         }
                     }
-                    $delete = $gmDB->delete_term($item, $taxonomy);
+                    $delete = $gmDB->delete_term($item);
                     if(is_wp_error($delete)) {
                         $error[] = $delete->get_error_message();
                         $count--;
@@ -1120,7 +1136,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                             $error[] = __('You are not allowed to edit others media', 'grand-media');
                             break;
                         }
-                        $term_id = $gmDB->update_term($edit_term, $taxonomy, $term);
+                        $term_id = $gmDB->update_term($edit_term, $term);
                     } else {
                         if(!current_user_can('gmedia_edit_others_media')) {
                             $term['global'] = intval($user_ID);
@@ -1143,11 +1159,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                         $term_meta['_order'] = $term['order'];
                     }
                     foreach($term_meta as $key => $value) {
-                        if($edit_term) {
-                            $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
-                        } else {
-                            $gmDB->add_metadata('gmedia_term', $term_id, $key, $value);
-                        }
+                        $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
                     }
 
                     $alert[] = sprintf(__('Album `%s` successfuly saved', 'grand-media'), $term['name']);
@@ -1174,7 +1186,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                     if($term['name'] && !$gmCore->is_digit($term['name'])) {
                         if(($term_id = $gmDB->term_exists($term['term_id'], $taxonomy))) {
                             if(!$gmDB->term_exists($term['name'], $taxonomy)) {
-                                $term_id = $gmDB->update_term($term['term_id'], $taxonomy, $term);
+                                $term_id = $gmDB->update_term($term['term_id'], $term);
                                 if(is_wp_error($term_id)) {
                                     $error[] = $term_id->get_error_message();
                                 } else {
@@ -1232,7 +1244,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true) {
                     if($term['name'] && !$gmCore->is_digit($term['name'])) {
                         if(($term_id = $gmDB->term_exists($term['term_id'], $taxonomy))) {
                             if(!$gmDB->term_exists($term['name'], $taxonomy)) {
-                                $term_id = $gmDB->update_term($term['term_id'], $taxonomy, $term);
+                                $term_id = $gmDB->update_term($term['term_id'], $term);
                                 if(is_wp_error($term_id)) {
                                     $error[] = $term_id->get_error_message();
                                 } else {

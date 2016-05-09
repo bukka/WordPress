@@ -109,7 +109,7 @@ var GmediaAddMedia = {
             }
         });
 
-        var albums = jQuery('#combobox_gmedia_album');
+        var albums = jQuery('select#combobox_gmedia_album');
         if(albums.length) {
             var albums_data = jQuery('option', albums);
             albums.selectize({
@@ -750,6 +750,53 @@ var GmediaFunction = {
             });
         });
 
+        jQuery('.buildquery-modal').click(function (e) {
+            e.preventDefault();
+            var data = jQuery(this).data(),
+                modal_div = jQuery(jQuery(this).attr('href')),
+                query_field = jQuery(jQuery(this).attr('id') + '_field');
+                query = query_field.val();
+
+            modal_div.modal({
+                backdrop: false,
+                show: true,
+                keyboard: false
+            }).one('shown.bs.modal', function () {
+                if(query){
+                    query = gm_parse_query(query);
+                    console.log(query);
+                }
+            }).one('hidden.bs.modal', function () {});
+        });
+
+        jQuery('.buildquerysubmit').on('click', function () {
+            var qform = jQuery('#buildQuery :input').filter(function () {
+                return !!jQuery(this).val();
+            });
+
+            var qform = decodeURIComponent(qform.serialize());
+            console.log(qform);
+            jQuery('#build_query_field').val(qform);
+            jQuery('#buildQuery').modal('hide');
+        });
+        jQuery('a.newcustomfield-modal').click(function (e) {
+            e.preventDefault();
+            var data = jQuery(this).data(),
+                modal_div = jQuery(jQuery(this).attr('href'));
+
+            modal_div.modal({
+                backdrop: false,
+                show: true,
+                keyboard: false
+            }).one('shown.bs.modal', function () {
+                jQuery('input.newcustomfield-for-id', this).val(data['gmid']);
+            }).one('hidden.bs.modal', function () {
+                jQuery(':input.form-control, input.newcustomfield-for-id', this).val('');
+                if (jQuery('.newcfield', this).length) {
+                    jQuery('a.gmediacustomstuff').click();
+                }
+            });
+        });
         jQuery('.customfieldsubmit').on('click', function () {
             var cform = jQuery('#newCustomFieldForm');
             if (!jQuery('.newcustomfield-for-id', cform).val()) {
@@ -778,24 +825,6 @@ var GmediaFunction = {
                     } else {
                         console.log(data);
                     }
-                }
-            });
-        });
-        jQuery('a.newcustomfield-modal').click(function (e) {
-            e.preventDefault();
-            var data = jQuery(this).data(),
-                modal_div = jQuery(jQuery(this).attr('href'));
-
-            modal_div.modal({
-                backdrop: false,
-                show: true,
-                keyboard: false
-            }).one('shown.bs.modal', function () {
-                jQuery('input.newcustomfield-for-id', this).val(data['gmid']);
-            }).one('hidden.bs.modal', function () {
-                jQuery(':input.form-control, input.newcustomfield-for-id', this).val('');
-                if (jQuery('.newcfield', this).length) {
-                    jQuery('a.gmediacustomstuff').click();
                 }
             });
         });
@@ -934,18 +963,19 @@ var GmediaFunction = {
             });
         };
         preset_popover();
-        jQuery('#gallerySettingsForm').on('click', '.ajax-submit', function (e) {
+        jQuery('#module_preset').on('click', '.ajax-submit', function (e) {
             e.preventDefault();
             jQuery('body').addClass('gmedia-busy');
-            var form = jQuery('#gallerySettingsForm');
+            var form = jQuery('#gmedia-edit-gallery');
             var post_data = form.serializeArray();
             post_data.push({name: jQuery(this).attr('name'), value: 1});
-            var post_url = form.attr('action');
-            jQuery.post(post_url, jQuery.param(post_data), function (data, status, xhr) {
+            var pathname = window.location.href;
+            jQuery.post(pathname, jQuery.param(post_data), function (data, status, xhr) {
                 jQuery('body').removeClass('gmedia-busy');
                 data = jQuery(data).find('#gmedia-container');
                 jQuery('#gm-message').append(jQuery('#gm-message', data).html());
                 jQuery('#save_buttons').html(jQuery('#save_buttons', data).html());
+                jQuery('#save_buttons_duplicate').html(jQuery('#save_buttons_duplicate', data).html());
                 jQuery('#module_preset').html(jQuery('#module_preset', data).html());
                 preset_popover();
             });
@@ -959,6 +989,7 @@ var GmediaFunction = {
 
         jQuery('#module_preset').on('click', '.delpreset span', function () {
             jQuery('body').addClass('gmedia-busy');
+            var module_preset = this;
             var preset_item_li = jQuery(this).closest('li');
             var preset_id = jQuery(this).data('id');
             var post_data = {
@@ -969,6 +1000,8 @@ var GmediaFunction = {
                     jQuery('#gm-message').append(data.error);
                 } else {
                     preset_item_li.remove();
+                    var _save_preset = jQuery('#module_preset').find('.popover-content').html();
+                    jQuery('#_save_preset').replaceWith('<script type="text/html" id="_save_preset">' + _save_preset + '</script>');
                 }
                 jQuery('body').removeClass('gmedia-busy');
             });
@@ -1034,6 +1067,24 @@ function convertInputsToJSON(form) {
     });
 
     return json;
+}
+
+function gm_parse_query(s) {
+    var j = {},
+        res = s.split(/&/gm).map(function(e) {
+            var o = e.split(/=/),
+                pt = j;
+            if(typeof o[1] == 'undefined'){
+                o[1] = '';
+            }
+            o[0].replace(/^(\w+)\[([^&]*)\]/, '$1][$2').split(/\]\[/).map(function(e, i, a) {
+                if(e === ''){
+                    e = Object.keys(pt).length;
+                }
+                pt = (pt[e] = pt[e] || (i == a.length - 1 ? decodeURIComponent(o[1].replace(/\+/,' ')) : {}));
+            });
+        });
+    return j;
 }
 
 function validateEmail(email) {

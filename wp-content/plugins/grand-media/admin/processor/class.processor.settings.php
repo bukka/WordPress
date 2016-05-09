@@ -35,8 +35,7 @@ class GmediaProcessor_Settings extends GmediaProcessor {
                 $set['endpoint'] !== $gmGallery->options['endpoint'] ||
                 $set['gmedia_post_slug'] !== $gmGallery->options['gmedia_post_slug'] ||
                 $set['gmedia_album_post_slug'] !== $gmGallery->options['gmedia_album_post_slug'] ||
-                $set['gmedia_gallery_post_slug'] !== $gmGallery->options['gmedia_gallery_post_slug'] ||
-                $set['gmedia_filter_post_slug'] !== $gmGallery->options['gmedia_filter_post_slug']
+                $set['gmedia_gallery_post_slug'] !== $gmGallery->options['gmedia_gallery_post_slug']
             ) {
                 $flush_rewrite_rules = true;
             }
@@ -84,9 +83,6 @@ class GmediaProcessor_Settings extends GmediaProcessor {
                 }
                 if($roles[$capabilities['gmedia_terms']] < $roles[$capabilities['gmedia_tag_manage']]) {
                     $capabilities['gmedia_tag_manage'] = $capabilities['gmedia_terms'];
-                }
-                if($roles[$capabilities['gmedia_terms']] < $roles[$capabilities['gmedia_filter_manage']]) {
-                    $capabilities['gmedia_filter_manage'] = $capabilities['gmedia_terms'];
                 }
                 if($roles[$capabilities['gmedia_terms']] < $roles[$capabilities['gmedia_terms_delete']]) {
                     $capabilities['gmedia_terms_delete'] = $capabilities['gmedia_terms'];

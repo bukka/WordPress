@@ -120,7 +120,7 @@ function gmedia_term_item_more_data(&$item) {
         $item->author_name = false;
     }
 
-    if('gmedia_album' == $item->taxonomy || 'gmedia_filter' == $item->taxonomy) {
+    if('gmedia_album' == $item->taxonomy) {
         $post_id = isset($meta['_post_ID'][0])? (int)$meta['_post_ID'][0] : 0;
         $item->post_id = $post_id;
         if($post_id){
@@ -152,34 +152,6 @@ function gmedia_terms_create_tag_tpl() {
 
 function gmedia_terms_create_alert_tpl() {
     include(dirname(__FILE__) . '/tpl/terms-create-alert.php');
-}
-
-function gmedia_term_choose_author_field($selected = false) {
-    global $gmCore;
-
-    $user_ID = get_current_user_id();
-    if(false === $selected) {
-        $selected = $user_ID;
-    }
-
-    $user_ids = gm_user_can('delete_others_media')? $gmCore->get_editable_user_ids() : array($user_ID);
-    if($user_ids && gm_user_can('edit_others_media')) {
-        if(!in_array($user_ID, $user_ids)) {
-            array_push($user_ids, $user_ID);
-        }
-        wp_dropdown_users(array(
-                                  'include'          => $user_ids,
-                                  'include_selected' => true,
-                                  'name'             => 'term[global]',
-                                  'selected'         => $selected,
-                                  'class'            => 'form-control input-sm',
-                                  'multi'            => true,
-                                  'show_option_all'  => __('Shared', 'grand-media')
-                          ));
-    } else {
-        echo '<input type="hidden" name="term[global]" value="' . $user_ID . '"/>';
-        echo '<div>' . get_the_author_meta('display_name', $user_ID) . '</div>';
-    }
 }
 
 add_action('gmedia_term_album_after_panel', 'gmedia_term_album_after_panel');

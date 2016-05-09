@@ -10,7 +10,8 @@ if(!defined('ABSPATH')) {
 
 global $user_ID, $gmDB, $gmCore, $gmGallery, $gmProcessor;
 
-$gmedia_url           = $gmProcessor->url;
+$term_id              = $gmCore->_get('edit_item');
+$gmedia_url           = add_query_arg(array('edit_item' => $term_id), $gmProcessor->url);
 $gmedia_user_options  = $gmProcessor->user_options;
 $gmedia_term_taxonomy = $gmProcessor->taxonomy;
 $taxterm = str_replace('gmedia_', '', $gmedia_term_taxonomy);
@@ -19,8 +20,8 @@ if(!gm_user_can("{$taxterm}_manage")) {
     die('-1');
 }
 
-$term_id = $gmCore->_get('edit_item');
-$term    = $gmDB->get_term($term_id, $gmedia_term_taxonomy);
+$term_id = (int) $term_id;
+$term    = $gmDB->get_term($term_id);
 
 if(empty($term) || is_wp_error($term)) {
     return;

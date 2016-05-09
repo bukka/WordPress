@@ -33,7 +33,7 @@ class GmediaProcessor_Library extends GmediaProcessor {
      * @return array
      */
     public function query_args() {
-        global $gmCore, $gmDB, $user_ID, $gmGallery;
+        global $gmCore, $gmDB;
 
         $args['mime_type']        = $gmCore->_get('mime_type');
         $args['status']           = $gmCore->_get('status');
@@ -49,6 +49,7 @@ class GmediaProcessor_Library extends GmediaProcessor {
         $args['cat']              = $gmCore->_get('cat');
         $args['category__in']     = $gmCore->_get('category__in');
         $args['category__not_in'] = $gmCore->_get('category__not_in');
+        $args['category__and']    = $gmCore->_get('category__and');
         $args['gmedia__in']       = $gmCore->_get('gmedia__in');
         $args['s']                = $gmCore->_get('s');
         $args['orderby']          = $gmCore->_get('orderby', $this->user_options['orderby_gmedia']);
@@ -80,25 +81,6 @@ class GmediaProcessor_Library extends GmediaProcessor {
         }
 
         $query_args = apply_filters('gmedia_library_query_args', $args);
-
-        if($gmCore->_get('custom_filter', false, true) && ($custom_filter = $gmDB->get_term($_GET['custom_filter'], 'gmedia_filter'))) {
-            if(!is_wp_error($custom_filter)) {
-                if(($custom_filter->global == $user_ID) || $gmCore->caps['gmedia_show_others_media']) {
-                    $args = $gmDB->get_metadata('gmedia_term', $custom_filter->term_id, '_query', true);
-
-                    $this->filters['custom_filter'] = array(
-                        'title'  => __('Cusom Filter', 'grand-media'),
-                        'filter' => array($custom_filter->name)
-                    );
-
-                    $query_args = array_merge($query_args, $args);
-                } else {
-                    $this->error[] = __('You are not allowed to see others media', 'grand-media');
-                }
-            } else {
-                $this->error[] = $custom_filter->get_error_message();
-            }
-        }
 
         foreach($query_args as $key => $val) {
             if(empty($val) && ('0' !== $val) && (0 !== $val)) {
@@ -211,6 +193,17 @@ class GmediaProcessor_Library extends GmediaProcessor {
             exit;
         }
 
+        if(isset($_GET['gallery'])) {
+            $location = $this->url;
+            $gallery_id = $gmCore->_get('gallery');
+            if($gallery_id) {
+                $gallery_query = $gmDB->get_metadata('gmedia_term', $gallery_id, '_query', true);
+                $location = add_query_arg($gallery_query, $location);
+            }
+            wp_redirect($location);
+            exit;
+        }
+
         $this->query_args = $this->query_args();
 
 
@@ -245,15 +238,32 @@ class GmediaProcessor_Library extends GmediaProcessor {
                     $this->error[] = $term_id->get_error_message();
                     break;
                 }
+                $gallery_module = $gallery['module'];
+                $module_settings = array($gallery_module => array());
+                if($gmCore->is_digit($gallery_module)) {
+                    $preset = $gmDB->get_term($gallery_module);
+                    if(!empty($preset) && !is_wp_error($preset)){
+                        $gallery_module = $preset->status;
+                        $module_settings = array(
+                            $gallery_module => maybe_unserialize($preset->description)
+                        );
+                    } else {
+                        $gallery_module = $gmGallery->options['default_gmedia_module'];
+                        $module_settings = array(
+                            $gallery_module => array()
+                        );
+                    }
+                }
+                $gallery['query'] = array_merge($gallery['query'], array('order' => 'ASC', 'orderby' => 'gmedia__in'));
 
                 $gallery_meta = array(
                     '_edited'   => gmdate('Y-m-d H:i:s'),
-                    '_module'   => $gallery['module'],
-                    '_query'    => array('gmedia__in' => $gallery['query']['gmedia__in']),
-                    '_settings' => array($gallery['module'] => array())
+                    '_query'    => $gallery['query'],
+                    '_module'   => $gallery_module,
+                    '_settings' => $module_settings
                 );
                 foreach($gallery_meta as $key => $value) {
-                    $gmDB->add_metadata('gmedia_term', $term_id, $key, $value);
+                    $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
                 }
                 $this->msg[] = sprintf(__('Gallery "%s" successfuly saved. Shortcode: [gmedia id=%d]', 'grand-media'), esc_attr($gallery['name']), $term_id);
             } while(0);
@@ -329,7 +339,7 @@ class GmediaProcessor_Library extends GmediaProcessor {
                                 global $wpdb;
 
                                 foreach($term_ids as $term_id => $item_ids) {
-                                    $term = $gmDB->get_term($term_id, 'gmedia_album');
+                                    $term = $gmDB->get_term($term_id);
                                     if(isset($_POST['status_global'])) {
                                         $values = array();
                                         foreach($selected_items as $item) {

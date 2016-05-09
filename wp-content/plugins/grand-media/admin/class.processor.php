@@ -179,7 +179,9 @@ class GmediaProcessor {
             case 'GrandMedia_AddMedia':
                 include_once($path_ . 'addmedia.php');
             break;
-            case 'GrandMedia_Terms':
+            case 'GrandMedia_Albums':
+            case 'GrandMedia_Categories':
+            case 'GrandMedia_Tags':
                 include_once($path_ . 'terms.php');
             break;
             case 'GrandMedia_Galleries':

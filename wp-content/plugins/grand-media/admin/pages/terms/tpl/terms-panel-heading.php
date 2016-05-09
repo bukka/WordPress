@@ -8,14 +8,21 @@
  */
 ?>
 <div class="panel-heading-fake"></div>
-<div class="panel-heading clearfix">
+<div class="panel-heading clearfix" style="padding-bottom:2px;">
+    <div class="pull-right" style="margin-bottom:3px;">
+        <div class="clearfix">
+            <?php include(GMEDIA_ABSPATH . 'admin/tpl/search-form.php'); ?>
 
-    <?php
-    include(GMEDIA_ABSPATH . 'admin/tpl/search-form.php');
-    echo $gmedia_terms_pager;
-    ?>
+            <div class="btn-toolbar pull-right" style="margin-bottom:4px; margin-left:4px;">
+                <a title="<?php _e('More Screen Settings', 'grand-media'); ?>" class="show-settings-link pull-right btn btn-default btn-xs"><span class="glyphicon glyphicon-cog"></span></a>
+            </div>
+        </div>
 
-    <div class="btn-toolbar pull-left">
+        <?php echo $gmedia_terms_pager; ?>
+
+    </div>
+
+    <div class="btn-toolbar pull-left" style="margin-bottom:7px;">
         <div class="btn-group gm-checkgroup" id="cb_global-btn">
                 <span class="btn btn-default active"><input class="doaction" id="cb_global"
                                                             data-group="cb_term-object" type="checkbox"/></span>
@@ -30,40 +37,6 @@
                 <li><a data-select="reverse" href="#" title="<?php _e('Reverse only visible items', 'grand-media'); ?>"><?php _e('Reverse', 'grand-media'); ?></a></li>
             </ul>
         </div>
-
-        <?php
-        switch($gmedia_term_taxonomy) {
-            case 'gmedia_filter':
-                $button_title = __('Show: Filters', 'grand-media');
-            break;
-            case 'gmedia_tag':
-                $button_title = __('Show: Tags', 'grand-media');
-            break;
-            case 'gmedia_category':
-                $button_title = __('Show: Categories', 'grand-media');
-            break;
-            case 'gmedia_album':
-            default:
-                $button_title = __('Show: Albums', 'grand-media');
-            break;
-        }
-        ?>
-        <div class="btn-group" style="margin-right:20px;">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                <?php echo $button_title ?> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li<?php echo ('gmedia_album' == $gmedia_term_taxonomy)? ' class="active"' : ''; ?>><a href="<?php echo add_query_arg(array('taxonomy' => 'gmedia_album'), $gmedia_url); ?>"><?php _e('Albums', 'grand-media'); ?></a></li>
-                <li<?php echo ('gmedia_tag' == $gmedia_term_taxonomy)? ' class="active"' : ''; ?>><a href="<?php echo add_query_arg(array('taxonomy' => 'gmedia_tag'), $gmedia_url); ?>"><?php _e('Tags', 'grand-media'); ?></a></li>
-                <li<?php echo ('gmedia_category' == $gmedia_term_taxonomy)? ' class="active"' : ''; ?>><a href="<?php echo add_query_arg(array('taxonomy' => 'gmedia_category'), $gmedia_url); ?>"><?php _e('Categories', 'grand-media'); ?></a></li>
-                <li class="divider"></li>
-                <li<?php echo ('gmedia_filter' == $gmedia_term_taxonomy)? ' class="active"' : ''; ?>><a href="<?php echo add_query_arg(array('taxonomy' => 'gmedia_filter'), $gmedia_url); ?>"><?php _e('Custom Filters', 'grand-media'); ?></a></li>
-            </ul>
-        </div>
-
-        <?php if(('gmedia_filter' == $gmedia_term_taxonomy) && gm_user_can('filter_manage')) { ?>
-            <a class="btn btn-success pull-left" href="<?php echo add_query_arg(array('edit_item' => '0'), $gmedia_url); ?>"><?php _e('Create Filter', 'grand-media'); ?></a>
-        <?php } ?>
 
         <?php if(!empty($gmedia_terms)) { ?>
             <div class="btn-group">

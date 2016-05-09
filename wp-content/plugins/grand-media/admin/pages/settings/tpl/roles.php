@@ -80,12 +80,6 @@
             <p class="help-block"><?php _e('Who can create and edit own albums. It is required "Edit Others Media" capability to edit others and shared albums', 'grand-media'); ?></p>
         </div>
         <div class="form-group">
-            <label><?php _e('Manage Filters', 'grand-media') ?>:</label>
-            <select name="capability[gmedia_filter_manage]" class="form-control input-sm"><?php wp_dropdown_roles($gmDB->get_role('gmedia_filter_manage')); ?></select>
-
-            <p class="help-block"><?php _e('Who can create and edit own custom filters. It is required "Edit Others Media" capability to edit filters you do not own', 'grand-media'); ?></p>
-        </div>
-        <div class="form-group">
             <label><?php _e('Manage Categories', 'grand-media') ?>:</label>
             <select name="capability[gmedia_category_manage]" class="form-control input-sm"><?php wp_dropdown_roles($gmDB->get_role('gmedia_category_manage')); ?></select>
 

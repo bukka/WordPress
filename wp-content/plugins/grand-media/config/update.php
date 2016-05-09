@@ -78,6 +78,13 @@ function gmedia_upgrade_progress_panel() {
 function gmedia_do_update() {
     global $wpdb;
 
+    if(isset($_GET['reset_update_process'])){
+        delete_transient('gmediaHeavyJob');
+        delete_transient('gmediaUpgrade');
+        delete_transient('gmediaUpgradeSteps');
+        sleep(1);
+    }
+
     $info = get_transient('gmediaHeavyJob');
 
     @ignore_user_abort(true);
@@ -329,13 +336,12 @@ function gmedia_db_update__1_8_0() {
         $gm_options = $gmGallery->options;
         $step       = $steps['step'];
 
-        $gmedias = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gmedia WHERE post_id IS NULL OR post_id = '' OR post_id = 0 LIMIT 100");
+        $gmedias = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gmedia WHERE post_id IS NULL OR post_id = '' OR post_id = 0 LIMIT 20");
         if(!empty($gmedias)) {
             $post_data = array(
                     'post_type'      => 'gmedia',
                     'comment_status' => $gm_options['default_gmedia_comment_status']
             );
-            $total     = count($gmedias);
             $i         = 0;
             foreach($gmedias as $gmedia) {
                 $i++;
@@ -354,13 +360,12 @@ function gmedia_db_update__1_8_0() {
                     add_metadata('post', $post_ID, '_gmedia_ID', $gmedia->ID);
                     $wpdb->update($wpdb->prefix . 'gmedia', array('post_id' => $post_ID), array('ID' => $gmedia->ID));
 
-                    $info['180_3_' . $step] = sprintf(__('Step %d: Updating %d of %d items...', 'grand-media'), $step, $i, $total);
+                    $info['180_3'] = sprintf(__('Updated %d items in Gmedia Library...', 'grand-media'), ($step * $i));
                     set_transient('gmediaHeavyJob', $info);
                     set_transient('gmediaUpgrade', time());
                 }
             }
 
-            $info['180_4_' . $step] = __('Update cache...', 'grand-media');
             set_transient('gmediaHeavyJob', $info);
 
             $gmDB->update_gmedia_caches($gmedias, false, false);
@@ -376,20 +381,21 @@ function gmedia_db_update__1_8_0() {
             set_transient('gmediaHeavyJob', $info);
 
             $steps['gmedia_posts'] = 1;
+            $steps['step']         = 1;
         }
     }
 
     if(isset($steps['gmedia_posts']) && !isset($steps['terms_posts'])) {
-        $taxonomies             = array('gmedia_album', 'gmedia_filter', 'gmedia_gallery');
+        $step                   = $steps['step'];
+        $taxonomies             = array('gmedia_album', 'gmedia_gallery');
         $gmedia_terms_with_post = $wpdb->get_col("SELECT gmedia_term_id FROM {$wpdb->prefix}gmedia_term_meta WHERE meta_key = '_post_ID' AND meta_value != ''");
         $gmedia_terms_exclude   = '';
         if(!empty($gmedia_terms_with_post)) {
             $gmedia_terms_exclude = "AND term_id NOT IN ('" . implode("','", $gmedia_terms_with_post) . "')";
         }
-        $gmedia_terms = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gmedia_term WHERE taxonomy IN('" . implode("','", $taxonomies) . "') {$gmedia_terms_exclude} LIMIT 100");
+        $gmedia_terms = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gmedia_term WHERE taxonomy IN('" . implode("','", $taxonomies) . "') {$gmedia_terms_exclude} LIMIT 20");
         if(!empty($gmedia_terms)) {
-            $total = count($gmedia_terms);
-            $i     = 0;
+            $i = 0;
             foreach($gmedia_terms as $term) {
                 if($gmDB->get_metadata('gmedia_term', $term->term_id, '_post_ID', true)) {
                     continue;
@@ -407,7 +413,7 @@ function gmedia_db_update__1_8_0() {
                     $gmDB->add_metadata('gmedia_term', $term->term_id, '_post_ID', $post_ID);
 
                     $i++;
-                    $info['180_6_' . $step] = sprintf(__('Step %d: Updating %d of %d items...', 'grand-media'), $step, $i, $total);
+                    $info['180_6'] = sprintf(__('Updated %d terms (with author)...', 'grand-media'), ($step * $i));
                     set_transient('gmediaHeavyJob', $info);
                     set_transient('gmediaUpgrade', time());
                 }
@@ -423,10 +429,6 @@ function gmedia_db_update__1_8_0() {
             $info['180_7'] = __('Update cache...', 'grand-media');
             set_transient('gmediaHeavyJob', $info);
 
-            foreach($taxonomies as $taxonomy) {
-                wp_cache_delete('all_ids', $taxonomy);
-                wp_cache_delete('get', $taxonomy);
-            }
             wp_cache_set('last_changed', time(), 'gmedia_terms');
             set_transient('gmediaUpgrade', time());
 
@@ -528,6 +530,9 @@ function gmedia_images_update($files) {
 
                     if(-1 != $current_limit && $memoryNeeded > $current_limit_int) {
                         $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
+                        if($newLimit < 256){
+                            $newLimit = 256;
+                        }
                         @ini_set('memory_limit', $newLimit . 'M');
                     }
                 }
@@ -711,10 +716,6 @@ function gmedia_quite_update() {
             }
         }
 
-        if(version_compare($current_version, '1.6.01', '<')) {
-            $gmDB->set_capability('administrator', 'gmedia_filter_manage');
-        }
-
         if(version_compare($current_version, '1.6.3', '<')) {
             $wpdb->update($wpdb->prefix . 'gmedia_meta', array('meta_key' => '_cover'), array('meta_key' => 'cover'));
             $wpdb->update($wpdb->prefix . 'gmedia_meta', array('meta_key' => '_rating'), array('meta_key' => 'rating'));
@@ -791,6 +792,53 @@ function gmedia_quite_update() {
 
             $role = $gmDB->get_role('gmedia_tag_manage');
             $gmDB->set_capability($role, 'gmedia_category_manage');
+        }
+        if(version_compare($current_version, '1.8.20', '<')) {
+            $queries = $wpdb->get_results("SELECT meta_id, meta_key, meta_value FROM {$wpdb->prefix}gmedia_term_meta WHERE meta_key = '_query'", ARRAY_A);
+            if(!empty($queries)) {
+                foreach($queries as $query) {
+                    $query['meta_value'] = maybe_unserialize($query['meta_value']);
+                    $gmCore->replace_array_keys($query['meta_value'], array('album__in' => 'gmedia_album', 'tag__in' => 'gmedia_tag', 'category__in' => 'gmedia_category'));
+                    foreach($query['meta_value'] as $key => $value) {
+                        if('gmedia_filter' == $key) {
+                            $new_query = array();
+                            foreach($value as $filter_id) {
+                                $filter_query = $gmDB->get_metadata('gmedia_term', $filter_id, '_query', true);
+                                $new_query    = array_merge($filter_query, $new_query);
+                            }
+                            foreach($new_query as $new_key => $new_val) {
+                                if(is_array($new_val)) {
+                                    $new_query[$new_key] = implode(',', $new_val);
+                                }
+                            }
+                            $query['meta_value'] = $new_query;
+                        } else {
+                            if(is_array($value)) {
+                                $query['meta_value'][$key] = implode(',', $value);
+                            }
+                        }
+                    }
+                    $gmDB->update_metadata_by_mid($meta_type = 'gmedia_term', $query['meta_id'], $query['meta_value']);
+                }
+            }
+            $filters = $gmDB->get_terms('gmedia_filter');
+            if(!empty($filters)) {
+                foreach($filters as $filter) {
+                    $gmDB->delete_term($filter->term_id);
+                }
+            }
+        }
+        if(version_compare($current_version, '1.8.22', '<')) {
+            $queries = $wpdb->get_results("SELECT meta_id, meta_key, meta_value FROM {$wpdb->prefix}gmedia_term_meta WHERE meta_key = '_query'", ARRAY_A);
+            if(!empty($queries)) {
+                foreach($queries as $query) {
+                    $query['meta_value'] = maybe_unserialize($query['meta_value']);
+                    if(isset($query['meta_value']['gmedia__in'])){
+                        $query['meta_value'] = $query['meta_value'] + array('order' => 'ASC', 'orderby' => 'gmedia__in');
+                        $gmDB->update_metadata_by_mid($meta_type = 'gmedia_term', $query['meta_id'], $query['meta_value']);
+                    }
+                }
+            }
         }
 
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/afflux');

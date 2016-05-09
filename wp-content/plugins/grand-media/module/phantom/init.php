@@ -62,12 +62,6 @@ foreach($terms as $term) {
             $img_size           = getimagesize($thumb);
             $_metadata['thumb'] = array_slice($img_size, 0, 2);
         }
-        if($item->post_id) {
-            $cc = wp_count_comments($item->post_id);
-            $cc = $cc->approved;
-        } else {
-            $cc = 0;
-        }
 
         $content[$i] = array(
                 'id'         => $item->ID,
@@ -79,15 +73,27 @@ foreach($terms as $term) {
                 'thumb'      => $thumb,
                 'title'      => $item->title,
                 'text'       => str_replace(array("\r\n", "\r", "\n"), '', wpautop($item->description)),
-                'cc'         => $cc,
-                'views'      => empty($meta['views'][0])? 0 : (int)$meta['views'][0],
-                'likes'      => empty($meta['likes'][0])? 0 : (int)$meta['likes'][0],
                 'link'       => $item->link,
                 'linkTarget' => $link_target,
                 'date'       => $item->date,
                 'websize'    => array_values($_metadata['web']),
                 'thumbsize'  => array_values($_metadata['thumb'])
         );
+
+        if(!empty($allsettings['viewsEnabled']) || !empty($allsettings['likesEnabled'])) {
+            $content[$i]['views'] = empty($meta['views'][0])? 0 : (int)$meta['views'][0];
+            if(!empty($allsettings['likesEnabled'])){
+                $content[$i]['likes'] = empty($meta['likes'][0])? 0 : (int)$meta['likes'][0];
+            }
+        }
+        if(!empty($allsettings['commentsEnabled'])) {
+            if($item->post_id) {
+                $cc = wp_count_comments($item->post_id);
+                $content[$i]['cc'] = $cc->approved;
+            } else {
+                $content[$i]['cc'] = 0;
+            }
+        }
 
         if($allsettings['share_post_link']) {
             $content[$i]['post_link'] = get_permalink($item->post_id);
@@ -289,6 +295,23 @@ if(!empty($content)) {
                 } ?></div><?php
             } ?><br style="clear:both;"/>
         </div>
+
+        <?php if(isset($counts['total_pages']) && !empty($counts['total_pages']) && 1 < intval($counts['total_pages'])){ ?>
+        <div class="gmPhantom_pagination">
+            <?php
+            $params = $_GET;
+            $gmid = 'gm' . $gallery['term_id'];
+            $counts['total_pages'] = (int)$counts['total_pages'];
+            for($x = 1; $x <= $counts['total_pages']; $x++){
+                $li_class = $x == $counts['current_page']? ' gmPhantom_current_page' : '';
+                $params[$gmid]['page'] = $x;
+                $new_query_string = http_build_query($params);
+                $self = '?' . urldecode($new_query_string);
+                echo "<a class='gmPhantom_pager{$li_class}' href='{$self}'>{$x}</a>";
+            }
+            ?>
+        </div>
+        <?php } ?>
     </div>
     <?php
 } else {

@@ -71,7 +71,10 @@ $pager_html = $gmDB->query_pager();
                         <label style="visibility:hidden;">-</label>
                         <button style="display:block" type="submit" class="btn btn-primary btn-sm" name="gmedia_term_sort_save"><?php _e('Update', 'grand-media'); ?></button>
                     </div>
-                    <?php wp_nonce_field('GmediaTerms', 'term_save_wpnonce'); ?>
+                    <?php
+                    wp_nonce_field('GmediaTerms', 'term_save_wpnonce');
+                    wp_referer_field();
+                    ?>
                     <input type="hidden" name="term[term_id]" value="<?php echo $term->term_id; ?>"/>
                     <input type="hidden" name="term[taxonomy]" value="<?php echo $term->taxonomy; ?>"/>
                 </div>

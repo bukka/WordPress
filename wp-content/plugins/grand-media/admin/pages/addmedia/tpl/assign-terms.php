@@ -23,7 +23,7 @@ if(gm_user_can('terms')) { ?>
                 } else {
                     $author_name .= ' &nbsp; (' . __('shared', 'grand-media') . ')';
                 }
-                if('public' != $term->status) {
+                if('publish' != $term->status) {
                     $author_name .= ' [' . $term->status . ']';
                 }
                 $terms_album .= '<option value="' . $term->term_id . '" data-name="' . esc_html($term->name) . '" data-meta="' . $author_name . '">' . esc_html($term->name) . $author_name . '</option>' . "\n";

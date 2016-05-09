@@ -309,18 +309,29 @@ class GmediaCore {
         }
         $module_dirs = array(
                 'upload' => array(
+                        'name' => $module_name,
                         'path' => $this->upload['path'] . '/' . $gmGallery->options['folder']['module'] . '/' . $module_name,
                         'url'  => $this->upload['url'] . '/' . $gmGallery->options['folder']['module'] . '/' . $module_name
                 ),
                 'plugin' => array(
+                        'name' => $module_name,
                         'path' => GMEDIA_ABSPATH . 'module/' . $module_name,
                         'url'  => plugins_url(GMEDIA_FOLDER) . '/module/' . $module_name
                 ),
+                'theme'  => array(
+                        'name' => $module_name,
+                        'path' => get_template_directory() . '/gmedia-module/' . $module_name,
+                        'url'  => get_template_directory_uri() . '/gmedia-module/' . $module_name
+                )
         );
         foreach($module_dirs as $dir) {
             if(is_dir($dir['path'])) {
                 return $dir;
             }
+        }
+
+        if($module_name != $gmGallery->options['default_gmedia_module']) {
+            return $this->get_module_path($gmGallery->options['default_gmedia_module']);
         }
 
         return false;
@@ -555,7 +566,6 @@ class GmediaCore {
                 'tag'      => 't',
                 'single'   => 's',
                 'category' => 'k',
-                'filter'   => 'f',
                 'author'   => 'u'
         );
         if(get_option('permalink_structure')) {
@@ -1772,6 +1782,9 @@ class GmediaCore {
 
                             if(-1 != $current_limit && $memoryNeeded > $current_limit_int) {
                                 $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
+                                if($newLimit < 256){
+                                    $newLimit = 256;
+                                }
                                 @ini_set('memory_limit', $newLimit . 'M');
                             }
                         }
@@ -2024,7 +2037,7 @@ class GmediaCore {
                 if('inherit' == $post_data['set_status']) {
                     $gmedia_album = isset($post_data['terms']['gmedia_album'])? $post_data['terms']['gmedia_album'] : false;
                     if($gmedia_album && $this->is_digit($gmedia_album)) {
-                        $album = $gmDB->get_term($gmedia_album, 'gmedia_album');
+                        $album = $gmDB->get_term($gmedia_album);
                         if(empty($album) || is_wp_error($album)) {
                             $status = 'publish';
                         } else {
@@ -2206,7 +2219,7 @@ class GmediaCore {
 
         $gmedia_album = isset($_terms['gmedia_album'])? $_terms['gmedia_album'] : false;
         if($gmedia_album && $gmCore->is_digit($gmedia_album)) {
-            $album = $gmDB->get_term($gmedia_album, 'gmedia_album');
+            $album = $gmDB->get_term($gmedia_album);
             if(empty($album) || is_wp_error($album)) {
                 $_status = 'publish';
             } else {
@@ -2338,6 +2351,9 @@ class GmediaCore {
 
                         if(-1 != $current_limit && $memoryNeeded > $current_limit_int) {
                             $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
+                            if($newLimit < 256){
+                                $newLimit = 256;
+                            }
                             @ini_set('memory_limit', $newLimit . 'M');
                         }
                     }
@@ -2588,10 +2604,10 @@ class GmediaCore {
             $result['error'][] = __('Enter valid email, please', 'grand-media');
         } else {
 
-            $url         = home_url();
+            $url       = home_url();
             $post_data = array('url' => $url);
 
-            if('app_uninstallplugin' == $service){
+            if('app_uninstallplugin' == $service) {
                 if(!empty($options['site_ID'])) {
                     $post_data['site_id'] = $options['site_ID'];
                     wp_remote_post('http://gmediaservice.codeasily.com/?gmService=' . $service, array(
@@ -2600,6 +2616,7 @@ class GmediaCore {
                             'body'    => $post_data
                     ));
                 }
+
                 return false;
             }
 
@@ -2612,15 +2629,15 @@ class GmediaCore {
             }
             $install_date = get_option('gmediaInstallDate');
 
-            $data['service']     = $service;
-            $data['site_hash']   = $hash;
-            $data['site_ID']     = $options['site_ID'];
-            $data['title']       = empty($options['site_title'])? get_bloginfo('name') : $options['site_title'];
-            $data['description'] = empty($options['site_description'])? get_bloginfo('description') : $options['site_description'];
-            $data['url']         = $url;
-            $data['license']     = $options['license_key'];
-            $data['status']      = $status;
-            $data['install_date']= $install_date? $install_date : time();
+            $data['service']      = $service;
+            $data['site_hash']    = $hash;
+            $data['site_ID']      = $options['site_ID'];
+            $data['title']        = empty($options['site_title'])? get_bloginfo('name') : $options['site_title'];
+            $data['description']  = empty($options['site_description'])? get_bloginfo('description') : $options['site_description'];
+            $data['url']          = $url;
+            $data['license']      = $options['license_key'];
+            $data['status']       = $status;
+            $data['install_date'] = $install_date? $install_date : time();
 
             $tagslist = $gmDB->get_terms('gmedia_tag', array(
                     'hide_empty'    => true,
@@ -2636,7 +2653,7 @@ class GmediaCore {
             set_transient($hash, $data, 45);
 
             $post_data['hash'] = $hash;
-            $gms_post = wp_remote_post('http://gmediaservice.codeasily.com/?gmService=' . $service, array(
+            $gms_post          = wp_remote_post('http://gmediaservice.codeasily.com/?gmService=' . $service, array(
                     'method'  => 'POST',
                     'timeout' => 45,
                     'body'    => $post_data
@@ -2755,6 +2772,10 @@ class GmediaCore {
      */
     function gmedia_custom_meta_box($gmedia_id, $meta_type = 'gmedia') {
         global $gmDB;
+
+        if(empty($gmedia_id)) {
+            return;
+        }
 
         if(!in_array($meta_type, array('gmedia', 'gmedia_term'))) {
             $meta_type = 'gmedia';
@@ -3184,23 +3205,48 @@ class GmediaCore {
      */
     function plugin_capabilities() {
         return array(
-                'gmedia_library'
-                , 'gmedia_show_others_media'
-                , 'gmedia_edit_media'
-                , 'gmedia_edit_others_media'
-                , 'gmedia_delete_media'
-                , 'gmedia_delete_others_media'
-                , 'gmedia_upload'
-                , 'gmedia_import'
-                , 'gmedia_terms'
-                , 'gmedia_album_manage'
-                , 'gmedia_category_manage'
-                , 'gmedia_filter_manage'
-                , 'gmedia_tag_manage'
-                , 'gmedia_terms_delete'
-                , 'gmedia_gallery_manage'
-                , 'gmedia_module_manage'
-                , 'gmedia_settings'
+                'gmedia_library',
+                'gmedia_show_others_media',
+                'gmedia_edit_media',
+                'gmedia_edit_others_media',
+                'gmedia_delete_media',
+                'gmedia_delete_others_media',
+                'gmedia_upload',
+                'gmedia_import',
+                'gmedia_terms',
+                'gmedia_album_manage',
+                'gmedia_category_manage',
+                'gmedia_tag_manage',
+                'gmedia_terms_delete',
+                'gmedia_gallery_manage',
+                'gmedia_module_manage',
+                'gmedia_settings'
+        );
+    }
+
+    /**
+     * @return array Gmedia Capabilities
+     */
+    function modules_order() {
+        return array(
+                'phantom'        => '',
+                'phototravlr'    => '',
+                'realslider'     => '',
+                'mosaic'         => '',
+                'photobox'       => '',
+                'photomania'     => '',
+                'jq-mplayer'     => '',
+                'wp-videoplayer' => '',
+                'photo-pro'      => '',
+                'optima'         => '',
+                'afflux'         => '',
+                'slider'         => '',
+                'green-style'    => '',
+                'photo-blog'     => '',
+                'minima'         => '',
+                'sphere'         => '',
+                'cube'           => '',
+                'flatwall'       => ''
         );
     }
 }

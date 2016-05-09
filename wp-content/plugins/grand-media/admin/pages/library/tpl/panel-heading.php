@@ -91,8 +91,6 @@
                 <li class="filter_categories<?php echo isset($gmDB->filter_tax['gmedia_category'])? ' active' : ''; ?>"><a href="#libModal" data-modal="filter_categories" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Categories', 'grand-media'); ?></a></li>
                 <li class="filter_albums<?php echo isset($gmDB->filter_tax['gmedia_album'])? ' active' : ''; ?>"><a href="#libModal" data-modal="filter_albums" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Albums', 'grand-media'); ?></a></li>
                 <li class="filter_tags<?php echo isset($gmDB->filter_tax['gmedia_tag'])? ' active' : ''; ?>"><a href="#libModal" data-modal="filter_tags" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Tags', 'grand-media'); ?></a></li>
-                <li class="divider"></li>
-                <li class="custom_filters"><a href="#libModal" data-modal="custom_filter" data-action="gmedia_get_modal" class="gmedia-modal"><?php _e('Custom Filters', 'grand-media'); ?></a></li>
                 <?php do_action('gmedia_filter_list'); ?>
             </ul>
         </div>

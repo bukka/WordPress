@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
 global $gmCore, $gmProcessor, $gmGallery;
 
 $gmedia_url = $gmProcessor->url;
-$modules    = gmedia_get_modules();
+$modules    = get_gmedia_modules();
 
 if(isset($modules['error'])) {
     echo $gmCore->alert('danger', $modules['error']);
