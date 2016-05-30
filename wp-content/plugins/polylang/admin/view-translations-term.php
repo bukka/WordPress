@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * displays the translations fields for terms
  */
 
@@ -9,12 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 };
 
 if ( isset( $term_id ) ) {
-	// edit term form?>
+	// edit term form ?>
 	<th scope="row"><?php _e( 'Translations', 'polylang' ); ?></th>
 	<td><?php
 }
 else {
-	// add term form?>
+	// add term form ?>
 	<p><?php _e( 'Translations', 'polylang' ); ?></p><?php
 }?>
 <table class="widefat term-translations"  id="<?php echo isset( $term_id ) ? 'edit' : 'add'; ?>-term-translations"><?php
@@ -57,8 +57,8 @@ else {
 			<td class = "pll-translation-column"><?php
 				printf( '
 					<label class="screen-reader-text" for="tr_lang_%1$s">%2$s</label>
-					<input type="hidden" class="htr_lang" name="term_tr_lang[%1$s]" id="htr_lang_%1$s" value="%3$s"/>
-					<input type="text" class="tr_lang" id="tr_lang_%1$s" value="%4$s"%5$s>',
+					<input type="hidden" class="htr_lang" name="term_tr_lang[%1$s]" id="htr_lang_%1$s" value="%3$s" />
+					<input type="text" class="tr_lang" id="tr_lang_%1$s" value="%4$s"%5$s />',
 					esc_attr( $language->slug ),
 					__( 'Translation', 'polylang' ),
 					empty( $translation ) ? 0 : esc_attr( $translation->term_id ),
