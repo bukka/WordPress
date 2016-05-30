@@ -4,6 +4,3 @@
 [submodule "wp-content/plugins/wordpress-importer"]
 	path = wp-content/plugins/wordpress-importer
 	url = git@github.com:wp-plugins/wordpress-importer.git
-[submodule "wp-content/plugins/wordpress-seo"]
-	path = wp-content/plugins/wordpress-seo
-	url = git@github.com:Yoast/wordpress-seo.git
