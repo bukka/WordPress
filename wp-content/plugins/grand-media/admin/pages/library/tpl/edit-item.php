@@ -1,4 +1,9 @@
 <?php
+// don't load directly
+if(!defined('ABSPATH')) {
+    die('-1');
+}
+
 /**
  * Edit Gmedia Item
  */
@@ -19,6 +24,10 @@
             <?php $media_action_links = gmedia_item_actions($item);
             unset($media_action_links['edit_data']);
             echo implode(' | ', $media_action_links);
+
+            if('audio' == $item->type) {
+                echo gmedia_waveform_player($item);
+            }
             ?>
         </div>
     </div>
@@ -191,7 +200,7 @@
                 <?php if(('image' != $item->type)) { ?>
                     <div class="form-group">
                         <label><?php _e('Custom Cover', 'grand-media'); echo ' <small>('.__('media image ID', 'grand-media').')</small>'; ?></label>
-                        <input name="meta[_cover]" type="text" class="form-control input-sm gmedia-cover" value="<?php echo isset($item->meta['_cover'][0])? $item->meta['_cover'][0] : ''; ?>" placeholder="<?php _e('Gmedia ID or Image URL', 'grand-media'); ?>"/>
+                        <input name="meta[_cover]" type="text" class="form-control input-sm gmedia-cover" value="<?php echo isset($item->meta['_cover'][0])? $item->meta['_cover'][0] : ''; ?>" placeholder="<?php _e('Gmedia ID', 'grand-media'); ?>"/>
                     </div>
                 <?php } ?>
                 <?php if(('image' == $item->type) || ('video' == $item->type)) { ?>
