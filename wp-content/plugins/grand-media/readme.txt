@@ -36,6 +36,7 @@ Gmedia Gallery is the result of hundreds of hours of working to bring you the ul
 
 See demo of Gmedia Gallery Modules:
 
+*   [WaveSurfer Module](http://codeasily.com/portfolio-item/gmedia-wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
 *   [PhotoTravlr Module](http://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) is amazing responsive gallery with terms support (tags, albums, categories) and details for each image like author, caption, download button, link button, like button, EXIF info, location map. Can be in full window and full screen mode.
 *   [PhotoMania Module (GmediaCloud demo)](http://codeasily.com/portfolio-item/gmedia-photomania/) - free responsive gallery with thumbs panel and other details for each image like author, caption, download button, link button, like button. Can be in full window and full screen mode.
 *   [Mosaic Module](http://codeasily.com/portfolio-item/gmedia-mosaic/) is an image gallery with masonry layout built on jQuery. Responsive gallery with built in prettyPhoto lightbox for big images.
@@ -58,6 +59,7 @@ Help me make it best gallery plugin: test it and [write suggestions](http://code
 
 Features:
 
+*   New in 1.8.*: WaveForm for music. Create and save music waveforms o display them nicely with WaveSurfer music module
 *   New in 1.8.*: Comments for Gmedia Items (For now only Phantom module support comments. Later will add other modules)
 *   New in 1.8.*: Integration with WP search. Gmedia items looks like a regular post with comments. Also you can search for albums, galleries and filters.
 *   iOS application "Gmedia" - [iOS manage application](https://itunes.apple.com/ua/app/gmedia/id947515626?mt=8) to manage your Library with your iPhone
@@ -122,23 +124,43 @@ Use [Gmedia Gallery support forum](http://codeasily.com/community/forum/gmedia-g
 
 == Screenshots ==
 
-1. iOS App - Home page
-2. iOS App - Album View
-3. iOS App - Image Edit
-4. iOS App - List of Albums
-5. Admin Area - Gmedia Library Edit Mode
-6. Admin Area - Create Gallery with Afflux Module
-7. Admin Area - Add shortcode to Post - Gmedia MetaBox
-8. Admin Area - Upload images to Gmedia Library
-9. Admin Area - Import galleries from Flagallery plugin
-10. Admin Area - Process of import galleries from Flagallery plugin
-11. Admin Area - Gmedia Library
-12. Admin Area - Gmedia Library Filters
+1. Module - WaveSurfer Music Gallery
+2. iOS App - Home page
+3. iOS App - Album View
+4. iOS App - Image Edit
+5. iOS App - List of Albums
+6. Admin Area - Gmedia Library Edit Mode
+7. Admin Area - Create Gallery with Afflux Module
+8. Admin Area - Add shortcode to Post - Gmedia MetaBox
+9. Admin Area - Upload images to Gmedia Library
+10. Admin Area - Import galleries from Flagallery plugin
+11. Admin Area - Process of import galleries from Flagallery plugin
+12. Admin Area - Gmedia Library
+13. Admin Area - Gmedia Library Filters
 
 == Changelog ==
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= 1.8.63 =
+* Fixed: admin background
+* Fixed: Notice on Build Query popup
+* Fixed: database error if image have unknown characters in EXIF
+* Fixed: Hide Gmedia button if it is not active for current post type
+* Small fixes and improvements
+
+= 1.8.62 =
+* Added: Ability to change gallery preview background color
+* Added: Global preset for modules (admin only)
+* Fixed: Upload for sites with Punycode url
+* Small fixes and improvements
+
+= 1.8.61 =
+* Fixed: Internal Server Error on some servers
+* Fixed: Increased upload chunk size
+* Fixed: Notice in Build Query popup, when MimeType chosen
+* Added: Class for manipulating hex colors with PHP
 
 = 1.8.60 =
 * Fixed: Preset Preview

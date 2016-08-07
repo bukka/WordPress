@@ -1,6 +1,6 @@
 <?php
 // don't load directly
-if(!defined('ABSPATH')) {
+if(!defined('ABSPATH')){
     die('-1');
 }
 
@@ -56,21 +56,29 @@ $gmedia_url = $gmProcessor->url;
                     <div class="form-group">
                         <label><?php _e('Module/Preset', 'grand-media'); ?></label>
                         <select class="form-control input-sm" id="term_module_preset" name="term[meta][_module_preset]">
-                            <option value=""<?php if(empty($term->meta['_module_preset'][0])){ echo ' selected="selected"'; } ?>><?php _e('Default module in Global Settings', 'grand-media'); ?></option>
+                            <option value=""<?php if(empty($term->meta['_module_preset'][0])){
+                                echo ' selected="selected"';
+                            } ?>><?php _e('Default module in Global Settings', 'grand-media'); ?></option>
                             <?php global $gmDB, $user_ID;
                             $gmedia_modules = get_gmedia_modules(false);
-                            foreach($gmedia_modules['in'] as $mfold => $module) {
+                            foreach($gmedia_modules['in'] as $mfold => $module){
                                 echo '<optgroup label="' . esc_attr($module['title']) . '">';
-                                $presets           = $gmDB->get_terms('gmedia_module', array('status' => $mfold));
-                                $option            = array();
+                                $presets  = $gmDB->get_terms('gmedia_module', array('status' => $mfold));
+                                $option   = array();
                                 $option[] = '<option value="' . esc_attr($mfold) . '">' . $module['title'] . ' - ' . __('Default Settings') . '</option>';
-                                foreach($presets as $preset) {
-                                    $by_author =  ' [' . get_the_author_meta('display_name', $preset->global) .']';
-                                    if('[' . $mfold . ']' === $preset->name) {
-                                        $option[] = '<option value="' . $preset->term_id . '">' . $module['title'] . $by_author  . ' - ' . __('Default Settings'). '</option>';
-                                    } else {
+                                foreach($presets as $preset){
+                                    if(!(int)$preset->global && '[' . $mfold . ']' === $preset->name){
+                                        continue;
+                                    }
+                                    $by_author = '';
+                                    if((int)$preset->global){
+                                        $by_author = ' [' . get_the_author_meta('display_name', $preset->global) . ']';
+                                    }
+                                    if('[' . $mfold . ']' === $preset->name){
+                                        $option[] = '<option value="' . $preset->term_id . '">' . $module['title'] . $by_author . ' - ' . __('Default Settings') . '</option>';
+                                    } else{
                                         $preset_name = str_replace('[' . $mfold . '] ', '', $preset->name);
-                                        $option[] = '<option value="' . $preset->term_id . '">' . $module['title'] . $by_author  . ' - ' . $preset_name . '</option>';
+                                        $option[]    = '<option value="' . $preset->term_id . '">' . $module['title'] . $by_author . ' - ' . $preset_name . '</option>';
                                     }
                                 }
                                 echo implode('', $option);

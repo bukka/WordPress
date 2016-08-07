@@ -180,8 +180,9 @@ global $user_ID, $gmDB, $gmCore
 								array('value' => 'text', 'text' => 'Text'),
 								array('value' => 'application', 'text' => 'Application'),
 							);
+                            $mime_type_val = is_array($query_data['mime_type'])? implode(',', $query_data['mime_type']) : str_replace(', ', ',', $query_data['mime_type']);
 							?>
-							<input name="mime_type" class="form-control input-sm gmedia-combobox" data-options='<?php echo json_encode($mime_types); ?>' value="<?php echo implode(',', $query_data['mime_type']); ?>" placeholder="<?php esc_attr_e(__('All types...', 'grand-media')); ?>"/>
+							<input name="mime_type" class="form-control input-sm gmedia-combobox" data-options='<?php echo json_encode($mime_types); ?>' value="<?php esc_attr_e($mime_type_val); ?>" placeholder="<?php esc_attr_e(__('All types...', 'grand-media')); ?>"/>
 						</div>
 						<div class="col-xs-4">
 							<label><?php _e('Authors', 'grand-media'); ?></label>

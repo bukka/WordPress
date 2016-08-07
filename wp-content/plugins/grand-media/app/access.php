@@ -883,6 +883,7 @@ function gmedia_ios_app_processor( $action, $data, $filter = true ) {
 			$filter = $filter ? gmedia_ios_app_library_data( array( 'filter' ) ) : array();
 
 			$args = array(
+				//'mime_type'    => array('image/*', 'audio/*'),
 				'mime_type'    => 'image/*',
 				'orderby'      => 'ID',
 				'order'        => 'DESC',

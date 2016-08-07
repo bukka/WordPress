@@ -1,13 +1,13 @@
 <?php
 // don't load directly
-if(!defined('ABSPATH')) {
+if(!defined('ABSPATH')){
     die('-1');
 }
 
 /**
  * Edit Album Form
  */
-$_module_preset = isset( $term->meta['_module_preset'][0] ) ? $term->meta['_module_preset'][0] : '';
+$_module_preset = isset($term->meta['_module_preset'][0])? $term->meta['_module_preset'][0] : '';
 ?>
 <form method="post" id="gmedia-edit-term" name="gmEditTerm" class="panel-body" data-id="<?php echo $term->term_id; ?>">
     <h4 style="margin-top:0;">
@@ -50,30 +50,38 @@ $_module_preset = isset( $term->meta['_module_preset'][0] ) ? $term->meta['_modu
                             <option value="draft"<?php selected($term->status, 'draft'); ?>><?php _e('Draft', 'grand-media'); ?></option>
                         </select>
                         <div class="cb-help-block">
-                                <div class="checkbox"><label><input type="checkbox" name="term[status_global]" value="1"> <?php _e('Apply Status for all items in album', 'grand-media'); ?> </label></div>
+                            <div class="checkbox"><label><input type="checkbox" name="term[status_global]" value="1"> <?php _e('Apply Status for all items in album', 'grand-media'); ?> </label></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label><?php _e('Module/Preset', 'grand-media'); ?></label>
                         <select class="form-control input-sm" id="term_module_preset" name="term[meta][_module_preset]">
-                            <option value=""<?php if('' === $_module_preset){ echo ' selected="selected"'; } ?>><?php _e('Default module in Global Settings', 'grand-media'); ?></option>
+                            <option value=""<?php if('' === $_module_preset){
+                                echo ' selected="selected"';
+                            } ?>><?php _e('Default module in Global Settings', 'grand-media'); ?></option>
                             <?php global $gmDB, $user_ID, $gmGallery;
                             $gmedia_modules = get_gmedia_modules(false);
 
-                            foreach($gmedia_modules['in'] as $mfold => $module) {
+                            foreach($gmedia_modules['in'] as $mfold => $module){
                                 echo '<optgroup label="' . esc_attr($module['title']) . '">';
-                                $presets           = $gmDB->get_terms('gmedia_module', array('status' => $mfold));
-                                $selected          = selected($_module_preset, esc_attr($mfold), false);
-                                $option            = array();
+                                $presets  = $gmDB->get_terms('gmedia_module', array('status' => $mfold));
+                                $selected = selected($_module_preset, esc_attr($mfold), false);
+                                $option   = array();
                                 $option[] = '<option ' . $selected . ' value="' . esc_attr($mfold) . '">' . $module['title'] . ' - ' . __('Default Settings') . '</option>';
-                                foreach($presets as $preset) {
-                                    $selected = selected($_module_preset, $preset->term_id, false);
-                                    $by_author =  ' [' . get_the_author_meta('display_name', $preset->global) .']';
-                                    if('[' . $mfold . ']' === $preset->name) {
-                                        $option[] = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . $by_author  . ' - ' . __('Default Settings'). '</option>';
-                                    } else {
+                                foreach($presets as $preset){
+                                    if(!(int)$preset->global && '[' . $mfold . ']' === $preset->name){
+                                        continue;
+                                    }
+                                    $selected  = selected($_module_preset, $preset->term_id, false);
+                                    $by_author = '';
+                                    if((int)$preset->global){
+                                        $by_author = ' [' . get_the_author_meta('display_name', $preset->global) . ']';
+                                    }
+                                    if('[' . $mfold . ']' === $preset->name){
+                                        $option[] = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . $by_author . ' - ' . __('Default Settings') . '</option>';
+                                    } else{
                                         $preset_name = str_replace('[' . $mfold . '] ', '', $preset->name);
-                                        $option[] = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . $by_author  . ' - ' . $preset_name . '</option>';
+                                        $option[]    = '<option ' . $selected . ' value="' . $preset->term_id . '">' . $module['title'] . $by_author . ' - ' . $preset_name . '</option>';
                                     }
                                 }
                                 echo implode('', $option);
@@ -99,10 +107,10 @@ $_module_preset = isset( $term->meta['_module_preset'][0] ) ? $term->meta['_modu
                 </div>
                 <div class="col-xs-6">
                     <?php if(isset($term->slug)){ ?>
-                    <div class="form-group">
-                        <label><?php _e('Slug', 'grand-media'); ?></label>
-                        <input type="text" class="form-control input-sm" name="term[slug]" value="<?php echo esc_attr($term->slug); ?>"/>
-                    </div>
+                        <div class="form-group">
+                            <label><?php _e('Slug', 'grand-media'); ?></label>
+                            <input type="text" class="form-control input-sm" name="term[slug]" value="<?php echo esc_attr($term->slug); ?>"/>
+                        </div>
                     <?php } ?>
                     <?php $cover_id = isset($term->meta['_cover'][0])? $term->meta['_cover'][0] : ''; ?>
                     <div class="form-group">
@@ -110,13 +118,13 @@ $_module_preset = isset( $term->meta['_module_preset'][0] ) ? $term->meta['_modu
                         <input type="text" class="form-control input-sm" name="term[meta][_cover]" value="<?php echo esc_attr($cover_id); ?>" placeholder="<?php _e('Gmedia Image ID', 'grand-media'); ?>"/>
                     </div>
                     <?php
-                    if(($cover_id = intval($cover_id))) {
-                        if(($cover = $gmDB->get_gmedia($cover_id))) { ?>
+                    if(($cover_id = intval($cover_id))){
+                        if(($cover = $gmDB->get_gmedia($cover_id))){ ?>
                             <div class="gm-img-thumbnail" data-gmid="<?php echo $cover->ID; ?>"><?php
                                 ?><img src="<?php echo $gmCore->gm_get_media_image($cover, 'thumb', true); ?>" alt="<?php echo $cover->ID; ?>" title="<?php echo esc_attr($cover->title); ?>"/><?php
                                 ?><span class="label label-default">ID: <?php echo $cover->ID; ?></span><?php
                                 ?></div>
-                        <?php } else {
+                        <?php } else{
                             echo '<strong class="text-danger">' . __('No image with such ID', 'grand-media') . '</strong>';
                         }
                     }
