@@ -101,7 +101,9 @@ class GmediaProcessor_Library extends GmediaProcessor {
         if(!empty($query_args['author__in']) && $gmCore->caps['gmedia_show_others_media']) {
             $authors_names = $query_args['author__in'];
             foreach($authors_names as $i => $id) {
-                $authors_names[$i] = get_the_author_meta('display_name', $id);
+                if((int)$id){
+                    $authors_names[ $i ] = get_the_author_meta('display_name', $id);
+                }
             }
             $this->filters['filter_author'] = array(
                 'title'  => __('Filter Author', 'grand-media'),
@@ -654,6 +656,32 @@ class GmediaProcessor_Library extends GmediaProcessor {
                             }
                         }
                         $this->msg[] = sprintf(__('%d item(s) updated successfuly', 'grand-media'), $count);
+                    }
+                    $this->selected_items = $this->clear_selected_items('library');
+                } else {
+                    $this->error[] = __('You are not allowed to edit media', 'grand-media');
+                }
+            }
+            if('selected' == $gmCore->_get('recreate')) {
+                check_admin_referer('gmedia_recreate');
+                if($gmCore->caps['gmedia_edit_media']) {
+                    $selected_items = $this->selected_items;
+                    $count = count($selected_items);
+                    if($count) {
+                        if(!$gmCore->caps['gmedia_edit_others_media']) {
+                            $edit_items = $gmDB->get_gmedias(array('fields' => 'ids', 'author' => $user_ID, 'mime_type' => 'image', 'gmedia__in' => $selected_items));
+                            $selected_items = $edit_items;
+                        } else {
+                            $selected_items = $gmDB->get_gmedias(array('fields' => 'ids', 'mime_type' => 'image', 'gmedia__in' => $selected_items));
+                        }
+                        if(($count = count($selected_items))) {
+                            $ajax_operations   = get_option('gmedia_ajax_long_operations', array());
+                            foreach($selected_items as $si){
+                                $ajax_operations['gmedia_recreate_images'][$si] = $si;
+                            }
+                            update_option('gmedia_ajax_long_operations', $ajax_operations);
+                            $this->msg[] = sprintf(__('You\'ve added 4 image(s) to the re-creation queue.', 'grand-media'), $count);
+                        }
                     }
                     $this->selected_items = $this->clear_selected_items('library');
                 } else {

@@ -251,7 +251,8 @@ class GmediaAdmin{
         if(!$ajax_operations){
             return;
         }
-        $ajax  = reset($ajax_operations);
+        reset($ajax_operations);
+        $ajax  = key($ajax_operations);
         $nonce = wp_create_nonce('ajaxLongOperation');
         ?>
         <script type="text/javascript">

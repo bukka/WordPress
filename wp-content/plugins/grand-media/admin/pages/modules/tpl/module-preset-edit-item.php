@@ -69,12 +69,12 @@ global $user_ID;
                             <?php
                         }
                     }
-                    $submit_name = 'gmedia_preset_save';
+                    $submit_name = 'module_preset_save';
                     if($is_preset === 'default'){
-                        $submit_name = 'gmedia_preset_save_default';
+                        $submit_name = 'module_preset_save_default';
                     }
                     if($is_preset === 'global'){
-                        $submit_name = 'gmedia_preset_save_global';
+                        $submit_name = 'module_preset_save_global';
                     }
                     ?>
                     <button type="submit" name="<?php echo $submit_name; ?>" class="btn btn-primary btn-sm"><?php _e('Save', 'grand-media'); ?></button>

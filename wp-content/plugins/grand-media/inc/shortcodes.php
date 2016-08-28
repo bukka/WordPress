@@ -62,7 +62,7 @@ function gmedia_shortcode($atts, $content = ''){
 
     $userid = get_current_user_id();
 
-    $query = !empty($atts['query'])? wp_parse_args($atts['query'], array()) : array();
+    $query = !empty($atts['query'])? wp_parse_args(html_entity_decode($atts['query']), array()) : array();
 
     $sc_module  = false;
     $get_module = $gmGallery->options['default_gmedia_module'];
@@ -370,7 +370,7 @@ function gmedia_raw_shortcode($atts, $content = ''){
  * @return object
  */
 function gmedia_shortcode_id_data($id){
-    global $gmDB;
+    global $gmDB, $gmCore;
 
     $item = $gmDB->get_term($id);
 
@@ -401,7 +401,7 @@ function gmedia_shortcode_id_data($id){
     $item->custom_meta = array();
     $item->meta        = array();
     foreach($meta as $key => $value){
-        if(is_protected_meta($key, 'gmedia')){
+        if($gmCore->is_protected_meta($key, 'gmedia_term')){
             $item->meta[ $key ] = $value[0];
         } else{
             $item->custom_meta[ $key ] = $value;

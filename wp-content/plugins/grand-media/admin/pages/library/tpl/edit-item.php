@@ -141,7 +141,7 @@ if(!defined('ABSPATH')) {
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label><?php _e('Filename', 'grand-media'); ?> <small>(ext: .<?php echo $item->ext; ?>)</small></label>
+                    <label><?php _e('Filename', 'grand-media'); ?> <small style="white-space:nowrap;">(ext: .<?php echo $item->ext; ?>)</small></label>
                     <input name="filename" type="text" class="form-control input-sm gmedia-filename" <?php echo (!gm_user_can('delete_others_media') && ((int)$item->author !== $user_ID))? 'readonly' : ''; ?> value="<?php echo pathinfo($item->gmuid, PATHINFO_FILENAME); ?>"/>
                 </div>
                 <div class="form-group">

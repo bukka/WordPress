@@ -66,7 +66,7 @@ function gmedia_gallery_more_data(&$item) {
     } else {
         $meta = $gmDB->get_metadata('gmedia_term', $item->term_id);
         foreach($meta as $key => $value) {
-            if(is_protected_meta($key, 'gmedia')) {
+            if($gmCore->is_protected_meta($key, 'gmedia_term')) {
                 $item->meta[$key] = $value[0];
             } else {
                 $item->custom[$key] = $value;

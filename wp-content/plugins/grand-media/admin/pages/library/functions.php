@@ -137,11 +137,16 @@ function gmedia_waveform_player($item) {
     global $gmDB;
     $peaks = $gmDB->get_metadata('gmedia', $item->ID, '_peaks', true);
     if($peaks) {
-        $peaks = json_decode( $peaks );
-        while(900 < count($peaks)){
-            $peaks = array_map('reset', array_chunk($peaks, 2));
+        if('[]' === $peaks){
+            $gmDB->delete_metadata('gmedia', $item->ID, '_peaks');
+            $peaks = '';
+        } else{
+            $peaks = json_decode($peaks);
+            while(900 < count($peaks)){
+                $peaks = array_map('reset', array_chunk($peaks, 2));
+            }
+            $peaks = json_encode($peaks);
         }
-        $peaks = json_encode($peaks);
     } else {
         $peaks = '';
     }

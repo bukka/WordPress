@@ -232,7 +232,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
 
         }
 
-        if(isset($_POST['gmedia_preset_save']) || isset($_POST['module_preset_save_default']) || isset($_POST['module_preset_save_global'])){
+        if(isset($_POST['module_preset_save']) || isset($_POST['module_preset_save_default']) || isset($_POST['module_preset_save_global'])){
             check_admin_referer('GmediaGallery');
             do{
                 $term = $gmCore->_post('term');

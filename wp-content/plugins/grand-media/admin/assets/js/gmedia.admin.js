@@ -1060,8 +1060,9 @@ var GmediaFunction = {
                 var inp = inputs[inputs.index(this) + 1];
                 if(inp !== null) {
                     jQuery(inp).focus();
-                    var inp_type = jQuery(this).attr('type');
+                    var inp_type = jQuery(inp).attr('type');
                     if(!!inp_type && (inp_type == 'text' || inp_type == 'number')) {
+                        console.log(inp);
                         inp.setSelectionRange(0, inp.value.length);
                     }
                 }

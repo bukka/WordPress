@@ -847,8 +847,7 @@ function gmedia_quite_update(){
             $wpdb->query("CREATE INDEX `_hash` ON {$wpdb->prefix}gmedia_meta ( meta_value(32) );");
 
             $ajax_operations   = get_option('gmedia_ajax_long_operations', array());
-            $ajax_operations[] = 'gmedia_hash_files';
-            $ajax_operations   = array_unique($ajax_operations);
+            $ajax_operations['gmedia_hash_files'] = 'gmedia_hash_files';
             update_option('gmedia_ajax_long_operations', $ajax_operations);
         }
 

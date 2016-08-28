@@ -302,7 +302,7 @@ class GmediaDB{
             return '';
         }
         $params = $_GET;
-        unset($params["pager"]);
+        unset($params['pager'], $params['recreate'], $params['_wpnonce'], $params['update_meta'], $params['delete'], $params['doing_wp_cron']);
         $new_query_string = http_build_query($params);
         //$self             = admin_url( 'admin.php?' . $new_query_string );
         $self = '?' . $new_query_string;
@@ -3075,7 +3075,7 @@ class GmediaDB{
                     continue;
                 }
                 $key = trim($key);
-                if(!empty($key) && !$gmCore->is_digit($key) && !empty($value) && !is_protected_meta($key, $meta_type)){
+                if(!empty($key) && !$gmCore->is_digit($key) && !empty($value) && !$gmCore->is_protected_meta($key, $meta_type)){
                     $this->add_metadata($meta_type, $term_id, $key, $value);
                 }
             }

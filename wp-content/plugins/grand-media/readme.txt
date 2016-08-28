@@ -1,30 +1,30 @@
-=== Gmedia Gallery - Photo Gallery, Image Slider, Music Player, Video Player, Media Library ===
-Contributors: Rattus
+=== Gallery - Gmedia Photo Gallery. Music Player, Video Gallery, Media Library ===
+Contributors: pasyuk
 Donate link: http://codeasily.com/donate/
-Tags: admin, best gallery, flagallery, gallery, gallery slider, gallery with comments, gmedia, header slider, image, image gallery, images, iOS app, iphone gallery, media library, music, page, photo, photo gallery, portfolio, Post, posts, responsive, slider, slideshow, video
+Tags: admin, gallery, image, image gallery, images, music, lightbox, photo, photo gallery, portfolio, responsive, thumbnail
 Requires at least: 3.6
-Tested up to: 4.5.*
+Tested up to: 4.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Gmedia Gallery - powerful media library plugin with comments support for creating beautiful galleries and managing files (from creator of Flagallery plugin)
+Gallery Gmedia - media gallery, comments for images, social sharing, show EXIF & Metadata, map geolocation (GPS)
 
 == Description ==
 
-Manage files, show image galleries and photo slideshows, play music on your site Gmedia Gallery plugin. Gmedia Library provides a comprehensive interface for handling galleries, image and audio files.
+Manage files, show image galleries and photo slideshows, play music on your site Gmedia Gallery plugin. Gmedia Gallery plugin provides a comprehensive interface for handling galleries, images, video & audio files.
 
 > **NEW:** Now You can upload and manage your Gmedia Library (images, tags, albums) anywhere!!!
 > Download new **[Gmedia application for iPhone](https://itunes.apple.com/ua/app/gmedia/id947515626?mt=8)**
 
-With Gmedia plugin you can upload an unlimited number of photo and audio files, create dozens of galleries and playlists, group pictures and other files in albums, and add tags for each file.
+With Gmedia Gallery plugin you can upload an unlimited number of photo and audio files, create dozens of galleries and playlists, group pictures and other files in albums, and add tags for each file.
 Handle any file format and link any files with images in few clicks. You can import images with captions from Worpress Media Library, Flagallery plugin and from NextGen Gallery plugin right to Gmedia Library.
 
 Create Slideshow Galleries with using tags and automatically add images to several galleries by assigning these tags to uploaded photos.
 
-Easily add related photos from Gmedia Library to the Post by using Add Media -> Gmedia Gallery tab MetaBox. One click for inserting image or gallery right in your page.
+Easily add related photos from Gmedia Gallery Library to the Post by using Add Media -> Gmedia Gallery tab MetaBox. One click for inserting image or gallery right in your page.
 
-Set Post Featured Image (Post Thumbnail) from Gmedia Library if your theme support post thumbnail.
+Set Post Featured Image (Post Thumbnail) from Gmedia Gallery Library if your theme support post thumbnail.
 
 Friendly for iPad and iPhone. Doesn’t slow down your website. **Unlimited galleries** on your website with **unlimited customizations** for each gallery.
 
@@ -36,13 +36,13 @@ Gmedia Gallery is the result of hundreds of hours of working to bring you the ul
 
 See demo of Gmedia Gallery Modules:
 
-*   [WaveSurfer Module](http://codeasily.com/portfolio-item/gmedia-wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
-*   [PhotoTravlr Module](http://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) is amazing responsive gallery with terms support (tags, albums, categories) and details for each image like author, caption, download button, link button, like button, EXIF info, location map. Can be in full window and full screen mode.
-*   [PhotoMania Module (GmediaCloud demo)](http://codeasily.com/portfolio-item/gmedia-photomania/) - free responsive gallery with thumbs panel and other details for each image like author, caption, download button, link button, like button. Can be in full window and full screen mode.
-*   [Mosaic Module](http://codeasily.com/portfolio-item/gmedia-mosaic/) is an image gallery with masonry layout built on jQuery. Responsive gallery with built in prettyPhoto lightbox for big images.
-*   [RealSlider Module](http://codeasily.com/portfolio-item/gmedia-realslider/) is an image/video gallery slider module built on jQuery. RealSlider module is responsive and touch friendly gallery with 50+ options for customization.
-*   [Phantom Module](http://codeasily.com/portfolio-item/gmedia-phantom/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more. PhotoSwipe like theme on touch devices.. only better.
-*   [PhotoBox Module](http://codeasily.com/portfolio-item/gmedia-photobox/) - a lightweight image gallery which uses only CSS3 for silky-smooth animations and transitions.
+*   [Phantom Pro - Mixed Gallery Module](http://codeasily.com/portfolio-item/gmedia-phantom-pro/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more. PhotoSwipe like theme on touch devices.. only better.
+*   [WaveSurfer - Music Module](http://codeasily.com/portfolio-item/gmedia-wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
+*   [PhotoTravlr - Gallery Module](http://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) is amazing responsive gallery with terms support (tags, albums, categories) and details for each image like author, caption, download button, link button, like button, EXIF info, location map. Can be in full window and full screen mode.
+*   [PhotoMania - Gallery Module (GmediaCloud demo)](http://codeasily.com/portfolio-item/gmedia-photomania/) - free responsive gallery with thumbs panel and other details for each image like author, caption, download button, link button, like button. Can be in full window and full screen mode.
+*   [Mosaic - Gallery Module](http://codeasily.com/portfolio-item/gmedia-mosaic/) is an image gallery with masonry layout built on jQuery. Responsive gallery with built in prettyPhoto lightbox for big images.
+*   [RealSlider - Gallery Module](http://codeasily.com/portfolio-item/gmedia-realslider/) is an image/video gallery slider module built on jQuery. RealSlider module is responsive and touch friendly gallery with 50+ options for customization.
+*   [PhotoBox - Gallery Module](http://codeasily.com/portfolio-item/gmedia-photobox/) - a lightweight image gallery which uses only CSS3 for silky-smooth animations and transitions.
 *   [Music Player Module](http://codeasily.com/portfolio-item/gmedia-music-player/) - beautiful audio player with playlist is totally written in jQuery and HTML5.
 *   [Afflux Module](http://codeasily.com/portfolio-item/gmedia-afflux/) with touch/swipe interface on mobile browsers. Multi-tab professional photo gallery module with autoslideshow feature.
 *   [Slider Module](http://codeasily.com/portfolio-item/gmedia-slider/) - shows your images in one line sliding them one by one + LightBox for big images & Link to other pages or files.
@@ -142,6 +142,18 @@ Use [Gmedia Gallery support forum](http://codeasily.com/community/forum/gmedia-g
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= 1.8.71 =
+* Fixed: Compatibility with some plugins, which manipulate posts meta
+* Fixed: Saving custom presets on Edit Gallery pages.
+* Improvements for future iOS app version.
+
+= 1.8.70 =
+* Added: New Action to re-create selected images
+* Fixed: Author filter in Gmedia Library
+* Fixed: Fatal error for some images without EXIF
+* Updated: New compact look for comments in Phantom module
+* Other fixes and improvements
 
 = 1.8.63 =
 * Fixed: admin background

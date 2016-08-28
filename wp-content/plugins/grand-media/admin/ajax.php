@@ -82,7 +82,7 @@ function gmedia_update_data(){
                                 );
                             }
                         }
-                    } elseif(is_protected_meta($key)){
+                    } elseif('_' == $key[0]){
                         if('_cover' == $key){
                             $value = ltrim($value, '#');
                         } elseif('_gps' == $key){
@@ -296,187 +296,17 @@ function gmedit_save(){
 
 add_action('wp_ajax_gmedit_restore', 'gmedit_restore');
 function gmedit_restore(){
-    global $gmDB, $gmCore, $gmGallery;
+    global $gmCore;
     check_ajax_referer("gmedit-save");
     if(!current_user_can('gmedia_edit_media')){
         die('-1');
     }
 
-    $gmedia  = array();
-    $fail    = '';
-    $success = '';
-    $gmid    = $gmCore->_post('id');
+    $gmid = $gmCore->_post('id');
+    $out  = $gmCore->recreate_images_from_original($gmid);
 
-    $item = $gmDB->get_gmedia($gmid);
-    if(!empty($item)){
-        if((int)$item->author != get_current_user_id()){
-            if(!current_user_can('gmedia_edit_others_media')){
-                die('-2');
-            }
-        }
-        $meta               = $gmDB->get_metadata('gmedia', $item->ID);
-        $metadata           = $meta['_metadata'][0];
-        $gmedia['ID']       = $gmid;
-        $gmedia['date']     = $item->date;
-        $gmedia['modified'] = current_time('mysql');
-        $gmedia['author']   = $item->author;
-
-        $webimg   = $gmGallery->options['image'];
-        $thumbimg = $gmGallery->options['thumb'];
-
-        $fileinfo = $gmCore->fileinfo($item->gmuid, false);
-
-        $size = @getimagesize($fileinfo['filepath_original']);
-
-        do{
-            $extensions = array('1' => 'GIF', '2' => 'JPG', '3' => 'PNG', '6' => 'BMP');
-            if(function_exists('memory_get_usage')){
-                switch($extensions[ $size[2] ]){
-                    case 'GIF':
-                        $CHANNEL = 1;
-                    break;
-                    case 'JPG':
-                        $CHANNEL = $size['channels'];
-                    break;
-                    case 'PNG':
-                        $CHANNEL = 3;
-                    break;
-                    case 'BMP':
-                    default:
-                        $CHANNEL = 6;
-                    break;
-                }
-                $MB                = 1048576;  // number of bytes in 1M
-                $K64               = 65536;    // number of bytes in 64K
-                $TWEAKFACTOR       = 1.8;     // Or whatever works for you
-                $memoryNeeded      = round(($size[0] * $size[1] * $size['bits'] * $CHANNEL / 8 + $K64) * $TWEAKFACTOR);
-                $memoryNeeded      = memory_get_usage() + $memoryNeeded;
-                $current_limit     = @ini_get('memory_limit');
-                $current_limit_int = intval($current_limit);
-                if(false !== strpos($current_limit, 'M')){
-                    $current_limit_int *= $MB;
-                }
-                if(false !== strpos($current_limit, 'G')){
-                    $current_limit_int *= 1024;
-                }
-
-                if(- 1 != $current_limit && $memoryNeeded > $current_limit_int){
-                    $newLimit = $current_limit_int / $MB + ceil(($memoryNeeded - $current_limit_int) / $MB);
-                    if($newLimit < 256){
-                        $newLimit = 256;
-                    }
-                    @ini_set('memory_limit', $newLimit . 'M');
-                }
-            }
-
-            $size_ratio = $size[0] / $size[1];
-
-            $angle      = 0;
-            $image_meta = @$gmCore->wp_read_image_metadata($fileinfo['filepath_original']);
-            if(!empty($image_meta['orientation'])){
-                switch($image_meta['orientation']){
-                    case 3:
-                        $angle = 180;
-                    break;
-                    case 6:
-                        $angle      = 270;
-                        $size_ratio = $size[1] / $size[0];
-                    break;
-                    case 8:
-                        $angle      = 90;
-                        $size_ratio = $size[1] / $size[0];
-                    break;
-                }
-            }
-
-            $webimg['resize']   = (($webimg['width'] < $size[0]) || ($webimg['height'] < $size[1]))? true : false;
-            $thumbimg['resize'] = (((1 >= $size_ratio) && ($thumbimg['width'] > $size[0])) || ((1 <= $size_ratio) && ($thumbimg['height'] > $size[1])))? false : true;
-
-            if($webimg['resize'] || $thumbimg['resize'] || $angle){
-
-                $editor = wp_get_image_editor($fileinfo['filepath_original']);
-                if(is_wp_error($editor)){
-                    $fail = $fileinfo['basename'] . " (wp_get_image_editor): " . $editor->get_error_message();
-                    break;
-                }
-
-                if($angle){
-                    $editor->rotate($angle);
-                }
-
-                if($webimg['resize'] || $angle){
-                    // Web-image
-                    $editor->set_quality($webimg['quality']);
-
-                    if($webimg['resize']){
-                        $resized = $editor->resize($webimg['width'], $webimg['height'], $webimg['crop']);
-                        if(is_wp_error($resized)){
-                            $fail = $fileinfo['basename'] . " (" . $resized->get_error_code() . " | editor->resize->webimage({$webimg['width']}, {$webimg['height']}, {$webimg['crop']})): " . $resized->get_error_message();
-                            break;
-                        }
-                    }
-
-                    $saved = $editor->save($fileinfo['filepath']);
-                    if(is_wp_error($saved)){
-                        $fail = $fileinfo['basename'] . " (" . $saved->get_error_code() . " | editor->save->webimage): " . $saved->get_error_message();
-                        break;
-                    }
-                    if(('JPG' == $extensions[ $size[2] ]) && !(extension_loaded('imagick') || class_exists("Imagick"))){
-                        $gmCore->copy_exif($fileinfo['filepath_original'], $fileinfo['filepath']);
-                    }
-                } else{
-                    @copy($fileinfo['filepath_original'], $fileinfo['filepath']);
-                }
-
-                // Thumbnail
-                $editor->set_quality($thumbimg['quality']);
-                if($thumbimg['resize']){
-                    $ed_size  = $editor->get_size();
-                    $ed_ratio = $ed_size['width'] / $ed_size['height'];
-                    if(1 > $ed_ratio){
-                        $resized = $editor->resize($thumbimg['width'], 0, $thumbimg['crop']);
-                    } else{
-                        $resized = $editor->resize(0, $thumbimg['height'], $thumbimg['crop']);
-                    }
-                    if(is_wp_error($resized)){
-                        $fail = $fileinfo['basename'] . " (" . $resized->get_error_code() . " | editor->resize->thumb({$thumbimg['width']}, {$thumbimg['height']}, {$thumbimg['crop']})): " . $resized->get_error_message();
-                        break;
-                    }
-                }
-
-                $saved = $editor->save($fileinfo['filepath_thumb']);
-                if(is_wp_error($saved)){
-                    $fail = $fileinfo['basename'] . " (" . $saved->get_error_code() . " | editor->save->thumb): " . $saved->get_error_message();
-                    break;
-                }
-
-            } else{
-                @copy($fileinfo['filepath_original'], $fileinfo['filepath']);
-                @copy($fileinfo['filepath_original'], $fileinfo['filepath_thumb']);
-            }
-
-            $id = $gmDB->insert_gmedia($gmedia);
-
-            $new_metadata         = $gmDB->generate_gmedia_metadata($id, $fileinfo);
-            $metadata['web']      = $new_metadata['web'];
-            $metadata['original'] = $new_metadata['original'];
-            $metadata['thumb']    = $new_metadata['thumb'];
-
-            $gmDB->update_metadata($meta_type = 'gmedia', $id, $meta_key = '_metadata', $metadata);
-            $gmDB->update_metadata($meta_type = 'gmedia', $id, $meta_key = '_modified', 0);
-
-            $success = sprintf(__('Image "%d" restored from backup and saved', 'grand-media'), $id);
-        } while(0);
-
-        if(empty($fail)){
-            $out = array('msg' => $gmCore->alert('info', $success), 'modified' => $gmedia['modified']);
-        } else{
-            $out = array('error' => $gmCore->alert('danger', $fail));
-        }
-
-        header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
-        echo json_encode($out);
-    }
+    header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+    echo json_encode($out);
 
     die();
 }
@@ -2095,7 +1925,7 @@ function gmedia_add_custom_field(){
 
 add_action('wp_ajax_gmedia_delete_custom_field', 'gmedia_delete_custom_field');
 function gmedia_delete_custom_field(){
-    global $gmDB, $user_ID;
+    global $gmDB, $user_ID, $gmCore;
     check_ajax_referer('gmedia_custom_field', '_customfield_nonce');
 
     $meta_type = 'gmedia';
@@ -2120,7 +1950,7 @@ function gmedia_delete_custom_field(){
             if($meta->{$column} != $pid){
                 continue;
             }
-            if(is_protected_meta($meta->meta_key, $meta_type)){
+            if($gmCore->is_protected_meta($meta->meta_key, $meta_type)){
                 continue;
             }
             if(($del_meta = $gmDB->delete_metadata_by_mid($meta_type, $key))){
@@ -2184,7 +2014,7 @@ function gmedia_term_add_custom_field(){
 
 add_action('wp_ajax_gmedia_term_delete_custom_field', 'gmedia_term_delete_custom_field');
 function gmedia_term_delete_custom_field(){
-    global $gmDB, $user_ID;
+    global $gmDB, $user_ID, $gmCore;
     check_ajax_referer('gmedia_custom_field', '_customfield_nonce');
 
     $meta_type = 'gmedia_term';
@@ -2213,7 +2043,7 @@ function gmedia_term_delete_custom_field(){
             if($meta->{$column} != $pid){
                 continue;
             }
-            if(is_protected_meta($meta->meta_key, $meta_type)){
+            if($gmCore->is_protected_meta($meta->meta_key, $meta_type)){
                 continue;
             }
             if(($del_meta = $gmDB->delete_metadata_by_mid($meta_type, $key))){
@@ -2277,9 +2107,7 @@ function gmedia_hash_files(){
     $unhashed = $wpdb->get_results($sql);
     if(!$unhashed){
         $ajax_operations = get_option('gmedia_ajax_long_operations', array());
-        foreach(array_keys($ajax_operations, 'gmedia_hash_files', true) as $key){
-            unset($ajax_operations[ $key ]);
-        }
+        unset($ajax_operations['gmedia_hash_files']);
         if(empty($ajax_operations)){
             delete_option('gmedia_ajax_long_operations');
         } else{
@@ -2303,6 +2131,43 @@ function gmedia_hash_files(){
     $progress = round(($all_count - $unhashed_count) * 100 / $all_count);
 
     wp_send_json_success(array('progress' => "{$progress}%", 'info' => __('Indexing:', 'grand-media')));
+}
+
+add_action('wp_ajax_gmedia_recreate_images', 'gmedia_recreate_images');
+function gmedia_recreate_images(){
+    global $gmCore;
+
+    check_ajax_referer('ajaxLongOperation');
+
+    $gmid = 0;
+    $ajax_operations = get_option('gmedia_ajax_long_operations', array());
+    if(!empty($ajax_operations['gmedia_recreate_images'])){
+        $all_count = count($ajax_operations['gmedia_recreate_images']);
+        $recreate_ids = array_filter($ajax_operations['gmedia_recreate_images']);
+        $do_count = count($recreate_ids);
+
+        if(!empty($recreate_ids)){
+            $gmid = reset($recreate_ids);
+            $gmCore->recreate_images_from_original($gmid);
+
+            $ajax_operations['gmedia_recreate_images'][$gmid] = false;
+            update_option('gmedia_ajax_long_operations', $ajax_operations);
+        } else {
+            unset($ajax_operations['gmedia_recreate_images']);
+        }
+
+        if(empty($ajax_operations)){
+            delete_option('gmedia_ajax_long_operations');
+
+            wp_send_json_success(array('progress' => '100%', 'info' => __('Done:', 'grand-media'), 'done' => true, 'id' => $gmid));
+        } else {
+            $progress = round(($all_count - $do_count) * 100 / $all_count);
+
+            wp_send_json_success(array('progress' => "{$progress}%", 'info' => __('Working:', 'grand-media'), 'id' => $gmid));
+        }
+    }
+
+    wp_send_json_success(array('progress' => '100%', 'info' => __('Done:', 'grand-media'), 'done' => true, 'id' => $gmid));
 }
 
 add_action('wp_ajax_gmedia_save_waveform', 'gmedia_save_waveform');

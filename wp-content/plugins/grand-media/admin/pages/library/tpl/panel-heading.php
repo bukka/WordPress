@@ -155,6 +155,9 @@ if(!defined('ABSPATH')) {
 
                 <li class="divider <?php echo $rel_selected_show; ?>"></li>
                 <li class="<?php echo $rel_selected_show . (gm_user_can('edit_media')? '' : ' disabled'); ?>">
+                    <a href="<?php echo wp_nonce_url(gm_get_admin_url(array('recreate' => 'selected'), array()), 'gmedia_recreate') ?>" class="gmedia-update"><?php _e('Re-create Images (heavy process)', 'grand-media'); ?></a>
+                </li>
+                <li class="<?php echo $rel_selected_show . (gm_user_can('edit_media')? '' : ' disabled'); ?>">
                     <a href="<?php echo wp_nonce_url(gm_get_admin_url(array('update_meta' => 'selected'), array()), 'gmedia_update_meta') ?>" class="gmedia-update"><?php _e('Update Metadata in Database', 'grand-media'); ?></a>
                 </li>
 

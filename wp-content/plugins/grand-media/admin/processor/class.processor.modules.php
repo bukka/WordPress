@@ -17,7 +17,7 @@ class GmediaProcessor_Modules extends GmediaProcessor{
 
         include_once(GMEDIA_ABSPATH . 'admin/pages/modules/functions.php');
 
-        if(isset($_POST['gmedia_preset_save']) || isset($_POST['module_preset_save_default']) || isset($_POST['module_preset_save_global'])){
+        if(isset($_POST['module_preset_save']) || isset($_POST['module_preset_save_default']) || isset($_POST['module_preset_save_global'])){
             check_admin_referer('GmediaGallery');
 
             if(isset($_POST['preview_bgcolor'])){
