@@ -86,7 +86,7 @@
 
                 }
 
-                _showCookieConsent(data.cookieText, data.dismissText, data.linkText, data.linkHref, data.styles, false);
+                _showCookieConsent(htmlDecode(data.cookieText), htmlDecode(data.dismissText), htmlDecode(data.linkText), data.linkHref, data.styles, false);
 
             }
 
@@ -237,6 +237,12 @@
         function _shouldDisplayConsent() {
             // Display the header only if the cookie has not been set.
             return !document.cookie.match(new RegExp(cookieName + '=([^;]+)'));
+        }
+
+        function htmlDecode(input){
+          var e = document.createElement('textarea');
+          e.innerHTML = input;
+          return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
         }
 
         var exports = {};
