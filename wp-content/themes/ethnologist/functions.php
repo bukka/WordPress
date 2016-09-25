@@ -323,6 +323,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_404_reason_2', 'an out-of-date link', 'ethnologist' );
 		pll_register_string( 'ethnologist_404_reason_3', 'internal page error', 'ethnologist' );
 		pll_register_string( 'ethnologist_404_search', 'Please return back to the homepage or try searching bellow.', 'ethnologist' );
+		pll_register_string( 'ethnologist_tag_cloud_title', 'Categories', 'ethnologist' );
 		//pll_register_string( '', '', 'ethnologist' );
 	}
 }
