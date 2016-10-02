@@ -53,11 +53,15 @@ class Ethnologist_Widget_TagCloud extends WP_Widget {
 			$this->id_base
 		);
 
+		echo $before_widget;
+
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
 
 		echo wp_tag_cloud(['taxonomy' => 'category']);
+
+		echo $after_widget;
 
 		$cache[$args['widget_id']] = ob_get_flush();
 		wp_cache_set( 'ethnologist_widget_recent_posts', $cache, 'widget' );
