@@ -399,6 +399,9 @@ function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-social-icons.php';
 	register_widget( 'Ethnologist_Widget_SocialIcons' );
 
+	require_once __DIR__ . '/inc/widget-tag-cloud.php';
+	register_widget( 'Ethnologist_Widget_TagCloud' );
+
 	// unregister pinnacle widget as we don't need them
 	unregister_widget( 'kad_contact_widget' );
 	unregister_widget( 'kad_social_widget' );
