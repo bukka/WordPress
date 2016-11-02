@@ -855,6 +855,14 @@ function gmedia_quite_update(){
             $default_options['purchase_key'] = $options['license_key'];
         }
 
+        if(version_compare($current_version, '1.8.85', '<')){
+            foreach($_COOKIE as $key => $value){
+                if('gmuser' === substr($key, 0, 6)){
+                    setcookie($key, '', time() - 3600);
+                }
+            }
+        }
+
         $new_options        = $gmCore->array_diff_key_recursive($default_options, $options);
         $gmGallery->options = $gmCore->array_replace_recursive($options, $new_options);
         update_option('gmediaOptions', $gmGallery->options);

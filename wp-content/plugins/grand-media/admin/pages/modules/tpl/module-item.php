@@ -14,7 +14,7 @@ global $gmDB, $gmCore, $user_ID;
     <div class="row">
         <div class="col-sm-3">
             <div class="thumbnail">
-                <img class="media-object" src="<?php echo $module['screenshot_url']; ?>" alt="<?php echo esc_attr($module['title']); ?>" width="320" height="240"/>
+                <img class="media-object" src="<?php echo $module['screenshot_url']; ?>" alt="<?php esc_attr_e($module['title']); ?>" width="320" height="240"/>
             </div>
         </div>
         <div class="<?php echo(($module['place'] === 'remote')? 'col-sm-9' : 'col-sm-5'); ?>">

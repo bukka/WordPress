@@ -34,6 +34,8 @@ class GmediaCore{
         add_action('edited_gmedia_term', array(&$this, 'clear_cache'));
         add_action('deleted_gmedia_term', array(&$this, 'clear_cache'));
 //        add_action( 'gmedia_clean_object_term_cache', array( &$this, 'clear_cache' ) );
+
+        add_filter('get_the_gmedia_terms', array(&$this, 'get_the_gmedia_terms'), 10, 3);
     }
 
     function user_capabilities(){
@@ -136,16 +138,26 @@ class GmediaCore{
      * @param array $add_args
      * @param array $remove_args
      * @param bool  $uri
+     * @param array $preserve_args
      *
      * @return string
      */
-    function get_admin_url($add_args = array(), $remove_args = array(), $uri = false){
+    function get_admin_url($add_args = array(), $remove_args = array(), $uri = false, $preserve_args = array()){
         if(true === $uri){
             $uri = admin_url('admin.php');
         }
         $remove_args = empty($remove_args)? array() : (array)$remove_args;
-        $remove_args = array_unique(array_merge(array('doing_wp_cron', '_wpnonce', 'delete', 'update_meta', 'recreate'), $remove_args, array_keys($add_args)));
+        $remove_args = array_unique(array_merge(array('doing_wp_cron', '_wpnonce', 'do_gmedia', 'did_gmedia', 'do_gmedia_terms', 'did_gmedia_terms', 'ids'), $remove_args, array_keys($add_args)));
         $new_uri     = remove_query_arg($remove_args, $uri);
+        if(!empty($preserve_args)){
+            $_add_args = array();
+            foreach($preserve_args as $key){
+                if(($value = $this->_get($key)) !== false){
+                    $_add_args[ $key ] = $value;
+                }
+            }
+            $new_uri = add_query_arg($_add_args, $new_uri);
+        }
         if(!empty($add_args)){
             $new_uri = add_query_arg($add_args, $new_uri);
         }
@@ -379,12 +391,15 @@ class GmediaCore{
         $fileinfo['basename_original'] = $pathinfo['filename'] . '.' . $fileinfo['extension'];
         $fileinfo['filename']          = $pathinfo['filename'] . $suffix;
         $fileinfo['basename']          = $fileinfo['filename'] . '.' . $fileinfo['extension'];
-        $fileinfo['title']             = ucwords(str_replace('_', ' ', esc_sql($title)));
+        $fileinfo['title']             = str_replace('_', ' ', esc_sql($title));
+        if((int)$gmGallery->options['name2title_capitalize']){
+            $fileinfo['title'] = mb_convert_case($fileinfo['title'], MB_CASE_TITLE, 'UTF-8');
+        }
         $fileinfo['mime_type']         = (empty($filetype['type']))? 'application/' . $fileinfo['extension'] : $filetype['type'];
         list($dirname) = explode('/', $fileinfo['mime_type']);
         $fileinfo['dirname']           = $dirname;
         $fileinfo['dirpath']           = $this->upload['path'] . '/' . $gmGallery->options['folder'][ $dirname ];
-        $fileinfo['dirpath_oroginal']  = $this->upload['path'] . '/' . $gmGallery->options['folder'][ $dirname ];
+        $fileinfo['dirpath_original']  = $this->upload['path'] . '/' . $gmGallery->options['folder'][ $dirname ];
         $fileinfo['dirurl']            = $this->upload['url'] . '/' . $gmGallery->options['folder'][ $dirname ];
         $fileinfo['dirurl_original']   = $this->upload['url'] . '/' . $gmGallery->options['folder'][ $dirname ];
         $fileinfo['filepath']          = $fileinfo['dirpath'] . '/' . $fileinfo['basename'];
@@ -2208,16 +2223,23 @@ class GmediaCore{
             $_status = 'publish';
         }
 
+        if(isset($_terms['gmedia_album']) && !empty($_terms['gmedia_album'])){
+            if(is_array($_terms['gmedia_album'])){
+                $_terms['gmedia_album'] = trim(reset($_terms['gmedia_album']));
+            }
+        } else {
+            $_terms['gmedia_album'] = '';
+        }
         if(isset($_terms['gmedia_category']) && !empty($_terms['gmedia_category'])){
             if(!is_array($_terms['gmedia_category'])){
-                $_terms['gmedia_category'] = explode(',', $_terms['gmedia_category']);
+                $_terms['gmedia_category'] = array_filter(array_map('trim', explode(',', $_terms['gmedia_category'])));
             }
         } else{
             $_terms['gmedia_category'] = array();
         }
         if(isset($_terms['gmedia_tag']) && !empty($_terms['gmedia_tag'])){
             if(!is_array($_terms['gmedia_tag'])){
-                $_terms['gmedia_tag'] = explode(',', $_terms['gmedia_tag']);
+                $_terms['gmedia_tag'] = array_filter(array_map('trim', explode(',', $_terms['gmedia_tag'])));
             }
         } else{
             $_terms['gmedia_tag'] = array();
@@ -2553,12 +2575,60 @@ class GmediaCore{
 
         }
 
-        echo '<p><b>' . __('Category') . ':</b> ' . ((isset($_terms['gmedia_category']) && !empty($_terms['gmedia_category']))? esc_html(str_replace(',', ', ', $_terms['gmedia_category'])) : '-') . PHP_EOL;
-        echo '<br /><b>' . __('Album') . ':</b> ' . ((isset($_terms['gmedia_album']) && !empty($_terms['gmedia_album']))? (isset($album_name)? $album_name : esc_html($_terms['gmedia_album'])) : '-') . PHP_EOL;
-        echo '<br /><b>' . __('Tags') . ':</b> ' . ((isset($_terms['gmedia_tag']) && !empty($_terms['gmedia_tag']))? esc_html(str_replace(',', ', ', $_terms['gmedia_tag'])) : '-') . '</p>' . PHP_EOL;
+        echo '<p><b>' . __('Category') . ':</b> ' . (!empty($_terms['gmedia_category'])? esc_html(implode(', ', $_terms['gmedia_category'])) : '-') . PHP_EOL;
+        echo '<br /><b>' . __('Album') . ':</b> ' . (!empty($_terms['gmedia_album'])? (isset($album_name)? $album_name : esc_html($_terms['gmedia_album'])) : '-') . PHP_EOL;
+        echo '<br /><b>' . __('Tags') . ':</b> ' . (!empty($_terms['gmedia_tag'])? esc_html(implode(', ', $_terms['gmedia_tag'])) : '-') . '</p>' . PHP_EOL;
 
         wp_ob_end_flush_all();
         flush();
+    }
+
+    /**
+     * @param            $gmid
+     */
+    function duplicate_gmedia($gmid){
+        global $gmDB;
+
+        $gmedia = $gmDB->get_gmedia($gmid);
+        if(!$gmedia || is_wp_error($gmedia)){
+            return;
+        }
+
+        $fileinfo = $this->fileinfo($gmedia->gmuid);
+        $file     = $fileinfo['dirpath_original'] . '/' . $gmedia->gmuid;
+
+        if(!copy($file, $fileinfo['filepath_original'])){
+            return;
+        }
+
+        if('image' == $fileinfo['dirname']){
+            copy($fileinfo['dirpath'] . '/' . $gmedia->gmuid, $fileinfo['filepath']);
+            copy($fileinfo['dirpath_thumb'] . '/' . $gmedia->gmuid, $fileinfo['filepath_thumb']);
+        }
+
+        // Construct the media_data array
+        $media_data = array('mime_type'   => $fileinfo['mime_type'],
+                            'gmuid'       => $fileinfo['basename'],
+                            'title'       => $gmedia->title,
+                            'link'        => $gmedia->link,
+                            'description' => $gmedia->description,
+                            'status'      => $gmedia->status
+        );
+
+        $media_data['author'] = get_current_user_id();
+
+        // Save the data
+        $id = $gmDB->insert_gmedia($media_data);
+
+        $media_metadata = $gmDB->get_metadata('gmedia', $gmedia->ID);
+
+        $metadata_keys = array('_metadata', '_created_timestamp', '_gps', '_cover', '_hash', '_size', '_peaks');
+        foreach($metadata_keys as $key){
+            if(isset($media_metadata[ $key ][0])){
+                $gmDB->add_metadata($meta_type = 'gmedia', $id, $key, $media_metadata[ $key ][0]);
+            }
+        }
+
     }
 
     /**
@@ -2882,6 +2952,36 @@ class GmediaCore{
     }
 
     /**
+     * @param null $modules
+     */
+    function modules_update($modules = null){
+        if ( wp_installing() ) {
+            return;
+        }
+
+        if(!is_array($modules)){
+            $modules = get_gmedia_modules();
+        }
+        if(isset($modules['error'])){
+            return;
+        }
+
+        global $gmGallery;
+        $modules_update_count = 0;
+
+        foreach($modules['in'] as $module){
+            if(!empty($module['update']) && 'remote' != $module['place']){
+                $modules_update_count++;
+            }
+        }
+
+        $gmGallery->options = get_option('gmediaOptions');
+        $gmGallery->options['modules_update'] = $modules_update_count;
+
+        update_option('gmediaOptions', $gmGallery->options);
+    }
+
+    /**
      * @param $key
      *
      * @return mixed
@@ -2948,12 +3048,13 @@ class GmediaCore{
      *
      * @param string      $meta_key Meta key
      * @param string|null $meta_type
+     *
      * @return bool True if the key is protected, false otherwise.
      */
-    function is_protected_meta( $meta_key, $meta_type = null ) {
-        $protected = ( '_' == $meta_key[0] );
+    function is_protected_meta($meta_key, $meta_type = null){
+        $protected = ('_' == $meta_key[0]);
 
-        return apply_filters( 'is_protected_gmedia_meta', $protected, $meta_key, $meta_type );
+        return apply_filters('is_protected_gmedia_meta', $protected, $meta_key, $meta_type);
     }
 
     /**
@@ -2987,7 +3088,7 @@ class GmediaCore{
                 <?php if(!empty($metadata)){
                     //$count = 0;
                     foreach($metadata as $entry){
-                        echo $this->_list_meta_item($entry);
+                        echo $this->_list_meta_item($entry, $meta_type);
                     }
                 } ?>
             </div>
@@ -3000,11 +3101,12 @@ class GmediaCore{
     /**
      * @since 1.6.3
      *
-     * @param $entry
+     * @param        $entry
+     * @param string $meta_type
      *
      * @return string|void
      */
-    function _list_meta_item($entry){
+    function _list_meta_item($entry, $meta_type = 'gmedia'){
         if(is_serialized($entry['meta_value'])){
             if(is_serialized_string($entry['meta_value'])){
                 // This is a serialized string, so we should display it.
@@ -3019,9 +3121,10 @@ class GmediaCore{
         $entry['meta_value'] = esc_textarea($entry['meta_value']); // using a <textarea />
         $entry['meta_id']    = (int)$entry['meta_id'];
 
+        $colsm = ('gmedia' == $meta_type)? 6 : 4;
         //$delete_nonce = wp_create_nonce( 'gmedia_custom_field', '_customfield_nonce' );
         $item = '
-			<div class="form-group col-sm-6 gm-custom-meta-' . $entry['meta_id'] . '">
+			<div class="form-group col-sm-' . $colsm . ' gm-custom-meta-' . $entry['meta_id'] . '">
 				<span class="delete-custom-field glyphicon glyphicon-remove pull-right text-danger"></span>
 				<label>' . $entry['meta_key'] . '</label>
 				<textarea name="meta[' . $entry['meta_id'] . ']" class="gmedia-custom-field gm-custom-field-' . $entry['meta_id'] . ' vert form-control input-sm" style="height:30px;" placeholder="' . __('Value', 'grand-media') . '" rows="1" cols="30">' . $entry['meta_value'] . '</textarea>
@@ -3491,6 +3594,40 @@ class GmediaCore{
                 $wp_fastest_cache->deleteCache();
             }
         }
+    }
+
+    /**
+     * Filter the gmedia terms (private and draft) for frontend and admin panel
+     *
+     * @param $terms
+     * @param $gmedia_id
+     * @param $taxonomy
+     */
+    function get_the_gmedia_terms($terms, $gmedia_id, $taxonomy){
+        if('gmedia_album' === $taxonomy){
+            if(!is_user_logged_in()){
+                foreach($terms as $key => $term){
+                    if('publish' !== $term->status){
+                        unset($terms[ $key ]);
+                    }
+                }
+            } else {
+                global $user_ID;
+                foreach($terms as $key => $term){
+                    if('draft' === $term->status){
+                        if(!is_admin() || ($user_ID != $term->global && !gm_user_can('edit_others_media'))){
+                            unset($terms[ $key ]);
+                        }
+                    } elseif('private' === $term->status){
+                        if($user_ID != $term->global && !gm_user_can('show_others_media')){
+                            unset($terms[ $key ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $terms;
     }
 
     /**

@@ -4,6 +4,7 @@
  * GmediaProcessor_Settings
  */
 class GmediaProcessor_Settings extends GmediaProcessor{
+    private static $me = null;
 
     protected function processor(){
         global $gmCore, $gmGallery, $gmDB;
@@ -181,7 +182,14 @@ class GmediaProcessor_Settings extends GmediaProcessor{
 
     }
 
+    public static function getMe() {
+        if ( self::$me == null ) {
+            self::$me = new GmediaProcessor_Settings();
+        }
+
+        return self::$me;
+    }
 }
 
-global $gmProcessor;
-$gmProcessor = new GmediaProcessor_Settings();
+global $gmProcessorSettings;
+$gmProcessorSettings = GmediaProcessor_Settings::getMe();

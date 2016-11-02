@@ -97,14 +97,14 @@ function gmogmeta_header(){
 add_action('the_post', 'gmedia_the_post');
 function gmedia_the_post($post){
     if('gmedia' == substr($post->post_type, 0, 6)){
-        add_filter('get_the_excerpt', 'gmedia_post_type__the_excerpt', 15);
-        add_filter('the_content', 'gmedia_post_type__the_content', 20);
+        add_filter('get_the_excerpt', 'gmedia_post_type__the_excerpt', 150);
+        add_filter('the_content', 'gmedia_post_type__the_content', 200);
     }
 }
 
 function gmedia_post_type__the_excerpt($content){
-    remove_filter('get_the_excerpt', 'gmedia_post_type__the_excerpt', 15);
-    remove_filter('the_content', 'gmedia_post_type__the_content', 20);
+    remove_filter('get_the_excerpt', 'gmedia_post_type__the_excerpt', 150);
+    remove_filter('the_content', 'gmedia_post_type__the_content', 200);
     $content = wp_trim_excerpt();
 
     return gmedia_post_type__the_content($content);
@@ -113,7 +113,14 @@ function gmedia_post_type__the_excerpt($content){
 function gmedia_post_type__the_content($content){
     global $post, $gmDB, $gmCore;
 
-    remove_filter('the_content', 'gmedia_post_type__the_content', 20);
+    if(isset($post->gmedia_content)){
+        $post->post_content = $post->gmedia_content;
+        return $post->gmedia_content;
+    }
+
+    remove_filter('the_content', 'gmedia_post_type__the_content', 200);
+
+    $output = '';
     if($post->post_type == 'gmedia'){
         $gmedia_id = get_post_meta($post->ID, '_gmedia_ID', true);
         $gmedia    = $gmDB->get_gmedia($gmedia_id);
@@ -181,7 +188,7 @@ function gmedia_post_type__the_content($content){
                         <div class="gmsingle_photo_info">
                             <div class="gmsingle_description_wrap">
                                 <?php
-                                echo $content; //the_content();
+                                echo apply_filters('the_gmedia_content', wpautop($gmedia->description));
 
                                 if(!empty($gmedia->album)){
                                     $term_name    = $gmedia->album[0]->name;
@@ -346,20 +353,20 @@ function gmedia_post_type__the_content($content){
                     </style>
                     <?php
                 } else{
-                    echo $content; //the_content();
+                    echo apply_filters('the_gmedia_content', wpautop($gmedia->description));
                 }
 
             } elseif('audio' == $gmedia->type && ($module = $gmCore->get_module_path('wavesurfer')) && $module['name'] === 'wavesurfer'){
                 echo gmedia_shortcode(array('module' => 'wavesurfer', 'library' => $gmedia->ID, 'native' => true));
                 if(is_single()){
-                    echo $content;
+                    echo apply_filters('the_gmedia_content', wpautop($gmedia->description));
                 }
             } else{
                 $ext1 = wp_get_audio_extensions();
                 $ext2 = wp_get_video_extensions();
                 $ext  = array_merge($ext1, $ext2);
                 if(in_array($gmedia->ext, $ext)){
-                    $embed = apply_filters('the_content', "[embed]$gmedia->url[/embed]");
+                    $embed = do_shortcode("[embed]$gmedia->url[/embed]");
                     echo $embed;
                 } else{
                     $cover_url = $gmCore->gm_get_media_image($gmedia, 'web');
@@ -381,21 +388,28 @@ function gmedia_post_type__the_content($content){
             }
 
 
-            $content = $before . $ob_content . $after;
+            $output = $before . $ob_content . $after;
 
         }
+
     } else{
         if('get_the_excerpt' != current_filter()){
             $term_id = get_post_meta($post->ID, '_gmedia_term_ID', true);
             if(in_array($post->post_type, array('gmedia_album'))){
-                $content .= do_shortcode("[gm id={$term_id}]");
+                $output .= do_shortcode("[gm id={$term_id}]");
             } elseif($post->post_type == 'gmedia_gallery'){
-                $content .= do_shortcode("[gmedia id={$term_id}]");
+                $output .= do_shortcode("[gmedia id={$term_id}]");
             }
         }
     }
 
-    return $content;
+    $output = str_replace(array("\r\n", "\r", "\n"), '', $output);
+    $output = preg_replace('/ {2,}/', ' ', $output);
+
+    $post->post_content = $output;
+    $post->gmedia_content = $output;
+
+    return $output;
 }
 
 /*

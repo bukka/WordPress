@@ -14,13 +14,13 @@ global $gmGallery;
         <ul class="nav nav-tabs" id="galleryTabs">
             <?php if(isset($module_info)){ ?>
                 <li class="text-center">
-                    <strong><?php echo $module_info['title']; ?></strong><a href="#chooseModuleModal" data-toggle="modal" style="padding:5px 0;"><img src="<?php echo $term->module['url'] . '/screenshot.png'; ?>" alt="<?php echo esc_attr($module_info['title']); ?>" width="100" style="height:auto;"/></a>
+                    <strong><?php echo $module_info['title']; ?></strong><a href="#chooseModuleModal" data-toggle="modal" style="padding:5px 0;"><img src="<?php echo $term->module['url'] . '/screenshot.png'; ?>" alt="<?php esc_attr_e($module_info['title']); ?>" width="100" style="height:auto;"/></a>
                 </li>
             <?php } else{ ?>
                 <li class="text-center"><strong><?php echo $term->module['name']; ?></strong>
 
                     <p><?php _e('This module is broken or outdated. Please, go to Modules page and update/install module or choose another one for this gallery', 'grand-media'); ?></p>
-                    <a href="#chooseModuleModal" data-toggle="modal" style="padding:5px 0;"><img src="<?php echo $term->module['url'] . '/screenshot.png'; ?>" alt="<?php echo esc_attr($term->module['name']); ?>" width="100" style="height:auto;"/></a>
+                    <a href="#chooseModuleModal" data-toggle="modal" style="padding:5px 0;"><img src="<?php echo $term->module['url'] . '/screenshot.png'; ?>" alt="<?php esc_attr_e($term->module['name']); ?>" width="100" style="height:auto;"/></a>
                 </li>
             <?php } ?>
             <?php

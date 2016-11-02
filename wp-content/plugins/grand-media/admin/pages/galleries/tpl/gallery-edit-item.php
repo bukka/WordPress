@@ -25,15 +25,25 @@ if(!defined('ABSPATH')){
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label><?php _e('Name', 'grand-media'); ?></label>
-                            <input type="text" class="form-control input-sm" name="term[name]" value="<?php echo esc_attr($term->name); ?>" placeholder="<?php _e('Gallery Name', 'grand-media'); ?>" required/>
+                            <input type="text" class="form-control input-sm" name="term[name]" value="<?php esc_attr_e($term->name); ?>" placeholder="<?php _e('Gallery Name', 'grand-media'); ?>" required/>
                         </div>
                         <div class="form-group">
                             <label><?php _e('Slug', 'grand-media'); ?></label>
-                            <input type="text" class="form-control input-sm" name="term[slug]" value="<?php echo esc_attr($term->slug); ?>"/>
+                            <input type="text" class="form-control input-sm" name="term[slug]" value="<?php esc_attr_e($term->slug); ?>"/>
                         </div>
                         <div class="form-group">
                             <label><?php _e('Description', 'grand-media'); ?></label>
-                            <textarea class="form-control input-sm" style="height:64px;" rows="2" name="term[description]"><?php echo $term->description; ?></textarea>
+                            <?php
+                            wp_editor(esc_textarea($term->description), "gallery{$term->term_id}_description", array('editor_class'  => 'form-control input-sm',
+                                                                                                       'editor_height' => 120,
+                                                                                                       'wpautop'       => false,
+                                                                                                       'media_buttons' => false,
+                                                                                                       'textarea_name' => 'term[description]',
+                                                                                                       'textarea_rows' => '4',
+                                                                                                       'tinymce'       => false,
+                                                                                                       'quicktags'     => array('buttons' => apply_filters('gmedia_editor_quicktags', 'strong,em,link,ul,li,close'))
+                            ));
+                            ?>
                         </div>
                     </div>
                     <div class="col-xs-6">
@@ -50,18 +60,14 @@ if(!defined('ABSPATH')){
                             </select>
                         </div>
                         <div class="form-group">
-                            <div class="pull-right"><a id="build_query" class="label label-primary buildquery-modal" href="#buildQuery" style="font-size:90%;"><?php _e('Build Query', 'grand-media'); ?></a></div>
                             <label><?php _e('Query Args.', 'grand-media'); ?></label>
-                            <textarea class="form-control input-sm" id="build_query_field" style="height:64px;"
+                            <textarea class="form-control input-sm" id="build_query_field" style="height:120px;" title="<?php _e("Click 'Build Query' button and choose query arguments for this gallery"); ?>"
                                       placeholder="<?php _e("Click 'Build Query' button for help with Query Args.\nIf you leave this field empty then whole Library will be loaded. That's could exceed your server's PHP Memory Limit.", 'grand-media') ?>"
                                       rows="2" name="term[query]"><?php echo(empty($gmedia_filter['query_args'])? '' : urldecode(build_query($gmedia_filter['query_args']))); ?></textarea>
+                            <p class="help-block text-right"><a id="build_query" class="btn btn-sm btn-success buildquery-modal" href="#buildQuery" style="font-size:90%;"><?php _e('Build Query', 'grand-media'); ?></a></p>
                         </div>
                     </div>
                 </div>
-                <?php
-                $gmCore->gmedia_custom_meta_box($term->term_id, $meta_type = 'gmedia_term');
-                do_action('gmedia_term_edit_form');
-                ?>
             </div>
 
             <div class="col-sm-4">
@@ -75,7 +81,7 @@ if(!defined('ABSPATH')){
                         ?>
                     </label>
                     <div>
-                        <div class="btn-group btn-group-sm" id="save_buttons">
+                        <div class="btn-group btn-group" id="save_buttons">
                             <?php if($term->module['name'] != $term->meta['_module']){ ?>
                                 <a href="<?php echo $gmedia_url; ?>" class="btn btn-default"><?php _e('Cancel preview module', 'grand-media'); ?></a>
                                 <button type="submit" name="gmedia_gallery_save" class="btn btn-primary"><?php _e('Save with new module', 'grand-media'); ?></button>
@@ -93,12 +99,12 @@ if(!defined('ABSPATH')){
 
                 <p><b><?php _e('Gallery ID:'); ?></b> #<?php echo $term_id; ?></p>
                 <p><b><?php _e('Last edited:'); ?></b> <?php echo $term->meta['_edited']; ?></p>
-                <p><?php echo '<b>' . __('Gallery module:') . '</b> <a href="#chooseModuleModal" data-toggle="modal">' . $term->meta['_module'] . '</a>';
+                <p><?php echo '<b>' . __('Gallery module:') . '</b> <a href="#chooseModuleModal" data-toggle="modal" title="' . __('Change module for gallery', 'grand-media') . '">' . $term->meta['_module'] . '</a>';
                     if($term->module['name'] != $term->meta['_module']){
                         echo '<br /><b>' . __('Preview module:') . '</b> ' . $term->module['name'];
                         echo '<br /><span class="text-danger">' . sprintf(__('Note: Module changed to %s, but not saved yet'), $term->module['name']) . '</span>';
                     } ?></p>
-                <input type="hidden" name="term[module]" value="<?php echo esc_attr($term->module['name']); ?>">
+                <input type="hidden" name="term[module]" value="<?php esc_attr_e($term->module['name']); ?>">
                 <?php if($term_id){
                     $params = array();
                     if($term->module['name'] != $term->meta['_module']){
@@ -132,6 +138,10 @@ if(!defined('ABSPATH')){
                 <?php } ?>
             </div>
         </div>
+        <?php
+        $gmCore->gmedia_custom_meta_box($term->term_id, $meta_type = 'gmedia_term');
+        do_action('gmedia_term_edit_form');
+        ?>
 
         <hr/>
         <div class="well well-sm clearfix">

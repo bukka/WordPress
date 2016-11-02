@@ -37,7 +37,7 @@ global $user_ID;
                         <input type="text" class="form-control input-sm" name="term[name]" value="<?php $is_preset === 'global'? _e('Global Settings', 'grand-media') : _e('Default Settings', 'grand-media'); ?>" readonly/>
                         <input type="hidden" name="module_preset_save_default" value="1"/>
                     <?php } else{ ?>
-                        <input type="text" class="form-control input-sm" name="term[name]" value="<?php echo esc_attr($term->name); ?>" placeholder="<?php echo $term->name? esc_attr($term->name) : __('Preset Name', 'grand-media'); ?>"/>
+                        <input type="text" class="form-control input-sm" name="term[name]" value="<?php esc_attr_e($term->name); ?>" placeholder="<?php echo $term->name? esc_attr($term->name) : __('Preset Name', 'grand-media'); ?>"/>
                     <?php } ?>
                 </div>
                 <div class="form-group">
@@ -55,7 +55,7 @@ global $user_ID;
                     } ?>
                 </div>
                 <input type="hidden" name="term[term_id]" value="<?php echo $term_id; ?>"/>
-                <input type="hidden" name="term[module]" value="<?php echo esc_attr($term->module['name']); ?>"/>
+                <input type="hidden" name="term[module]" value="<?php esc_attr_e($term->module['name']); ?>"/>
                 <input type="hidden" name="term[taxonomy]" value="<?php echo $gmedia_term_taxonomy; ?>"/>
                 <?php
                 wp_nonce_field('GmediaGallery');

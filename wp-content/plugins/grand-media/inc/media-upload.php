@@ -280,9 +280,9 @@ function gmedia_add_media_galleries(){
 
                                     <p class="media-meta clear hidden">
 										<span class="clearfix">
-											<span class="media-object pull-left" style="width:77px;margin-right:5px;">
+											<span class="media-object pull-left" style="width:85px;margin-right:5px;">
 												<?php if(!$broken){ ?>
-                                                    <span class="thumbnail"><img src="<?php echo $module['url'] . '/screenshot.png'; ?>" alt="<?php echo esc_attr($term->name); ?>"/></span>
+                                                    <span class="thumbnail"><img src="<?php echo $module['url'] . '/screenshot.png'; ?>" alt="<?php esc_attr_e($term->name); ?>"/></span>
                                                 <?php } else{ ?>
                                                     <span class="bg-danger text-center"><?php _e('Module broken. Reinstall module', 'grand-media') ?></span>
                                                 <?php } ?>
@@ -292,51 +292,13 @@ function gmedia_add_media_galleries(){
                                             <br><span class="label label-default"><?php _e('Status', 'grand-media'); ?>:</span> <?php echo $term->status; ?>
 										</span>
                                         <span class="label label-default"><?php _e('Last Edited', 'grand-media'); ?>:</span> <?php echo $term_meta['_edited']; ?>
-                                        <br><span class="label label-default"><?php _e('Source', 'grand-media'); ?>:</span>
-                                        <?php
-                                        $gallery_tabs = reset($term_meta['_query']);
-                                        $tax_tabs     = key($term_meta['_query']);
-                                        if('gmedia__in' == $tax_tabs){
-                                            _e('Selected Gmedia', 'grand-media');
-                                            if(!(((int)$term->global != $user_ID) && !current_user_can('gmedia_show_others_media'))){
-                                                $gmedia_ids = wp_parse_id_list($gallery_tabs[0]);
-                                                $gal_source = sprintf('<a class="selected__in" target="_blank" href="%s">' . __('Show %d items in Gmedia Library', 'grand-media') . '</a>', esc_url(add_query_arg(array('gmedia__in' => implode(',', $gmedia_ids)), $lib_url)), count($gmedia_ids));
-                                                echo " ($gal_source)";
-                                            }
-                                        } else{
-                                            $tabs         = $gmDB->get_terms($tax_tabs, array('include' => $gallery_tabs));
-                                            $terms_source = array();
-                                            if('gmedia_category' == $tax_tabs){
-                                                _e('Categories', 'grand-media');
-                                                foreach($tabs as $t){
-                                                    $terms_source[] = sprintf('<a class="gm_category" target="_blank" href="%s">%s</a>', esc_url(add_query_arg(array('cat' => $t->term_id), $lib_url)), esc_html($t->name));
-                                                }
-                                            } elseif('gmedia_album' == $tax_tabs){
-                                                _e('Albums', 'grand-media');
-                                                foreach($tabs as $t){
-                                                    $terms_source[] = sprintf('<a class="gm_album" target="_blank" href="%s">%s</a>', esc_url(add_query_arg(array('alb' => $t->term_id), $lib_url)), esc_html($t->name));
-                                                }
-                                            } elseif('gmedia_tag' == $tax_tabs){
-                                                _e('Tags', 'grand-media');
-                                                foreach($tabs as $t){
-                                                    $terms_source[] = sprintf('<a class="gm_tag" target="_blank" href="%s">%s</a>', esc_url(add_query_arg(array('tag_id' => $t->term_id), $lib_url)), esc_html($t->name));
-                                                }
-                                            }
-                                            if(!empty($terms_source)){
-                                                $terms_source = join(', ', $terms_source);
-                                                if(((int)$term->global != $user_ID) && !current_user_can('gmedia_show_others_media')){
-                                                    $terms_source = strip_tags($terms_source);
-                                                }
-                                                echo " ({$terms_source})";
-                                            }
-                                        }
-                                        ?>
+                                        <br><span class="label label-default"><?php _e('Query Args.', 'grand-media'); ?>:</span> <?php echo !empty($term_meta['_query'])? str_replace(',"', ', "', json_encode($term_meta['_query'])) : ''; ?>
                                     </p>
                                     <?php if(current_user_can('gmedia_gallery_manage')){
                                         if(!(((int)$term->global != $user_ID) && !current_user_can('gmedia_edit_others_media'))){
                                             ?>
                                             <p class="media-meta hidden"><a target="_blank" href="<?php echo add_query_arg(array('page'      => 'GrandMedia_Galleries',
-                                                                                                                                 'edit_item' => $term->term_id
+                                                                                                                                 'edit_term' => $term->term_id
                                                                                                                            ), admin_url('admin.php')); ?>"><?php _e('Edit gallery', 'grand-media'); ?></a></p>
                                             <?php
                                         }
@@ -523,10 +485,21 @@ function gmedia_add_media_terms(){
                                     if('gmedia_album' == $taxonomy){
                                         $term_meta = $gmDB->get_metadata('gmedia_term', $item->term_id);
                                         $term_meta = array_map('reset', $term_meta);
-                                        $term_meta = array_merge(array('_orderby' => 'ID', '_order' => 'DESC'), $term_meta);
+                                        $term_meta = array_merge(array('_orderby' => $gmGallery->options['in_album_orderby'], '_order' => $gmGallery->options['in_album_order']), $term_meta);
                                         $args      = array('no_found_rows' => true,
                                                            'per_page'      => $per_page,
                                                            'album__in'     => array($item->term_id),
+                                                           'author'        => $author,
+                                                           'orderby'       => $term_meta['_orderby'],
+                                                           'order'         => $term_meta['_order']
+                                        );
+                                    } elseif('gmedia_category' == $taxonomy){
+                                        $term_meta = $gmDB->get_metadata('gmedia_term', $item->term_id);
+                                        $term_meta = array_map('reset', $term_meta);
+                                        $term_meta = array_merge(array('_orderby' => $gmGallery->options['in_category_orderby'], '_order' => $gmGallery->options['in_category_order']), $term_meta);
+                                        $args      = array('no_found_rows' => true,
+                                                           'per_page'      => $per_page,
+                                                           'category__in'  => $item->term_id,
                                                            'author'        => $author,
                                                            'orderby'       => $term_meta['_orderby'],
                                                            'order'         => $term_meta['_order']
@@ -539,24 +512,35 @@ function gmedia_add_media_terms(){
                                                       'orderby'       => $gmGallery->options['in_tag_orderby'],
                                                       'order'         => $gmGallery->options['in_tag_order']
                                         );
-                                    } elseif('gmedia_category' == $taxonomy){
-                                        $args = array('no_found_rows' => true,
-                                                      'per_page'      => $per_page,
-                                                      'category__in'  => $item->term_id,
-                                                      'author'        => $author,
-                                                      'orderby'       => $gmGallery->options['in_category_orderby'],
-                                                      'order'         => $gmGallery->options['in_category_order']
-                                        );
                                     }
                                     $termItems = $gmDB->get_gmedias($args);
                                 }
+                                if('gmedia_tag' != $taxonomy){
+                                    $_module_preset = isset($term_meta['_module_preset'][0])? $term_meta['_module_preset'][0] : $gmGallery->options['default_gmedia_module'];
+                                } else{
+                                    $_module_preset = $gmGallery->options['default_gmedia_module'];
+                                }
+                                $by_author = '';
+                                $preset_name = __('Default Settings');
+                                if($gmCore->is_digit($_module_preset)){
+                                    $preset    = $gmDB->get_term($_module_preset);
+                                    $mfold = $preset->status;
+                                    if((int)$preset->global){
+                                        $by_author = ' [' . get_the_author_meta('display_name', $preset->global) . ']';
+                                    }
+                                    if('[' . $mfold . ']' !== $preset->name){
+                                        $preset_name   = str_replace('[' . $mfold . '] ', '', $preset->name);
+                                    }
+                                } else {
+                                    $mfold = $_module_preset;
+                                }
+                                $module_preset = $gmedia_modules['in'][ $mfold ]['title'] . $by_author . ' - ' . $preset_name;
                                 ?>
                                 <div class="list-group-item term-list-item d-row<?php echo $list_row_class; ?>">
                                     <div class="row<?php echo $row_class; ?>">
-                                        <div class="term_id">#<?php echo $item->term_id; ?></div>
                                         <div class="col-xs-5 term-label">
                                             <div class="no-checkbox">
-                                                <strong class="term_name"><?php echo esc_html($item_name); ?></strong>
+                                                <span class="term_name"><?php echo esc_html($item_name); ?></span>
                                                 <span class="term_info_author"><?php echo $author_name; ?></span>
                                                 <span class="badge pull-right"><?php echo $item->count; ?></span>
                                             </div>
@@ -569,7 +553,7 @@ function gmedia_add_media_terms(){
                                                         <img style="z-index:<?php echo $per_page --; ?>;"
                                                              src="<?php echo $gmCore->gm_get_media_image($i, 'thumb', false); ?>"
                                                              alt="<?php echo $i->ID; ?>"
-                                                             title="<?php echo esc_attr($i->title); ?>"/>
+                                                             title="<?php esc_attr_e($i->title); ?>"/>
                                                         <?php
                                                     }
                                                 }
@@ -589,9 +573,9 @@ function gmedia_add_media_terms(){
                                                            'gmedia_tag'      => __('Tag', 'grand-media'),
                                                            'gmedia_category' => __('Category', 'grand-media')
                                         );
-                                        $lib_arg   = array('gmedia_album'    => 'alb',
-                                                           'gmedia_tag'      => 'tag_id',
-                                                           'gmedia_category' => 'cat'
+                                        $lib_arg   = array('gmedia_album'    => 'album__in',
+                                                           'gmedia_tag'      => 'tag__in',
+                                                           'gmedia_category' => 'category__in'
                                         );
                                         ?>
                                         <input type="hidden" name="taxonomy" value="<?php echo $taxonomy; ?>"/>
@@ -599,7 +583,7 @@ function gmedia_add_media_terms(){
 
                                         <p><strong><?php echo $tax_name[ $taxonomy ]; ?>:</strong> <?php echo esc_html($item_name); ?>
                                             <br/><strong><?php _e('ID', 'grand-media'); ?>:</strong> <?php echo $item->term_id; ?>
-                                            <?php if('gmedia_album' == $taxonomy){
+                                            <?php if('gmedia_tag' != $taxonomy){
                                                 $orderby = array('custom'   => __('user defined', 'grand-media'),
                                                                  'ID'       => __('by ID', 'grand-media'),
                                                                  'title'    => __('by title', 'grand-media'),
@@ -610,19 +594,26 @@ function gmedia_add_media_terms(){
                                                 ); ?>
                                                 <br/><strong><?php _e('Order', 'grand-media'); ?>:</strong> <?php echo $orderby[ $term_meta['_orderby'] ]; ?>
                                                 <br/><strong><?php _e('Sort order', 'grand-media'); ?>:</strong> <?php echo $term_meta['_order']; ?>
-                                                <br/><strong><?php _e('Status', 'grand-media'); ?>:</strong> <?php echo $item->status; ?>
+                                                <?php if('gmedia_album' == $taxonomy){ ?>
+                                                    <br/><strong><?php _e('Status', 'grand-media'); ?>:</strong> <?php echo $item->status; ?>
                                                 <br/><strong><?php _e('Author', 'grand-media'); ?>:</strong> <?php echo $owner; ?>
+                                                <?php } ?>
                                             <?php } ?>
+                                            <br/><strong><?php _e('Module/Preset', 'grand-media'); ?>:</strong> <?php echo $module_preset; ?>
                                         </p>
 
                                         <p>
                                             <a href="<?php echo add_query_arg(array('page'                => 'GrandMedia',
                                                                                     $lib_arg[ $taxonomy ] => $item->term_id
-                                                                              ), admin_url('admin.php')); ?>" target="_blank"><?php _e('Open in Gmedia Library', 'grand-media'); ?></a>
+                                                                              ), admin_url('admin.php')); ?>" target="_blank"><?php _e('View in Gmedia Library', 'grand-media'); ?></a>
                                             <?php if(('gmedia_album' == $taxonomy) && $allow_edit){ ?>
                                                 &nbsp; | &nbsp; <a href="<?php echo add_query_arg(array('page'      => 'GrandMedia_Albums',
-                                                                                                        'edit_item' => $item->term_id
+                                                                                                        'edit_term' => $item->term_id
                                                                                                   ), admin_url('admin.php')); ?>" target="_blank"><?php _e('Edit Album', 'grand-media'); ?></a>
+                                            <?php } elseif(('gmedia_category' == $taxonomy) && $allow_edit){ ?>
+                                                &nbsp; | &nbsp; <a href="<?php echo add_query_arg(array('page'      => 'GrandMedia_Categories',
+                                                                                                        'edit_term' => $item->term_id
+                                                                                                  ), admin_url('admin.php')); ?>" target="_blank"><?php _e('Edit Category', 'grand-media'); ?></a>
                                             <?php } ?>
                                         </p>
                                     </div>
@@ -790,7 +781,7 @@ function gmedia_add_media_library(){
 
                                     <div class="form-group">
                                         <label><?php _e('Title', 'grand-media'); ?></label>
-                                        <input name="title" type="text" class="form-control input-sm" placeholder="<?php _e('Title', 'grand-media'); ?>" value="<?php echo esc_attr($item->title); ?>">
+                                        <input name="title" type="text" class="form-control input-sm" placeholder="<?php _e('Title', 'grand-media'); ?>" value="<?php esc_attr_e($item->title); ?>">
                                     </div>
                                     <div class="form-group">
                                         <label><?php _e('Link To', 'grand-media'); ?></label>
@@ -805,7 +796,7 @@ function gmedia_add_media_library(){
                                     </div>
                                     <div class="form-group">
                                         <label><?php _e('Description', 'grand-media'); ?></label>
-                                        <textarea name="description" class="form-control input-sm" rows="4" cols="10"><?php echo esc_html($item->description); ?></textarea>
+                                        <textarea name="description" class="form-control input-sm" rows="4" cols="10"><?php echo esc_textarea($item->description); ?></textarea>
                                     </div>
                                     <?php //if($is_webimage){
                                     ?>
@@ -1043,7 +1034,7 @@ function gmedia_add_media_upload(){
                             });
                             uploader.bind('UploadComplete', function(up, files) {
                                 console.log('[UploadComplete]', files);
-                                $('<div></div>').addClass('alert alert-success alert-dismissable').html(closebtn + "<?php echo esc_attr(__('Upload finished', 'grand-media')); ?>").appendTo('#gmedia-msg-panel');
+                                $('<div></div>').addClass('alert alert-success alert-dismissable').html(closebtn + "<?php esc_attr_e(__('Upload finished', 'grand-media')); ?>").appendTo('#gmedia-msg-panel');
                                 $('#total-progress-info .progress-bar').css('width', '0').attr('aria-valuenow', '0');
                             });
 
@@ -1152,7 +1143,7 @@ function gmedia_add_media_upload(){
                                     <?php } ?>
                                     delimiter: ',',
                                     maxItems: null,
-                                    openOnFocus: false,
+                                    openOnFocus: true,
                                     persist: false,
                                     options: cat_items,
                                     labelField: 'item',
@@ -1179,7 +1170,7 @@ function gmedia_add_media_upload(){
                                     <?php } ?>
                                     delimiter: ',',
                                     maxItems: null,
-                                    openOnFocus: false,
+                                    openOnFocus: true,
                                     persist: false,
                                     options: tag_items,
                                     labelField: 'item',

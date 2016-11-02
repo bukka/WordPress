@@ -5,11 +5,18 @@
  */
 class GmediaProcessor{
 
+    private static $me = null;
     public $page;
+    public $gmediablank;
     public $url;
     public $msg;
     public $error;
     public $user_options = array();
+
+    public $display_mode;
+    public $taxonomy;
+    public $taxterm;
+    public $edit_term;
 
     /**
      * initiate the manage page
@@ -28,6 +35,34 @@ class GmediaProcessor{
 
         add_action('init', array($this, 'controller'));
 
+        if(!$this->page || strpos($this->page, 'GrandMedia') === false){
+            return;
+        }
+
+        $this->gmediablank = $gmCore->_get('gmediablank');
+        if($this->gmediablank){
+            $this->url = add_query_arg(array('gmediablank' => $this->gmediablank), $this->url);
+        }
+
+        switch($this->page){
+            case 'GrandMedia_Albums':
+                $this->taxonomy = 'gmedia_album';
+            break;
+            case 'GrandMedia_Categories':
+                $this->taxonomy = 'gmedia_category';
+            break;
+            case 'GrandMedia_Tags':
+                $this->taxonomy = 'gmedia_tag';
+            break;
+            case 'GrandMedia_Galleries':
+                $this->taxonomy = 'gmedia_gallery';
+            break;
+        }
+        if($this->taxonomy){
+            $this->taxterm   = str_replace('gmedia_', '', $this->taxonomy);
+            $this->edit_term = $gmCore->_get('edit_term');
+        }
+
     }
 
     /**
@@ -36,6 +71,8 @@ class GmediaProcessor{
     public function controller(){
 
         $this->user_options = self::user_options();
+        $view               = $this->gmediablank? '_frame' : '';
+        $this->display_mode = $this->user_options["display_mode_gmedia{$view}"];
 
         if(!$this->page || strpos($this->page, 'GrandMedia') === false){
             return;
@@ -67,19 +104,19 @@ class GmediaProcessor{
     }
 
     /**
-     * @param string $cookie_key
+     * @param string $key
      * @param string $post_key
      *
      * @return array
      */
-    public static function selected_items($cookie_key, $post_key = 'selected_items'){
+    public static function selected_items($key, $post_key = 'selected_items'){
 
         $selected_items = array();
-        if($cookie_key){
+        if($key){
             if(isset($_POST[ $post_key ])){
                 $selected_items = array_filter(explode(',', $_POST[ $post_key ]), 'is_numeric');
-            } elseif(isset($_COOKIE[ $cookie_key ])){
-                $selected_items = array_filter(explode(',', $_COOKIE[ $cookie_key ]), 'is_numeric');
+            } elseif(isset($_COOKIE[ $key ])){
+                $selected_items = array_filter(explode('.', $_COOKIE[ $key ]), 'is_numeric');
             }
         }
 
@@ -92,11 +129,9 @@ class GmediaProcessor{
      * @return array
      */
     public function clear_selected_items($cookie_key){
-        global $user_ID;
-
         if($cookie_key){
-            setcookie("gmuser_{$user_ID}_{$cookie_key}", '', time() - 3600);
-            unset($_COOKIE["gmuser_{$user_ID}_{$cookie_key}"]);
+            setcookie($cookie_key, '', time() - 3600);
+            unset($_COOKIE[ $cookie_key ]);
         }
 
         return array();
@@ -175,40 +210,71 @@ class GmediaProcessor{
      * Autoloader
      */
     public static function autoload(){
-        $path_ = GMEDIA_ABSPATH . '/admin/processor/class.processor.';
+        $path_ = GMEDIA_ABSPATH . 'admin/processor/class.processor.';
         $page  = isset($_GET['page'])? $_GET['page'] : '';
         switch($page){
             case 'GrandMedia':
+                /** @var $gmProcessorLibrary */
                 include_once($path_ . 'library.php');
+
+                return $gmProcessorLibrary;
             break;
             case 'GrandMedia_AddMedia':
+                /** @var $gmProcessorAddMedia */
                 include_once($path_ . 'addmedia.php');
+
+                return $gmProcessorAddMedia;
             break;
             case 'GrandMedia_Albums':
             case 'GrandMedia_Categories':
-            case 'GrandMedia_Tags':
+                /** @var $gmProcessorTerms */
                 include_once($path_ . 'terms.php');
+                /** @var $gmProcessorLibrary */
+                include_once($path_ . 'library.php');
+
+                return $gmProcessorTerms;
+            break;
+            case 'GrandMedia_Tags':
+                /** @var $gmProcessorTerms */
+                include_once($path_ . 'terms.php');
+
+                return $gmProcessorTerms;
             break;
             case 'GrandMedia_Galleries':
+                /** @var $gmProcessorGalleries */
                 include_once($path_ . 'galleries.php');
+
+                return $gmProcessorGalleries;
             break;
             case 'GrandMedia_Modules':
+                /** @var $gmProcessorModules */
                 include_once($path_ . 'modules.php');
+
+                return $gmProcessorModules;
             break;
             case 'GrandMedia_Settings':
+                /** @var $gmProcessorSettings */
                 include_once($path_ . 'settings.php');
+
+                return $gmProcessorSettings;
             break;
             case 'GrandMedia_WordpressLibrary':
+                /** @var $gmProcessorWPMedia */
                 include_once($path_ . 'wpmedia.php');
+
+                return $gmProcessorWPMedia;
             break;
             default:
-                global $gmProcessor;
-                $gmProcessor = new GmediaProcessor();
+                if(self::$me == null){
+                    self::$me = new GmediaProcessor();
+                }
+
+                return self::$me;
             break;
         }
     }
 
-
 }
 
-GmediaProcessor::autoload();
+global $gmProcessor;
+$gmProcessor = GmediaProcessor::autoload();

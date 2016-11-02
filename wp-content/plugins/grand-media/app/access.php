@@ -803,6 +803,32 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                     $alert[] = sprintf(__('%d tag(s) added to %d item(s)', 'grand-media'), count($terms), $count);
                 break;
 
+                case 'add_cover':
+                    if(!current_user_can('gmedia_edit_media')){
+                        $error[] = __('You are not allowed to edit media', 'grand-media');
+                        break;
+                    }
+                    $cover = (int) $data['add_cover'];
+                    $count = count($data['selected']);
+                    foreach($data['selected'] as $item){
+                        $gm_item = $gmDB->get_gmedia($item);
+                        if(!$gm_item || ($user_ID != $gm_item->author && !current_user_can('gmedia_edit_others_media'))){
+                            $count--;
+                            continue;
+                        }
+                        if('image' == substr($gm_item->mime_type, 0, 5)){
+                            $count--;
+                            continue;
+                        }
+                        if($cover){
+                            $gmDB->update_metadata('gmedia', $gm_item->ID, '_cover', $cover);
+                        } else {
+                            $gmDB->delete_metadata('gmedia', $gm_item->ID, '_cover');
+                        }
+                    }
+                    $alert[] = sprintf(__('%d item(s) updated', 'grand-media'), $count);
+                break;
+
                 case 'delete_tags':
                     if(!current_user_can('gmedia_edit_media')){
                         $error[] = __('You are not allowed to edit media', 'grand-media');

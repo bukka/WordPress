@@ -20,6 +20,8 @@ function gmedia_default_options(){
     $gm['site_description'] = '';
     $gm['mobile_app']       = 0;
 
+    $gm['modules_update']   = 0;
+
     $gm['gmedia_post_slug']              = 'gmedia';
     $gm['gmedia_exclude_from_search']    = '0';
     $gm['gmedia_has_archive']            = '1';
@@ -38,6 +40,7 @@ function gmedia_default_options(){
 
     $gm['uninstall_dropdata'] = 'none'; // can be 'all', 'none', 'db'
 
+    $gm['name2title_capitalize'] = '1';
     $gm['in_tag_orderby']        = 'ID';
     $gm['in_tag_order']          = 'DESC';
     $gm['in_category_orderby']   = 'ID';
@@ -47,7 +50,7 @@ function gmedia_default_options(){
     $gm['in_album_status']       = 'publish';
     $gm['default_gmedia_module'] = 'phantom';
 
-    $gm['isolation_mode'] = '0';
+    $gm['isolation_mode'] = '1';
     $gm['shortcode_raw']  = '0';
     $gm['debug_mode']     = WP_DEBUG? '1' : '';
 
@@ -83,13 +86,16 @@ function gmedia_default_options(){
     $gm['taxonomies']['gmedia_gallery'] = array(); // not linked with gmedia_term_relationships table
     $gm['taxonomies']['gmedia_module']  = array(); // not linked with gmedia_term_relationships table
 
-    $gm['gm_screen_options']['per_page_sort_gmedia'] = 60;
+    $gm['gm_screen_options']['per_page_gmedia']            = 30;
+    $gm['gm_screen_options']['orderby_gmedia']             = 'ID';
+    $gm['gm_screen_options']['sortorder_gmedia']           = 'DESC';
+    $gm['gm_screen_options']['display_mode_gmedia']        = 'grid';
+    $gm['gm_screen_options']['grid_cell_fit_gmedia']       = false;
+    $gm['gm_screen_options']['display_mode_gmedia_frame']  = 'grid';
+    $gm['gm_screen_options']['grid_cell_fit_gmedia_frame'] = false;
 
-    $gm['gm_screen_options']['per_page_gmedia']      = 30;
-    $gm['gm_screen_options']['orderby_gmedia']       = 'ID';
-    $gm['gm_screen_options']['sortorder_gmedia']     = 'DESC';
-    $gm['gm_screen_options']['display_mode_gmedia']  = 'list';
-    $gm['gm_screen_options']['grid_cell_fit_gmedia'] = false;
+    $gm['gm_screen_options']['per_page_gmedia_album_edit']    = 60;
+    $gm['gm_screen_options']['per_page_gmedia_category_edit'] = 60;
 
     $gm['gm_screen_options']['per_page_gmedia_album']  = 30;
     $gm['gm_screen_options']['orderby_gmedia_album']   = 'name';
@@ -116,7 +122,7 @@ function gmedia_default_options(){
     $gm['gm_screen_options']['uploader_chunk_size']       = 8; // in Mb
     $gm['gm_screen_options']['uploader_urlstream_upload'] = 'false';
 
-    $gm['gm_screen_options']['library_edit_quicktags'] = 'false';
+    $gm['gm_screen_options']['library_edit_quicktags'] = 'true';
 
     return $gm;
 

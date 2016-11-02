@@ -21,7 +21,17 @@ $_order   = $gmGallery->options['in_category_order'];
             </div>
             <div class="form-group">
                 <label><?php _e('Description', 'grand-media'); ?></label>
-                <textarea class="form-control input-sm" style="height:49px;" rows="2" name="term[description]"></textarea>
+                <?php
+                wp_editor('', "category_description", array('editor_class'  => 'form-control input-sm',
+                                                                                                   'editor_height' => 120,
+                                                                                                   'wpautop'       => false,
+                                                                                                   'media_buttons' => false,
+                                                                                                   'textarea_name' => 'term[description]',
+                                                                                                   'textarea_rows' => '4',
+                                                                                                   'tinymce'       => false,
+                                                                                                   'quicktags'     => array('buttons' => apply_filters('gmedia_editor_quicktags', 'strong,em,link,ul,li,close'))
+                ));
+                ?>
             </div>
         </div>
         <div class="col-xs-6">
@@ -34,6 +44,11 @@ $_order   = $gmGallery->options['in_category_order'];
                         <option value="gmuid"<?php selected($_orderby, 'gmuid'); ?>><?php _e('by filename', 'grand-media'); ?></option>
                         <option value="date"<?php selected($_orderby, 'date'); ?>><?php _e('by date', 'grand-media'); ?></option>
                         <option value="modified"<?php selected($_orderby, 'modified'); ?>><?php _e('by last modified date', 'grand-media'); ?></option>
+                        <option value="_created_timestamp" <?php selected($_orderby, '_created_timestamp'); ?>><?php _e('by created timestamp', 'grand-media'); ?></option>
+                        <option value="comment_count" <?php selected($_orderby, 'comment_count'); ?>><?php _e('by comment count', 'grand-media'); ?></option>
+                        <option value="views" <?php selected($_orderby, 'views'); ?>><?php _e('by views', 'grand-media'); ?></option>
+                        <option value="likes" <?php selected($_orderby, 'likes'); ?>><?php _e('by likes', 'grand-media'); ?></option>
+                        <option value="_size" <?php selected($_orderby, '_size'); ?>><?php _e('by file size', 'grand-media'); ?></option>
                         <option value="rand"<?php selected($_orderby, 'rand'); ?>><?php _e('Random', 'grand-media'); ?></option>
                     </select>
                 </div>

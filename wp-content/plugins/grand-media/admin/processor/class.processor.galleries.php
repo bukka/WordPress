@@ -5,6 +5,7 @@
  */
 class GmediaProcessor_Galleries extends GmediaProcessor{
 
+    private static $me = null;
     public $taxonomy;
     public static $cookie_key = false;
     public $selected_items = array();
@@ -17,7 +18,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
         global $user_ID;
 
         $this->taxonomy       = 'gmedia_gallery';
-        self::$cookie_key     = "gmuser_{$user_ID}_{$this->taxonomy}";
+        self::$cookie_key     = 'gmedia_terms:gallery';
         $this->selected_items = parent::selected_items(self::$cookie_key);
 
         parent::__construct();
@@ -92,7 +93,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                 update_option('gmediaOptions', $gmGallery->options);
             }
 
-            $edit_gallery = (int)$gmCore->_get('edit_item');
+            $edit_gallery = (int)$gmCore->_get('edit_term');
             do{
                 $term = $gmCore->_post('term');
                 if(((int)$term['global'] != $user_ID) && !$gmCore->caps['gmedia_edit_others_media']){
@@ -159,14 +160,14 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                 if($edit_gallery){
                     $this->msg[] = sprintf(__('Gallery #%d successfuly saved', 'grand-media'), $term_id);
                 } else{
-                    $location = add_query_arg(array('page' => $this->page, 'edit_item' => $term_id, 'message' => 'save'), admin_url('admin.php'));
+                    $location = add_query_arg(array('edit_term' => $term_id, 'message' => 'save'), $this->url);
                     set_transient('gmedia_new_gallery_id', $term_id, 60);
                     wp_redirect($location);
                     exit;
                 }
             } while(0);
         }
-        if(('save' == $gmCore->_get('message')) && ($term_id = $gmCore->_get('edit_item'))){
+        if(('save' == $gmCore->_get('message')) && ($term_id = $gmCore->_get('edit_term'))){
             $gmedia_new_gallery_id = get_transient('gmedia_new_gallery_id');
             if(false !== $gmedia_new_gallery_id){
                 delete_transient('gmedia_new_gallery_id');
@@ -182,7 +183,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
 
         if(isset($_POST['gmedia_gallery_reset'])){
             check_admin_referer('GmediaGallery');
-            $edit_gallery = (int)$gmCore->_get('edit_item');
+            $edit_gallery = (int)$gmCore->_get('edit_term');
             do{
                 if(!$gmDB->term_exists($edit_gallery)){
                     $this->error[] = __('A term with the id provided do not exists', 'grand-media');
@@ -287,14 +288,12 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
             } while(0);
         }
 
-        if(($delete = $gmCore->_get('delete'))){
+        $do_gmedia_terms = $gmCore->_get('do_gmedia_terms');
+        if('delete' == $do_gmedia_terms){
             check_admin_referer('gmedia_delete');
-            $taxonomy = 'gmedia_gallery';
-            if('selected' == $delete){
-                $selected_items = $this->selected_items;
-            } else{
-                $selected_items = wp_parse_id_list($delete);
-            }
+            $taxonomy       = 'gmedia_gallery';
+            $ids            = $gmCore->_get('ids', 'selected');
+            $selected_items = ('selected' == $ids)? $this->selected_items : wp_parse_id_list($ids);
             if(!$gmCore->caps['gmedia_delete_others_media']){
                 $_selected_items = $gmDB->get_terms($taxonomy, array('fields' => 'ids', 'global' => $user_ID, 'include' => $selected_items));
                 if(count($_selected_items) < count($selected_items)){
@@ -316,15 +315,45 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                 if($count){
                     $this->msg[] = sprintf(__('%d item(s) deleted successfuly', 'grand-media'), $count);
                 }
-                setcookie("gmuser_{$user_ID}_{$taxonomy}", '', time() - 3600);
-                unset($_COOKIE["gmuser_{$user_ID}_{$taxonomy}"]);
+                setcookie(self::$cookie_key, '', time() - 3600);
+                unset($_COOKIE[ self::$cookie_key ]);
                 $this->selected_items = array();
             }
+            if(!empty($this->msg)){
+                set_transient('gmedia_action_msg', $this->msg, 30);
+            }
+            if(!empty($this->error)){
+                set_transient('gmedia_action_error', $this->error, 30);
+            }
         }
-
+        if($do_gmedia_terms){
+            $location = remove_query_arg(array('do_gmedia_terms', 'ids', '_wpnonce'));
+            $location = add_query_arg('did_gmedia_terms', $do_gmedia_terms, $location);
+            wp_redirect($location);
+            exit;
+        }
+        if($gmCore->_get('did_gmedia_terms')){
+            $msg = get_transient('gmedia_action_msg');
+            if($msg){
+                delete_transient('gmedia_action_msg');
+                $this->msg = $msg;
+            }
+            $error = get_transient('gmedia_action_error');
+            if($error){
+                delete_transient('gmedia_action_error');
+                $this->error = $error;
+            }
+        }
     }
 
+    public static function getMe(){
+        if(self::$me == null){
+            self::$me = new GmediaProcessor_Galleries();
+        }
+
+        return self::$me;
+    }
 }
 
-global $gmProcessor;
-$gmProcessor = new GmediaProcessor_Galleries();
+global $gmProcessorGalleries;
+$gmProcessorGalleries = GmediaProcessor_Galleries::getMe();

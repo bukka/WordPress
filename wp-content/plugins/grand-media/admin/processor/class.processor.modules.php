@@ -4,6 +4,8 @@
  * GmediaProcessor_Modules
  */
 class GmediaProcessor_Modules extends GmediaProcessor{
+    private static $me = null;
+    public $modules = array();
 
     protected function processor(){
         global $gmDB, $gmCore, $gmGallery, $user_ID;
@@ -101,7 +103,7 @@ class GmediaProcessor_Modules extends GmediaProcessor{
                 if($edit_preset){
                     $this->msg[] = sprintf(__('Preset #%d successfuly saved', 'grand-media'), $term_id);
                 } else{
-                    $location = add_query_arg(array('page' => $this->page, 'preset' => $term_id, 'message' => 'save'), admin_url('admin.php'));
+                    $location = add_query_arg(array('preset' => $term_id, 'message' => 'save'), $this->url);
                     set_transient('gmedia_new_preset_id', $term_id, 60);
                     wp_redirect($location);
                     exit;
@@ -191,9 +193,20 @@ class GmediaProcessor_Modules extends GmediaProcessor{
             }
         }
 
+        $this->modules = get_gmedia_modules();
+        wp_clear_scheduled_hook('gmedia_modules_update');
+        wp_schedule_event(time(), 'daily', 'gmedia_modules_update');
+        $gmCore->modules_update($this->modules);
     }
 
+    public static function getMe() {
+        if ( self::$me == null ) {
+            self::$me = new GmediaProcessor_Modules();
+        }
+
+        return self::$me;
+    }
 }
 
-global $gmProcessor;
-$gmProcessor = new GmediaProcessor_Modules();
+global $gmProcessorModules;
+$gmProcessorModules = GmediaProcessor_Modules::getMe();

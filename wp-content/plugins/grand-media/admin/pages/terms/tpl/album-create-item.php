@@ -19,38 +19,43 @@ $gmedia_url = $gmProcessor->url;
             </div>
             <div class="form-group">
                 <label><?php _e('Description', 'grand-media'); ?></label>
-                <textarea class="form-control input-sm" style="height:98px;" rows="2" name="term[description]"></textarea>
+                <?php
+                wp_editor('', "album_description", array('editor_class'  => 'form-control input-sm',
+                                                                                                     'editor_height' => 120,
+                                                                                                     'wpautop'       => false,
+                                                                                                     'media_buttons' => false,
+                                                                                                     'textarea_name' => 'term[description]',
+                                                                                                     'textarea_rows' => '4',
+                                                                                                     'tinymce'       => false,
+                                                                                                     'quicktags'     => array('buttons' => apply_filters('gmedia_editor_quicktags', 'strong,em,link,ul,li,close'))
+                ));
+                ?>
             </div>
         </div>
         <div class="col-xs-6">
-            <div class="form-group row">
-                <div class="col-xs-6">
-                    <label><?php _e('Order gmedia', 'grand-media'); ?></label>
-                    <select name="term[meta][_orderby]" class="form-control input-sm">
-                        <option value="ID" <?php selected($gmGallery->options['in_album_orderby'], 'ID'); ?>><?php _e('by ID', 'grand-media'); ?></option>
-                        <option value="title" <?php selected($gmGallery->options['in_album_orderby'], 'title'); ?>><?php _e('by title', 'grand-media'); ?></option>
-                        <option value="gmuid" <?php selected($gmGallery->options['in_album_orderby'], 'gmuid'); ?>><?php _e('by filename', 'grand-media'); ?></option>
-                        <option value="date" <?php selected($gmGallery->options['in_album_orderby'], 'date'); ?>><?php _e('by date', 'grand-media'); ?></option>
-                        <option value="modified" <?php selected($gmGallery->options['in_album_orderby'], 'modified'); ?>><?php _e('by last modified date', 'grand-media'); ?></option>
-                        <option value="rand" <?php selected($gmGallery->options['in_album_orderby'], 'rand'); ?>><?php _e('Random', 'grand-media'); ?></option>
-                    </select>
-                </div>
-                <div class="col-xs-6">
-                    <label><?php _e('Sort order', 'grand-media'); ?></label>
-                    <select name="term[meta][_order]" class="form-control input-sm">
-                        <option value="DESC" <?php selected($gmGallery->options['in_album_order'], 'DESC'); ?>><?php _e('DESC', 'grand-media'); ?></option>
-                        <option value="ASC" <?php selected($gmGallery->options['in_album_order'], 'ASC'); ?>><?php _e('ASC', 'grand-media'); ?></option>
-                    </select>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label><?php _e('Status', 'grand-media'); ?></label>
-                        <select name="term[status]" class="form-control input-sm">
-                            <option value="publish" <?php selected($gmGallery->options['in_album_status'], 'publish'); ?>><?php _e('Public', 'grand-media'); ?></option>
-                            <option value="private" <?php selected($gmGallery->options['in_album_status'], 'private'); ?>><?php _e('Private', 'grand-media'); ?></option>
-                            <option value="draft" <?php selected($gmGallery->options['in_album_status'], 'draft'); ?>><?php _e('Draft', 'grand-media'); ?></option>
+                        <label><?php _e('Order gmedia', 'grand-media'); ?></label>
+                        <select name="term[meta][_orderby]" class="form-control input-sm">
+                            <option value="ID" <?php selected($gmGallery->options['in_album_orderby'], 'ID'); ?>><?php _e('by ID', 'grand-media'); ?></option>
+                            <option value="title" <?php selected($gmGallery->options['in_album_orderby'], 'title'); ?>><?php _e('by title', 'grand-media'); ?></option>
+                            <option value="gmuid" <?php selected($gmGallery->options['in_album_orderby'], 'gmuid'); ?>><?php _e('by filename', 'grand-media'); ?></option>
+                            <option value="date" <?php selected($gmGallery->options['in_album_orderby'], 'date'); ?>><?php _e('by date', 'grand-media'); ?></option>
+                            <option value="modified" <?php selected($gmGallery->options['in_album_orderby'], 'modified'); ?>><?php _e('by last modified date', 'grand-media'); ?></option>
+                            <option value="_created_timestamp" <?php selected($gmGallery->options['in_album_orderby'], '_created_timestamp'); ?>><?php _e('by created timestamp', 'grand-media'); ?></option>
+                            <option value="comment_count" <?php selected($gmGallery->options['in_album_orderby'], 'comment_count'); ?>><?php _e('by comment count', 'grand-media'); ?></option>
+                            <option value="views" <?php selected($gmGallery->options['in_album_orderby'], 'views'); ?>><?php _e('by views', 'grand-media'); ?></option>
+                            <option value="likes" <?php selected($gmGallery->options['in_album_orderby'], 'likes'); ?>><?php _e('by likes', 'grand-media'); ?></option>
+                            <option value="_size" <?php selected($gmGallery->options['in_album_orderby'], '_size'); ?>><?php _e('by file size', 'grand-media'); ?></option>
+                            <option value="rand" <?php selected($gmGallery->options['in_album_orderby'], 'rand'); ?>><?php _e('Random', 'grand-media'); ?></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><?php _e('Sort order', 'grand-media'); ?></label>
+                        <select name="term[meta][_order]" class="form-control input-sm">
+                            <option value="DESC" <?php selected($gmGallery->options['in_album_order'], 'DESC'); ?>><?php _e('DESC', 'grand-media'); ?></option>
+                            <option value="ASC" <?php selected($gmGallery->options['in_album_order'], 'ASC'); ?>><?php _e('ASC', 'grand-media'); ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -87,6 +92,20 @@ $gmedia_url = $gmProcessor->url;
                             ?>
                         </select>
                     </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label><?php _e('Author', 'grand-media'); ?></label>
+                        <?php gmedia_term_choose_author_field(); ?>
+                    </div>
+                    <div class="form-group">
+                        <label><?php _e('Status', 'grand-media'); ?></label>
+                        <select name="term[status]" class="form-control input-sm">
+                            <option value="publish" <?php selected($gmGallery->options['in_album_status'], 'publish'); ?>><?php _e('Public', 'grand-media'); ?></option>
+                            <option value="private" <?php selected($gmGallery->options['in_album_status'], 'private'); ?>><?php _e('Private', 'grand-media'); ?></option>
+                            <option value="draft" <?php selected($gmGallery->options['in_album_status'], 'draft'); ?>><?php _e('Draft', 'grand-media'); ?></option>
+                        </select>
+                    </div>
                     <?php /* ?>
                     <div class="form-group">
                         <label><?php _e('Comment Status', 'grand-media'); ?></label>
@@ -96,12 +115,6 @@ $gmedia_url = $gmProcessor->url;
                         </select>
                     </div>
                     <?php */ ?>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <label><?php _e('Author', 'grand-media'); ?></label>
-                        <?php gmedia_term_choose_author_field(); ?>
-                    </div>
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <?php
