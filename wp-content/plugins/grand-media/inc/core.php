@@ -2955,7 +2955,8 @@ class GmediaCore{
      * @param null $modules
      */
     function modules_update($modules = null){
-        if ( wp_installing() ) {
+        $wp_installing = (bool)(defined( 'WP_INSTALLING' ) && WP_INSTALLING);
+        if ( $wp_installing ) {
             return;
         }
 

@@ -1,7 +1,7 @@
 === Gallery - Gmedia Photo Gallery. Music Player, Video Gallery, Media Library ===
 Contributors: pasyuk
 Donate link: http://codeasily.com/donate/
-Tags: gallery, comments, image, image gallery, images, music, lightbox, photo, photo gallery, portfolio, responsive, thumbnail, lightbox, media, audio, easy, free, google maps, iphone, map, maps, photos, picture, pictures, slider, slideshow, categories, tags, upload, video
+Tags: gallery, comments, image, image gallery, images, music, lightbox, photo, photo gallery, portfolio, responsive, thumbnail, lightbox, media, audio, easy, free, google maps, iphone, map, maps, photos, picture, pictures, slider, slideshow, categories, tags, video, widget
 Requires at least: 3.6
 Tested up to: 4.6
 Stable tag: trunk
@@ -51,6 +51,7 @@ Help me make it **best gallery** plugin: test it and [write suggestions](http://
 #### Gallery Features
 
 *   New in 1.8.*: **Music player & WaveForm for music. Create and save music waveforms & display them nicely with WaveSurfer music module**
+*   New in 1.8.*: **Widget for Gallery and widget for Album**
 *   New in 1.8.*: **Comments for Gmedia Items** (Note: not all gallery modules support comments.)
 *   New in 1.8.*: **Integration with WordPress Search. Gmedia items looks like a regular post with comments. Also you can search for albums and galleries**
 *   **Duplicate item in Gmedia Library**
@@ -148,6 +149,9 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.8.94 =
+* Fixed: Compatibility with Wordpress less than 4.4
 
 = Gmedia Gallery v1.8.93 =
 * Added: Update Modules badge indicator
