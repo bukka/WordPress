@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.8.94
+ * Version: 1.8.95
  * Author: Rattus
  * Author URI: http://codeasily.com/
  * Requires at least: 3.6
@@ -42,7 +42,7 @@ if(!class_exists('Gmedia')){
      */
     class Gmedia{
 
-        var $version = '1.8.94';
+        var $version = '1.8.95';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.6';
         var $options = '';
@@ -337,8 +337,8 @@ if(!class_exists('Gmedia')){
                                                                                'plugin_dirurl' => $gmCore->gmedia_url
             ));
 
-            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.8.92', 'all');
-            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.8.92');
+            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.8.95', 'all');
+            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.8.95');
             wp_localize_script('grand-media', 'grandMedia', array('error3'   => __('Disable your Popup Blocker and try again.', 'grand-media'),
                                                                   'download' => __('downloading...', 'grand-media'),
                                                                   'wait'     => __('Working. Wait please.', 'grand-media'),
@@ -355,7 +355,7 @@ if(!class_exists('Gmedia')){
         function register_scripts_frontend(){
             global $gmCore, $wp_scripts;
 
-            wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.8.24');
+            wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.8.95');
             wp_localize_script('gmedia-global-frontend', 'GmediaGallery', array('ajaxurl'       => admin_url('admin-ajax.php'),
                                                                                 'nonce'         => wp_create_nonce('GmediaGallery'),
                                                                                 'upload_dirurl' => $gmCore->upload['url'],
@@ -444,13 +444,13 @@ if(!class_exists('Gmedia')){
                         $this->import_styles[] = $wp_styles->registered[ $handle ]->src;
                     }
                 }
-                $files = glob($module['path'] . '/css/*.css', GLOB_NOSORT);
-                if(!empty($files)){
-                    $files = array_map('basename', $files);
-                    foreach($files as $file){
-                        $this->import_styles[] = "{$module['url']}/css/{$file}";
-                    }
-                }
+//                $files = glob($module['path'] . '/css/*.css', GLOB_NOSORT);
+//                if(!empty($files)){
+//                    $files = array_map('basename', $files);
+//                    foreach($files as $file){
+//                        $this->import_styles[] = "{$module['url']}/css/{$file}";
+//                    }
+//                }
                 $files = glob($module['path'] . '/js/*.js', GLOB_NOSORT);
                 if(!empty($files)){
                     $files = array_map('basename', $files);
@@ -466,16 +466,36 @@ if(!class_exists('Gmedia')){
             }
         }
 
+        /** Return module styles like <style>@import(...)</style>
+         * @param $module
+         *
+         * @return string
+         */
+        function load_module_styles($module){
+            $module_styles = '';
+            $files = glob($module['path'] . '/css/*.css', GLOB_NOSORT);
+            if(!empty($files)){
+                $files = array_map('basename', $files);
+                $module_styles .= '<style class="gmedia_module_style_import" type="text/css">';
+                foreach($files as $file){
+                    $src = "{$module['url']}/css/{$file}";
+                    $module_styles .= "@import url('{$src}') all;";
+                }
+                $module_styles .= '</style>';
+            }
+
+            return $module_styles;
+        }
+
         function print_import_styles(){
             if(!empty($this->import_styles)){
-                echo "\n<style type='text/css'>";
+                echo "\n<style class='gmedia_assets_style_import' type='text/css'>";
                 foreach($this->import_styles as $src){
                     if('http' !== substr($src, 0, 4)){
                         $src = site_url($src);
                     }
                     echo "\n@import url('{$src}') all;";
                 }
-                //echo "\n" . implode("\n", $this->inline_styles);
                 echo "\n</style>\n";
                 $this->import_styles = array();
             }

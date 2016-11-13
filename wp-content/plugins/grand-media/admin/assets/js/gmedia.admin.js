@@ -1087,7 +1087,7 @@ var GmediaFunction = {
 
             if(postlink) {
                 jQuery('.sharelink_post', modal_div).show();
-                jQuery('.sharelink_post input', modal_div).val(postlink);
+                jQuery('.sharelink_post input[type="text"]', modal_div).val(postlink);
                 jQuery('.sharelink_post a', modal_div).attr('href', postlink);
             } else {
                 jQuery('.sharelink_post', modal_div).hide();
@@ -1096,7 +1096,7 @@ var GmediaFunction = {
             }
             if(cloudlink) {
                 jQuery('.sharelink_page', modal_div).show();
-                jQuery('.sharelink_page input', modal_div).val(cloudlink);
+                jQuery('.sharelink_page input[type="text"]', modal_div).val(cloudlink);
                 jQuery('.sharelink_page a', modal_div).attr('href', cloudlink);
                 if(cloudlink_checked) {
                     jQuery('.sharelink_page input[type="radio"]', modal_div).prop('checked', true);

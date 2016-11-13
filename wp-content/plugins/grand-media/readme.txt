@@ -50,10 +50,12 @@ Help me make it **best gallery** plugin: test it and [write suggestions](http://
 
 #### Gallery Features
 
-*   New in 1.8.*: **Music player & WaveForm for music. Create and save music waveforms & display them nicely with WaveSurfer music module**
-*   New in 1.8.*: **Widget for Gallery and widget for Album**
+*   New in 1.8.*: **Option to automatically create gallery in Post with related images (images with the same tags as in Post)**
+*   New in 1.8.*: **Show Related Media for WP tags and categories archive pages**
+*   New in 1.8.*: **Widget for Album and Gallery widget**
 *   New in 1.8.*: **Comments for Gmedia Items** (Note: not all gallery modules support comments.)
 *   New in 1.8.*: **Integration with WordPress Search. Gmedia items looks like a regular post with comments. Also you can search for albums and galleries**
+*   **Music player & WaveForm for music. Create and save music waveforms & display them nicely with WaveSurfer music module**
 *   **Duplicate item in Gmedia Library**
 *   **iOS application "Gmedia" - [iOS manage application](https://itunes.apple.com/ua/app/gmedia/id947515626?mt=8) to manage your Library with your iPhone**
 *   **Full Page Gallery Template - "GmediaCloud" pages with permalink support**
@@ -84,7 +86,7 @@ Help me make it **best gallery** plugin: test it and [write suggestions](http://
 = Gallery TODO List =
 
 *   More Batch operations with selected Gmedia items (work in progress..)
-*   Related Post images on Edit Post. Option to automatically create gallery in Post with related images (work in progress..)
+*   Related Post images on Edit Post (work in progress..)
 *   Share albums to socials from admin panel (in queue)
 *   More modules for creating photo gallery, audio playlist, video playlist
 *   Easily add to Post audio and video files with tags related to post tags
@@ -149,6 +151,15 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.8.95 =
+* Added: Setting "Delete original images"
+* Added: Setting to show Related Media for WP tags and categories archive pages
+* Added: Setting to show Related Media for WP Posts based on tag names
+* Fixed: Gallery Share button in the admin linked to wrong post
+* Improved: Load module styles before the module content
+* Improved: Clear cache after module update
+* Improved: Do not show Reset Filter for author if there is only one author who can not view others media
 
 = Gmedia Gallery v1.8.94 =
 * Fixed: Compatibility with Wordpress less than 4.4

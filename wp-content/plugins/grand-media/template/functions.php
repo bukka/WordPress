@@ -195,7 +195,7 @@ add_filter('body_class', 'gmedia_body_class');
 function get_gmedia_header(){
     global $gmedia_module, $gmCore;
     $module = $gmCore->get_module_path($gmedia_module);
-    if(file_exists($module['path'] . '/template/head.php')){
+    if(is_file($module['path'] . '/template/head.php')){
         /** @noinspection PhpIncludeInspection */
         include_once($module['path'] . '/template/head.php');
     } else{
@@ -207,7 +207,7 @@ function get_gmedia_header(){
 function get_gmedia_footer(){
     global $gmedia_module, $gmCore;
     $module = $gmCore->get_module_path($gmedia_module);
-    if(file_exists($module['path'] . '/template/foot.php')){
+    if(is_file($module['path'] . '/template/foot.php')){
         /** @noinspection PhpIncludeInspection */
         include_once($module['path'] . '/template/foot.php');
     } else{

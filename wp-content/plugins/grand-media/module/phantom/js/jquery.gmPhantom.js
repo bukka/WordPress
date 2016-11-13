@@ -1,6 +1,6 @@
 /*
  * Title                   : gmPhantom
- * Version                 : 3.8
+ * Version                 : 3.10
  * Copyright               : 2013-2015 CodEasily.com
  * Website                 : http://www.codeasily.com
  */
@@ -88,7 +88,6 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
 
                 methods = {
                     init: function(arguments) {// Init Plugin.
-                        console.log(Container);
                         opt = $.extend(true, {}, opt_str, opt_int, opt_bool, opt_hex, arguments[0]);
                         $.each(opt, function(key, val) {
                             if(key in opt_bool) {
@@ -790,12 +789,13 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                             var image = $(this);
                             var img_holder = image.closest('.gmPhantom_ThumbContainer');
                             var load_img = new Image();
-                            $(load_img).on('load', function() {
+                            load_img.onload = function() {
                                 img_holder.removeClass('gmPhantom_ThumbLoader');
                                 image.animate({opacity: opt.thumbAlpha / 100}, 600, function() {
                                     $(this).css({opacity: ''});
                                 });
-                            }).attr('src', image.attr('src'));
+                            }
+                            load_img.src = image.attr('src');
                         });
 
                         if(opt.maxheight !== 0) {

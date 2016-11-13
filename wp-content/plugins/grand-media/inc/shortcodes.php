@@ -138,7 +138,7 @@ function gmedia_shortcode($atts, $content = ''){
     }
 
     $module = $gmCore->get_module_path($module);
-    if(!$module || !file_exists($module['path'] . '/index.php') || !file_exists($module['path'] . '/settings.php')){
+    if(!$module || !is_file($module['path'] . '/index.php') || !is_file($module['path'] . '/settings.php')){
         return '<div class="gmedia_gallery gmediaShortcodeError" data-gmid="' . $id . '" data-error="' . $_module . ': folder missed or module broken">' . $content . '</div>';
     }
 
@@ -168,6 +168,8 @@ function gmedia_shortcode($atts, $content = ''){
     }
 
     $query = array_merge(apply_filters('gmedia_shortcode_query', $query, $id), $protected_query_args);
+
+    $moduleCSS = isset($gmGallery->do_module[ $_module ])? '' : $gmGallery->load_module_styles($module);
 
     $gmGallery->do_module[ $_module ] = $module;
     $gmGallery->shortcode[ $id ]      = compact('id', 'query', 'module', 'settings', 'term');
@@ -289,7 +291,8 @@ function gmedia_shortcode($atts, $content = ''){
 
     do_action('pre_gmedia_shortcode');
 
-    $out = '<div class="' . $sc_classes . '" id="' . $sc_id . '" data-gmid="' . esc_attr($id) . '" data-module="' . $_module . '"' . $sc_styles . '>';
+    $out = $moduleCSS;
+    $out .= '<div class="' . $sc_classes . '" id="' . $sc_id . '" data-gmid="' . esc_attr($id) . '" data-module="' . $_module . '"' . $sc_styles . '>';
     $out .= $content;
 
     ob_start();
