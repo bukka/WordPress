@@ -113,18 +113,25 @@ div.gmPhantom_Container img {
   font-size:40px;
   line-height:50px;
 }
+.gmPhantom_Thumb::before {
+  content:'';
+  height:0;
+  width:0;
+}
 .gmPhantom_Thumb {
   display:block !important;
   margin:0;
   overflow:hidden;
   padding:0;
-  position:static !important;
+  position:relative !important;
   width:100%; height:100%;
   -webkit-transition:0.2s; transition:0.2s;
   -webkit-transition-property:all !important;
   transition-property:all !important;
   opacity:0.90;
   filter:alpha(opacity=90);
+  backface-visibility:hidden;
+  border:none !important;
 }
 .gmPhantom_Thumb:hover, .gmPhantom_Thumb:active {
   display:block;
@@ -132,7 +139,7 @@ div.gmPhantom_Container img {
   margin:0;
   overflow:hidden;
   padding:0;
-  position:static;
+  position:relative;
   width:100%; height:100%;
 }
 .gmPhantom_ThumbContainer:hover .gmPhantom_Thumb {
@@ -154,7 +161,7 @@ div.gmPhantom_Container img {
   z-index:0 !important;
 }
 .gmPhantom_Thumb img {
-  position:relative;
+  position:absolute;
   left:50%; top:50%; transform:translate(-50%, -50%) translateZ(0);
   display:block;
   border:0;
@@ -517,6 +524,7 @@ img.mfp-img--comments-div {
 .mfp-button > span *,
 .mfp-button > a * { display:inline-block; }
 .mfp-gmedia-open .mfp-content svg {
+  position:static;
   display:block;
   width:1em;
   height:1em;

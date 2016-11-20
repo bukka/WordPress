@@ -152,6 +152,22 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
+= Gmedia Gallery v1.8.98 =
+* Fixed: Compatibility with "All in One SEO Pack" plugin
+* Fixed: Load registered styles only once if there are few different gallery modules on the page
+* Fixed: Module styles doesn't load when Raw output enabled in settings
+* Fixed: Notice in Media Upload popup
+
+= Gmedia Gallery v1.8.97 =
+* Changed: Shortcode css output
+* Changed: Shortcode js output to avoid cache for new versions
+
+= Gmedia Gallery v1.8.96 =
+* Added: Message "Upload complete" on Add Media page
+* Fixed: Library grid on Safari
+* Fixed: Minima module
+* Improved: Shortcode output
+
 = Gmedia Gallery v1.8.95 =
 * Added: Setting "Delete original images"
 * Added: Setting to show Related Media for WP tags and categories archive pages

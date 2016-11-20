@@ -153,7 +153,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
                     $gmDB->update_term_sortorder($term_id);
                 }
 
-                $this->msg[] = sprintf(__('Album `%s` successfuly saved', 'grand-media'), $term['name']);
+                $this->msg[] = sprintf(__('Album `%s` successfully saved', 'grand-media'), $term['name']);
 
             } while(0);
         } elseif(isset($_POST['gmedia_category_save'])){
@@ -202,7 +202,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
                     break;
                 }
 
-                $this->msg[] = sprintf(__('Category `%s` successfuly saved', 'grand-media'), $term['name']);
+                $this->msg[] = sprintf(__('Category `%s` successfully saved', 'grand-media'), $term['name']);
 
             } while(0);
         } elseif(isset($_POST['gmedia_tag_add'])){
@@ -223,7 +223,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
                         if(is_wp_error($term_id)){
                             $this->error[] = $term_id->get_error_message();
                         } else{
-                            $this->msg['tag_add'] = sprintf(__('%d of %d tags successfuly added', 'grand-media'), ++ $terms_added, $terms_qty);
+                            $this->msg['tag_add'] = sprintf(__('%d of %d tags successfully added', 'grand-media'), ++ $terms_added, $terms_qty);
                         }
                     } else{
                         $this->error['tag_add'] = __('Some of provided tags are already exists', 'grand-media');
@@ -261,7 +261,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
                         }
                     }
                     if($count){
-                        $this->msg[] = sprintf(__('%d item(s) deleted successfuly', 'grand-media'), $count);
+                        $this->msg[] = sprintf(__('%d item(s) deleted successfully', 'grand-media'), $count);
                     }
                     setcookie(self::$cookie_key, '', time() - 3600);
                     unset($_COOKIE[ self::$cookie_key ]);

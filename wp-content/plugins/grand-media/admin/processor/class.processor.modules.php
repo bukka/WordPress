@@ -101,7 +101,7 @@ class GmediaProcessor_Modules extends GmediaProcessor{
                 }
 
                 if($edit_preset){
-                    $this->msg[] = sprintf(__('Preset #%d successfuly saved', 'grand-media'), $term_id);
+                    $this->msg[] = sprintf(__('Preset #%d successfully saved', 'grand-media'), $term_id);
                 } else{
                     $location = add_query_arg(array('preset' => $term_id, 'message' => 'save'), $this->url);
                     set_transient('gmedia_new_preset_id', $term_id, 60);
@@ -114,7 +114,7 @@ class GmediaProcessor_Modules extends GmediaProcessor{
             $gmedia_new_preset_id = get_transient('gmedia_new_preset_id');
             if(false !== $gmedia_new_preset_id){
                 delete_transient('gmedia_new_preset_id');
-                $this->msg[] = sprintf(__('Preset #%d successfuly saved', 'grand-media'), $term_id);
+                $this->msg[] = sprintf(__('Preset #%d successfully saved', 'grand-media'), $term_id);
             }
         }
 

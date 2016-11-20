@@ -516,7 +516,7 @@ function gmedia_add_media_terms(){
                                     $termItems = $gmDB->get_gmedias($args);
                                 }
                                 if('gmedia_tag' != $taxonomy){
-                                    $_module_preset = isset($term_meta['_module_preset'][0])? $term_meta['_module_preset'][0] : $gmGallery->options['default_gmedia_module'];
+                                    $_module_preset = isset($term_meta['_module_preset'])? $term_meta['_module_preset'] : $gmGallery->options['default_gmedia_module'];
                                 } else{
                                     $_module_preset = $gmGallery->options['default_gmedia_module'];
                                 }

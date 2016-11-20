@@ -121,7 +121,7 @@
 .gmpm_big_button_wrap .gmpm_comments_button .gmpm_count_icon { display: block; text-align: center; line-height: 210%; font-size: 160%; color:#ffffff; }
 .gmpm_big_button_wrap .gmpm_comments_button .gmpm_comments_count { font-size: 70%; font-weight: 300; vertical-align: bottom; }
 .gmpm_big_button_wrap .gmpm_comments_button .gmpm_comments_icon { display:inline-block; }
-.gmpm_big_button_wrap svg { display:block; width:1em; height:1em; fill:currentColor; }
+.gmpm_big_button_wrap svg { position:static; display:block; width:1em; height:1em; fill:currentColor; }
 .gmpm_big_button_wrap .gmpm_button:hover { background-color:#71767a; }
 .gmpm_big_button_wrap .gmpm_button.gmpm_share { display:block; width:35px; height:24px; text-indent:-999px; overflow:hidden; background-image:url('../img/share@2x.png'); background-position:50% 50%; background-size:18px 18px; -webkit-background-size:18px; }
 .gmpm_big_button_wrap.gmpm_one_button .gmpm_button.gmpm_share { height:50px; }

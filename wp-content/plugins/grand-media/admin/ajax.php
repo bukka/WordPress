@@ -1008,7 +1008,7 @@ function gmedia_tag_edit(){
                 if(is_wp_error($term_id)){
                     $out['error'] = $gmCore->alert('danger', $term_id->get_error_message());
                 } else{
-                    $out['msg'] = $gmCore->alert('info', sprintf(__("Tag #%d successfuly updated", 'grand-media'), $term_id));
+                    $out['msg'] = $gmCore->alert('info', sprintf(__("Tag #%d successfully updated", 'grand-media'), $term_id));
                 }
             } else{
                 $out['error'] = $gmCore->alert('danger', __("A term with the name provided already exists", 'grand-media'));
@@ -1118,7 +1118,7 @@ function gmedia_module_install(){
             echo $gmCore->alert('danger', $result->get_error_message());
             die();
         } else{
-            echo $gmCore->alert('success', sprintf(__("The `%s` module successfuly installed", 'flag'), $module));
+            echo $gmCore->alert('success', sprintf(__("The `%s` module successfully installed", 'flag'), $module));
             // Try to clear cache after module update
             @$gmCore->clear_cache();
         }

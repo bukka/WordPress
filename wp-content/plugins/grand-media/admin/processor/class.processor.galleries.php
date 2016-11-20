@@ -158,7 +158,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                     $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
                 }
                 if($edit_gallery){
-                    $this->msg[] = sprintf(__('Gallery #%d successfuly saved', 'grand-media'), $term_id);
+                    $this->msg[] = sprintf(__('Gallery #%d successfully saved', 'grand-media'), $term_id);
                 } else{
                     $location = add_query_arg(array('edit_term' => $term_id, 'message' => 'save'), $this->url);
                     set_transient('gmedia_new_gallery_id', $term_id, 60);
@@ -171,7 +171,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
             $gmedia_new_gallery_id = get_transient('gmedia_new_gallery_id');
             if(false !== $gmedia_new_gallery_id){
                 delete_transient('gmedia_new_gallery_id');
-                $this->msg[] = sprintf(__('Gallery #%d successfuly saved', 'grand-media'), $term_id);
+                $this->msg[] = sprintf(__('Gallery #%d successfully saved', 'grand-media'), $term_id);
             }
         }
 
@@ -282,7 +282,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                     $this->error[] = $term_id->get_error_message();
                     break;
                 } else{
-                    $this->msg[] = sprintf(__('Preset `%s` successfuly saved', 'grand-media'), $preset_name);
+                    $this->msg[] = sprintf(__('Preset `%s` successfully saved', 'grand-media'), $preset_name);
                 }
 
             } while(0);
@@ -313,7 +313,7 @@ class GmediaProcessor_Galleries extends GmediaProcessor{
                     }
                 }
                 if($count){
-                    $this->msg[] = sprintf(__('%d item(s) deleted successfuly', 'grand-media'), $count);
+                    $this->msg[] = sprintf(__('%d item(s) deleted successfully', 'grand-media'), $count);
                 }
                 setcookie(self::$cookie_key, '', time() - 3600);
                 unset($_COOKIE[ self::$cookie_key ]);

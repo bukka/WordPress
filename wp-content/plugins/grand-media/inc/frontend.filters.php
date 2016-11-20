@@ -500,6 +500,8 @@ function gmedia_post_type__the_content($content){
             } else{
                 $output .= do_shortcode("[gm id={$post->term_id}]");
             }
+        } else{
+            $output = $content;
         }
     }
 

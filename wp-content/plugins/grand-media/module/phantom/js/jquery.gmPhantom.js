@@ -1,6 +1,6 @@
 /*
  * Title                   : gmPhantom
- * Version                 : 3.10
+ * Version                 : 3.11
  * Copyright               : 2013-2015 CodEasily.com
  * Website                 : http://www.codeasily.com
  */
@@ -454,7 +454,7 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                         var h = location.hash;
                         if(h.indexOf(prefix) === 0) {
                             h = h.substr(prefix.length).split('-');
-                            if(h[0] && parseInt(h[0]) == ID) {
+                            if(h[0] && h[0] == ID) {
                                 $(document).scrollTop($(Container).offset().top);
                                 if(h[1]) {
                                     startWith = $('.gmPhantom_ThumbContainer[data-id="' + h[1] + '"]', Container).index();
@@ -775,13 +775,15 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                                 return false;
                             }
                         });
-                        $('.gmPhantom_Thumb', thumb_container).off('click').on('click', function(e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            $(this).parent().trigger('click');
-                            return false;
-                        });
-                        $('.gmPhantom_ThumbLabel a', thumb_container).click(function(e) {
+                        setTimeout(function(){
+                            $('.gmPhantom_Thumb', thumb_container).off('click').on('click', function(e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                $(this).parent().trigger('click');
+                                return false;
+                            });
+                        },1);
+                        $('.gmPhantom_ThumbLabel a', thumb_container).on('click', function(e) {
                             e.stopPropagation();
                         });
 

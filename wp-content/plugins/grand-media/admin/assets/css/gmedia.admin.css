@@ -280,13 +280,11 @@ body.gmedia-blank .panel-absoluteHeader .panel-heading,
 }
 div#gm-list-table {
   font-size:13px;
-}
-.GrandMedia_Albums_edit div#gm-list-table {
   display:block;
   display:flex;
   flex-wrap:wrap;
 }
-.GrandMedia_Albums_edit div#gm-list-table::before {
+div#gm-list-table::before {
   display:block;
   content:'';
   float:left;
@@ -398,6 +396,10 @@ label.cb_media-object-gallery {
   min-width:200px;
   max-width:340px;
   border-radius:14px;
+  flex: 1 1 200px;
+}
+.display-as-grid .gm-item-cell-blank {
+  flex: 1 1 200px;
 }
 .display-as-grid .gm-item-cell.ui-highlight-placeholder {margin-bottom:0;background-color:#2c7c91;}
 .edit-gmedia .gmedia-actions { margin:10px; }

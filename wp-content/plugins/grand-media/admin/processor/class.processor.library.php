@@ -343,7 +343,7 @@ class GmediaProcessor_Library extends GmediaProcessor{
                 foreach($gallery_meta as $key => $value){
                     $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
                 }
-                $this->msg[] = sprintf(__('Gallery "%s" successfuly saved. Shortcode: [gmedia id=%d]', 'grand-media'), esc_attr($gallery['name']), $term_id);
+                $this->msg[] = sprintf(__('Gallery "%s" successfully saved. Shortcode: [gmedia id=%d]', 'grand-media'), esc_attr($gallery['name']), $term_id);
             } while(0);
         }
 
@@ -731,7 +731,7 @@ class GmediaProcessor_Library extends GmediaProcessor{
 
                             $i ++;
                         }
-                        $this->msg[] = sprintf(__('%d item(s) updated successfuly', 'grand-media'), $count);
+                        $this->msg[] = sprintf(__('%d item(s) updated successfully', 'grand-media'), $count);
 
                         $this->clear_selected_items($cookie_key);
                         $this->selected_items = $this->selected_items(self::$cookie_key);
@@ -788,7 +788,7 @@ class GmediaProcessor_Library extends GmediaProcessor{
                                     $gmDB->update_metadata($meta_type = 'gmedia', $id, $meta_key = '_gps', $media_metadata['image_meta']['GPS']);
                                 }
                             }
-                            $this->msg[] = sprintf(__('%d item(s) updated successfuly', 'grand-media'), $count);
+                            $this->msg[] = sprintf(__('%d item(s) updated successfully', 'grand-media'), $count);
                             set_transient('gmedia_action_msg', $this->msg, 30);
                         }
                         $this->clear_selected_items($cookie_key);
@@ -875,9 +875,9 @@ class GmediaProcessor_Library extends GmediaProcessor{
                         }
                         if($count){
                             if($delete_original_file){
-                                $this->msg[] = sprintf(__('%d item(s) deleted successfuly', 'grand-media'), $count);
+                                $this->msg[] = sprintf(__('%d item(s) deleted successfully', 'grand-media'), $count);
                             } else{
-                                $this->msg[] = sprintf(__('%d record(s) deleted from database successfuly. Original file(s) safe', 'grand-media'), $count);
+                                $this->msg[] = sprintf(__('%d record(s) deleted from database successfully. Original file(s) safe', 'grand-media'), $count);
                             }
                         }
                         $this->selected_items = array_diff($this->selected_items, $selected_items);

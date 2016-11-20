@@ -874,7 +874,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         }
                     }
                     if($count){
-                        $alert[] = sprintf(__('%d items deleted successfuly', 'grand-media'), $count);
+                        $alert[] = sprintf(__('%d items deleted successfully', 'grand-media'), $count);
                     }
                 break;
             }
@@ -1197,7 +1197,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                     }
                 }
                 if($count){
-                    $alert[] = sprintf(__('%d items deleted successfuly', 'grand-media'), $count);
+                    $alert[] = sprintf(__('%d items deleted successfully', 'grand-media'), $count);
                 }
             }
             $out = gmedia_ios_app_library_data(array('filter', $taxonomy));
@@ -1279,7 +1279,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         $gmDB->update_metadata('gmedia_term', $term_id, $key, $value);
                     }
 
-                    $alert[] = sprintf(__('Album `%s` successfuly saved', 'grand-media'), $term['name']);
+                    $alert[] = sprintf(__('Album `%s` successfully saved', 'grand-media'), $term['name']);
 
                 } while(0);
                 if(1 < $logic && $edit_term && $term_id){
@@ -1317,7 +1317,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                     $error[] = $term_id->get_error_message();
                                     $term_id = 0;
                                 } else{
-                                    $alert[]                         = sprintf(__("Category %d successfuly updated", 'grand-media'), $term_id);
+                                    $alert[]                         = sprintf(__("Category %d successfully updated", 'grand-media'), $term_id);
                                     $alert_info['terms'][ $term_id ] = $term['name'];
                                     if(1 < $logic){
                                         $args['include'][] = $term_id;
@@ -1363,7 +1363,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                 $error[] = $term_id->get_error_message();
                                 $term_id = 0;
                             } else{
-                                $alert['category_add']           = sprintf(__('%d of %d categories successfuly added', 'grand-media'), ++ $terms_added, $terms_qty);
+                                $alert['category_add']           = sprintf(__('%d of %d categories successfully added', 'grand-media'), ++ $terms_added, $terms_qty);
                                 $alert_info['terms'][ $term_id ] = $term_name;
                             }
                         } else{
@@ -1406,7 +1406,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                     $error[] = $term_id->get_error_message();
                                     $term_id = 0;
                                 } else{
-                                    $alert[]                         = sprintf(__("Tag %d successfuly updated", 'grand-media'), $term_id);
+                                    $alert[]                         = sprintf(__("Tag %d successfully updated", 'grand-media'), $term_id);
                                     $alert_info['terms'][ $term_id ] = $term['name'];
                                 }
                             } else{
@@ -1434,7 +1434,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                 $error[] = $term_id->get_error_message();
                                 $term_id = 0;
                             } else{
-                                $alert['tag_add']                = sprintf(__('%d of %d tags successfuly added', 'grand-media'), ++ $terms_added, $terms_qty);
+                                $alert['tag_add']                = sprintf(__('%d of %d tags successfully added', 'grand-media'), ++ $terms_added, $terms_qty);
                                 $alert_info['terms'][ $term_id ] = $term_name;
                             }
                         } else{
