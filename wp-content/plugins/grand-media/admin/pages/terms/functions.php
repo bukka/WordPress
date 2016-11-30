@@ -78,7 +78,7 @@ function gmedia_term_item_actions($item){
 
     $trash_icon = '<span class="glyphicon glyphicon-trash"></span>';
     if($item->allow_delete){
-        $actions['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('do_gmedia_terms' => 'delete', 'ids' => $item->term_id), $gmProcessor->url), 'gmedia_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
+        $actions['delete'] = '<a class="trash-icon" title="' . __('Delete', 'grand-media') . '" href="' . wp_nonce_url(add_query_arg(array('do_gmedia_terms' => 'delete', 'ids' => $item->term_id), $gmProcessor->url), 'gmedia_delete', '_wpnonce_delete') . '" data-confirm="' . __("You are about to permanently delete the selected items.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media") . '">' . $trash_icon . '</a>';
     } else{
         $actions['delete'] = "<span class='action-inactive'>$trash_icon</span>";
     }
@@ -120,7 +120,7 @@ function gmedia_term_album_after_panel($term){
 
     $atts = 'class="gmedia_term__in"';
     if(isset($term->meta['_orderby'][0]) && ('custom' == $term->meta['_orderby'][0])){
-        $atts .= ' id="gm-sortable" data-term_id="' . $term->term_id . '" data-action="gmedia_term_sortorder" data-_wpnonce="' . wp_create_nonce('GmediaTerms') . '"';
+        $atts .= ' id="gm-sortable" data-term_id="' . $term->term_id . '" data-action="gmedia_term_sortorder" data-_wpnonce_terms="' . wp_create_nonce('gmedia_terms') . '"';
         add_action('before_gmedia_filter_message', 'before_gmedia_filter_message');
     }
     echo "<div {$atts}>";

@@ -74,12 +74,15 @@ var GmediaLibrary = {
         }
 
         if(jQuery('body').hasClass('gmedia_library')) {
-            jQuery(window).on('load.gmedia resize.gmedia', function(){
-                jQuery('#previewFrame', window.parent.document).height(window.document.getElementById('gmedia_iframe_content').offsetHeight + 2);
+            var previewFrame = jQuery('#previewFrame', window.parent.document);
+            jQuery(window).on('load.gmedia', function(){
+                setTimeout(function(){
+                    previewFrame.animate({'height': getDocHeight('gmedia_iframe_content') + 3}, 200);
+                }, 10);
             });
             var refresh = !jQuery('body').is('.GrandMedia_select_single, .GrandMedia_select_multiple');
             var observer = new MutationObserver(function(mutations) {
-                jQuery('#previewFrame', window.parent.document).height(window.document.getElementById('gmedia_iframe_content').offsetHeight + 2);
+                previewFrame.height(getDocHeight('gmedia_iframe_content') + 3);
                 if(refresh) {
                     jQuery('#previewModal', window.parent.document).attr('data-refresh', 'true');
                 }
@@ -1204,7 +1207,7 @@ var GmediaFunction = {
             var meta_type = jQuery(this).closest('fieldset').attr('data-metatype');
             post_data.action = meta_type + '_delete_custom_field';
             post_data.ID = jQuery(this).closest('form').attr('data-id');
-            post_data._customfield_nonce = jQuery('#_customfield_nonce').val();
+            post_data._wpnonce_custom_field = jQuery('#_wpnonce_custom_field').val();
             jQuery.post(ajaxurl, post_data, function(data, textStatus, jqXHR) {
                 jQuery('body').removeClass('gmedia-busy');
                 //noinspection JSUnresolvedVariable
@@ -1536,6 +1539,23 @@ function getStorage() {
     };
 }
 
+function getDocHeight(id){
+    var H;
+    if(id){
+        H = Math.max(
+            jQuery('#' + id).height(),
+            document.getElementById(id).clientHeight
+        );
+    } else {
+        H = Math.max(
+            jQuery(document).height(),
+            jQuery(window).height(),
+            document.documentElement.clientHeight
+        );
+    }
+
+    return H;
+};
 /*
  function gmHashCode(str){
  var l = str.length,

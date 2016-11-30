@@ -104,7 +104,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
         }
 
         if(isset($_POST['gmedia_album_save'])){
-            check_admin_referer('GmediaTerms', 'term_save_wpnonce');
+            check_admin_referer('gmedia_terms', '_wpnonce_terms');
             $edit_term = (int)$gmCore->_get('edit_term');
             do{
                 if(!$gmCore->caps['gmedia_album_manage']){
@@ -157,7 +157,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
 
             } while(0);
         } elseif(isset($_POST['gmedia_category_save'])){
-            check_admin_referer('GmediaTerms', 'term_save_wpnonce');
+            check_admin_referer('gmedia_terms', '_wpnonce_terms');
             $edit_term = (int)$gmCore->_get('edit_term');
             do{
                 if(!$gmCore->caps['gmedia_category_manage']){
@@ -207,7 +207,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
             } while(0);
         } elseif(isset($_POST['gmedia_tag_add'])){
             if($gmCore->caps['gmedia_tag_manage']){
-                check_admin_referer('GmediaTerms', 'term_save_wpnonce');
+                check_admin_referer('gmedia_terms', '_wpnonce_terms');
                 $term        = $gmCore->_post('term');
                 $terms       = array_filter(array_map('trim', explode(',', $term['name'])));
                 $terms_added = 0;
@@ -236,7 +236,7 @@ class GmediaProcessor_Terms extends GmediaProcessor{
 
         $do_gmedia_terms = $gmCore->_get('do_gmedia_terms');
         if('delete' == $do_gmedia_terms){
-            check_admin_referer('gmedia_delete');
+            check_admin_referer('gmedia_delete', '_wpnonce_delete');
             if($gmCore->caps['gmedia_terms_delete']){
                 $ids            = $gmCore->_get('ids', 'selected');
                 $selected_items = ('selected' == $ids)? $this->selected_items : wp_parse_id_list($ids);
@@ -278,7 +278,14 @@ class GmediaProcessor_Terms extends GmediaProcessor{
             }
         }
         if($do_gmedia_terms){
-            $location = remove_query_arg(array('do_gmedia_terms', 'ids', '_wpnonce'));
+            $_wpnonce = array();
+            foreach ($_GET as $key => $value) {
+                if (strpos($key, '_wpnonce') !== false) {
+                    $_wpnonce[$key] = $value;
+                }
+            }
+            $remove_args = array_merge(array('do_gmedia_terms', 'ids'), $_wpnonce);
+            $location = remove_query_arg($remove_args);
             $location = add_query_arg('did_gmedia_terms', $do_gmedia_terms, $location);
             wp_redirect($location);
             exit;

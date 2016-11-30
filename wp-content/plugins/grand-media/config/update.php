@@ -314,7 +314,7 @@ function gmedia_db_update__0_9_6(){
 }
 
 function gmedia_db_update__1_8_0(){
-    global $wpdb, $gmDB, $gmGallery;
+    global $wpdb, $gmDB, $gmGallery, $gmCore;
 
     $info  = get_transient('gmediaHeavyJob');
     $steps = get_transient('gmediaUpgradeSteps');
@@ -349,9 +349,9 @@ function gmedia_db_update__1_8_0(){
                 $i ++;
 
                 $description = $gmedia->description;
-                $description = mb_convert_encoding($description, 'UTF-8', 'UTF-8');
+                $description = $gmCore->mb_convert_encoding_utf8($description);
                 $title       = $gmedia->title;
-                $title       = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+                $title       = $gmCore->mb_convert_encoding_utf8($title);
                 if($description !== $gmedia->description || $title !== $gmedia->title){
                     $gmDB->insert_gmedia((array)$gmedia);
                 }

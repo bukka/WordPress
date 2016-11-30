@@ -307,7 +307,12 @@ class GmediaDB{
             return '';
         }
         $params = $_GET;
-        unset($params['pager'], $params['do_gmedia'], $params['did_gmedia'], $params['do_gmedia_terms'], $params['did_gmedia_terms'], $params['ids'], $params['_wpnonce'], $params['doing_wp_cron']);
+        foreach ($params as $key => $value) {
+            if (strpos($key, '_wpnonce') !== false) {
+                unset($params[$key]);
+            }
+        }
+        unset($params['pager'], $params['do_gmedia'], $params['did_gmedia'], $params['do_gmedia_terms'], $params['did_gmedia_terms'], $params['ids'], $params['doing_wp_cron']);
         $new_query_string = http_build_query($params);
         //$self             = admin_url( 'admin.php?' . $new_query_string );
         $self = '?' . $new_query_string;
@@ -381,11 +386,11 @@ class GmediaDB{
         $object   = wp_parse_args($object, $defaults);
         if(isset($object['title'])){
             $object['title'] = strip_tags($object['title'], '<span>');
-            $object['title'] = mb_convert_encoding($object['title'], 'UTF-8', 'UTF-8');
+            $object['title'] = $gmCore->mb_convert_encoding_utf8($object['title']);
         }
         if(isset($object['description'])){
             $object['description'] = $gmCore->clean_input($object['description']);
-            $object['description'] = mb_convert_encoding($object['description'], 'UTF-8', 'UTF-8');
+            $object['description'] = $gmCore->mb_convert_encoding_utf8($object['description']);
         }
         if(isset($object['link'])){
             $object['link'] = esc_url_raw($object['link']);
@@ -1512,18 +1517,18 @@ class GmediaDB{
                 $allowed_keys[] = 'meta_value';
                 $allowed_keys[] = 'meta_value_num';
             }
-            if(in_array($q['orderby'], array('title', 'date', 'modified', 'comment_count', 'meta_value', 'meta_value_num'))){
-                $q['orderby'] .= ' ID';
+            if(in_array($q['orderby'], array('custom', 'title', 'date', 'modified', 'comment_count', 'meta_value', 'meta_value_num'))){
+                $q['orderby'] .= ' ID.DESC';
+                $allowed_keys[] = 'ID.DESC';
             }
-
             $orderby_array = array();
-            foreach(explode(' ', $q['orderby']) as $orderby){
+            foreach(explode(' ', $q['orderby']) as $_orderby){
                 // Only allow certain values for safety
-                if(!in_array($orderby, $allowed_keys)){
+                if(!in_array($_orderby, $allowed_keys)){
                     continue;
                 }
 
-                switch($orderby){
+                switch($_orderby){
                     case 'rand':
                         $orderby = 'RAND()';
                     break;
@@ -1545,16 +1550,23 @@ class GmediaDB{
                         $orderby = "{$wpdb->prefix}gmedia.gmuid";
                     break;
                     case 'custom':
-                        $orderby = "{$album['alias']}.gmedia_order {$q['order']}, {$wpdb->prefix}gmedia.ID";
+                        $orderby = "{$album['alias']}.gmedia_order";
                     break;
                     case 'comment_count':
                         $orderby = "wp.comment_count";
                     break;
+                    case 'ID.DESC':
+                        $orderby = "{$wpdb->prefix}gmedia.ID";
+                    break;
                     default:
-                        $orderby = "{$wpdb->prefix}gmedia." . $orderby;
+                        $orderby = "{$wpdb->prefix}gmedia." . $_orderby;
                 }
 
-                $orderby .= " {$q['order']}";
+                if('ID.DESC' !== $_orderby){
+                    $orderby .= " {$q['order']}";
+                } else{
+                    $orderby .= " DESC";
+                }
                 $orderby_array[] = $orderby;
             }
             $orderby = implode(', ', $orderby_array);

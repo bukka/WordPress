@@ -51,13 +51,13 @@ function gmedia_item_actions($item){
         if((gm_user_can('delete_media') && ((int)$item->author == get_current_user_id())) || gm_user_can('delete_others_media')){
             $delete = '<a class="text-danger" href="' . wp_nonce_url(gm_get_admin_url(array('do_gmedia' => 'delete',
                                                                                             'ids'       => $item->ID
-                                                                                      )), 'gmedia_delete') . '" data-confirm="' . sprintf(__("You are about to permanently delete %s file.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media"), $item->gmuid) . '" title="' . __('Delete', 'grand-media') . '">' . $delete_icon . '</a>';
+                                                                                      )), 'gmedia_delete', '_wpnonce_delete') . '" data-confirm="' . sprintf(__("You are about to permanently delete %s file.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media"), $item->gmuid) . '" title="' . __('Delete', 'grand-media') . '">' . $delete_icon . '</a>';
 
             if($gmCore->_get('showmore')){
                 $erase_icon = '<span class="glyphicon glyphicon-erase"></span>';
                 $db_delete  = '<a class="text-danger" href="' . wp_nonce_url(gm_get_admin_url(array('do_gmedia' => 'delete__save_original',
                                                                                                     'ids'       => $item->ID
-                                                                                              )), 'gmedia_delete') . '" data-confirm="' . sprintf(__("You are about to delete record from DB for %s file.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media"), $item->gmuid) . '" title="' . __('Delete DB record (leave file on the server)', 'grand-media') . '">' . $erase_icon . '</a>';
+                                                                                              )), 'gmedia_delete', '_wpnonce_delete') . '" data-confirm="' . sprintf(__("You are about to delete record from DB for %s file.\n\r'Cancel' to stop, 'OK' to delete.", "grand-media"), $item->gmuid) . '" title="' . __('Delete DB record (leave file on the server)', 'grand-media') . '">' . $erase_icon . '</a>';
             }
         } else{
             $delete = "<span class='action-inactive'>$delete_icon</span>";
@@ -84,7 +84,7 @@ function gmedia_item_actions($item){
     }
 
     $duplicate_icon = '<span class="glyphicon glyphicon-duplicate"></span>';
-    $duplicate      = '<a href="' . wp_nonce_url(gm_get_admin_url(array('do_gmedia' => 'duplicate', 'ids' => $item->ID)), 'gmedia_action') . '" title="' . __('Duplicate', 'grand-media') . '">' . $duplicate_icon . '</a>';
+    $duplicate      = '<a href="' . wp_nonce_url(gm_get_admin_url(array('do_gmedia' => 'duplicate', 'ids' => $item->ID)), 'gmedia_action', '_wpnonce_action') . '" title="' . __('Duplicate', 'grand-media') . '">' . $duplicate_icon . '</a>';
 
     $actions = compact('share', 'edit_data', 'edit_image', 'show', 'info', 'duplicate', 'delete', 'db_delete');
 

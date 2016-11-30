@@ -955,7 +955,7 @@ function gmedia_add_media_upload(){
                                 <?php } else{ ?>
                                 multipart: true,
                                 <?php } ?>
-                                multipart_params: {action: 'gmedia_upload_handler', _ajax_nonce: '<?php echo wp_create_nonce('GmediaUpload'); ?>', params: ''},
+                                multipart_params: {action: 'gmedia_upload_handler', _wpnonce_upload: '<?php echo wp_create_nonce('gmedia_upload'); ?>', params: ''},
                                 <?php if('true' == $gm_screen_options['uploader_chunking'] && ('html4' != $gm_screen_options['uploader_runtime'])){ ?>
                                 max_file_size: '2000Mb',
                                 chunk_size: <?php echo min($maxchunksize, $gm_screen_options['uploader_chunk_size']*1024*1024); ?>,

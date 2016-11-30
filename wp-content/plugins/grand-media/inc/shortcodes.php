@@ -177,6 +177,7 @@ function gmedia_shortcode($atts, $shortcode_post_content = ''){
         $query = array($id => $query);
         if(!empty($term)){
             if(in_array($_module, array('afflux', 'afflux-mod', 'cube', 'flatwall', 'green-style', 'minima', 'optima', 'photo-blog', 'photo-pro', 'slider', 'sphere'))){
+                add_filter('jetpack_photon_skip_image', 'jetpack_photon_skip_gmedia', 10, 3);
                 $_query = array_merge($query[ $id ], array('album__status' => $protected_query_args['status']));
                 $gmDB->gmedias_album_stuff($_query);
                 if(!empty($_query['album__in']) && empty($_query['album__not_in'])){

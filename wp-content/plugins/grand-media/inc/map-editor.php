@@ -51,7 +51,7 @@ function gmedia_map_editor()
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary gps_save"><?php _e('Save', 'grand-media'); ?></button>
                 </div>
-                <?php wp_nonce_field('gmedit-save'); ?>
+                <?php wp_nonce_field('gmedia_edit', '_wpnonce_edit'); ?>
             </div>
         </div>
     </div>

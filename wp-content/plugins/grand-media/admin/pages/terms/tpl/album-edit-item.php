@@ -57,7 +57,7 @@ $_module_preset = isset($term->meta['_module_preset'][0])? $term->meta['_module_
             </div>
             <div class="text-right">
                 <?php
-                wp_nonce_field('GmediaTerms', 'term_save_wpnonce');
+                wp_nonce_field('gmedia_terms', '_wpnonce_terms');
                 wp_referer_field();
                 ?>
                 <input type="hidden" name="term[term_id]" value="<?php echo $term->term_id; ?>"/>
@@ -194,7 +194,7 @@ $_module_preset = isset($term->meta['_module_preset'][0])? $term->meta['_module_
     <input type="hidden" name="status_global" value="0">
     <input type="hidden" name="cookie_key" value="gmedia_library:frame">
     <input type="hidden" name="assign_album"/>
-    <?php wp_nonce_field('gmedia_action'); ?>
+    <?php wp_nonce_field('gmedia_action', '_wpnonce_action'); ?>
 </form>
 
 <div class="modal fade gmedia-modal" id="newCustomFieldModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -207,7 +207,7 @@ $_module_preset = isset($term->meta['_module_preset'][0])? $term->meta['_module_
             <form class="modal-body" method="post" id="newCustomFieldForm">
                 <?php
                 echo $gmCore->meta_form($meta_type = 'gmedia_term');
-                wp_nonce_field('gmedia_custom_field', '_customfield_nonce');
+                wp_nonce_field('gmedia_custom_field', '_wpnonce_custom_field');
                 wp_referer_field();
                 ?>
                 <input type="hidden" name="action" value="gmedia_term_add_custom_field"/>

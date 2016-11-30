@@ -278,14 +278,14 @@ class GmediaAdmin{
         }
         reset($ajax_operations);
         $ajax  = key($ajax_operations);
-        $nonce = wp_create_nonce('ajaxLongOperation');
+        $nonce = wp_create_nonce('gmedia_ajax_long_operations');
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function($) {
                 var header = $('#gmedia-header');
                 header.append('<div id="ajax-long-operation"><div class="progress"><div class="progress-bar progress-bar-info" style="width: 0%;"></div><div class="progress-bar-indicator">0%</div></div></div>');
                 gmAjaxLongOperation = function() {
-                    jQuery.post(ajaxurl, {action: '<?php echo $ajax; ?>', _ajax_nonce: '<?php echo $nonce; ?>'}, function(r) {
+                    jQuery.post(ajaxurl, {action: '<?php echo $ajax; ?>', _wpnonce_ajax_long_operations: '<?php echo $nonce; ?>'}, function(r) {
                         if(r.data) {
                             jQuery('.progress-bar-info', header).width(r.data.progress);
                             var indicator = r.data.info? r.data.info + ' ' + r.data.progress : r.data.progress;

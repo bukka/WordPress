@@ -1,6 +1,6 @@
 /*
  * Title                   : gmPhantom
- * Version                 : 3.11
+ * Version                 : 3.13
  * Copyright               : 2013-2015 CodEasily.com
  * Website                 : http://www.codeasily.com
  */
@@ -144,8 +144,8 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
 
                         var browser_class = '';
                         if(prototypes.isIEBrowser()) {
-                            if(prototypes.isIEBrowser() < 8) {
-                                browser_class += ' msie msie7';
+                            if(prototypes.isIEBrowser() < 10) {
+                                browser_class += ' msie msie9';
                             } else {
                                 browser_class += ' msie';
                             }
@@ -747,7 +747,7 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                             $('.gmPhantom_thumbsWrapper', Container).css({maxWidth: 'none'});
                         }
                         if(opt.thumbsSpacing) {
-                            $('.gmPhantom_thumbsWrapper', Container).css({marginTop: -opt.thumbsSpacing, marginLeft: -opt.thumbsSpacing});
+                            $('.gmPhantom_thumbsWrapper', Container).css({'transform': 'translate(' + (-opt.thumbsSpacing/3) + 'px,'+ (-opt.thumbsSpacing) + 'px)', 'margin-bottom': -opt.thumbsSpacing});
                         }
                     },
 
@@ -788,16 +788,21 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                         });
 
                         $('.gmPhantom_ThumbLoader .gmPhantom_Thumb img', Container).css({opacity: 0}).each(function() {
-                            var image = $(this);
-                            var img_holder = image.closest('.gmPhantom_ThumbContainer');
-                            var load_img = new Image();
+                            var image = $(this),
+                                src = image.attr('src'),
+                                img_holder = image.closest('.gmPhantom_ThumbContainer'),
+                                load_img = new Image();
                             load_img.onload = function() {
                                 img_holder.removeClass('gmPhantom_ThumbLoader');
-                                image.animate({opacity: opt.thumbAlpha / 100}, 600, function() {
-                                    $(this).css({opacity: ''});
-                                });
+                                if(prototypes.isIEBrowser()) {
+                                    image.parent().css('background-image', 'url("'+src+'")')
+                                } else{
+                                    image.animate({opacity: opt.thumbAlpha / 100}, 600, function() {
+                                        $(this).css({opacity: ''});
+                                    });
+                                }
                             }
-                            load_img.src = image.attr('src');
+                            load_img.src = src;
                         });
 
                         if(opt.maxheight !== 0) {
@@ -986,8 +991,10 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
 
                 prototypes = {
                     isIEBrowser: function() {// Detect the browser IE
-                        var myNav = navigator.userAgent.toLowerCase();
-                        return (myNav.indexOf('msie') == -1)? false : parseInt(myNav.split('msie')[1]);
+                        var myNav = navigator.userAgent.toLowerCase(),
+                            msie = (myNav.indexOf('msie') == -1)? false : parseInt(myNav.split('msie')[1]);
+                        msie = !msie? ((myNav.indexOf('rv:11') != -1)? 11 : false) : false;
+                        return msie;
                     },
                     isTouchDevice: function() {// Detect Touchscreen devices
                         return 'ontouchend' in document;

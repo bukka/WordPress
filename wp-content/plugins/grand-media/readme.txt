@@ -2,7 +2,7 @@
 Contributors: pasyuk
 Donate link: http://codeasily.com/donate/
 Tags: gallery, comments, image, image gallery, images, music, lightbox, photo, photo gallery, portfolio, responsive, thumbnail, lightbox, media, audio, easy, free, google maps, iphone, map, maps, photos, picture, pictures, slider, slideshow, categories, tags, video, widget
-Requires at least: 3.6
+Requires at least: 3.7
 Tested up to: 4.6
 Stable tag: trunk
 License: GPLv2 or later
@@ -36,7 +36,8 @@ Friendly for iPad and iPhone. Doesn’t slow down your website. **Unlimited gall
 
 #### Photo Gallery Modules, Music Players, Mixed Galleries demos
 
-*   [Phantom Pro - Mixed Gallery Module](http://codeasily.com/portfolio-item/gmedia-phantom-pro/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more. PhotoSwipe like theme on touch devices.. only better.
+*   [Cubik - Mixed 3D Gallery Module](http://codeasily.com/portfolio/gmedia-gallery-modules/cubik-3d-photo-gallery-for-wordpress/) is the 3D Cube Gallery with social sharing - highly customizible grid and Magnific Popup lightbox with additional information for each photo.
+*   [Phantom Pro - Mixed Gallery Module](http://codeasily.com/portfolio-item/gmedia-phantom-pro/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more.
 *   [WaveSurfer - Music Module](http://codeasily.com/portfolio-item/gmedia-wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
 *   [PhotoTravlr - Gallery Module](http://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) is amazing responsive gallery with terms support (tags, albums, categories) and details for each image like author, caption, download button, link button, like button, EXIF info, location map. Can be in full window and full screen mode.
 *   [PhotoMania - Gallery Module (GmediaCloud demo)](http://codeasily.com/portfolio-item/gmedia-photomania/) - free responsive gallery with thumbs panel and other details for each image like author, caption, download button, link button, like button. Can be in full window and full screen mode.
@@ -50,7 +51,9 @@ Help me make it **best gallery** plugin: test it and [write suggestions](http://
 
 #### Gallery Features
 
-*   New in 1.8.*: **Option to automatically create gallery in Post with related images (images with the same tags as in Post)**
+*   New in 1.8.*: **New free gallery module: Cubik Lite - 3D Cube Gallery (HTML5, CSS3, JS, responsive)**
+*   New in 1.8.*: **Option to show own Gmedia Albums on Author Pofile page**
+*   New in 1.8.*: **[Option to automatically create gallery in Post with related images (images with the same tags as in Post)](http://codeasily.com/portfolio/gmedia-gallery-modules/)**
 *   New in 1.8.*: **Show Related Media for WP tags and categories archive pages**
 *   New in 1.8.*: **Widget for Album and Gallery widget**
 *   New in 1.8.*: **Comments for Gmedia Items** (Note: not all gallery modules support comments.)
@@ -151,6 +154,29 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.9.0 =
+* Added: Batch edit Module/Preset for selected Galleries
+* Fixed: Notice in compatibility.php
+* Fixed: subscribers now can leave comments for private gmedia items
+* Updated: Phantom gallery module
+* Updated: PhotoMania gallery module
+
+= Gmedia Gallery v1.8.99 =
+* Added: New free module - Cubik Lite (3D Cube Gallery)
+* Added: Settings for Author profile page
+* Added: Show Related Gmedia Metabox for Posts
+* Added: Back button on Upload page
+* Added: Show term description on standalone post
+* Updated: Latest version of Lightbox script
+* Improved: Compatibility with ajax themes
+* Improved: Compatibility with JetPack plugin
+* Fixed: Cover change error on Edit Item
+* Fixed: Library Grid Mode on Safari
+* Fixed: Refresh after edit item in popup
+* Fixed: Actions on Edit Term page
+* Fixed: Add/Edit comments for roles lower than editor
+* Fixed: Error on servers with 'mbstring' disabled
 
 = Gmedia Gallery v1.8.98 =
 * Fixed: Compatibility with "All in One SEO Pack" plugin

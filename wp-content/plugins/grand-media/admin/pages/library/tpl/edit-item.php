@@ -235,6 +235,7 @@ if(!defined('ABSPATH')){
                 <?php } ?>
                 <p class="media-meta">
                     <span class="label label-default"><?php _e('ID', 'grand-media') ?>:</span> <strong><?php echo $item->ID; ?></strong>
+                    <br/><span class="label label-default"><?php _e('Post ID', 'grand-media') ?>:</span> <strong><?php echo $item->post_id; ?></strong>
                     <br/><span class="label label-default"><?php _e('Type', 'grand-media'); ?>:</span> <?php echo $item->mime_type; ?>
                     <?php if(('image' == $item->type) && !empty($item->meta['_metadata'])){ ?>
                         <br/><span class="label label-default"><?php _e('Dimensions', 'grand-media'); ?>:</span>

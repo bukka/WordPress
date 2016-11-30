@@ -14,7 +14,7 @@ class GmediaProcessor_Settings extends GmediaProcessor{
         }
         $lk_check = isset($_POST['license-key-activate']);
         if(isset($_POST['gmedia_settings_save'])){
-            check_admin_referer('GmediaSettings');
+            check_admin_referer('gmedia_settings', '_wpnonce_settings');
 
             $set = $gmCore->_post('set', array());
 
@@ -125,7 +125,7 @@ class GmediaProcessor_Settings extends GmediaProcessor{
         }
 
         if($lk_check){
-            check_admin_referer('GmediaSettings');
+            check_admin_referer('gmedia_settings', '_wpnonce_settings');
             $license_key = $gmCore->_post('set');
             if(!empty($license_key['purchase_key'])){
                 global $wp_version;
@@ -171,7 +171,7 @@ class GmediaProcessor_Settings extends GmediaProcessor{
         }
 
         if(isset($_POST['gmedia_settings_reset'])){
-            check_admin_referer('GmediaSettings');
+            check_admin_referer('gmedia_settings', '_wpnonce_settings');
             include_once(GMEDIA_ABSPATH . 'config/setup.php');
             $_temp_options      = $gmGallery->options;
             $gmGallery->options = gmedia_default_options();

@@ -23,7 +23,9 @@ $allsettings = array_merge($module['options'], $settings);
 $base_url_host = parse_url($gmCore->upload['url'], PHP_URL_HOST);
 $term_url      = remove_query_arg('gm' . $id);
 
-$query['per_page'] = $allsettings['per_page'];
+if(empty($query['per_page'])){
+    $query['per_page'] = $allsettings['per_page'];
+}
 $gmedias           = $gmDB->get_gmedias($query);
 if($gmDB->openPage < $gmDB->pages){
     $load_query         = $query;
@@ -201,7 +203,7 @@ if(!isset($shortcode_raw)){
                             <div class="gmPhantom_other_terms">
                                 <table class="gmPhantom_other_terms_table">
                                     <?php foreach($details as $key => $value){ ?>
-                                        <tr class="gmPhantom_term_<?php echo sanitize_key($key); ?>">
+                                        <tr class="gmPhantom_term_row_<?php echo sanitize_key($key); ?>">
                                             <td class="gmPhantom_term_key"><?php echo ucwords($key); ?></td>
                                             <td class="gmPhantom_term_value"><?php echo $value; ?></td>
                                         </tr>
@@ -241,12 +243,14 @@ if(isset($settings['lightboxControlsColor'])){
 }
 if(isset($settings['lightboxTitleColor'])){
     $mfp_css .= "
-{$mfp_id} .mfp-title,
+{$mfp_id} .gmPhantom_title,
 {$mfp_id} .mfp-counter {color:#{$settings['lightboxTitleColor']};}";
 }
 if(isset($settings['lightboxTextColor'])){
     $mfp_css .= "
-{$mfp_id} .mfp-description {color:#{$settings['lightboxTextColor']};}";
+{$mfp_id} .gmPhantom_text,
+{$mfp_id} .gmPhantom_other_terms,
+{$mfp_id} .gmPhantom_other_terms_table {color:#{$settings['lightboxTextColor']};}";
 }
 if(isset($settings['lightboxBGColor'])){
     $mfp_css .= "
@@ -285,10 +289,11 @@ if(isset($settings['thumbWidth']) || isset($settings['thumbHeight']) || isset($s
 {$cssid} .gmPhantom_MobileView .gmPhantom_LoadMore[data-col=\"1\"] .gmPhantom_pager {font-size:40px;line-height:50px;}";
 }
 if(isset($settings['thumbsSpacing'])){
+    $marbot = $settings['thumbsSpacing'] * 2;
     $dcss .= "
 {$cssid} .gmPhantom_ThumbContainer,
 {$cssid} .gmPhantom_LoadMore {margin:{$settings['thumbsSpacing']}px 0 0 {$settings['thumbsSpacing']}px;}
-{$cssid} .gmPhantom_LoadMore[data-col=\"1\"] {transform:translate(0, {$settings['thumbsSpacing']}px);}";
+{$cssid} .gmPhantom_LoadMore[data-col=\"1\"] {transform:translate(0, {$settings['thumbsSpacing']}px);marging-bottom:{$marbot}px;}";
 }
 if(isset($settings['thumbPadding'])){
     $dcss .= "

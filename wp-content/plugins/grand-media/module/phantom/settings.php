@@ -57,7 +57,7 @@ $options_tree    = array(array('label'  => 'Common Settings',
                                'fields' => array('per_page'             => array('label' => 'Items Per Page',
                                                                                  'tag'   => 'input',
                                                                                  'attr'  => 'type="number" min="1"',
-                                                                                 'text'  => ''
+                                                                                 'text'  => '(ignored if there is "per_page" parameter in the Query Args.)'
                                ),
                                                  'maxheight'            => array('label' => 'Max-Height',
                                                                                  'tag'   => 'input',

@@ -38,6 +38,10 @@ function gmedia_default_options(){
     $gm['wp_term_related_gmedia'] = '1';
     $gm['wp_post_related_gmedia'] = '0';
 
+    $gm['wp_author_related_gmedia'] = '0';
+    $gm['wp_author_related_gmedia_album'] = '1';
+    $gm['wp_author_related_gmedia_gallery'] = '0';
+
     $gm['preview_bgcolor'] = 'ffffff';
 
     //$gm['default_gmedia_term_comment_status'] = 'closed'; // can be 'closed', 'open'

@@ -120,7 +120,7 @@ class GmediaProcessor_Modules extends GmediaProcessor{
 
         if(isset($_FILES['modulezip']['tmp_name'])){
             if(!empty($_FILES['modulezip']['tmp_name'])){
-                check_admin_referer('GmediaModule');
+                check_admin_referer('gmedia_module', '_wpnonce_module');
                 if(!current_user_can('manage_options')){
                     wp_die(__('You are not allowed to install module ZIP', 'grand-media'));
                 }
@@ -177,13 +177,13 @@ class GmediaProcessor_Modules extends GmediaProcessor{
         }
 
         if(isset($_GET['delete_module'])){
-            if($gmCore->_get('_wpnonce')){
+            if($gmCore->_get('_wpnonce_module_delete')){
                 $mfold = preg_replace('/[^a-z0-9_-]+/i', '_', $_GET['delete_module']);
                 $mpath = "{$gmCore->upload['path']}/{$gmGallery->options['folder']['module']}/{$mfold}";
                 if($mfold && file_exists($mpath)){
-                    check_admin_referer('gmedia_module_delete');
+                    check_admin_referer('gmedia_module_delete', '_wpnonce_module_delete');
                     $gmCore->delete_folder($mpath);
-                    $location = remove_query_arg(array('_wpnonce'));
+                    $location = remove_query_arg(array('_wpnonce_module_delete'));
                     set_transient('gmedia_module_deleted', sprintf(__("The `%s` module folder was deleted", 'flag'), $mpath), 60);
                     wp_redirect($location);
                 }
