@@ -5,7 +5,8 @@
 class Ethnologist_Widget_EditorsPick extends WP_Widget {
 
 	private $instance_keys = array(
-		'title'
+		'title',
+		'post_id',
 	);
 
 	/**

@@ -390,6 +390,9 @@ function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-contact.php';
 	register_widget( 'Ethnologist_Widget_Contact' );
 
+	require_once __DIR__ . '/inc/widget-editors-pick.php';
+	register_widget( 'Ethnologist_Widget_EditorsPick' );
+
 	require_once __DIR__ . '/inc/widget-image.php';
 	register_widget( 'Ethnologist_Widget_Image' );
 
