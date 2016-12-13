@@ -450,6 +450,12 @@ add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 require_once __DIR__ . '/inc/class-ethnologist-facebook.php';;
 add_action( 'wp_head', 'Ethnologist_Facebook::display_header_script' );
 
+// GOOGLE
+
+// AdSense
+require_once __DIR__ . '/inc/class-ethnologist-google-ad-sense.php';;
+add_action( 'wp_head', 'Ethnologist_GoogleAdSense::display_header_script' );
+
 /**
  * Wrapper for like box
  */
