@@ -16,7 +16,7 @@
 </p>
 <p>
 	<label for="<?php echo $context->get_field_id( 'type' ); ?>">
-		<?php _e('Type:', 'ethnologist'); ?>
+		<?php _e( 'Type:', 'ethnologist' ); ?>
 	</label>
 	<select id="<?php echo $context->get_field_id( 'type' ); ?>"
 			name="<?php echo $context->get_field_name( 'type' ); ?>">
