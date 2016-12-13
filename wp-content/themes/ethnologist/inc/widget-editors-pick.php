@@ -121,6 +121,11 @@ class Ethnologist_Widget_EditorsPick extends WP_Widget {
 				esc_attr( $instance[$instance_key] ) : '';
 		}
 
+		$params['query_args'] = array(
+			'post_type' => array('post', 'section', 'interview'),
+			'posts_per_page' => 50,
+		);
+
 		ethnologist_view( 'widget', 'editors-pick-form', $params, $this );
 	}
 }
