@@ -70,6 +70,7 @@ class Ethnologist_Widget_EditorsPick extends WP_Widget {
 			echo $after_title;
 		}
 
+		$instance['post'] = empty( $instance['post_id'] ) ? false : get_post( $instance['post_id'] );
 		ethnologist_view( 'widget', 'editors-pick-widget', $instance );
 
 		echo $after_widget;
@@ -91,7 +92,7 @@ class Ethnologist_Widget_EditorsPick extends WP_Widget {
 		$instance = $old_instance;
 
 		foreach ( $this->instance_keys as $instance_key ) {
-			$instance[$instance_key] =  strip_tags( $new_instance[$instance_key] );;
+			$instance[$instance_key] =  strip_tags( $new_instance[$instance_key] );
 		}
 
         $this->flush_widget_cache();
