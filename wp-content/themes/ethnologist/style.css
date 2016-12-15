@@ -106,6 +106,11 @@
 	border-top-width: 0 !important;
 
 }
+.ethnologist-editors-pick-post-title {
+	font-weight: bold;
+	text-align: left;
+	padding-top: 5px;
+}
 .ethnologist-copyright {
 	padding: 20px 0 25px 40px;
 	font-size: 80%;
