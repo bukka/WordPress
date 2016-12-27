@@ -60,7 +60,14 @@ class Ethnologist_Widget_Image extends WP_Widget {
 			'text'       => $instance['text'],
 		);
 
+		$title = 'Logo';
+
 		echo $before_widget;
+		if ( $title ) {
+			echo $before_title;
+			echo $title;
+			echo $after_title;
+		}
 
 		ethnologist_view( 'widget', 'image-widget', $params );
 
