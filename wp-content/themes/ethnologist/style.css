@@ -106,6 +106,9 @@
 	border-top-width: 0 !important;
 
 }
+.ethnologist-widget-image-logo {
+	width: 50%;
+}
 .ethnologist-editors-pick-link img {
 	width: 80%;
 }
