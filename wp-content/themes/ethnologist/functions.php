@@ -387,6 +387,8 @@ function ethnologist_register_sidebars() {
  * Regester widgets
  */
 function ethnologist_register_widgets() {
+	require_once __DIR__ . '/inc/widget-base.php';
+
 	require_once __DIR__ . '/inc/widget-contact.php';
 	register_widget( 'Ethnologist_Widget_Contact' );
 
