@@ -868,3 +868,28 @@ function ethnologist_is_mobile() {
 
 	return false;
 }
+
+/**
+ * Get src for ethnologist post thumbnail
+ *
+ * @param int $width
+ * @param int $height
+ */
+function ethnologist_thumbnail_src( $width, $height ) {
+	global $post;
+
+	if ( has_post_thumbnail( $post->ID ) ) {
+		$image_width = 382;
+		$image_height = 255;
+		$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+		$thumbnailURL = $image_url[0];
+		$image = aq_resize( $thumbnailURL, $image_width, $image_height, true );
+		if ( empty($image) ) {
+			$image = $thumbnailURL;
+		}
+	} else {
+		$image = pinnacle_img_placeholder();
+	}
+
+	return esc_attr( $image );
+}
