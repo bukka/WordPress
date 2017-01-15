@@ -30,6 +30,16 @@ class Ethnologist_NavMenus
 				'cs' => 'cs',
 			),
 		),
+		'journal' => array(
+			'title' => array(
+				'en' => 'Journal',
+				'cs' => 'Periodikum',
+			),
+			'slug' => array(
+				'en' => 'journal',
+				'cs' => 'periodikum',
+			),
+		),
 		'sections' => array(
 			'title' => array(
 				'en' => 'Sections',
@@ -86,6 +96,7 @@ class Ethnologist_NavMenus
 				'cs' => 'o-nas',
 			),
 		),
+		/*
 		'contact' => array(
 			'title' => array(
 				'en' => 'Contact',
@@ -96,6 +107,7 @@ class Ethnologist_NavMenus
 				'cs' => 'kontakt',
 			),
 		),
+		*/
 		'language' => array(
 			'type'  => 'lang',
 			'title' => array(
