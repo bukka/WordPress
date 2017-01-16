@@ -6,6 +6,7 @@
 class Ethnologist_NavMenus
 {
 	const TOP_MENU_NAME = 'ethnologist-top';
+	const FOOTER_MENU_NAME = 'ethnologist-footer';
 
 	/**
 	 * Supported languages
@@ -15,11 +16,11 @@ class Ethnologist_NavMenus
 	protected $languages = array('en', 'cs');
 
 	/**
-	 * Navigation menus
+	 * Navigation top menus
 	 *
 	 * @var array
 	 */
-	protected $menus = array(
+	protected $top_menus = array(
 		'home' => array(
 			'title' => array(
 				'en' => 'Home',
@@ -86,17 +87,31 @@ class Ethnologist_NavMenus
 				'cs' => 'galerie',
 			),
 		),
-		'about' => array(
+		'language' => array(
+			'type'  => 'lang',
 			'title' => array(
-				'en' => 'About Us',
-				'cs' => 'O nás',
+				'en' => 'Language',
+				'cs' => 'Jazyk',
+			)
+		),
+	);
+
+	/**
+	 * Navigation footer menus
+	 *
+	 * @var array
+	 */
+	protected $footer_menus = array(
+		'home' => array(
+			'title' => array(
+				'en' => 'Home',
+				'cs' => 'Úvod',
 			),
 			'slug' => array(
-				'en' => 'about-us',
-				'cs' => 'o-nas',
+				'en' => 'en',
+				'cs' => 'cs',
 			),
 		),
-		/*
 		'contact' => array(
 			'title' => array(
 				'en' => 'Contact',
@@ -107,15 +122,16 @@ class Ethnologist_NavMenus
 				'cs' => 'kontakt',
 			),
 		),
-		*/
-		'language' => array(
-			'type'  => 'lang',
+		'about' => array(
 			'title' => array(
-				'en' => 'Language',
-				'cs' => 'Jazyk',
-			)
-		),
-
+				'en' => 'About Us',
+				'cs' => 'O nás',
+			),
+			'slug' => array(
+				'en' => 'about-us',
+				'cs' => 'o-nas',
+			),
+		)
 	);
 
 	/**
@@ -126,6 +142,16 @@ class Ethnologist_NavMenus
 	 */
 	protected function get_top_menu_name($lang) {
 		return self::TOP_MENU_NAME . '-' . $lang;
+	}
+
+	/**
+	 * Get footer menu name
+	 *
+	 * @param string $lang
+	 * @return string
+	 */
+	protected function get_footer_menu_name($lang) {
+		return self::FOOTER_MENU_NAME . '-' . $lang;
 	}
 
 	/**
@@ -228,9 +254,7 @@ class Ethnologist_NavMenus
 	 * @param boolean $create_only If true only create an item (do not update existing items)
 	 * @return boolean|WP_Error
 	 */
-	public function update_nav_menu( $lang, $create_only ) {
-		// Get menu name
-		$menu_name = $this->get_top_menu_name( $lang );
+	protected function update_nav_menu( $menus, $menu_name, $lang, $create_only ) {
 
 		// Check if Top menu exists and make it if not
 		if ( ! is_nav_menu( $menu_name  ) ) {
@@ -248,7 +272,7 @@ class Ethnologist_NavMenus
 		}
 
 		$pos = 1;
-		foreach ( $this->menus as $slug => $menu ) {
+		foreach ( $menus as $slug => $menu ) {
 			$type = isset( $menu['type'] ) ? $menu['type'] : 'link';
 			$url = ( $type === 'link' ) ? home_url( $menu['slug'][$lang] . '/' ) : '#';
 
@@ -298,7 +322,10 @@ class Ethnologist_NavMenus
 	public function update( $create_only = false ) {
 
 		foreach ( $this->languages as $lang ) {
-			$this->update_nav_menu( $lang, $create_only );
+			// Top menu
+			$this->update_nav_menu( $this->top_menus, $this->get_top_menu_name( $lang ), $lang, $create_only );
+			// Footer menu
+			$this->update_nav_menu( $this->footer_menus, $this->get_footer_menu_name( $lang ), $lang, $create_only );
 		}
 	}
 }

@@ -18,10 +18,10 @@
 #menu-ethnologist-top-cs ul {
 	min-width: 14em;
 }
-#logo a {
+#logo a.brand {
 	font-weight: bold !important;
-	text-transform: uppercase;
 	line-height: 120px !important;
+	font-size: 30px !important;
 }
 .home-page-title {
 	font-weight: bold;
@@ -122,6 +122,12 @@
 .ethnologist-copyright {
 	padding: 20px 0 25px 40px;
 	font-size: 80%;
+}
+.footermenu {
+	padding-top: 20px;
+}
+.footernav ul li a {
+	font-size: 12px;
 }
 .widget-first {
 	margin-top: 30px;
