@@ -3,7 +3,7 @@
 	Plugin Name: WF Cookie Consent
 	Plugin URI: http://www.wunderfarm.com/plugins/wf-cookie-consent
 	Description: The wunderfarm-way to show how your website complies with the EU Cookie Law.
-	Version: 1.1.0
+	Version: 1.1.2
 	License: GNU General Public License v2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Author: wunderfarm
@@ -11,6 +11,9 @@
 	*/
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
+define ('WFCOOKIECONSENT_IUBENDA_DIRECT_URL', 'http://iubenda.refr.cc/N3792HZ');
+define ('WFCOOKIECONSENT_IUBENDA_HELP_URL', 'https://www.iubenda.com/en/help/posts/3284');
 
 /*
 * Enqueue JS
@@ -25,7 +28,7 @@ function wf_cookieconsent_get_options($language = null) {
 
   $options = get_option('wf_cookieconsent_options');
   if (!$language) $language = wf_get_language();
-  
+
   $data = array(
     'wf_cookietext' => empty($options[$language]['wf_cookietext']) ? null : $options[$language]['wf_cookietext'],
     'wf_dismisstext' => empty($options[$language]['wf_dismisstext']) ? null : $options[$language]['wf_dismisstext'],
@@ -34,9 +37,9 @@ function wf_cookieconsent_get_options($language = null) {
     'wf_position' => empty($options['wf_position']) ? 'bottom' : $options['wf_position'],
     'language' => $language
   );
-  
+
   switch ($data['language']) {
-    
+
     case 'de':
       if (empty($data['wf_cookietext'])) $data['wf_cookietext'] = "Cookies erleichtern die Bereitstellung unserer Dienste. Mit der Nutzung unserer Dienste erklären Sie sich damit einverstanden, dass wir Cookies verwenden. ";
       if (empty($data['wf_dismisstext'])) $data['wf_dismisstext'] = "OK";
@@ -65,6 +68,12 @@ function wf_cookieconsent_get_options($language = null) {
         if (empty($data['wf_cookietext'])) $data['wf_cookietext'] = "Evästeet auttavat meitä palvelujemme toimituksessa. Käyttämällä palvelujamme hyväksyt evästeiden käytön.";
         if (empty($data['wf_dismisstext'])) $data['wf_dismisstext'] = "Selvä";
         if (empty($data['wf_linktext'])) $data['wf_linktext'] = "Lisätietoja";
+        break;
+
+		case 'hu':
+        if (empty($data['wf_cookietext'])) $data['wf_cookietext'] = "A weboldalon cookie-kat használunk, amik segítenek minket a lehető legjobb szolgáltatások nyújtásában. Weboldalunk további használatával jóváhagyja, hogy cookie-kat használjunk.";
+        if (empty($data['wf_dismisstext'])) $data['wf_dismisstext'] = "OK";
+        if (empty($data['wf_linktext'])) $data['wf_linktext'] = "További információk";
         break;
 
     default:
@@ -137,17 +146,17 @@ function wf_cookieconsent_admin_init(){
 
   $sectionKey = 'plugin_main';
 	add_settings_section($sectionKey, count($languages) > 1 ? esc_html__('General settings', 'wf-cookie-consent') : '', '', 'wf-cookieconsent');
-  
+
 	add_settings_field(
-    'wf_position', 
-    esc_html__('Position'), 
-    'wf_cookieconsent_setting_radio', 
-    'wf-cookieconsent', 
-    'plugin_main', 
-    array( 
-      'fieldname' => 'wf_position', 
-      'fielddescription' => esc_html__('Choose the position for the banner', 'wf-cookie-consent'), 
-      'radioFields' => array( 'top' , 'bottom') 
+    'wf_position',
+    esc_html__('Position'),
+    'wf_cookieconsent_setting_radio',
+    'wf-cookieconsent',
+    'plugin_main',
+    array(
+      'fieldname' => 'wf_position',
+      'fielddescription' => esc_html__('Choose the position for the banner', 'wf-cookie-consent'),
+      'radioFields' => array( 'top' , 'bottom')
     )
   );
 
@@ -157,7 +166,7 @@ function wf_cookieconsent_admin_init(){
         add_settings_section($sectionKey, esc_html__('Language specific settings: ' . $lang, 'wf-cookie-consent'), '', 'wf-cookieconsent');
     }
     add_settings_field(
-      'wf_cookietext', 
+      'wf_cookietext',
       esc_html__('Info text', 'wf-cookie-consent'),
       'wf_cookieconsent_setting_textarea',
       'wf-cookieconsent',
@@ -165,23 +174,23 @@ function wf_cookieconsent_admin_init(){
       array(
         'fieldname' => 'wf_cookietext',
         'fielddescription' => '',
-        'lang' => $lang 
+        'lang' => $lang
       )
     );
     add_settings_field(
-      'wf_linkhref', 
-      esc_html__('Cookie policy page', 'wf-cookie-consent'), 
-      'wf_cookieconsent_setting_page_selector', 
-      'wf-cookieconsent', 
-      $sectionKey, 
+      'wf_linkhref',
+      esc_html__('Cookie policy page', 'wf-cookie-consent'),
+      'wf_cookieconsent_setting_page_selector',
+      'wf-cookieconsent',
+      $sectionKey,
       array(
-        'fieldname' => 'wf_linkhref', 
-        'fielddescription' => '', 
+        'fieldname' => 'wf_linkhref',
+        'fielddescription' => sprintf( wp_kses( __( '<a href="%s" target="_blank">Add your policy</a>', 'wf-cookie-consent' ), array('a'=>array('href'=>array(), 'target'=>array()))), esc_url(WFCOOKIECONSENT_IUBENDA_DIRECT_URL)),
         'lang' => $lang
-      ) 
+      )
     );
 		add_settings_field(
-      'wf_linktext', 
+      'wf_linktext',
       esc_html__('Cookie policy link text', 'wf-cookie-consent'),
       'wf_cookieconsent_setting_input_text',
       'wf-cookieconsent',
@@ -192,7 +201,6 @@ function wf_cookieconsent_admin_init(){
         'lang' => $lang
       )
     );
-
 		add_settings_field(
       'wf_dismisstext',
       esc_html__('Dismiss text', 'wf-cookie-consent'),
@@ -250,7 +258,7 @@ function wf_cookieconsent_setting_page_selector($args) {
 }
 
 function wf_cookieconsent_setting_radio($args) {
-	$options = wf_cookieconsent_get_options($args['lang']);
+  $options = wf_cookieconsent_get_options();
 	if(empty($options[$args['fieldname']])) {
 		$options[$args['fieldname']] = '';
 	}
@@ -267,14 +275,14 @@ function wf_cookieconsent_setting_radio($args) {
 
 function wf_cookieconsent_admin_notice__iubenda() {
 	global $pagenow;
-	if ($pagenow == 'options-general.php' && $_GET['page'] == 'wf-cookieconsent') {
+	if ($pagenow == 'options-general.php' && isset($_GET['page']) && $_GET['page'] == 'wf-cookieconsent') {
 ?>
   <div class="notice notice-info">
     <p>
 			<?php print wp_kses( __( 'Websites that use third-party cookies as well as their own cookies for tracking and analytics must comply with the Cookie law and are required to obtain explicit consent from the user. Users must be provided with a clear, comprehensible and visible notice about the use of cookies by the website.', 'wf-cookie-consent' ), array('b'=>array())); ?>
 		</p>
 		<p>
-			<?php print sprintf( wp_kses( __( '<b>The WF Cookie Consent banner is only one part of the requirement</b>, you must provide a link to a more detailed actual cookie policy. <a href="%s" target="_blank">Click here to learn more on how to generate a cookie policy.</a>', 'wf-cookie-consent' ), array('b'=>array(),'a'=>array('href'=>array(), 'target'=>array()))), esc_url('https://www.iubenda.com/en/help/posts/3284') ); ?>
+			<?php print sprintf( wp_kses( __( '<b>The WF Cookie Consent banner is only one part of the requirement</b>, you must provide a link to a more detailed actual cookie policy. <a href="%s" target="_blank">Click here to learn more on how to generate a cookie policy.</a>', 'wf-cookie-consent' ), array('b'=>array(),'a'=>array('href'=>array(), 'target'=>array()))), esc_url(WFCOOKIECONSENT_IUBENDA_HELP_URL) ); ?>
 		</p>
   </div>
 <?php
