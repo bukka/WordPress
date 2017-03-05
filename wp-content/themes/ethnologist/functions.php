@@ -435,7 +435,7 @@ function ethnologist_enqueue_scripts() {
 	// enqueue ethnologist original pinnacle style
 	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
 	// enqueue ethnologist style
-	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'ethnologist-parent-style' ), 7 );
+	wp_enqueue_style( 'ethnologist-child-style', get_stylesheet_uri(), array( 'ethnologist-parent-style' ), 8 );
 	// remove duplicated ethnologist style
 	wp_dequeue_style( 'pinnacle_child' );
 
