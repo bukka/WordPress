@@ -16,7 +16,7 @@ var GmediaLibrary = {
                     jQuery('.gm-play', this).show();
                     jQuery('.gm-pause', this).hide();
 
-                    GmediaLibrary.waveplayer(data);
+                    GmediaLibrary.waveplayer(data, true);
                 }
             });
             gmedia_DOM.on('click', '.gm-waveform', function() {
@@ -49,9 +49,16 @@ var GmediaLibrary = {
                 }
             });
             gmedia_DOM.on('click', '.gm-play, .gm-pause', function() {
-                var parent = jQuery(this).parent(),
-                    data = parent.data();
-                window.gm_wavesurfer[data.id].playPause();
+                var parent = jQuery(this).parent();
+                var data = parent.data();
+                if(!parent.hasClass('ws-loaded')) {
+                    parent.addClass('ws-loaded');
+                    window.gm_wavesurfer[data.id].load(data.file, data.peaks);
+                    window.gm_wavesurfer[data.id].toggleInteraction();
+                    window.gm_wavesurfer[data.id].play();
+                } else {
+                    window.gm_wavesurfer[data.id].playPause();
+                }
             });
 
             var resize;
@@ -97,28 +104,47 @@ var GmediaLibrary = {
         }
 
     },
-    waveplayer: function(data) {
+    waveplayer: function(data, draw) {
         window.gm_wavesurfer[data.id] = Object.create(WaveSurfer);
         window.gm_wavesurfer[data.id].init({
             container: '#' + data.id,
             waveColor: '#428bca',
             progressColor: '#31708f',
+            backend: 'MediaElement',
+            renderer: 'Canvas',
             height: 60,
-            barWidth: 1
+            interact: false,
+            barWidth: 0
         });
         // Play on audio load
         var parent = jQuery(window.gm_wavesurfer[data.id].container).parent();
 
         if(!parent.hasClass('ws-loaded')) {
-            parent.addClass('ws-loaded');
-
-            window.gm_wavesurfer[data.id].load(data.file, data.peaks);
+            if(draw) {
+                window.gm_wavesurfer[data.id].backend.setPeaks(data.peaks);
+                window.gm_wavesurfer[data.id].drawBuffer();
+            } else {
+                parent.addClass('ws-loaded');
+                window.gm_wavesurfer[data.id].load(data.file, data.peaks);
+                window.gm_wavesurfer[data.id].toggleInteraction();
+                window.gm_wavesurfer[data.id].play();
+            }
         } else {
             window.gm_wavesurfer[data.id].play();
         }
 
-        jQuery(window.gm_wavesurfer[data.id].container).on('click', function() {
-            window.gm_wavesurfer[data.id].play();
+        jQuery(window.gm_wavesurfer[data.id].container).on('click', function(e) {
+            if(!parent.hasClass('ws-loaded')) {
+                parent.addClass('ws-loaded');
+                window.gm_wavesurfer[data.id].load(data.file, data.peaks);
+                window.gm_wavesurfer[data.id].toggleInteraction();
+                window.gm_wavesurfer[data.id].play();
+            }
+            if(window.gm_wavesurfer[data.id].isPlaying()) {
+                window.gm_wavesurfer[data.id].backend.media.currentTime = 0;
+            } else{
+                window.gm_wavesurfer[data.id].play();
+            }
         });
 
         window.gm_wavesurfer[data.id].on('play', function() {
@@ -507,7 +533,7 @@ var GmediaTerms = {
                     action: 'gmedia_tag_edit',
                     tag_id: inp.data('tag_id'),
                     tag_name: new_tag_name,
-                    _wpnonce: jQuery('#_wpnonce').val()
+                    _wpnonce_terms: jQuery('#_wpnonce_terms').val()
                 };
                 jQuery.post(ajaxurl, post_data, function(data, textStatus, jqXHR) {
                     console.log(data);
@@ -975,7 +1001,7 @@ var GmediaFunction = {
             });
         });
 
-        gmedia_DOM.on('click', 'a.preview-modal', function(e) {
+        jQuery(document).on('click.gmedia', 'a.preview-modal', function(e) {
             e.preventDefault();
             var initiator = jQuery(this),
                 data = initiator.data(),
@@ -1041,6 +1067,26 @@ var GmediaFunction = {
             } else {
                 jQuery('<img src="" alt="" />').attr('src', window.gmediaTempData.src).appendTo(form.find('.gmedia-cover-image'));
             }
+            jQuery('#previewModal').modal('hide');
+        });
+
+        jQuery(document).on('click.gmedia', '#previewModal .select_gmedia .btn-primary', function() {
+            var field = jQuery('.previewModal_initiator').closest('.form-group').find('.form-control');
+            var valData = field.val().split(',');
+            var storedData = getStorage();
+            storedData = storedData.get('gmedia_library:frame').split('.');
+            valData = jQuery.grep(valData, function(e) {
+                return e.trim();
+            });
+            jQuery.each(storedData, function(i, id) {
+                if(!id) {
+                    return true;
+                }
+                if(jQuery.inArray(id, valData) === -1) {
+                    valData.push(id);
+                }
+            });
+            field.val(valData.join(','));
             jQuery('#previewModal').modal('hide');
         });
 
@@ -1479,7 +1525,9 @@ function GmediaInit(){
             jQuery(this).removeAttr('title');
         }
     }).on('mousemove', '[title]', function(e) {
-        helper.css({left:e.clientX - helper_width - 25, top: e.clientY + 25});
+        if(helper) {
+            helper.css({left: e.clientX - helper_width - 25, top: e.clientY + 25});
+        }
     }).on('mouseleave', '[title]', function(e) {
         jQuery('#gmedia-data-helper').remove();
         helper = null;

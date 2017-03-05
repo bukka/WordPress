@@ -620,6 +620,9 @@ class GmediaProcessor_Library extends GmediaProcessor{
                         foreach($selected_items as $item){
                             $id          = (int)$item;
                             $gmedia      = $gmDB->get_gmedia($id, ARRAY_A);
+                            if(!$gmedia){
+                                continue;
+                            }
                             $item_author = (int)$gmedia['author'];
 
                             if('custom' == $b_filename && ($gmCore->caps['gmedia_delete_others_media'] || ($item_author == $user_ID))){
@@ -841,7 +844,7 @@ class GmediaProcessor_Library extends GmediaProcessor{
                         foreach($selected_items as $gmid){
                             $gmCore->duplicate_gmedia($gmid);
                         }
-                        $this->msg[] = sprintf(__('%d item duplicated (without terms)', 'grand-media'), $count);
+                        $this->msg[] = sprintf(__('%d item was duplicated', 'grand-media'), $count);
                         set_transient('gmedia_action_msg', $this->msg, 30);
                     }
                 }

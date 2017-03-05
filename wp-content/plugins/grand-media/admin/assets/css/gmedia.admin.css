@@ -55,6 +55,7 @@ select.disabled {pointer-events:none;}
   position: fixed;
   z-index: 999999;
   max-width: 220px;
+  word-wrap:break-word;
 }
 #gmedia-data-helper:before{
   border: solid;
@@ -611,6 +612,7 @@ label.cb_media-object-gallery {
 }
 .media-title {
   font-size:22px;
+  word-wrap:break-word;
 }
 .media-caption:empty { display:none; }
 .media-caption.in-library {
@@ -804,7 +806,7 @@ a.trash-icon:hover { color:#843534; }
   width:auto;
   background-color:#ffffff;
 }
-.term-list-item .term_name { margin-right:100px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:22px;}
+.term-list-item .term_name { margin-right:80px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:22px; display:inline-block; line-height:100%; }
 .term-list-item .no-checkbox .term_name { margin-right:5px; font-size:16px;}
 .term-list-item .term_info_author {
   font-size:80%;

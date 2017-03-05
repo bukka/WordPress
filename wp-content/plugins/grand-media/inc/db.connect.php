@@ -3135,10 +3135,12 @@ class GmediaDB{
 
         // expected_slashed ($name)
         $name = stripslashes($name);
+        $name = $gmCore->mb_convert_encoding_utf8($name);
         if('gmedia_module' == $taxonomy){
             $description = maybe_serialize($description);
         } else{
             $description = stripslashes($description);
+            $description = $gmCore->mb_convert_encoding_utf8($description);
             if(in_array($taxonomy, array('gmedia_tag', 'gmedia_category'))){
                 $global = 0;
             }
@@ -3249,6 +3251,7 @@ class GmediaDB{
 
         // expected_slashed ($name)
         $name = stripslashes($name);
+        $name = $gmCore->mb_convert_encoding_utf8($name);
         if('' == trim($name)){
             return new WP_Error('gm_empty_term_name', __('A name is required for term'));
         }
@@ -3263,6 +3266,7 @@ class GmediaDB{
             $description = maybe_serialize($description);
         } else{
             $description = stripslashes($description);
+            $description = $gmCore->mb_convert_encoding_utf8($description);
             if(in_array($taxonomy, array('gmedia_tag', 'gmedia_category'))){
                 $global = 0;
             }

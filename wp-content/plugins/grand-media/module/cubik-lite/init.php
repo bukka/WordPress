@@ -36,7 +36,7 @@ foreach($gmedias as $gmkey => $item){
     $attr_data = array('id'      => $item->ID,
                        'post_id' => $item->post_id,
                        'ratio'   => $item->img_ratio,
-                       'type'    => $item->type,
+                       'mtype'   => $item->type,
                        'ext'     => $item->ext,
                        'views'   => empty($item->meta['views'][0])? 0 : (int)$item->meta['views'][0],
                        'likes'   => empty($item->meta['likes'][0])? 0 : (int)$item->meta['likes'][0],
@@ -63,8 +63,8 @@ foreach($gmedias as $gmkey => $item){
         } else{
             $link_target = '_blank';
         }
-        if(isset($meta['link_target'][0])){
-            $link_target = $meta['link_target'][0];
+        if(isset($item->meta['link_target'][0])){
+            $link_target = $item->meta['link_target'][0];
         }
 
         $attr_data['link']   = $item->link;

@@ -418,44 +418,24 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                         methods.initLightbox();
                         methods.loadGalleryDeepLink();
 
+                        setTimeout(function(){
+                            $('a.gmCubikLite_thumbImg', Container).off('click');
+                        },10);
                     },
                     initLightbox: function() {
-                        $.magnificPopup.instance.next = function() {
-                            if($.magnificPopup.instance.index < $.magnificPopup.instance.items.length - 1) {
-                                $.magnificPopup.proto.next.call(this, arguments);
+                        $('.gmCubikLite_thumb', Container).not('.gmCubikLite_parsed').each(function(){
+                            var link = $(this).attr('data-link');
+                            if(link) {
+                                if(link.indexOf('youtube.com/') !== -1 || link.indexOf('vimeo.com/') !== -1) {
+                                    $('.gmCubikLite_thumbImg', this).attr('href', link);
+                                    $(this).addClass('mfp-iframe').removeAttr('data-link').removeAttr('data-target').attr('data-mtype', 'video');
+                                } else if(link.indexOf('//maps.google.') !== -1 || (link.indexOf('google.') !== -1 && link.indexOf('/maps/embed') !== -1)) {
+                                    $('.gmCubikLite_thumbImg', this).attr('href', link);
+                                    $(this).addClass('mfp-iframe').removeAttr('data-link').removeAttr('data-target').attr('data-mtype', 'map');
+                                }
                             }
-                        };
-                        $.magnificPopup.instance.prev = function() {
-                            if($.magnificPopup.instance.index > 0) {
-                                $.magnificPopup.proto.prev.call(this, arguments);
-                            }
-                        };
-                        $.magnificPopup.instance.toggleArrows = function() {
-                            if($.magnificPopup.instance.index < $.magnificPopup.instance.items.length - 1) {
-                                $(".mfp-arrow-right").show();
-                            }
-                            if($.magnificPopup.instance.index == $.magnificPopup.instance.items.length - 1) {
-                                $(".mfp-arrow-right").hide();
-                            }
-
-                            if($.magnificPopup.instance.index > 0) {
-                                $(".mfp-arrow-left").show();
-                            }
-                            if($.magnificPopup.instance.index == 0) {
-                                $(".mfp-arrow-left").hide();
-                            }
-                        };
-                        $.magnificPopup.instance.updateItemHTML = function() {
-                            $.magnificPopup.instance.toggleArrows();
-                            $.magnificPopup.proto.updateItemHTML.call(this, arguments);
-                        };
-                        var orig_checkIfClose = $.magnificPopup.instance._checkIfClose;
-                        $.magnificPopup.instance._checkIfClose = function(target) {
-                            if($(target).closest('.mfp-prevent-close').length) {
-                                return;
-                            }
-                            return orig_checkIfClose(target);
-                        };
+                            $(this).addClass('gmCubikLite_parsed');
+                        });
 
                         var thumbs_wrapper = $('.gmCubikLite_thumbsWrapper', Container);
                         thumbs_wrapper.magnificPopup({
@@ -495,7 +475,44 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                                     }, 16);
                                 },
                                 open: function() {
-                                    $(document.body).addClass('mfp-gmedia-open');
+                                    $.magnificPopup.instance.next = function() {
+                                        if($.magnificPopup.instance.index < $.magnificPopup.instance.items.length - 1) {
+                                            $.magnificPopup.proto.next.call(this, arguments);
+                                        }
+                                    };
+                                    $.magnificPopup.instance.prev = function() {
+                                        if($.magnificPopup.instance.index > 0) {
+                                            $.magnificPopup.proto.prev.call(this, arguments);
+                                        }
+                                    };
+                                    $.magnificPopup.instance.toggleArrows = function() {
+                                        if($.magnificPopup.instance.index < $.magnificPopup.instance.items.length - 1) {
+                                            $(".mfp-arrow-right").show();
+                                        }
+                                        if($.magnificPopup.instance.index == $.magnificPopup.instance.items.length - 1) {
+                                            $(".mfp-arrow-right").hide();
+                                        }
+
+                                        if($.magnificPopup.instance.index > 0) {
+                                            $(".mfp-arrow-left").show();
+                                        }
+                                        if($.magnificPopup.instance.index == 0) {
+                                            $(".mfp-arrow-left").hide();
+                                        }
+                                    };
+                                    $.magnificPopup.instance.updateItemHTML = function() {
+                                        $.magnificPopup.instance.toggleArrows();
+                                        $.magnificPopup.proto.updateItemHTML.call(this, arguments);
+                                    };
+                                    var orig_checkIfClose = $.magnificPopup.instance._checkIfClose;
+                                    $.magnificPopup.instance._checkIfClose = function(target) {
+                                        if($(target).closest('.mfp-prevent-close').length) {
+                                            return;
+                                        }
+                                        return orig_checkIfClose(target);
+                                    };
+
+                                    $(document.body).addClass('mfp-gmedia-open gmedia-cubik-lite');
                                     itemLoaded = this.currItem.id;
                                     if(opt.commentsEnabled) {
                                         this.wrap.on('click.gmCloseComments', '.mfp-img--comments-div', function() {
@@ -513,13 +530,17 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                                             var sharelink,
                                                 title = mfp.currItem.title,
                                                 imgsrc = mfp.currItem.image,
-                                                url = window.location.href;
-                                            if(!opt.deepLinks) {
-                                                var hash = "#!gallery-" + ID + '-' + mfp.currItem['id'];
-                                                url = ('' + window.location).split('#')[0] + hash;
-                                            }
+                                                _url = ('' + window.location.href).split('#'),
+                                                url = _url[0];
                                             if(opt.share_post_link) {
                                                 url = mfp.currItem['post_link'];
+                                            } else {
+                                                var separator = (url.indexOf("?") === -1)? "?" : "&",
+                                                    newParam = separator + "gmedia_share=" + mfp.currItem['id'];
+                                                url = url.replace(newParam,"");
+                                                url += newParam;
+                                                var hash = "#!gallery-" + ID + '-' + mfp.currItem['id'];
+                                                url += hash;
                                             }
                                             if($(this).hasClass('mfp-share_twitter')) {
                                                 sharelink = 'https://twitter.com/home?status=' + encodeURIComponent(title + ' ' + url);
@@ -548,8 +569,8 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                                 close: function() {
                                     $(Container).data('gmCubikLite_stop', false);
                                     $(Container).trigger('mouseleave');
-                                    $(document.body).removeClass('mfp-gmedia-open');
-                                    if('image' != this.currItem.type) {
+                                    $(document.body).removeClass('mfp-gmedia-open gmedia-cubik-lite');
+                                    if('image' != this.currItem.mtype) {
                                         $(document.body).removeClass('mfp-zoom-out-cur');
                                         this.wrap.removeClass('mfp-iframe-loaded');
                                     }
@@ -595,14 +616,14 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                                             location.replace(url);
                                         }
                                     }
-                                    this.contentContainer.attr('data-gmtype', this.currItem.type).attr('data-ext', this.currItem.ext);
+                                    this.contentContainer.attr('data-gmtype', this.currItem.mtype).attr('data-ext', this.currItem.ext);
                                     if(opt.commentsEnabled) {
                                         this.wrap.removeClass('mfp-comments-open mfp-comments-loaded');
                                         $('.mfp-comments-wrapper', this.contentContainer).css({height: ''}).empty();
                                     }
 
                                     clearTimeout(ticker);
-                                    if('image' != this.currItem.type) {
+                                    if('image' != this.currItem.mtype) {
                                         $(document.body).addClass('mfp-zoom-out-cur');
                                         var self = this;
                                         setTimeout(function() {

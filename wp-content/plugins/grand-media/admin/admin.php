@@ -176,6 +176,14 @@ class GmediaAdmin{
             }
         }
 
+//        global $wpdb;
+//        $query = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gmedia_term");
+//        foreach($query as $item){
+//            $name = $gmCore->mb_convert_encoding_utf8($item->name);
+//            $wpdb->update($wpdb->prefix . 'gmedia_term', array('name' => $name), array('term_id' => $item->term_id));
+//        }
+//        echo '<pre>' . print_r($query, true) . '</pre>';
+
         ?>
         <div id="gmedia-container" class="gmedia-admin">
             <div id="gmedia-header" class="clearfix">

@@ -8,7 +8,7 @@ if(!defined('ABSPATH')){
 
 global $gmGallery;
 
-add_action('wp_head', 'gmogmeta_header'); // Generate og:image meta tag
+add_action('wp_head', 'gmogmeta_header', 2); // Generate og:image meta tag
 add_action('pre_get_posts', 'gmedia_alter_query'); // Show taxonomy archives for gmedia tags and categories
 add_action('pre_get_posts', 'gmedia_alter_query_author', 100); // Show gmedia posts on author profile page
 if((int)$gmGallery->options['wp_term_related_gmedia']){
@@ -20,20 +20,34 @@ add_action('the_post', 'gmedia_the_post'); // Show Gmedia post types
  * Generate og:image meta tag
  */
 function gmogmeta_header(){
-    if(is_single()){
+    global $gmDB, $gmCore;
+    $share_ref = (int)$gmCore->_get('gmedia_share', 0);
+    $gmedia = false;
+    $is_single = is_single();
+    if($share_ref && ($gmedia = $gmDB->get_gmedia($share_ref))){
+        //$og_url_id = $gmedia->post_id;
+    }
+    if($is_single){
         global $post;
-        if(isset($post->post_type) && $post->post_type == 'gmedia'){
-            global $gmDB, $gmCore;
+        if(!$gmedia && isset($post->post_type) && $post->post_type == 'gmedia'){
             $gmedia = $gmDB->get_post_gmedia($post->ID);
-            if($gmedia){
-                $image_url = $gmCore->gm_get_media_image($gmedia, 'web');
-                ?>
-                <!-- Gmedia Open Graph Meta Image -->
-                <meta property="og:image" content="<?php echo $image_url; ?>"/>
-                <!-- End Gmedia Open Graph Meta Image -->
-                <?php
-            }
         }
+        //$og_url_id = $post->ID;
+    }
+    if($gmedia){
+        remove_action('wp_head', 'rel_canonical');
+        $image_url = $gmCore->gm_get_media_image($gmedia, 'web');
+        $description = strip_tags($gmedia->description);
+        if(!$description){
+            $description = get_bloginfo('description');
+        }
+        ?>
+        <!-- Gmedia Open Graph Meta Image -->
+        <meta property="og:title" content="<?php echo esc_attr($gmedia->title); ?>"/>
+        <meta property="og:description" content="<?php echo esc_attr($description); ?>"/>
+        <meta property="og:image" content="<?php echo $image_url; ?>"/>
+        <!-- End Gmedia Open Graph Meta Image -->
+        <?php
     }
 }
 
@@ -83,8 +97,10 @@ function gmedia_alter_query($query){
         $query->set('post__in', $post_ids);
         $query->set('orderby', 'post__in');
 
-        $wp_query->is_tax     = true;
-        $wp_query->is_archive = true;
+        $wp_query->is_tag      = false;
+        $wp_query->is_category = false;
+        $wp_query->is_tax      = false;
+        $wp_query->is_archive  = true;
 
         //we remove the actions hooked on the '__after_loop' (post navigation)
         remove_all_actions('__after_loop');
@@ -116,7 +132,7 @@ function gmedia_alter_query_author($query){
         return;
     }
 
-    $post_type = $query->get('post_type', array());
+    $post_type = $query->get('post_type', array('post'));
     $post_type = array_unique(array_merge($gmedia_post_type, (array)$post_type));
     $query->set('post_type', $post_type);
 
@@ -305,95 +321,97 @@ function gmedia_post_type__the_content($content){
                     }
                     ?>
                     <div class="gmsingle_wrapper gmsingle_clearfix">
-                        <div class="gmsingle_photo_header gmsingle_clearfix">
-                            <div class="gmsingle_name_wrap gmsingle_clearfix">
-                                <?php if(!empty($author_avatar)){ ?>
-                                    <div class="gmsingle_user_avatar">
-                                        <a class="gmsingle_user_avatar_link" href="<?php echo urldecode($author_posts_link); ?>"><img src="<?php echo $author_avatar; ?>" alt=""/></a>
-                                    </div>
-                                <?php } ?>
-                                <div class="gmsingle_title_author">
-                                    <div class="gmsingle_title"><?php
-                                        if(('image' != $gmedia->type) && $gmedia->link){
-                                            echo "<a href='{$gmedia_link}'{$link_target}>{$gmedia->title}&nbsp;&#x1f517;</a>";
-                                        } else{
-                                            echo $gmedia->title;
-                                        }
-                                        ?>&nbsp;</div>
-
-                                    <div class="gmsingle_author_name">
-                                        <a class="gmsingle_author_link" href="<?php echo urldecode($author_posts_link); ?>"><?php echo $author_name; ?></a>
+                        <script type="text/html" class="gm_script2html">
+                            <div class="gmsingle_photo_header gmsingle_clearfix">
+                                <div class="gmsingle_name_wrap gmsingle_clearfix">
+                                    <?php if(!empty($author_avatar)){ ?>
+                                        <div class="gmsingle_user_avatar">
+                                            <a class="gmsingle_user_avatar_link" href="<?php echo urldecode($author_posts_link); ?>"><img src="<?php echo $author_avatar; ?>" alt=""/></a>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="gmsingle_title_author">
+                                        <div class="gmsingle_title"><?php
+                                            if(('image' != $gmedia->type) && $gmedia->link){
+                                                echo "<a href='{$gmedia_link}'{$link_target}>{$gmedia->title}&nbsp;&#x1f517;</a>";
+                                            } else{
+                                                echo $gmedia->title;
+                                            }
+                                            ?>&nbsp;</div>
+                                        <div class="gmsingle_author_name">
+                                            <a class="gmsingle_author_link" href="<?php echo urldecode($author_posts_link); ?>"><?php echo $author_name; ?></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </script>
                         <div class="gmsingle_photo_info">
                             <div class="gmsingle_description_wrap">
-                                <?php
-                                echo apply_filters('the_gmedia_content', wpautop($gmedia->description));
+                                <?php echo apply_filters('the_gmedia_content', wpautop($gmedia->description)); ?>
+                                <script type="text/html" class="gm_script2html">
+                                    <?php
+                                    if(!empty($gmedia->album)){
+                                        $term_name    = $gmedia->album[0]->name;
+                                        $term_post_id = $gmDB->get_metadata('gmedia_term', $gmedia->album[0]->term_id, '_post_ID', true);
+                                        if(!empty($term_post_id)){
+                                            $term_url = get_permalink($term_post_id);
+                                        } else{
+                                            $term_url = $gmCore->gmcloudlink($gmedia->album[0]->term_id, 'album');
+                                        }
+                                        ?>
+                                        <div class="gmsingle_terms">
+                                            <span class="gmsingle_term_label"><?php _e('Album'); ?>:</span>
+                                            <span class="gmsingle_album"><span class="gmsingle_term"><a href="<?php echo $term_url; ?>"><?php echo $term_name; ?></a></span></span>
+                                        </div>
+                                        <?php
+                                    }
+                                    if(!empty($gmedia->categories)){
+                                        $item_cats = array();
+                                        foreach($gmedia->categories as $term){
+                                            $term->slug = $term->name;
+                                            $term_url   = get_term_link($term);
+                                            //$term_url = $gmCore->gmcloudlink($term->term_id, 'category');
+                                            $item_cats[] = "<span class='gmsingle_term'><a href='{$term_url}'>{$term->name}</a></span>";
+                                        }
+                                        ?>
+                                        <div class="gmsingle_terms">
+                                            <span class="gmsingle_term_label"><?php _e('Categories'); ?>:</span>
+                                            <span class="gmsingle_categories"><?php echo implode(' ', $item_cats); ?></span>
+                                        </div>
+                                        <?php
+                                    }
+                                    if(!empty($gmedia->tags)){
+                                        $item_tags = array();
+                                        foreach($gmedia->tags as $term){
+                                            $term->slug = $term->name;
+                                            $term_url   = get_term_link($term);
+                                            //$term_url    = $gmCore->gmcloudlink($term->term_id, 'tag');
+                                            $item_tags[] = "<span class='gmsingle_term'><a href='{$term_url}'>#{$term->name}</a></span>";
+                                        }
+                                        ?>
+                                        <div class="gmsingle_terms">
+                                            <span class="gmsingle_term_label"><?php _e('Tags'); ?>:</span>
+                                            <span class="gmsingle_tags"><?php echo implode(' ', $item_tags); ?></span>
+                                        </div>
+                                    <?php } ?>
+                                </script>
+                            </div>
+                            <script type="text/html" class="gm_script2html">
+                                <?php if($gmedia->gps){
+                                    $loc = str_replace(' ', '', $gmedia->gps);
+                                    ?>
+                                    <div class="gmsingle_location_section">
+                                        <div class="gmsingle_details_title"><?php _e('Location'); ?></div>
 
-                                if(!empty($gmedia->album)){
-                                    $term_name    = $gmedia->album[0]->name;
-                                    $term_post_id = $gmDB->get_metadata('gmedia_term', $gmedia->album[0]->term_id, '_post_ID', true);
-                                    if(!empty($term_post_id)){
-                                        $term_url = get_permalink($term_post_id);
-                                    } else{
-                                        $term_url = $gmCore->gmcloudlink($gmedia->album[0]->term_id, 'album');
-                                    }
-                                    ?>
-                                    <div class="gmsingle_terms">
-                                        <span class="gmsingle_term_label"><?php _e('Album'); ?>:</span>
-                                        <span class="gmsingle_album"><span class="gmsingle_term"><a href="<?php echo $term_url; ?>"><?php echo $term_name; ?></a></span></span>
-                                    </div>
-                                    <?php
-                                }
-                                if(!empty($gmedia->categories)){
-                                    $item_cats = array();
-                                    foreach($gmedia->categories as $term){
-                                        $term->slug = $term->name;
-                                        $term_url   = get_term_link($term);
-                                        //$term_url = $gmCore->gmcloudlink($term->term_id, 'category');
-                                        $item_cats[] = "<span class='gmsingle_term'><a href='{$term_url}'>{$term->name}</a></span>";
-                                    }
-                                    ?>
-                                    <div class="gmsingle_terms">
-                                        <span class="gmsingle_term_label"><?php _e('Categories'); ?>:</span>
-                                        <span class="gmsingle_categories"><?php echo implode(' ', $item_cats); ?></span>
-                                    </div>
-                                    <?php
-                                }
-                                if(!empty($gmedia->tags)){
-                                    $item_tags = array();
-                                    foreach($gmedia->tags as $term){
-                                        $term->slug = $term->name;
-                                        $term_url   = get_term_link($term);
-                                        //$term_url    = $gmCore->gmcloudlink($term->term_id, 'tag');
-                                        $item_tags[] = "<span class='gmsingle_term'><a href='{$term_url}'>#{$term->name}</a></span>";
-                                    }
-                                    ?>
-                                    <div class="gmsingle_terms">
-                                        <span class="gmsingle_term_label"><?php _e('Tags'); ?>:</span>
-                                        <span class="gmsingle_tags"><?php echo implode(' ', $item_tags); ?></span>
+                                        <div class="gmsingle_location_info">
+                                            <a href='https://www.google.com/maps/place/<?php echo $loc; ?>' target='_blank'><img src='//maps.googleapis.com/maps/api/staticmap?key=AIzaSyBMiF6nlG5O1tE81Q-35_dckOwW4ypMRuk&size=320x240&zoom=10&scale=2&maptype=roadmap&markers=<?php echo $loc; ?>' alt='' width='320' height='240'/></a>
+                                        </div>
                                     </div>
                                 <?php } ?>
-                            </div>
+                                <div class="gmsingle_details_section">
+                                    <div class="gmsingle_details_title"><?php _e('Details', 'grand-media'); ?></div>
 
-                            <?php if($gmedia->gps){
-                                $loc = str_replace(' ', '', $gmedia->gps);
-                                ?>
-                                <div class="gmsingle_location_section">
-                                    <div class="gmsingle_details_title"><?php _e('Location'); ?></div>
-
-                                    <div class="gmsingle_location_info">
-                                        <a href='https://www.google.com/maps/place/<?php echo $loc; ?>' target='_blank'><img src='//maps.googleapis.com/maps/api/staticmap?key=AIzaSyBMiF6nlG5O1tE81Q-35_dckOwW4ypMRuk&size=320x240&zoom=10&scale=2&maptype=roadmap&markers=<?php echo $loc; ?>' alt='' width='320' height='240'/></a>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                            <div class="gmsingle_details_section">
-                                <div class="gmsingle_details_title"><?php _e('Details', 'grand-media'); ?></div>
-
-                                <div class="gmsingle_slide_details">
-                                    <?php /* ?>
+                                    <div class="gmsingle_slide_details">
+                                        <?php /* ?>
                                 <div class='gmsingle_badges'>
                                     <div class='gmsingle_badges__column'>
                                         <div class='gmsingle_badges__label'><?php _e('Views', 'grand-media'); ?></div>
@@ -407,51 +425,52 @@ function gmedia_post_type__the_content($content){
                                 </div>
                                 <?php
                                 */
-                                    $exif = $gmCore->metadata_info($gmedia->ID);
+                                        $exif = $gmCore->metadata_info($gmedia->ID);
 
-                                    $details = array();
-                                    if(!empty($exif)){
-                                        $details['model']           = empty($exif['model'])? '' : $exif['model']['value'];
-                                        $details['lens']            = empty($exif['lens'])? '' : $exif['lens']['value'];
-                                        $details['camera_settings'] = array('focallength' => empty($exif['focallength'])? (empty($exif['focallength35'])? '' : $exif['focallength35']['value']) : $exif['focallength']['value'],
-                                                                            'aperture'    => empty($exif['aperture'])? '' : str_replace('f', 'ƒ', $exif['aperture']['value']),
-                                                                            'exposure'    => empty($exif['exposure'])? '' : $exif['exposure']['value'],
-                                                                            'iso'         => empty($exif['iso'])? '' : 'ISO ' . $exif['iso']['value']
-                                        );
-                                        $details['camera_settings'] = array_filter($details['camera_settings']);
-                                        $details['taken']           = empty($exif['created_timestamp'])? '' : date_i18n(get_option('date_format'), $exif['created_timestamp']['value']);
-                                    }
-                                    $details['uploaded'] = date_i18n(get_option('date_format'), strtotime($gmedia->date));
+                                        $details = array();
+                                        if(!empty($exif)){
+                                            $details['model']           = empty($exif['model'])? '' : $exif['model']['value'];
+                                            $details['lens']            = empty($exif['lens'])? '' : $exif['lens']['value'];
+                                            $details['camera_settings'] = array('focallength' => empty($exif['focallength'])? (empty($exif['focallength35'])? '' : $exif['focallength35']['value']) : $exif['focallength']['value'],
+                                                                                'aperture'    => empty($exif['aperture'])? '' : str_replace('f', 'ƒ', $exif['aperture']['value']),
+                                                                                'exposure'    => empty($exif['exposure'])? '' : $exif['exposure']['value'],
+                                                                                'iso'         => empty($exif['iso'])? '' : 'ISO ' . $exif['iso']['value']
+                                            );
+                                            $details['camera_settings'] = array_filter($details['camera_settings']);
+                                            $details['taken']           = empty($exif['created_timestamp'])? '' : date_i18n(get_option('date_format'), $exif['created_timestamp']['value']);
+                                        }
+                                        $details['uploaded'] = date_i18n(get_option('date_format'), strtotime($gmedia->date));
 
-                                    if(!empty($details['model'])){ ?>
-                                        <div class='gmsingle_exif'>
-                                            <div class='gmsingle_label gmsingle_exif_model'><?php echo $details['model']; ?></div>
-                                            <?php if(!empty($details['lens'])){ ?>
-                                                <div class='gmsingle_label_small gmsingle_exif_lens'><?php echo $details['lens']; ?></div>
-                                            <?php }
-                                            $camera_settings = array();
-                                            foreach($details['camera_settings'] as $key => $value){
-                                                $camera_settings[] = "<span class='gmsingle_exif_{$key}'>{$value}</span>";
-                                            }
-                                            if(!empty($camera_settings)){ ?>
-                                                <div class='gmsingle_label_small gmsingle_camera_settings'><?php echo implode('<span class="gmsingle_separator"> / </span>', $camera_settings); ?></div>
-                                            <?php } ?>
-                                        </div>
-                                    <?php } ?>
-                                    <div class='gmsingle_meta'>
-                                        <?php if(!empty($details['taken'])){ ?>
-                                            <div class='gmsingle_clearfix'>
-                                                <span class='gmsingle_meta_key'><?php _e('Created', 'grand-media'); ?></span>
-                                                <span class='gmsingle_meta_value'><?php echo $details['taken']; ?></span>
+                                        if(!empty($details['model'])){ ?>
+                                            <div class='gmsingle_exif'>
+                                                <div class='gmsingle_label gmsingle_exif_model'><?php echo $details['model']; ?></div>
+                                                <?php if(!empty($details['lens'])){ ?>
+                                                    <div class='gmsingle_label_small gmsingle_exif_lens'><?php echo $details['lens']; ?></div>
+                                                <?php }
+                                                $camera_settings = array();
+                                                foreach($details['camera_settings'] as $key => $value){
+                                                    $camera_settings[] = "<span class='gmsingle_exif_{$key}'>{$value}</span>";
+                                                }
+                                                if(!empty($camera_settings)){ ?>
+                                                    <div class='gmsingle_label_small gmsingle_camera_settings'><?php echo implode('<span class="gmsingle_separator"> / </span>', $camera_settings); ?></div>
+                                                <?php } ?>
                                             </div>
                                         <?php } ?>
-                                        <div class='gmsingle_clearfix'>
-                                            <span class='gmsingle_meta_key'><?php _e('Uploaded', 'grand-media'); ?></span>
-                                            <span class='gmsingle_meta_value'><?php echo $details['uploaded']; ?></span>
+                                        <div class='gmsingle_meta'>
+                                            <?php if(!empty($details['taken'])){ ?>
+                                                <div class='gmsingle_clearfix'>
+                                                    <span class='gmsingle_meta_key'><?php _e('Created', 'grand-media'); ?></span>
+                                                    <span class='gmsingle_meta_value'><?php echo $details['taken']; ?></span>
+                                                </div>
+                                            <?php } ?>
+                                            <div class='gmsingle_clearfix'>
+                                                <span class='gmsingle_meta_key'><?php _e('Uploaded', 'grand-media'); ?></span>
+                                                <span class='gmsingle_meta_value'><?php echo $details['uploaded']; ?></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </script>
                         </div>
                     </div>
                     <style type="text/css">
@@ -527,18 +546,19 @@ function gmedia_post_type__the_content($content){
         if(!isset($post->term_id)){
             $post->term_id = get_post_meta($post->ID, '_gmedia_term_ID', true);
         }
-        $output = '';
+        $output      = '';
         $gmedia_term = $gmDB->get_term($post->term_id);
-
-        $current_filter = current_filter();
-        if('get_the_excerpt' == $current_filter){
-            $cover_id    = $gmDB->get_metadata('gmedia_term', $post->term_id, '_cover', true);
-            if((int)$cover_id && ($cover = $gmDB->get_gmedia((int)$cover_id))){
-                $output .= '<div class="gmedia-term-cover"><img class="gmedia-item" style="max-width:100%;" src="' . $gmCore->gm_get_media_image($cover, 'web', true) . '" alt="' . esc_attr_e($gmedia_term->name) . '"/></div>';
+        if($gmedia_term && !is_wp_error($gmedia_term)){
+            $current_filter = current_filter();
+            if('get_the_excerpt' == $current_filter){
+                $cover_id = $gmDB->get_metadata('gmedia_term', $post->term_id, '_cover', true);
+                if((int)$cover_id && ($cover = $gmDB->get_gmedia((int)$cover_id))){
+                    $output .= '<div class="gmedia-term-cover"><img class="gmedia-item" style="max-width:100%;" src="' . $gmCore->gm_get_media_image($cover, 'web', true) . '" alt="' . esc_attr_e($gmedia_term->name) . '"/></div>';
+                }
             }
-        }
 
-        $output .= apply_filters('the_gmedia_content', wpautop($gmedia_term->description));
+            $output .= apply_filters('the_gmedia_content', wpautop($gmedia_term->description));
+        }
 
         if('get_the_excerpt' != $current_filter){
             $output .= do_shortcode("[gmedia id={$post->term_id}]");

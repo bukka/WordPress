@@ -33,8 +33,17 @@ class GmediaProcessor_Settings extends GmediaProcessor{
             if(empty($set['endpoint'])){
                 $set['endpoint'] = 'gmedia';
             }
-            if($set['endpoint'] !== $gmGallery->options['endpoint'] || $set['gmedia_post_slug'] !== $gmGallery->options['gmedia_post_slug'] || $set['gmedia_album_post_slug'] !== $gmGallery->options['gmedia_album_post_slug'] || $set['gmedia_gallery_post_slug'] !== $gmGallery->options['gmedia_gallery_post_slug']){
+            if(
+                $set['endpoint'] !== $gmGallery->options['endpoint']
+               || $set['gmedia_post_slug'] !== $gmGallery->options['gmedia_post_slug']
+               || $set['gmedia_album_post_slug'] !== $gmGallery->options['gmedia_album_post_slug']
+               || $set['gmedia_gallery_post_slug'] !== $gmGallery->options['gmedia_gallery_post_slug']
+               || $set['gmedia_has_archive'] !== $gmGallery->options['gmedia_has_archive']
+               || $set['gmedia_album_has_archive'] !== $gmGallery->options['gmedia_album_has_archive']
+               || $set['gmedia_gallery_has_archive'] !== $gmGallery->options['gmedia_gallery_has_archive']
+            ){
                 $flush_rewrite_rules = true;
+                $set['flush_rewrite_rules'] = true;
             }
 
             foreach($set as $key => $val){

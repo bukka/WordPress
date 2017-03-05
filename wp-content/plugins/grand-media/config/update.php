@@ -411,8 +411,8 @@ function gmedia_db_update__1_8_0(){
                     continue;
                 }
                 $post_data = array('post_author'  => $term->global,
-                                   'post_content' => $term->description,
-                                   'post_title'   => $term->name,
+                                   'post_content' => $gmCore->mb_convert_encoding_utf8($term->description),
+                                   'post_title'   => $gmCore->mb_convert_encoding_utf8($term->name),
                                    'post_status'  => $term->status,
                                    'post_type'    => $term->taxonomy
                 );
@@ -872,6 +872,7 @@ function gmedia_quite_update(){
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/minima');
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/phantom');
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/wp-videoplayer');
+        $gmCore->delete_folder($gmCore->upload['path'] . '/module/cubik-lite');
 
         update_option("gmediaVersion", GMEDIA_VERSION);
 

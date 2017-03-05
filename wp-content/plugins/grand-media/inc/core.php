@@ -2642,7 +2642,12 @@ class GmediaCore{
                             'title'       => $gmedia->title,
                             'link'        => $gmedia->link,
                             'description' => $gmedia->description,
-                            'status'      => $gmedia->status
+                            'status'      => $gmedia->status,
+                            'terms'       => array(
+                                'gmedia_album' => $gmDB->get_gmedia_terms($gmedia->ID, array('gmedia_album'), array('fields' => 'ids')),
+                                'gmedia_category' => $gmDB->get_gmedia_terms($gmedia->ID, array('gmedia_category'), array('fields' => 'ids')),
+                                'gmedia_tag' => $gmDB->get_gmedia_terms($gmedia->ID, array('gmedia_tag'), array('fields' => 'ids', 'order' => 'term_order'))
+                            )
         );
 
         $media_data['author'] = get_current_user_id();
@@ -2652,11 +2657,11 @@ class GmediaCore{
 
         $media_metadata = $gmDB->get_metadata('gmedia', $gmedia->ID);
         foreach($media_metadata as $key => $values){
-            if($this->is_protected_meta($key, 'gmedia')){
+            //if($this->is_protected_meta($key, 'gmedia')){
                 foreach($values as $val){
                     $gmDB->add_metadata($meta_type = 'gmedia', $id, $key, $val);
                 }
-            }
+            //}
         }
 
     }
@@ -3546,14 +3551,18 @@ class GmediaCore{
      * @return array Gmedia Capabilities
      */
     function modules_order(){
-        return array('phantom'        => '',
+        return array(
                      'phantom-pro'    => '',
+                     'albums-stripes' => '',
                      'cubik'          => '',
+                     'desire'         => '',
                      'phototravlr'    => '',
                      'realslider'     => '',
                      'mosaic'         => '',
                      'photobox'       => '',
                      'wavesurfer'     => '',
+                     'phantom'        => '',
+                     'cubik-lite'     => '',
                      'photomania'     => '',
                      'jq-mplayer'     => '',
                      'wp-videoplayer' => '',

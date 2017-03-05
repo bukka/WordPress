@@ -494,6 +494,18 @@ function gmedia_ios_app_term_data_extend(&$term, $share_link_base, $logic = 0, $
     $term->cap = (4 == $cap)? 4 : 0;
 }
 
+function gmedia_object_to_array($obj) {
+    if(is_object($obj)) $obj = (array) $obj;
+    if(is_array($obj)) {
+        $new = array();
+        foreach($obj as $key => $val) {
+            $new[$key] = gmedia_object_to_array($val);
+        }
+    }
+    else $new = $obj;
+    return $new;
+}
+
 /**
  * @param      $action
  * @param      $data
@@ -519,7 +531,9 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
     $error_info = array();
     $alert      = array();
     $alert_info = array();
-    $data       = (array)$data;
+
+    $data       = gmedia_object_to_array($data);
+
     switch($action){
         case 'do_library':
 
@@ -909,11 +923,12 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
 
             $terms_ids_query = array();
             if(!empty($data['tag__in'])){
+                $tag_ids = wp_parse_id_list($data['tag__in']);
                 if(empty($data['category__in']) && empty($data['album__in'])){
                     $args['orderby'] = $gmGallery->options['in_tag_orderby'];
                     $args['order']   = $gmGallery->options['in_tag_order'];
                 }
-                $terms_ids_query = array_merge($terms_ids_query, $data['tag__in']);
+                $terms_ids_query = array_merge($terms_ids_query, $tag_ids);
             }
             if(!empty($data['category__in'])){
                 $cat_ids = wp_parse_id_list($data['category__in']);
@@ -1002,7 +1017,8 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                                                'current_page' => $gmDB->openPage,
                                                                'items_count'  => $gmDB->resultPerPage,
                                                                'total_count'  => $gmDB->totalResult,
-                                                               'count'        => count($all_gmedias_ids)
+                                                               'count'        => count($all_gmedias_ids),
+                                                               //'args' => $data
             ));
             foreach($gmedias as $i => $item){
 

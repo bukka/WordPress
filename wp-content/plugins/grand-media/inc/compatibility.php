@@ -19,6 +19,23 @@ function jetpack_photon_skip_gmedia($skip, $src){
     return $skip;
 }
 
+/**
+ * WP-SpamShield plugin compatibility
+ * @param $pass
+ *
+ * @return bool
+ */
+function wpss_gmedia_check_bypass($pass){
+    global $wp;
+    $is_app = (isset($wp->query_vars['gmedia-app']) && !empty($wp->query_vars['gmedia-app']));
+    if($is_app) {
+        return true;
+    }
+
+    return $pass;
+}
+add_filter('wpss_misc_form_spam_check_bypass', 'wpss_gmedia_check_bypass');
+
 /** Allow Edit Comments for Gmedia Users
  *
  * @param $allcaps

@@ -7,9 +7,9 @@ if(!defined('ABSPATH')){
 /**
  * Edit Album Form
  */
-$_orderby       = isset($term->meta['_orderby'][0])? $term->meta['_orderby'][0] : $gmGallery->options['in_album_orderby'];
-$_order         = isset($term->meta['_order'][0])? $term->meta['_order'][0] : $gmGallery->options['in_album_order'];
-$_module_preset = isset($term->meta['_module_preset'][0])? $term->meta['_module_preset'][0] : '';
+$_orderby       = !empty($term->meta['_orderby'][0])? $term->meta['_orderby'][0] : $gmGallery->options['in_album_orderby'];
+$_order         = !empty($term->meta['_order'][0])? $term->meta['_order'][0] : $gmGallery->options['in_album_order'];
+$_module_preset = !empty($term->meta['_module_preset'][0])? $term->meta['_module_preset'][0] : '';
 ?>
 <form method="post" id="gmedia-edit-term" name="gmEditTerm" class="panel-body" data-id="<?php echo $term->term_id; ?>" action="<?php echo gm_get_admin_url(); ?>">
     <h4 style="margin-top:0;">

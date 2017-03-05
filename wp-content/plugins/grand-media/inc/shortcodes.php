@@ -122,7 +122,15 @@ function gmedia_shortcode($atts, $shortcode_post_content = ''){
     }
 
     if($userid && current_user_can('gmedia_gallery_manage') && ($preview_module = $gmCore->_get('gmedia_module'))){
-        $_module = $preview_module;
+        if($preview_module != $_module){
+            $_module = $preview_module;
+            $preset  = $gmCore->getModulePreset($_module);
+            if($preset['module'] == $_module){
+                $settings = $preset['settings'];
+            } else{
+                $settings = array($_module => array());
+            }
+        }
     }
 
     $gallery = array();
@@ -387,6 +395,7 @@ function gmedia_raw_shortcode($atts, $shortcode_post_content = ''){
 
     global $gmedia_shortcode_instance;
 
+    unset($atts['_raw'], $atts['_copy']);
     $atts_hash    = md5(build_query($atts));
     $atts['_raw'] = '1';
     gmedia_shortcode($atts, $shortcode_post_content);

@@ -89,12 +89,13 @@ function gmedia_map_editor()
             } else {
                 var script = document.createElement("script");
                 script.type = "text/javascript";
-                script.src = "//maps.google.com/maps/api/js?key=AIzaSyBMiF6nlG5O1tE81Q-35_dckOwW4ypMRuk&callback=handleApiReady";
+                script.src = "//maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBMiF6nlG5O1tE81Q-35_dckOwW4ypMRuk&callback=handleApiReady";
                 document.body.appendChild(script);
             }
         }
 
         function handleApiReady() {
+            console.log('Google Maps API version: ' + google.maps.version);
             latlng = new google.maps.LatLng(<?php echo "{$latlng['lat']}, {$latlng['lng']}"; ?>);
             map = new google.maps.Map(document.getElementById('map'), {
                 center: latlng,
