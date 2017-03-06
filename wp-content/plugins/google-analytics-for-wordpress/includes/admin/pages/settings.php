@@ -53,6 +53,7 @@ function monsterinsights_settings_page() {
      */
     do_action( 'monsterinsights_head' );
     ?>
+    <?php echo monsterinsights_ublock_notice(); ?>
 
     <!-- Tabs -->
     <h1 id="monsterinsights-settings-page-main-nav" class="monsterinsights-main-nav-container monsterinsights-nav-container" data-container="#monsterinsights-settings-pages">
@@ -148,6 +149,18 @@ add_action( 'current_screen', 'monsterinsights_save_general_settings_page' );
  */
 function monsterinsights_updated_settings() {
     echo monsterinsights_get_message( 'success', esc_html__( 'Settings saved successfully.', 'google-analytics-for-wordpress' ) );   
+}
+
+/**
+ * Outputs a WordPress style notification to tell the user their UA code was bad.
+ *
+ * @since 6.0.3
+ * @access public
+ *
+ * @return void
+ */
+function monsterinsights_invalid_ua_code() {
+    echo monsterinsights_get_message( 'error', esc_html__( 'Invalid UA code.', 'google-analytics-for-wordpress' ) );   
 }
 
 /**
