@@ -671,6 +671,13 @@ add_filter( 'deprecated_constructor_trigger_error',
 
 
 /**
+ * Print author box
+ */
+function ethnologist_author_box() {
+	ethnologist_view('box', 'author');
+}
+
+/**
  * Print author content
  */
 function ethnologist_author_content() {
