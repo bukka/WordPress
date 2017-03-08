@@ -798,6 +798,7 @@ function ethnologist_sidebar_page() {
 	if ( is_page() &&
 			!is_page_template('template-sidebar-page.php') &&
 			!is_page_template('template-portfolio-grid.php') &&
+			!is_page_template('template-journal.php') &&
 			!is_page_template('template-contact.php') ) {
 		global $post;
 
@@ -838,7 +839,6 @@ function ethnologist_display_sidebar() {
  * @return string
  */
 function ethnologist_main_class() {
-
 	if ( ethnologist_display_sidebar() ) {
 		// with sidebar
 		return 'col-lg-9 col-md-8 kt-sidebar';
