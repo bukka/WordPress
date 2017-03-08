@@ -59,6 +59,9 @@
 .ethnologist-grid .postcontent footer {
 	padding: 5px 8px !important;
 }
+.sidebar .widget-last {
+	margin-bottom: 20px;
+}
 .entry-content {
 	font-size: 15px;
 }
