@@ -1,7 +1,7 @@
 <div class="author-box">
 	<ul class="nav nav-tabs" id="authorTab">
-		<li class="active"><a href="#about"><?php _e('About Author', 'pinnacle'); ?></a></li>
-		<li><a href="#latest"><?php _e('Latest Posts', 'pinnacle'); ?></a></li>
+		<li class="active"><a href="#about"><?php etn_e( 'About Author' ); ?></a></li>
+		<li><a href="#latest"><?php etn_e( 'Latest Posts' ); ?></a></li>
 	</ul>
 
 	<div class="tab-content postclass">
@@ -9,42 +9,42 @@
 			<div class="author-profile vcard">
 				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
 				<div class="author-follow">
-					<span class="followtext"><?php _e('Follow', 'pinnacle'); ?> <?php the_author_meta( 'display_name' ); ?>:</span>
+					<span class="followtext"><?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?>:</span>
 					<?php if ( get_the_author_meta( 'facebook' ) ) { ?>
 					<span class="facebooklink">
-						<a href="<?php the_author_meta( 'facebook' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Facebook', 'pinnacle');?>"><i class="icon-facebook"></i></a>
+						<a href="<?php the_author_meta( 'facebook' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Facebook' );?>"><i class="icon-facebook"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'twitter' ) ) { ?>
 					<span class="twitterlink">
-						<a href="http://twitter.com/<?php the_author_meta( 'twitter' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Twitter', 'pinnacle');?>"><i class="icon-twitter"></i></a>
+						<a href="http://twitter.com/<?php the_author_meta( 'twitter' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Twitter' );?>"><i class="icon-twitter"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'google' ) ) { ?>
 					<span class="googlepluslink">
-						<a href="<?php the_author_meta( 'google' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Google Plus', 'pinnacle');?>"><i class="icon-google-plus"></i></a>
+						<a href="<?php the_author_meta( 'google' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Google Plus' );?>"><i class="icon-google-plus"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'flickr' ) ) { ?>
 					<span class="flickrlink">
-						<a href="<?php the_author_meta( 'flickr' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Flickr', 'pinnacle');?>"><i class="icon-flickr2"></i></a>
+						<a href="<?php the_author_meta( 'flickr' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Flickr' );?>"><i class="icon-flickr2"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'vimeo' ) ) { ?>
 					<span class="vimeolink">
-						<a href="<?php the_author_meta( 'vimeo' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Vimeo', 'pinnacle');?>"><i class="icon-vimeo"></i></a>
+						<a href="<?php the_author_meta( 'vimeo' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Vimeo' );?>"><i class="icon-vimeo"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'linkedin' ) ) { ?>
 					<span class="linkedinlink">
-						<a href="<?php the_author_meta( 'linkedin' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on linkedin', 'pinnacle');?>"><i class="icon-linkedin"></i></a>
+						<a href="<?php the_author_meta( 'linkedin' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on linkedin' );?>"><i class="icon-linkedin"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'dribbble' ) ) { ?>
 					<span class="dribbblelink">
-						<a href="<?php the_author_meta( 'dribbble' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Dribbble', 'pinnacle');?>"><i class="icon-dribbble"></i></a>
+						<a href="<?php the_author_meta( 'dribbble' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Dribbble' );?>"><i class="icon-dribbble"></i></a>
 					</span>
 					<?php } if ( get_the_author_meta( 'pinterest' ) ) { ?>
 					<span class="pinterestlink">
-						<a href="<?php the_author_meta( 'pinterest' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Pinterest', 'pinnacle');?>"><i class="icon-pinterest"></i></a>
+						<a href="<?php the_author_meta( 'pinterest' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Pinterest' );?>"><i class="icon-pinterest"></i></a>
 					</span>
 	      			<?php } if ( get_the_author_meta( 'instagram' ) ) { ?>
 					<span class="instagramlink">
-						<a href="<?php the_author_meta( 'instagram' ); ?>" title="<?php _e('Follow', 'pinnacle'); ?>  <?php the_author_meta( 'display_name' ); ?> <?php _e('on Instagram', 'pinnacle');?>"><i class="icon-instagram"></i></a>
+						<a href="<?php the_author_meta( 'instagram' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Instagram' );?>"><i class="icon-instagram"></i></a>
 					</span>
 					<?php } ?>
 				</div><!--Author Follow-->
@@ -61,7 +61,7 @@
 		<div class="tab-pane clearfix" id="latest">
 			<div class="author-latestposts">
 				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
-				<h5><?php _e('Latest posts from', 'pinnacle'); ?> <?php the_author_posts_link(); ?></h5>
+				<h5><?php etn_e( 'Latest posts from' ); ?> <?php the_author_posts_link(); ?></h5>
 				<ul>
 <?php
 global $authordata, $post;
