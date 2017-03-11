@@ -8,6 +8,25 @@
 define( 'ETHNOLOGIST_STYLE_VERSION', 9 );
 
 /**
+ * Translate a string
+ *
+ * @param string $string
+ * @return string
+ */
+function etn__( $string, $identificator = null ) {
+	return pll__( $string );
+}
+
+/**
+ * Echoes a translated string
+ *
+ * @param string $string
+ */
+function etn_e( $string, $identificator = null ) {
+	pll_e( $string );
+}
+
+/**
  * Include view for ethnologist
  *
  * @param string $type
