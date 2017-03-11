@@ -43,6 +43,6 @@ class Ethnologist_TemplateSections extends Ethnologist_TemplateListing
 	 * @return string
 	 */
 	protected function get_not_found_message() {
-		return pll__( 'Sorry, no sections found.' );
+		return etn__( 'Sorry, no sections found.' );
 	}
 }

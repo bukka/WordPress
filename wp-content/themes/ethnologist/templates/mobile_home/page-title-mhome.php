@@ -4,8 +4,8 @@
 		<div class="page-header home-page-header">
 			<div class="row">
 				<div class="col-md-12">
-					<h1 class="kad-page-title home-page-title"><?php pll_e('Ethnologist'); ?></h1>
-					<p class="subtitle home-page-subtitle"><?php pll_e('Welcome to Ethnologist Site'); ?></p>
+					<h1 class="kad-page-title home-page-title"><?php etn_e('Ethnologist'); ?></h1>
+					<p class="subtitle home-page-subtitle"><?php etn_e('Welcome to Ethnologist Site'); ?></p>
 				</div>
 			</div>
 		</div>

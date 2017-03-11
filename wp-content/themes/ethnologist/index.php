@@ -6,7 +6,7 @@
 		<div class="main <?php echo ethnologist_main_class(); ?>  postlist" role="main">
 			<?php if ( ! have_posts() ) : ?>
 				<div class="alert">
-					<?php pll_e( 'Sorry, no entries found.' ); ?>
+					<?php etn_e( 'Sorry, no entries found.' ); ?>
 				</div>
 				<?php get_search_form(); ?>
 			<?php endif; ?>
@@ -18,8 +18,8 @@
 			<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 				<nav class="post-nav">
 					<ul class="pager">
-						<li class="previous"><?php next_posts_link( pll__( '&larr; Older posts' ) ); ?></li>
-						<li class="next"><?php previous_posts_link( pll__( 'Newer posts &rarr;' ) ); ?></li>
+						<li class="previous"><?php next_posts_link( etn__( '&larr; Older posts' ) ); ?></li>
+						<li class="next"><?php previous_posts_link( etn__( 'Newer posts &rarr;' ) ); ?></li>
 					</ul>
 				</nav>
 			<?php endif; ?>

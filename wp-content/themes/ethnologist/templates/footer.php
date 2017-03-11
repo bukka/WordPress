@@ -36,7 +36,7 @@
 			<div class="ethnologist-copyright">
 				<div>ISSN 2570-4761</div>
 				<div>&copy; 2015 - <?php echo date('Y'); ?> The Ethnologist.</div>
-				<div><?php pll_e( 'All rights reserved' ); ?></div>
+				<div><?php etn_e( 'All rights reserved' ); ?></div>
 			</div>
 		</div><!-- credits -->
 	</div><!-- container -->

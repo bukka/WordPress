@@ -16,7 +16,7 @@
 			class="recentpost_title">
 			<?php if ( get_the_title() ) the_title(); else the_ID(); ?>
 		</a>
-		<span class="recentpost_date color_gray"><?php echo get_the_date( pll__( 'ethnologist_post_date' ) ); ?></span>
+		<span class="recentpost_date color_gray"><?php echo get_the_date( etn__( 'ethnologist_post_date' ) ); ?></span>
 	</li>
 	<?php endwhile; ?>
 </ul>

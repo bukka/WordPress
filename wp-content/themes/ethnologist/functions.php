@@ -587,7 +587,7 @@ add_action( 'wp_ajax_nopriv_ethnologist_contact_email', 'ethnologist_contact_ema
  * @return string
  */
 function ethnologist_excerpt_more(  ) {
-	$readmore =  pll__( 'Read More' );
+	$readmore =  etn__( 'Read More' );
 	return ' &hellip; <a href="' . get_permalink() . '">' . $readmore . '</a>';
 }
 add_filter( 'excerpt_more', 'ethnologist_excerpt_more', 20 );
@@ -737,7 +737,7 @@ function ethnologist_title() {
 		if ( get_option( 'page_for_posts', true ) ) {
 			echo get_the_title( get_option( 'page_for_posts', true ) );
 		} else {
-			pll_e( 'Latest Posts' );
+			etn_e( 'Latest Posts' );
 		}
 	} elseif ( is_archive() ) {
 		$term = get_term_by( 'slug', get_query_var('term'), get_query_var('taxonomy') );
@@ -746,20 +746,20 @@ function ethnologist_title() {
 		} elseif ( is_post_type_archive() ) {
 			echo get_queried_object()->labels->name;
 		} elseif ( is_day() ) {
-			echo pll__( 'Daily Archives:' ) . ' ' . get_the_date();
+			echo etn__( 'Daily Archives:' ) . ' ' . get_the_date();
 		} elseif ( is_month() ) {
-			echo pll__( 'Monthly Archives:' ) . ' ' . get_the_date('F Y');
+			echo etn__( 'Monthly Archives:' ) . ' ' . get_the_date('F Y');
 		} elseif ( is_year() ) {
-			echo pll__( 'Yearly Archives:' ) . ' ' . get_the_date('Y');
+			echo etn__( 'Yearly Archives:' ) . ' ' . get_the_date('Y');
 		} elseif ( is_author() ) {
-			echo pll__( 'Author Archives:' ) . ' ' . get_the_author();
+			echo etn__( 'Author Archives:' ) . ' ' . get_the_author();
 		} else {
 			single_cat_title();
 		}
 	} elseif (is_search()) {
-		echo pll__( 'Search Results for' ) . ' ' . get_search_query();
+		echo etn__( 'Search Results for' ) . ' ' . get_search_query();
 	} elseif (is_404()) {
-		pll_e( 'Not Found' );
+		etn_e( 'Not Found' );
 	} else {
 		the_title();
 	}

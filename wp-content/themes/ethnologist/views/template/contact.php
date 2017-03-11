@@ -7,7 +7,7 @@
 			<div class="postclass pageclass contact-info-box">
 
 				<div class="contact-info-field">
-					<h3 class="widget-title"><?php pll_e( 'Location' ); ?></h3>
+					<h3 class="widget-title"><?php etn_e( 'Location' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
 							<span style="color: #444444;"><?php the_field( 'address_name' ); ?></span>
@@ -18,7 +18,7 @@
 					</div>
 				</div>
 				<div class="contact-info-field">
-					<h3 class="widget-title"><?php pll_e( 'Phone' ); ?></h3>
+					<h3 class="widget-title"><?php etn_e( 'Phone' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
 							<span style="color: #444444;"><?php the_field( 'phone_number' ); ?></span>
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="contact-info-field">
-					<h3 class="widget-title"><?php pll_e( 'Email' ); ?></h3>
+					<h3 class="widget-title"><?php etn_e( 'Email' ); ?></h3>
 					<div class="textwidget">
 						<h5 style="text-align: center;">
 							<span style="color: #444444;"><?php the_field( 'email_address' ); ?></span>
@@ -46,23 +46,23 @@
 
 		<?php if ( $params['form'] ): ?>
 		<div class="contactformcase col-md-7">
-			<h3><?php pll_e( 'Send us an email' ); ?></h3>
+			<h3><?php etn_e( 'Send us an email' ); ?></h3>
 			<?php if ( $params['email_sent'] ): ?>
 			<div class="thanks">
-				<p><?php pll_e( 'Thanks, your email was sent successfully.' );?></p>
+				<p><?php etn_e( 'Thanks, your email was sent successfully.' );?></p>
 			</div>
 			<?php else: ?>
 			<?php	if ( $params['has_error'] ): ?>
-			<p class="error"><?php pll_e( 'Sorry, an error occured.' );?><p>
+			<p class="error"><?php etn_e( 'Sorry, an error occured.' );?><p>
 			<?php	endif; ?>
 			<form action="<?php the_permalink(); ?>" id="contactForm" method="post"
-					data-msg-required="<?php pll_e( 'This field is required.' ); ?>"
-					data-msg-email="<?php pll_e( 'Please enter a valid email address.' ); ?>"
-					data-msg-form-success="<?php pll_e( 'The email has been successfully delivered.' ); ?>"
-					data-msg-form-error="<?php pll_e( 'The email sending failed. Please email us directly.' ); ?>">
+					data-msg-required="<?php etn_e( 'This field is required.' ); ?>"
+					data-msg-email="<?php etn_e( 'Please enter a valid email address.' ); ?>"
+					data-msg-form-success="<?php etn_e( 'The email has been successfully delivered.' ); ?>"
+					data-msg-form-error="<?php etn_e( 'The email sending failed. Please email us directly.' ); ?>">
 				<div class="contactform">
 					<p>
-						<label for="contactName"><b><?php pll_e( 'Name' );?></b></label>
+						<label for="contactName"><b><?php etn_e( 'Name' );?></b></label>
 						<?php if ( $params['name_error_msg'] ): ?>
 						<span class="error"><?php $params['name_error_msg'];?></span>
 						<?php endif; ?>
@@ -71,7 +71,7 @@
 								class="required requiredField full" />
 					</p>
 					<p>
-						<label for="email"><b><?php pll_e( 'Email' ); ?></b></label>
+						<label for="email"><b><?php etn_e( 'Email' ); ?></b></label>
 						<?php if ( $params['email_error_msg'] ): ?>
 						<span class="error"><?php $params['email_error_msg']; ?></span>
 						<?php endif; ?>
@@ -80,7 +80,7 @@
 								class="required requiredField email full" />
 					</p>
 					<p>
-						<label for="commentsText"><b><?php pll_e( 'Message' ); ?></b></label>
+						<label for="commentsText"><b><?php etn_e( 'Message' ); ?></b></label>
 						<?php if ( $params['comment_error_msg'] ): ?>
 						<span class="error"><?php echo $params['comment_error_msg'];?></span>
 						<?php endif; ?>
@@ -98,7 +98,7 @@
 					</p>
 					<?php endif; ?>
 					<p>
-						<input type="submit" class="kad-btn kad-btn-primary" id="submit" tabindex="5" value="<?php pll_e( 'Send Email' ); ?>" ></input>
+						<input type="submit" class="kad-btn kad-btn-primary" id="submit" tabindex="5" value="<?php etn_e( 'Send Email' ); ?>" ></input>
 					</p>
 				</div><!-- /.contactform-->
 				<input type="hidden" name="action" value="ethnologist_contact_email" />

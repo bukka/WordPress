@@ -25,7 +25,7 @@ class Ethnologist_Grid
 	protected function get_list( $title, $post_type, $items_count = -1, $grid_style = 3 ) {
 
 		return array(
-			'title'      => pll__( $title ),
+			'title'      => etn__( $title ),
 			'template'   => $this->get_grid_template(),
 			'animate'    => 0,
 			'grid_style' => $this->grid_styles[$grid_style],

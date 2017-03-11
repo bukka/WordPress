@@ -32,6 +32,6 @@ class Ethnologist_TemplateInterviews extends Ethnologist_TemplateListing
 	 * @return string
 	 */
 	protected function get_not_found_message() {
-		return pll__( 'Sorry, no interviews found.' );
+		return etn__( 'Sorry, no interviews found.' );
 	}
 }

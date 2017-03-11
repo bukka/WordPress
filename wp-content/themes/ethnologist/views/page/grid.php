@@ -7,6 +7,6 @@
 	</div>
 	<?php   endwhile; ?>
 	<?php else: ?>
-	<div class="error-not-found"><?php pll_e( 'Sorry, no entries found.' ); ?></div>
+	<div class="error-not-found"><?php etn_e( 'Sorry, no entries found.' ); ?></div>
 	<?php endif; ?>
 </div><!-- .ethnologist-grid -->
