@@ -480,13 +480,13 @@ add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
 
 // FACEBOOK
 
-require_once __DIR__ . '/inc/class-ethnologist-facebook.php';;
+require_once __DIR__ . '/inc/class-ethnologist-facebook.php';
 add_action( 'wp_head', 'Ethnologist_Facebook::display_header_script' );
 
 // GOOGLE
 
 // AdSense
-require_once __DIR__ . '/inc/class-ethnologist-google-ad-sense.php';;
+require_once __DIR__ . '/inc/class-ethnologist-google-ad-sense.php';
 add_action( 'wp_head', 'Ethnologist_GoogleAdSense::display_header_script' );
 
 /**
@@ -701,11 +701,13 @@ add_filter( 'deprecated_constructor_trigger_error',
 		'ethnologist_deprecated_constructor_trigger_error' );
 
 
+require_once __DIR__ . '/inc/class-ethnologist-author-box.php';
+
 /**
  * Print author box
  */
 function ethnologist_author_box() {
-	ethnologist_view('box', 'author');
+	Ethnologist_AuthorBox::display_author_box();
 }
 
 /**
