@@ -29,6 +29,9 @@ class Ethnologist_AuthorBox
 		'vimeo'      => 'Vimeo',
 	];
 
+	/**
+	 * @var bool
+	 */
 	static private $social_processed = false;
 
 	/**
