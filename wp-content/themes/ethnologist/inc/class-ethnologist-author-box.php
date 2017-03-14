@@ -10,18 +10,18 @@ class Ethnologist_AuthorBox
 	 *
 	 * @var array
 	 */
-	static $social = [
+	static private $social = [
 		'facebook'   => 'Facebook',
 		'twitter'    => 'Twitter',
 		'instagram'  => 'Instagram',
 		'google'     => [
-			'name' => 'GooglePlus',
-			'icon' => 'icon-google-plus',
+			'title' => 'GooglePlus',
+			'icon'  => 'icon-google-plus',
 			'class' => 'googlepluslink'
 		],
 		'flickr'     => [
-			'name' => 'Flickr',
-			'icon' => 'icon-flickr2'
+			'title' => 'Flickr',
+			'icon'  => 'icon-flickr2'
 		],
 		'pinterest'  => 'Pinterest',
 		'dribbble'   => 'Dribble',
@@ -29,11 +29,48 @@ class Ethnologist_AuthorBox
 		'vimeo'      => 'Vimeo',
 	];
 
+	static private $social_processed = false;
+
+	/**
+	 * Get social data
+	 *
+	 * @return array
+	 */
+	private static function get_social()
+	{
+		if ( self::$social_processed ) {
+
+			return self::$social;
+		}
+
+		foreach ( self::$social as $name => $data ) {
+			if ( ! is_array( $data ) ) {
+				$data = array( 'title' => $data );
+			}
+
+			if ( ! isset( $data['icon'] ) ) {
+				$data['icon'] = 'icon-' . $name;
+			}
+
+			if ( ! isset( $data['class'] ) ) {
+				$data['class'] = $name . 'link';
+			}
+
+			self::$social[$name] = $data;
+		}
+
+		return self::$social;
+	}
+
 	/**
 	 * Display authour box
 	 */
 	public static function display_author_box()
 	{
-		ethnologist_view('box', 'author');
+		$params = array(
+			'social' => self::get_social(),
+		);
+
+		ethnologist_view( 'box', 'author', $params );
 	}
 }

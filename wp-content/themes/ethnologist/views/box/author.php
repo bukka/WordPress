@@ -12,7 +12,10 @@
 					<span class="followtext"><?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?>:</span>
 					<?php if ( get_the_author_meta( 'facebook' ) ) { ?>
 					<span class="facebooklink">
-						<a href="<?php the_author_meta( 'facebook' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Facebook' );?>"><i class="icon-facebook"></i></a>
+						<a href="<?php the_author_meta( 'facebook' ); ?>"
+							title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Facebook' );?>">
+							<i class="icon-facebook"></i>
+						</a>
 					</span>
 					<?php } if ( get_the_author_meta( 'twitter' ) ) { ?>
 					<span class="twitterlink">
