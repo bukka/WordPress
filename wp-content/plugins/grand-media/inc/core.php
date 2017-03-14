@@ -294,19 +294,26 @@ class GmediaCore{
             }
         }
         $type = explode('/', $item->mime_type);
-
+        $img_cover = false;
         if('image' == $type[0]){
             $images      = array('thumb'    => "{$this->upload['url']}/{$gmGallery->options['folder']['image_thumb']}/{$item->gmuid}",
                                  'web'      => "{$this->upload['url']}/{$gmGallery->options['folder']['image']}/{$item->gmuid}",
                                  'original' => "{$this->upload['url']}/{$gmGallery->options['folder']['image_original']}/{$item->gmuid}"
             );
+            if('all' == $size || 'thumb' == $size){
+                $thumb_path = "{$this->upload['path']}/{$gmGallery->options['folder']['image_thumb']}/{$item->gmuid}";
+                if( !is_file($thumb_path)){
+                    $img_cover = true;
+                }
+            }
             if('all' == $size || 'original' == $size){
                 $original_path = "{$this->upload['path']}/{$gmGallery->options['folder']['image_original']}/{$item->gmuid}";
                 if(!is_file($original_path)){
                     $images['original'] = $images['web'];
                 }
             }
-        } else{
+        }
+        if('image' != $type[0] || $img_cover){
             $ext = ltrim(strrchr($item->gmuid, '.'), '.');
             if(!$type = wp_ext2type($ext)){
                 $type = 'application';
@@ -1984,12 +1991,13 @@ class GmediaCore{
                         }
                         $is_webimage = true;
                     } else{
-                        @unlink($fileinfo['filepath']);
+                        /*@unlink($fileinfo['filepath']);
                         $return = array("error" => array("code" => 104, "message" => __("Could not read image size. Invalid image was deleted.", 'grand-media')),
                                         "id"    => $fileinfo['basename_original']
                         );
 
                         return $return;
+                        */
                     }
                 }
 

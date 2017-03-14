@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: http://codeasily.com/donate/
 Tags: gallery, comments, image, image gallery, images, music, lightbox, photo, photo gallery, portfolio, responsive, thumbnail, lightbox, media, audio, easy, free, google maps, iphone, map, maps, photos, picture, pictures, slider, slideshow, categories, tags, video, widget
 Requires at least: 3.7
-Tested up to: 4.7
+Tested up to: 4.7.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -153,6 +153,10 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.9.7 =
+* Fixed: Upload of TIFF files
+* Added: Cover field for non editable images
 
 = Gmedia Gallery v1.9.6 =
 * Added: Visual media select in Query Builder

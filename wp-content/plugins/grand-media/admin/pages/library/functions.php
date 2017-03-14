@@ -64,7 +64,7 @@ function gmedia_item_actions($item){
         }
     }
 
-    if('image' == $item->type){
+    if('image' == $item->type && $item->editor){
         $edit_image_icon = '<span class="glyphicon glyphicon-adjust"></span>';
         if((gm_user_can('edit_media') && ((int)$item->author == get_current_user_id())) || gm_user_can('edit_others_media')){
             $edit_image = '<a href="' . add_query_arg(array('page' => 'GrandMedia', 'gmediablank' => 'image_editor', 'id' => $item->ID), $gmProcessor->url) . '" data-target="#gmeditModal" class="gmedit-modal" id="gmimageedit' . $item->ID . '" title="' . __('Edit Image', 'grand-media') . '">' . $edit_image_icon . '</a>';
