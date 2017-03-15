@@ -11,10 +11,4 @@
 		<?php etn_e( 'on' ); ?>
 		<span class="postday"><?php echo get_the_date( etn__( 'ethnologist_post_date' ) ) ?></span>
 	</span>
-	<!--
-	<span class="postcommentscount">
-		<?php etn_e( 'with' ); ?>
-		<a href="<?php the_permalink();?>#post_comments"><?php comments_number(); ?></a>
-    </span>
-    -->
 </div>
