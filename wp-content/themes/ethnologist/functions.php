@@ -732,6 +732,19 @@ function ethnologist_author_href() {
 }
 
 /**
+ * Whether to show if post should show date
+ */
+function ethnologist_post_with_date() {
+
+	if ( get_post_type() !== 'section' ) {
+
+		return true;
+	}
+
+	return ! get_field( 'subhead_hide_date' );
+}
+
+/**
  * Page titles
  */
 function ethnologist_title() {
