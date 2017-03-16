@@ -617,23 +617,24 @@ remove_filter('excerpt_length', 'kadence_excerpt_length');
 remove_filter('excerpt_more', 'kadence_excerpt_more');
 
 /**
- * Filter for Polylang lanuguage link to fix author page link for switcher
+ * Filter for Polylang link translation URL to fix author page link for switcher
  *
  * Filter callback - pll_the_language_link
  *
  * @param string $url
  * @param string $slug
- * @param string $locale
  * @return string
  */
-function ethnologist_language_link( $url, $slug, $locale ) {
+function ethnologist_translation_url( $url, $slug ) {
 
-	if ( preg_match( '#/\w{2}(/author/\w+)#', $url, $matches) ) {
+	if ( empty( $url ) && preg_match( '#/\w{2}(/author/\w+)#', $_SERVER['REQUEST_URI'], $matches ) ) {
+
 		return "/$slug" . $matches[1];
 	}
+
 	return $url;
 }
-add_filter( 'pll_the_language_link', 'ethnologist_language_link', 10, 3 );
+add_filter( 'pll_translation_url', 'ethnologist_translation_url', 10, 2 );
 
 /**
  * Filter for Polylang home redirect
