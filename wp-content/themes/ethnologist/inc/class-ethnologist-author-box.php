@@ -10,24 +10,27 @@ class Ethnologist_AuthorBox
 	 *
 	 * @var array
 	 */
-	static private $social = [
+	static private $social = array(
 		'facebook'   => 'Facebook',
-		'twitter'    => 'Twitter',
+		'twitter'    => array(
+			'title'      => 'Twitter',
+			'url_prefix' => 'https://twitter.com/',
+		),
 		'instagram'  => 'Instagram',
-		'google'     => [
+		'google'     => array(
 			'title' => 'GooglePlus',
 			'icon'  => 'icon-google-plus',
 			'class' => 'googlepluslink'
-		],
-		'flickr'     => [
+		),
+		'flickr'     => array(
 			'title' => 'Flickr',
 			'icon'  => 'icon-flickr2'
-		],
+		),
 		'pinterest'  => 'Pinterest',
 		'dribbble'   => 'Dribble',
 		'linkedin'   => 'LinkedIn',
 		'vimeo'      => 'Vimeo',
-	];
+	);
 
 	/**
 	 * @var bool
