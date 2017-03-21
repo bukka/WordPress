@@ -10,46 +10,16 @@
 				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
 				<div class="author-follow">
 					<span class="followtext"><?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?>:</span>
-					<?php if ( get_the_author_meta( 'facebook' ) ) { ?>
-					<span class="facebooklink">
-						<a href="<?php the_author_meta( 'facebook' ); ?>"
-							title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Facebook' );?>">
-							<i class="icon-facebook"></i>
+					<?php foreach ($params['social'] as $name => $data): ?>
+					<?php   if ( get_the_author_meta( $name ) ): ?>
+					<span class="<?php echo $data['class']; ?>">
+						<a href="<?php echo (isset($data['url_prefix']) ? $data['url_prefix'] : '') . get_the_author_meta( $name ); ?>"
+							title="<?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on' ); ?> <?php echo $data['title']; ?>">
+							<i class="<?php echo $data['icon']; ?>"></i>
 						</a>
 					</span>
-					<?php } if ( get_the_author_meta( 'twitter' ) ) { ?>
-					<span class="twitterlink">
-						<a href="http://twitter.com/<?php the_author_meta( 'twitter' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Twitter' );?>"><i class="icon-twitter"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'google' ) ) { ?>
-					<span class="googlepluslink">
-						<a href="<?php the_author_meta( 'google' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Google Plus' );?>"><i class="icon-google-plus"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'flickr' ) ) { ?>
-					<span class="flickrlink">
-						<a href="<?php the_author_meta( 'flickr' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Flickr' );?>"><i class="icon-flickr2"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'vimeo' ) ) { ?>
-					<span class="vimeolink">
-						<a href="<?php the_author_meta( 'vimeo' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Vimeo' );?>"><i class="icon-vimeo"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'linkedin' ) ) { ?>
-					<span class="linkedinlink">
-						<a href="<?php the_author_meta( 'linkedin' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on linkedin' );?>"><i class="icon-linkedin"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'dribbble' ) ) { ?>
-					<span class="dribbblelink">
-						<a href="<?php the_author_meta( 'dribbble' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Dribbble' );?>"><i class="icon-dribbble"></i></a>
-					</span>
-					<?php } if ( get_the_author_meta( 'pinterest' ) ) { ?>
-					<span class="pinterestlink">
-						<a href="<?php the_author_meta( 'pinterest' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Pinterest' );?>"><i class="icon-pinterest"></i></a>
-					</span>
-	      			<?php } if ( get_the_author_meta( 'instagram' ) ) { ?>
-					<span class="instagramlink">
-						<a href="<?php the_author_meta( 'instagram' ); ?>" title="<?php etn_e( 'Follow' ); ?>  <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on Instagram' );?>"><i class="icon-instagram"></i></a>
-					</span>
-					<?php } ?>
+					<?php   endif; ?>
+					<?php endforeach; ?>
 				</div><!--Author Follow-->
 
 				<h5 class="author-name"><?php the_author_posts_link(); ?></h5>
