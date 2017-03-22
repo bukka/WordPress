@@ -3570,6 +3570,7 @@ class GmediaCore{
                      'photobox'       => '',
                      'wavesurfer'     => '',
                      'phantom'        => '',
+                     'flipgrid'       => '',
                      'cubik-lite'     => '',
                      'photomania'     => '',
                      'jq-mplayer'     => '',

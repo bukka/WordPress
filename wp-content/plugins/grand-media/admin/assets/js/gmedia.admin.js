@@ -30,9 +30,9 @@ var GmediaLibrary = {
                 if(data.peaks) {
                     //window.gm_wavesurfer[data.id].play();
                 } else {
-                    window.gm_wavesurfer[data.id].on('ready', function() {
-                        jQuery('.gm-play', parent).show();
-                        jQuery('.gm-pause', parent).hide();
+                    window.gm_wavesurfer[data.id].on('waveform-ready', function() {
+                        jQuery('.gm-play', parent).hide();
+                        jQuery('.gm-pause', parent).show();
                         jQuery('.spinner', parent).removeClass('is-active');
                         var peaks = window.gm_wavesurfer[data.id].exportPCM(1800, 10000, true);
                         var post_data = {
@@ -41,7 +41,7 @@ var GmediaLibrary = {
                             peaks: peaks,
                             _wpnonce: jQuery('#_wpnonce').val()
                         };
-                        jQuery.post(ajaxurl, post_data, function(data, textStatus, jqXHR) {
+                        jQuery.post(ajaxurl, post_data, function(return_data, textStatus, jqXHR) {
                             var data_peaks = window.gm_wavesurfer[data.id].exportPCM(450, 10000, true);
                             parent.attr('data-peaks', data_peaks);
                         });

@@ -154,6 +154,20 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
+= Gmedia Gallery v1.9.11 =
+* Fixed: Save WaveForm for music files not worked
+
+= Gmedia Gallery v1.9.10 =
+* Fixed: Compatibility with StarBox plugin
+* Fixed: iOS app not worked on some servers configurations
+
+= Gmedia Gallery v1.9.9 =
+* Fixed: FlipGrid module not worked if GmediaService disabled
+
+= Gmedia Gallery v1.9.8 =
+* Fixed: Modules remote XML error
+* Added: FlipGrid module
+
 = Gmedia Gallery v1.9.7 =
 * Fixed: Upload of TIFF files
 * Added: Cover field for non editable images

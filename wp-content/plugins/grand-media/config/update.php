@@ -864,6 +864,11 @@ function gmedia_quite_update(){
         }
 
         $new_options        = $gmCore->array_diff_key_recursive($default_options, $options);
+
+        if(version_compare($current_version, '1.9.8', '<')){
+            $new_options['modules_xml']  = 'https://codeasily.com/gmedia_modules/modules_v1.xml';
+        }
+
         $gmGallery->options = $gmCore->array_replace_recursive($options, $new_options);
         update_option('gmediaOptions', $gmGallery->options);
 

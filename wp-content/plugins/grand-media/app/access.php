@@ -21,22 +21,14 @@ $gmapp_version = isset($_GET['gmappversion'])? $_GET['gmappversion'] : 1;
 
 $out = array();
 
-$gmedia_options = get_option('gmediaOptions');
-if(empty($gmedia_options['mobile_app'])){
-    $out['error'] = array('code' => 'app_inactive', 'message' => 'Service not enabled/activated for this site');
-    header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
-    echo json_encode($out);
-    die();
-}
-
-
 if(isset($_FILES['userfile']['name'])){
     $globaldata = isset($_POST['account'])? $_POST['account'] : false;
     if($globaldata){
         $globaldata = stripslashes($globaldata);
     }
 } else{
-    $globaldata = isset($GLOBALS['HTTP_RAW_POST_DATA'])? $GLOBALS['HTTP_RAW_POST_DATA'] : false;
+    //$globaldata = isset($GLOBALS['HTTP_RAW_POST_DATA'])? $GLOBALS['HTTP_RAW_POST_DATA'] : false;
+    $globaldata = file_get_contents("php://input");
 }
 
 if($globaldata){
@@ -51,7 +43,15 @@ if($globaldata){
         gmedia_ios_app_counters($json->counter);
     }
 
+    $gmedia_options = get_option('gmediaOptions');
     if(isset($json->cookie) && !empty($json->cookie)){
+        if(empty($gmedia_options['mobile_app'])){
+            $out['error'] = array('code' => 'app_inactive', 'message' => 'Service not enabled/activated for this site');
+            header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+            echo json_encode($out);
+            die();
+        }
+
         $user_id = $gmAuth->validate_auth_cookie($json->cookie);
         if($user_id){
             $user = wp_set_current_user($user_id);
@@ -76,6 +76,13 @@ if($globaldata){
             $out['error'] = array('code' => 'wrongcookie', 'message' => 'Not Valid User');
         }
     } elseif(isset($json->login)){
+        if(empty($gmedia_options['mobile_app'])){
+            $out['error'] = array('code' => 'app_inactive', 'message' => 'Service not enabled/activated for this site');
+            header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+            echo json_encode($out);
+            die();
+        }
+
         $out = gmedia_ios_app_login($json);
         if(!isset($out['error'])){
             $user = wp_set_current_user($out['user']['id']);
