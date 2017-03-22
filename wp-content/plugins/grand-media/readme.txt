@@ -154,6 +154,9 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
+= Gmedia Gallery v1.9.12 =
+* Fixed: iOS application upload to Album (Category, tag)
+
 = Gmedia Gallery v1.9.11 =
 * Fixed: Save WaveForm for music files not worked
 

@@ -567,7 +567,38 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         $file_name = $_FILES['userfile']['name'];
                         $file_tmp  = $_FILES['userfile']['tmp_name'];
                     } else{
-                        $error[] = __("Failed to move uploaded file.", 'grand-media');
+                        switch($_FILES['userfile']['error']){
+                            case 0: {
+                                //no error; possible file attack!
+                                $error[] = __("There was a problem with your upload.", 'grand-media');
+                                break;
+                            }
+                            case 1: {
+                                //uploaded file exceeds the upload_max_filesize directive in php.ini
+                                $error[] = __("Uploaded file exceeds the upload_max_filesize directive in php.ini", 'grand-media');
+                                break;
+                            }
+                            case 2: {
+                                //uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form
+                                $error[] = __("Uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the form", 'grand-media');
+                                break;
+                            }
+                            case 3: {
+                                //uploaded file was only partially uploaded
+                                $error[] = __("The file you are trying upload was only partially uploaded.", 'grand-media');
+                                break;
+                            }
+                            case 4: {
+                                //no file was uploaded
+                                $error[] = __("You must select an image for upload.", 'grand-media');
+                                break;
+                            }
+                            default: {
+                                //a default error, just in case!  :)
+                                $error[] = __("There was a problem with your upload.", 'grand-media');
+                                break;
+                            }
+                        }
                         break;
                     }
 
@@ -583,7 +614,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         if(empty($gmedia['albums'])){
                             $gmedia['terms']['gmedia_album'] = '';
                         } else{
-                            $alb                             = isset($gmedia['albums'][0]->term_id)? $gmedia['albums'][0]->term_id : $gmedia['albums'][0]->name;
+                            $alb                             = isset($gmedia['albums'][0]['term_id'])? $gmedia['albums'][0]['term_id'] : $gmedia['albums'][0]['name'];
                             $gmedia['terms']['gmedia_album'] = $alb;
                         }
                         if(empty($gmedia['categories'])){
@@ -591,7 +622,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         } else{
                             $categories = array();
                             foreach($gmedia['categories'] as $category){
-                                $categories[] = isset($category->term_id)? $category->term_id : $category->name;
+                                $categories[] = isset($category['term_id'])? $category['term_id'] : $category['name'];
                             }
                             $gmedia['terms']['gmedia_category'] = implode(',', $categories);
                         }
@@ -600,7 +631,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                         } else{
                             $tags = array();
                             foreach($gmedia['tags'] as $tag){
-                                $tags[] = isset($tag->term_id)? $tag->term_id : $tag->name;
+                                $tags[] = isset($tag['term_id'])? $tag['term_id'] : $tag['name'];
                             }
                             $gmedia['terms']['gmedia_tag'] = implode(',', $tags);
                         }
@@ -647,10 +678,10 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                             if(empty($gmedia['albums'])){
                                 $gmedia['terms']['gmedia_album'] = '';
                             } else{
-                                if(isset($gmedia['albums'][0]->term_id)){
-                                    $gmedia['terms']['gmedia_album'] = $gmedia['albums'][0]->term_id;
+                                if(isset($gmedia['albums'][0]['term_id'])){
+                                    $gmedia['terms']['gmedia_album'] = $gmedia['albums'][0]['term_id'];
                                 } elseif(current_user_can('gmedia_album_manage')){
-                                    $gmedia['terms']['gmedia_album'] = $gmedia['albums'][0]->name;
+                                    $gmedia['terms']['gmedia_album'] = $gmedia['albums'][0]['name'];
                                 }
                             }
                             if(empty($gmedia['categories'])){
@@ -658,10 +689,10 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                             } else{
                                 $categories = array();
                                 foreach($gmedia['categories'] as $category){
-                                    if(isset($category->term_id)){
-                                        $categories[] = $category->term_id;
+                                    if(isset($category['term_id'])){
+                                        $categories[] = $category['term_id'];
                                     } elseif(current_user_can('gmedia_category_manage')){
-                                        $categories[] = $category->name;
+                                        $categories[] = $category['name'];
                                     }
                                 }
                                 $gmedia['terms']['gmedia_category'] = $categories;
@@ -671,10 +702,10 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                             } else{
                                 $tags = array();
                                 foreach($gmedia['tags'] as $tag){
-                                    if(isset($tag->term_id)){
-                                        $tags[] = $tag->term_id;
+                                    if(isset($tag['term_id'])){
+                                        $tags[] = $tag['term_id'];
                                     } elseif(current_user_can('gmedia_tag_manage')){
-                                        $tags[] = $tag->name;
+                                        $tags[] = $tag['name'];
                                     }
                                 }
                                 $gmedia['terms']['gmedia_tag'] = $tags;

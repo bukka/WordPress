@@ -122,6 +122,8 @@ function gmedia_term_album_after_panel($term){
     if(isset($term->meta['_orderby'][0]) && ('custom' == $term->meta['_orderby'][0])){
         $atts .= ' id="gm-sortable" data-term_id="' . $term->term_id . '" data-action="gmedia_term_sortorder" data-_wpnonce_terms="' . wp_create_nonce('gmedia_terms') . '"';
         add_action('before_gmedia_filter_message', 'before_gmedia_filter_message');
+    } else {
+        add_action('before_gmedia_filter_message', 'before_gmedia_filter_message2');
     }
     echo "<div {$atts}>";
     echo $gmCore->alert('success', $gmProcessor->msg);
@@ -137,6 +139,9 @@ function before_gmedia_filter_message(){
     } else{
         echo '<div class="custom-message alert alert-warning">' . __("Drag'n'drop functionality disabled. Reset filters to enable drag'n'drop.", 'grand-media') . '</div>';
     }
+}
+function before_gmedia_filter_message2(){
+    echo '<div class="custom-message alert alert-info">' . __("To enable drag'n'drop to reorder functionality for items you must update album's `Order gmedia` field to `Custom Order`.", 'grand-media') . '</div>';
 }
 
 add_action('gmedia_term_category_after_panel', 'gmedia_term_category_after_panel');
