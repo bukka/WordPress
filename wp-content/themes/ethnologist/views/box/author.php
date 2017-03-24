@@ -9,12 +9,12 @@
 			<div class="author-profile vcard">
 				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
 				<div class="author-follow">
-					<span class="followtext"><?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?>:</span>
+					<span class="followtext"><?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'first_name' ); ?>:</span>
 					<?php foreach ($params['social'] as $name => $data): ?>
 					<?php   if ( get_the_author_meta( $name ) ): ?>
 					<span class="<?php echo $data['class']; ?>">
 						<a href="<?php echo (isset($data['url_prefix']) ? $data['url_prefix'] : '') . get_the_author_meta( $name ); ?>"
-							title="<?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'display_name' ); ?> <?php etn_e( 'on' ); ?> <?php echo $data['title']; ?>">
+							title="<?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'first_name' ); ?> <?php etn_e( 'on' ); ?> <?php echo $data['title']; ?>">
 							<i class="<?php echo $data['icon']; ?>"></i>
 						</a>
 					</span>
