@@ -22,10 +22,15 @@
 					<?php endforeach; ?>
 				</div><!--Author Follow-->
 
-				<h5 class="author-name"><?php the_author_posts_link(); ?></h5>
-				<?php if ( get_the_author_meta( 'occupation' ) ) { ?>
+				<h5 class="author-name">
+					<a href="<?php echo ethnologist_author_href(); ?>" rel="author">
+						<?php echo get_the_author_meta( 'first_name' ) ?>
+						<?php echo get_the_author_meta( 'last_name' ) ?>
+					</a>
+				</h5>
+				<?php if ( get_the_author_meta( 'occupation' ) ): ?>
 				<p class="author-occupation"><strong><?php the_author_meta( 'occupation' ); ?></strong></p>
-				<?php } ?>
+				<?php endif; ?>
 				<p class="author-description author-bio">
 					<?php the_author_meta( 'description' ); ?>
 				</p>
@@ -34,7 +39,13 @@
 		<div class="tab-pane clearfix" id="latest">
 			<div class="author-latestposts">
 				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
-				<h5><?php etn_e( 'Latest posts from' ); ?> <?php the_author_posts_link(); ?></h5>
+				<h5>
+					<?php etn_e( 'Latest posts from' ); ?>
+					<a href="<?php echo ethnologist_author_href(); ?>" rel="author">
+						<?php echo get_the_author_meta( 'first_name' ) ?>
+						<?php echo get_the_author_meta( 'last_name' ) ?>
+					</a>
+				</h5>
 				<ul>
 <?php
 global $authordata, $post;
