@@ -27,5 +27,9 @@
 	<?php 		get_template_part( 'templates/content', 'fullwidth-section' ); ?>
 	<?php 	endwhile; ?>
 	<?php endwhile; ?>
+
+	<?php if ( get_field( 'author_info' ) ): ?>
+	<?php ethnologist_author_box(); ?>
+	<?php endif; ?>
 </div>
 

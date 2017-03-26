@@ -14,6 +14,7 @@
 		</footer>
 		<?php ethnologist_facebook_like_button(); ?>
 	</article>
+	<?php ethnologist_author_box(); ?>
 	<?php // comments_template('/templates/comments.php'); ?>
 	<?php endwhile; ?>
 </div>
