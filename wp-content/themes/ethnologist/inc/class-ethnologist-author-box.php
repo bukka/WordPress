@@ -73,7 +73,16 @@ class Ethnologist_AuthorBox
 	 */
 	public static function display_author_box()
 	{
+		global $authordata;
+
+		$query = new WP_Query( array(
+			'author'         => $authordata->ID,
+			'post_type'      => array('post', 'section', 'interview'),
+			'posts_per_page' => 3,
+		) );
+
 		$params = array(
+			'query'  => $query,
 			'social' => self::get_social(),
 		);
 

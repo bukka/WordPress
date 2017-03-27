@@ -47,24 +47,12 @@
 					</a>
 				</h5>
 				<ul>
-<?php
-global $authordata, $post;
-$temp = null;
-$wp_query = new WP_Query();
-$wp_query->query(array(
-	'author' => $authordata->ID,
-	'posts_per_page' => 3
-));
-$count =0;
-if ( $wp_query ) :
-	while ( $wp_query->have_posts() ) : $wp_query->the_post();
-?>
-					<li><a href="<?php the_permalink();?>"><?php the_title(); ?></a><span class="recentpost-date"> - <?php echo get_the_time('F j, Y'); ?></span></li>
-<?php
-endwhile;
-endif; // Reset
-wp_reset_query();
-?>
+					<?php while ( $params['query']->have_posts() ) : $params['query']->the_post(); ?>
+					<li>
+						<a href="<?php the_permalink();?>"><?php the_title(); ?></a>
+						<span class="recentpost-date"> - <?php echo get_the_time('F j, Y'); ?></span>
+					</li>
+					<?php endwhile; ?>
 				</ul>
 			</div><!--Latest Post -->
 		</div><!--Latest pane -->
