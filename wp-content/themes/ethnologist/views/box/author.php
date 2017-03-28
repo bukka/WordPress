@@ -50,7 +50,7 @@
 					<?php while ( $params['query']->have_posts() ) : $params['query']->the_post(); ?>
 					<li>
 						<a href="<?php the_permalink();?>"><?php the_title(); ?></a>
-						<span class="recentpost-date"> - <?php echo get_the_time('F j, Y'); ?></span>
+						<span class="recentpost-date"> - <?php echo get_the_date( etn__( 'ethnologist_post_date' ) ); ?></span>
 					</li>
 					<?php endwhile; ?>
 				</ul>
