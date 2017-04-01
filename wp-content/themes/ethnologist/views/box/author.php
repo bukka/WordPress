@@ -14,7 +14,7 @@
 					<?php   if ( get_the_author_meta( $name ) ): ?>
 					<span class="<?php echo $data['class']; ?>">
 						<a href="<?php echo (isset($data['url_prefix']) ? $data['url_prefix'] : '') . get_the_author_meta( $name ); ?>"
-							title="<?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'first_name' ); ?> <?php etn_e( 'on' ); ?> <?php echo $data['title']; ?>">
+							title="<?php etn_e( 'Follow' ); ?> <?php the_author_meta( 'first_name' ); ?> <?php etn_e( 'on the social' ); ?> <?php echo $data['title']; ?>">
 							<i class="<?php echo $data['icon']; ?>"></i>
 						</a>
 					</span>

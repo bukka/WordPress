@@ -353,6 +353,7 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_authorbox_tab_about', 'About Author', 'ethnologist' );
 		pll_register_string( 'ethnologist_authorbox_tab_posts', 'Latest Posts', 'ethnologist' );
 		pll_register_string( 'ethnologist_authorbox_follow', 'Follow', 'ethnologist' );
+		pll_register_string( 'ethnologist_authorbox_on', 'on the social', 'ethnologist' );
 		pll_register_string( 'ethnologist_authorbox_desc_posts', 'Latest posts from', 'ethnologist' );
 		//pll_register_string( 'ethnologist_', '', 'ethnologist' );
 	}
