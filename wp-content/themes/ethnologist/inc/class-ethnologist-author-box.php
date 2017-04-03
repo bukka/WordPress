@@ -82,8 +82,9 @@ class Ethnologist_AuthorBox
 		) );
 
 		$params = array(
-			'query'  => $query,
-			'social' => self::get_social(),
+			'query'          => $query,
+			'social'         => self::get_social(),
+			'display_follow' => true,
 		);
 
 		ethnologist_view( 'box', 'author', $params );
