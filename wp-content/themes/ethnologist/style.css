@@ -147,6 +147,9 @@
 .gmPhantom_Container {
 	width: 100% !important;
 }
+.gmPhantom_thumbsWrapper {
+	width: 100% !important;
+}
 .fb-like {
 	margin-top: 20px;
 }
