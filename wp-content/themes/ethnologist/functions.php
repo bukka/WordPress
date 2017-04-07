@@ -811,7 +811,7 @@ function ethnologist_subtitle() {
 /**
  * Print author avatar
  */
-function ethnologist_author_avatar() {
+function ethnologist_author_avatar( $size = 100) {
 	$author_id = get_the_author_meta( 'ID' );
 	if ( ! $author_id ) {
 		return;
@@ -819,12 +819,13 @@ function ethnologist_author_avatar() {
 
 	$photo = get_field( 'photo', 'user_'. $author_id );
 	if ( ! $photo ) {
-		echo get_avatar( get_the_author_meta( 'ID' ), 100 );
+		echo get_avatar( get_the_author_meta( 'ID' ), $size);
 		return;
 	}
 
 	echo '<img class="avatar pull-left media-object avatar-100 photo"' .
-			' width="100" height="100" src="' . $photo['url'] . '" alt="' . $photo['alt']. '" />';
+			' width="' . $size . '" height="' . $size . '" src="' .
+			$photo['url'] . '" alt="' . $photo['alt']. '" />';
 }
 
 /**

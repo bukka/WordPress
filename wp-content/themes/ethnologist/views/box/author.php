@@ -7,7 +7,7 @@
 	<div class="tab-content postclass">
 		<div class="tab-pane clearfix active" id="about">
 			<div class="author-profile vcard">
-				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
+				<?php echo ethnologist_author_avatar( 100 ); ?>
 				<div class="author-follow">
 					<?php foreach ($params['social'] as $name => $data): ?>
 					<?php   if ( get_the_author_meta( $name ) ): ?>
