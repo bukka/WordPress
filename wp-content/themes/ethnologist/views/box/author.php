@@ -40,7 +40,7 @@
 		</div><!--pane-->
 		<div class="tab-pane clearfix" id="latest">
 			<div class="author-latestposts">
-				<?php echo get_avatar( get_the_author_meta('ID'), 80 ); ?>
+				<?php ethnologist_author_avatar( 100 );?>
 				<h5>
 					<?php etn_e( 'Latest posts from' ); ?>
 					<a href="<?php echo ethnologist_author_href(); ?>" rel="author">
