@@ -108,6 +108,14 @@
 	border-top-width: 0 !important;
 
 }
+.author-profile .author-name,
+.author-profile .author-occupation,
+.author-profile .author-description {
+	margin-left: 120px
+}
+.author-profile .author-description {
+	text-align: justify;
+}
 .ethnologist-widget-image-logo {
 	width: 50%;
 }
