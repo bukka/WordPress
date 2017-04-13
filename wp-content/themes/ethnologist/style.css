@@ -18,6 +18,10 @@
 #menu-ethnologist-top-cs ul {
 	min-width: 14em;
 }
+.sf-menu ul li i.ethnologist-nav-section-item {
+	margin-right: 0;
+	padding-right: 0;
+}
 #logo a.brand {
 	font-weight: bold !important;
 	line-height: 120px !important;

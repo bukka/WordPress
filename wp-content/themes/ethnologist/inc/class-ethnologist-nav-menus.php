@@ -64,7 +64,10 @@ class Ethnologist_NavMenus
 				'cs' => 'rozhovory',
 			),
 			'submenu' => array(
-				'post_type' => 'interview',
+				'post_type'   => 'interview',
+				'orderby'     => 'date',
+				'order'       => 'DESC',
+				'numberposts' => 10,
 			),
 		),
 		'blog' => array(
@@ -229,17 +232,20 @@ class Ethnologist_NavMenus
 	 * @param string $lang
 	 * @return array
 	 */
-	protected function get_posts( $post_type, $lang ) {
-		$query = new WP_Query();
-		$query->query(array(
-			'numberposts' => -1,
-			'post_type'   => $post_type,
-			'post_status' => 'publish',
-			'lang'        => $lang,
-			'post_parent' => 0,
-			'orderby'     => 'title',
-			'order'       => 'ASC',
-		));
+	protected function get_posts( $options, $lang ) {
+		$query = new WP_Query(
+			array_merge(
+				array(
+					'numberposts' => -1,
+					'post_status' => 'publish',
+					'lang'        => $lang,
+					'post_parent' => 0,
+					'orderby'     => 'title',
+					'order'       => 'ASC',
+				),
+				$options
+			)
+		);
 		$posts = array();
 		while ( $query->have_posts() ) {
 			$posts[] = $query->next_post();
@@ -285,7 +291,7 @@ class Ethnologist_NavMenus
 			) );
 
 			if ( isset( $menu['submenu'] ) ) {
-				$submenu_posts = $this->get_posts( $menu['submenu']['post_type'], $lang );
+				$submenu_posts = $this->get_posts( $menu['submenu'], $lang );
 				$submenu_pos = 0;
 				foreach ( $submenu_posts as $submenu_post ) {
 					$this->update_item( $menu_id, $menu_items, array(

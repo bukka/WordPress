@@ -5,7 +5,7 @@
  *
  * @var int
  */
-define( 'ETHNOLOGIST_STYLE_VERSION', 11 );
+define( 'ETHNOLOGIST_STYLE_VERSION', 12 );
 
 /**
  * Translate a string
