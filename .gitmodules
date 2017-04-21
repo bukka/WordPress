@@ -1,3 +1,0 @@
-[submodule "wp-content/plugins/wordpress-importer"]
-	path = wp-content/plugins/wordpress-importer
-	url = git@github.com:wp-plugins/wordpress-importer.git
