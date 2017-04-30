@@ -1,5 +1,8 @@
 <?php
 
+// Disable E_DEPRACATED warnings due to old constructors in use
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 /**
  * Version of the Ethnologist style
  *
