@@ -127,7 +127,7 @@ global $user_ID, $gmDB, $gmCore
 						<div class="col-xs-4">
 							<select name="terms_relation" class="form-control input-sm">
 								<option <?php selected($query_data['terms_relation'], ''); ?> value=""><?php _e('Default (AND)'); ?></option>
-								<option <?php selected($query_data['terms_relation'], 'AND'); ?> value=""><?php _e('AND'); ?></option>
+								<option <?php selected($query_data['terms_relation'], 'AND'); ?> value="AND"><?php _e('AND'); ?></option>
 								<option <?php selected($query_data['terms_relation'], 'OR'); ?> value="OR"><?php _e('OR'); ?></option>
 							</select>
 						</div>
@@ -269,7 +269,7 @@ global $user_ID, $gmDB, $gmCore
 								<label><?php _e('Compare Operator', 'grand-media'); ?></label>
 								<select class="form-control input-sm" name="meta_query[<?php echo $i; ?>][compare]">
 									<option <?php selected($q['compare'], ''); ?> value=""><?php _e('Default', 'grand-media'); ?> (=)</option>
-									<option <?php selected($q['compare'], '='); ?> value="">=</option>
+									<option <?php selected($q['compare'], '='); ?> value="=">=</option>
 									<option <?php selected($q['compare'], '!='); ?> value="!=">!=</option>
 									<option <?php selected($q['compare'], '>'); ?> value="&gt;">&gt;</option>
 									<option <?php selected($q['compare'], '>='); ?> value="&gt;=">&gt;=</option>
@@ -291,7 +291,7 @@ global $user_ID, $gmDB, $gmCore
 								<label><?php _e('Meta Type', 'grand-media'); ?></label>
 								<select class="form-control input-sm" name="meta_query[<?php echo $i; ?>][type]">
 									<option <?php selected($q['type'], ''); ?> value=""><?php _e('Default', 'grand-media'); ?> (CHAR)</option>
-									<option <?php selected($q['type'], 'CHAR'); ?> value="">CHAR</option>
+									<option <?php selected($q['type'], 'CHAR'); ?> value="CHAR">CHAR</option>
 									<option <?php selected($q['type'], 'NUMERIC'); ?> value="NUMERIC">NUMERIC</option>
 									<option <?php selected($q['type'], 'DECIMAL'); ?> value="DECIMAL">DECIMAL</option>
 									<option <?php selected($q['type'], 'DATE'); ?> value="DATE">DATE</option>
@@ -312,7 +312,7 @@ global $user_ID, $gmDB, $gmCore
 							<label><?php _e('Order', 'grand-media'); ?></label>
 							<select class="form-control input-sm" name="order">
 								<option <?php selected($query_data['order'], ''); ?> value=""><?php _e('Default (DESC)', 'grand-media'); ?></option>
-								<option <?php selected($query_data['order'], 'DESC'); ?> value=""><?php _e('DESC', 'grand-media'); ?></option>
+								<option <?php selected($query_data['order'], 'DESC'); ?> value="DESC"><?php _e('DESC', 'grand-media'); ?></option>
 								<option <?php selected($query_data['order'], 'ASC'); ?> value="ASC"><?php _e('ASC', 'grand-media'); ?></option>
 							</select>
 							<span class="help-block"><?php _e('Ascending or Descending order', 'grand-media'); ?></span>
@@ -321,7 +321,7 @@ global $user_ID, $gmDB, $gmCore
 							<label><?php _e('Order by', 'grand-media'); ?></label>
 							<select class="form-control input-sm" name="orderby">
 								<option <?php selected($query_data['orderby'], ''); ?> value=""><?php _e('Default (ID)', 'grand-media'); ?></option>
-								<option <?php selected($query_data['orderby'], 'id'); ?> value=""><?php _e('ID', 'grand-media'); ?></option>
+								<option <?php selected($query_data['orderby'], 'id'); ?> value="ID"><?php _e('ID', 'grand-media'); ?></option>
 								<option <?php selected($query_data['orderby'], 'title'); ?> value="title"><?php _e('Title', 'grand-media'); ?></option>
 								<option <?php selected($query_data['orderby'], 'gmuid'); ?> value="gmuid"><?php _e('Filename', 'grand-media'); ?></option>
                                 <option <?php selected($query_data['orderby'], 'author'); ?> value="author"><?php _e('Author', 'grand-media'); ?></option>

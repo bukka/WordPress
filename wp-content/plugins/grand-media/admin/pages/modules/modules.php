@@ -54,7 +54,8 @@ if(isset($modules['error'])){
                 <div class="panel-body" id="gmedia-msg-panel"></div>
                 <div class="panel-body">
                     <?php
-                    $out_dirpath = dirname($gmGallery->options['modules_xml']);
+                    //$out_dirpath = dirname($gmGallery->options['modules_xml']);
+                    $out_dirpath = 'https://codeasily.com/gmedia_modules';
                     foreach($modules['out'] as $module){
                         $module['mclass']         = ' module-' . $module['type'] . ' module-' . $module['status'];
                         $module['screenshot_url'] = $out_dirpath . '/' . $module['name'] . '.png';

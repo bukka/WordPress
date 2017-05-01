@@ -82,7 +82,8 @@ function gmedia_default_options(){
     $gm['thumb'] = array('width' => 300, 'height' => 300, 'quality' => 80, 'crop' => 0);
     $gm['image'] = array('width' => 2200, 'height' => 2200, 'quality' => 85, 'crop' => 0);
 
-    $gm['modules_xml']  = 'https://codeasily.com/gmedia_modules/modules_v1.xml';
+    //$gm['modules_xml']  = 'https://codeasily.com/gmedia_modules/modules_v1.xml';
+    $gm['modules_xml']  = 'https://www.dropbox.com/s/t7oawbuxy1me5gk/modules_v1.xml?dl=1';
     $gm['license_name'] = '';
     $gm['purchase_key'] = '';
     $gm['license_key']  = '';

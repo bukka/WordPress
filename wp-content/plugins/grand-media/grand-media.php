@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.9.13
+ * Version: 1.9.15
  * Author: Rattus
  * Author URI: http://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if(!class_exists('Gmedia')){
      */
     class Gmedia{
 
-        var $version = '1.9.13';
+        var $version = '1.9.15';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -400,11 +400,11 @@ if(!class_exists('Gmedia')){
                 wp_register_script('photoswipe', $gmCore->gmedia_url . '/assets/photoswipe/photoswipe.jquery.min.js', array('jquery'), '3.0.5', true);
             }
 
-            if(!wp_script_is('easing', 'registered') || version_compare($wp_scripts->registered['easing']->ver, '1.3.0', '<')){
+            if(!wp_script_is('easing', 'registered') || ($wp_scripts->registered['easing']->ver !== false && version_compare($wp_scripts->registered['easing']->ver, '1.3.0', '<'))){
                 wp_deregister_script('easing');
                 wp_register_script('easing', $gmCore->gmedia_url . '/assets/jq-plugins/jquery.easing.js', array('jquery'), '1.3.0', true);
             }
-            if(!wp_script_is('fancybox', 'registered') || version_compare($wp_scripts->registered['fancybox']->ver, '1.3.4', '<')){
+            if(!wp_script_is('fancybox', 'registered') || ($wp_scripts->registered['fancybox']->ver !== false && version_compare($wp_scripts->registered['fancybox']->ver, '1.3.4', '<'))){
                 if(!defined('FANCYBOX_VERSION')){
                     wp_deregister_style('fancybox');
                     wp_register_style('fancybox', $gmCore->gmedia_url . '/assets/fancybox/jquery.fancybox-1.3.4.css', array(), '1.3.4');
@@ -625,6 +625,7 @@ if(!class_exists('Gmedia')){
 //                              'moderate_comments'  => 'moderate_gmedia_comments',
 //                              'edit_post'          => 'edit_gmedia_post',
 //                              'edit_posts'         => 'edit_gmedia_posts',
+                              'create_posts' => false
                           )
             );
             register_post_type('gmedia', $args);

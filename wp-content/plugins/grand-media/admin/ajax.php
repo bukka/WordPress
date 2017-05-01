@@ -1102,9 +1102,9 @@ function gmedia_module_install(){
             WP_Filesystem();
         }
         if(!is_object($wp_filesystem)){
-            $result = new WP_Error('fs_unavailable', __('Could not access filesystem.', 'flag'));
+            $result = new WP_Error('fs_unavailable', __('Could not access filesystem.', 'grand-media'));
         } elseif($wp_filesystem->errors->get_error_code()){
-            $result = new WP_Error('fs_error', __('Filesystem error', 'flag'), $wp_filesystem->errors);
+            $result = new WP_Error('fs_error', __('Filesystem error', 'grand-media'), $wp_filesystem->errors);
         } else{
             if($module && is_dir($to_folder . $module)){
                 $gmCore->delete_folder($to_folder . $module);
@@ -1119,7 +1119,7 @@ function gmedia_module_install(){
             echo $gmCore->alert('danger', $result->get_error_message());
             die();
         } else{
-            echo $gmCore->alert('success', sprintf(__("The `%s` module successfully installed", 'flag'), $module));
+            echo $gmCore->alert('success', sprintf(__("The `%s` module successfully installed", 'grand-media'), $module));
             // Try to clear cache after module update
             @$gmCore->clear_cache();
         }

@@ -154,6 +154,13 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
+= Gmedia Gallery v1.9.15 =
+* Build Query fixes
+* Minor bug fixes
+
+= Gmedia Gallery v1.9.14 =
+* Update if you have some issues with installing premium modules
+
 = Gmedia Gallery v1.9.13 =
 * Fixed: "Add from Library" button on edit term page
 
