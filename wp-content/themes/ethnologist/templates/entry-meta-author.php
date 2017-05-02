@@ -1,3 +1,3 @@
 <div class="entry-meta-author">
-	<?php ethnologist_author_avatar(); ?>
+	<?php the_post_thumbnail( 'widget-thumb' );?>
 </div>
