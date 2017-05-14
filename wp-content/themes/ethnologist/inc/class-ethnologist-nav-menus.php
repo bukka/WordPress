@@ -236,12 +236,13 @@ class Ethnologist_NavMenus
 		$query = new WP_Query(
 			array_merge(
 				array(
-					'numberposts' => -1,
-					'post_status' => 'publish',
-					'lang'        => $lang,
-					'post_parent' => 0,
-					'orderby'     => 'title',
-					'order'       => 'ASC',
+					'numberposts'  => -1,
+					'post_status'  => 'publish',
+					'has_password' => false,
+					'lang'         => $lang,
+					'post_parent'  => 0,
+					'orderby'      => 'title',
+					'order'        => 'ASC',
 				),
 				$options
 			)

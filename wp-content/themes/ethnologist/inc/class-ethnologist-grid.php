@@ -32,6 +32,7 @@ class Ethnologist_Grid
 			'query_args' => array(
 				'posts_per_page' => $items_count,
 				'post_type'      => $post_type,
+				'has_password'   => false,
 			),
 		);
 	}
