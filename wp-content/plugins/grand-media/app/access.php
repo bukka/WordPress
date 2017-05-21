@@ -1214,8 +1214,15 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                 }
 
                 $item_name                = $item->title? $item->title : pathinfo($item->gmuid, PATHINFO_FILENAME);
-                $gmedia_hashid            = gmedia_hash_id_encode($item->ID, 'single');
-                $gmedias[ $i ]->sharelink = str_replace(array('$1', '$2'), array(urlencode($gmedia_hashid), 's'), $share_link_base);
+                if(!empty($gmedias[ $i ]->post_id)){
+                    $gmedias[ $i ]->sharelink = get_permalink($gmedias[ $i ]->post_id);
+                } else{
+                    $gmedia_hashid = gmedia_hash_id_encode($item->ID, 'single');
+                    $gmedias[ $i ]->sharelink = str_replace(array('$1', '$2'), array(
+                        urlencode($gmedia_hashid),
+                        's'
+                    ), $share_link_base);
+                }
                 if(1 === $logic && 'publish' == $item->status){
                     $gmedias[ $i ]->status = 'public';
                 }

@@ -300,7 +300,7 @@ class GmediaCore{
                                  'web'      => "{$this->upload['url']}/{$gmGallery->options['folder']['image']}/{$item->gmuid}",
                                  'original' => "{$this->upload['url']}/{$gmGallery->options['folder']['image_original']}/{$item->gmuid}"
             );
-            if('all' == $size || 'thumb' == $size){
+            if('original' !== $size){
                 $thumb_path = "{$this->upload['path']}/{$gmGallery->options['folder']['image_thumb']}/{$item->gmuid}";
                 if( !is_file($thumb_path)){
                     $img_cover = true;
@@ -321,7 +321,8 @@ class GmediaCore{
             $image  = "{$this->gmedia_url}/admin/assets/img/{$type}.png";
             $images = array('thumb'    => $image,
                             'web'      => $image,
-                            'original' => $image
+                            'original' => $image,
+                            'icon'     => false
             );
 
             if($cover){
@@ -329,9 +330,21 @@ class GmediaCore{
                 if(!empty($cover)){
                     if($this->is_digit($cover)){
                         $images = $this->gm_get_media_image((int)$cover, 'all', false);
+                        $images['icon'] = $image;
                     }
                 } elseif($default !== false){
                     return $default;
+                } else {
+                    $alb = $gmDB->get_gmedia_terms(array($item->ID), array('gmedia_album'), array('fields' => 'ids'));
+                    if(!empty($alb)){
+                        $cover = $gmDB->get_metadata('gmedia_term', $alb[0], '_cover', true);
+                        if(!empty($cover)){
+                            if($this->is_digit($cover)){
+                                $images = $this->gm_get_media_image((int)$cover, 'all', false);
+                                $images['icon'] = $image;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -3560,6 +3573,7 @@ class GmediaCore{
      */
     function modules_order(){
         return array(
+                     'albumsgrid'     => '',
                      'phantom-pro'    => '',
                      'albums-stripes' => '',
                      'cubik'          => '',

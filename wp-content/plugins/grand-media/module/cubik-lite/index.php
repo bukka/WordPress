@@ -5,9 +5,9 @@ $module_info = array(
     'title'        => 'Cubik Lite',
     'version'      => '1.4',
     'author'       => 'GalleryCreator',
-    'description'  => 'Perfect gallery module for widget. This is a light version of Cubik module.
+    'description'  => __('Perfect gallery module for widget. This is a light version of Cubik module.
 
-Responsive and mobile friendly &bull; Working in all major browsers &bull; built with HTML5 & CSS3',
+Responsive and mobile friendly &bull; Working in all major browsers &bull; built with HTML5 & CSS3', 'grand-media'),
     'type'         => 'gallery',
     'branch'       => '1',
     'status'       => 'free',

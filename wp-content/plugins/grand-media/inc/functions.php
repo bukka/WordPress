@@ -103,14 +103,16 @@ function gmedia_item_more_data(&$item){
 
     $type       = explode('/', $item->mime_type);
     $item->type = $type[0];
-    $item->ext  = pathinfo($item->gmuid, PATHINFO_EXTENSION);
+    $item->ext  = strtolower(pathinfo($item->gmuid, PATHINFO_EXTENSION));
 
     $item->url  = $gmCore->upload['url'] . '/' . $gmGallery->options['folder'][ $type[0] ] . '/' . $item->gmuid;
     $item->path = $gmCore->upload['path'] . '/' . $gmGallery->options['folder'][ $type[0] ] . '/' . $item->gmuid;
 
     $item->editor = (('image' == $item->type) && in_array($type[1], array('jpeg', 'png', 'gif')))? true : false;
     $item->gps    = '';
-    if('image' == $item->type){
+
+    $cover = $gmCore->gm_get_media_image($item, 'all');
+    if('image' == $item->type && !isset($cover['icon'])){
         $item->path_thumb    = $gmCore->upload['path'] . '/' . $gmGallery->options['folder']['image_thumb'] . '/' . $item->gmuid;
         $item->path_web      = $gmCore->upload['path'] . '/' . $gmGallery->options['folder']['image'] . '/' . $item->gmuid;
         $item->path_original = $gmCore->upload['path'] . '/' . $gmGallery->options['folder']['image_original'] . '/' . $item->gmuid;
@@ -125,10 +127,10 @@ function gmedia_item_more_data(&$item){
             $item->gps = implode(', ', $metadata['image_meta']['GPS']);
         }
     } else{
-        $cover              = $gmCore->gm_get_media_image($item, 'all');
         $item->url_thumb    = $cover['thumb'];
         $item->url_web      = $cover['web'];
         $item->url_original = $cover['original'];
+        $item->url_icon     = $cover['icon'];
     }
 
     $item->alttext = !empty($meta['_image_alt'][0])? $meta['_image_alt'][0] : $item->title;

@@ -1,5 +1,5 @@
 <?php // don't load directly
-if(!defined('ABSPATH')){
+if( !defined('ABSPATH')){
     die('-1');
 }
 
@@ -38,8 +38,8 @@ function gmedia_default_options(){
     $gm['wp_term_related_gmedia'] = '1';
     $gm['wp_post_related_gmedia'] = '0';
 
-    $gm['wp_author_related_gmedia'] = '0';
-    $gm['wp_author_related_gmedia_album'] = '1';
+    $gm['wp_author_related_gmedia']         = '0';
+    $gm['wp_author_related_gmedia_album']   = '1';
     $gm['wp_author_related_gmedia_gallery'] = '0';
 
     $gm['preview_bgcolor'] = 'ffffff';
@@ -69,6 +69,9 @@ function gmedia_default_options(){
     $gm['gmediacloud_footer_css']    = '';
 
     $gm['gmedia_post_types_support'] = '';
+
+    $gm['feedback'] = '1';
+    $gm['twitter']  = '1';
 
     $gm['folder']['image']          = 'image';
     $gm['folder']['image_thumb']    = 'image/thumb';
@@ -169,7 +172,7 @@ function gmedia_install(){
     global $wpdb, $gmGallery, $gmCore;
 
     // Check for capability
-    if(!current_user_can('activate_plugins')){
+    if( !current_user_can('activate_plugins')){
         return;
     }
 
@@ -182,10 +185,10 @@ function gmedia_install(){
     $charset_collate = '';
 
     if($wpdb->has_cap('collation')){
-        if(!empty($wpdb->charset)){
+        if( !empty($wpdb->charset)){
             $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
         }
-        if(!empty($wpdb->collate)){
+        if( !empty($wpdb->collate)){
             $charset_collate .= " COLLATE $wpdb->collate";
         }
     }
@@ -286,7 +289,7 @@ function gmedia_install(){
         return;
     }
 
-    if(!get_option('GmediaHashID_salt')){
+    if( !get_option('GmediaHashID_salt')){
         $ustr = wp_generate_password(12, false);
         add_option('GmediaHashID_salt', $ustr);
     }
@@ -295,7 +298,7 @@ function gmedia_install(){
     if(empty($gmGallery->options)){
         $gmGallery->options = gmedia_default_options();
         // Set installation date
-        if(!get_option('gmediaInstallDate')){
+        if( !get_option('gmediaInstallDate')){
             $installDate = time();
             add_option('gmediaInstallDate', $installDate);
         }
@@ -332,7 +335,7 @@ function gmedia_deactivate(){
     wp_clear_scheduled_hook('gmedia_app_cronjob');
 
     $options = get_option('gmediaOptions');
-    if((int)$options['mobile_app']){
+    if((int) $options['mobile_app']){
         $gmCore->app_service('app_deactivateplugin');
     }
 

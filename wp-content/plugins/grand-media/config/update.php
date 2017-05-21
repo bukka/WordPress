@@ -872,6 +872,11 @@ function gmedia_quite_update(){
 
         $gmGallery->options = $gmCore->array_replace_recursive($options, $new_options);
         update_option('gmediaOptions', $gmGallery->options);
+        update_option("gmediaVersion", GMEDIA_VERSION);
+
+        if((int)$gmGallery->options['mobile_app']){
+            $gmCore->app_service('app_updatecron');
+        }
 
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/afflux');
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/jq-mplayer');
@@ -880,10 +885,5 @@ function gmedia_quite_update(){
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/wp-videoplayer');
         $gmCore->delete_folder($gmCore->upload['path'] . '/module/cubik-lite');
 
-        update_option("gmediaVersion", GMEDIA_VERSION);
-
-        if((int)$gmGallery->options['mobile_app']){
-            $gmCore->app_service('app_updatecron');
-        }
     }
 }

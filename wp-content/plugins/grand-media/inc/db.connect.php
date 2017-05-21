@@ -3690,7 +3690,7 @@ class GmediaDB{
      * @param string|array $taxonomies The taxonomies to retrieve terms from.
      * @param array|string $args       Change what is returned
      *
-     * @return array|WP_Error The requested term data or empty array if no terms found. WP_Error if $taxonomy does not exist.
+     * @return array The requested term data or empty array if no terms found. WP_Error if $taxonomy does not exist.
      */
     function get_gmedia_terms($object_ids, $taxonomies, $args = array()){
         /** @var $wpdb wpdb */

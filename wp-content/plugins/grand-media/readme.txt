@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: http://codeasily.com/donate/
 Tags: gallery, image gallery, photo gallery, lightbox gallery, comments gallery
 Requires at least: 3.7
-Tested up to: 4.7.3
+Tested up to: 4.7.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -153,6 +153,14 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.9.18 =
+* Added Settings to hide sidebar sections
+* Modules functions improvements
+
+= Gmedia Gallery v1.9.17 =
+* Use Album Covers as default artwork for non-image files
+* Preparations for the new gallery module
 
 = Gmedia Gallery v1.9.15 =
 * Build Query fixes
