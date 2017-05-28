@@ -4,7 +4,7 @@ Donate link: https://polylang.pro
 Tags: multilingual, bilingual, translate, translation, language, multilanguage, international, localization
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 
 Making WordPress multilingual
@@ -76,10 +76,18 @@ Don't hesitate to [give your feedback](http://wordpress.org/support/view/plugin-
 
 == Changelog ==
 
+= 2.1.4 (2017-05-16) =
+
+* Pro: fix user not logged in on secondary domain when previewing changes
+* Pro: fix archive links without language code in ACF link field (ACF 5.4.0+)
+* Fix redirection from www subdomain to wrong language domain.
+* Fix: selecting "Front page displays latest posts" in the customizer not cleaning the languages cache
+* Fix accessibility of the admin language switcher
+
 = 2.1.3 (2017-04-11) =
 
 * Pro: Fix translated slug of 'page' if it is translated to an empty string
-* Update plugin udpater class to 1.6.11
+* Update plugin updater class to 1.6.11
 * Strings registered with a wpml-config.xml file or WPML functions are now multiline by default
 * Translate the site title in emails sent to the user
 * Fix sanitize_user for specific locales
