@@ -288,6 +288,19 @@ function gmedia_ios_app_library_data($data = array('site', 'authors', 'filter', 
                 gmedia_ios_app_term_data_extend($gmediaTerms[ $i ], $share_link_base, $logic, $cap);
             }
 
+            if(!empty($_args['include'])){
+                $_gmediaTerms = array();
+                foreach($gmediaTerms as $term){
+                    $_gmediaTerms["{$term->term_id}"] = $term;
+                }
+                $include = (array) $_args['include'];
+                $gmediaTerms = array();
+                foreach($include as $tid){
+                    if(isset($_gmediaTerms["{$tid}"])){
+                        $gmediaTerms[] = $_gmediaTerms["{$tid}"];
+                    }
+                }
+            }
             $out['categories']['data'] = array_values($gmediaTerms);
         }
     }
@@ -331,6 +344,19 @@ function gmedia_ios_app_library_data($data = array('site', 'authors', 'filter', 
             gmedia_ios_app_term_data_extend($gmediaTerms[ $i ], $share_link_base, $logic, $cap);
         }
         $gmediaTerms          = array_filter($gmediaTerms);
+        if(!empty($_args['include'])){
+            $_gmediaTerms = array();
+            foreach($gmediaTerms as $term){
+                $_gmediaTerms["{$term->term_id}"] = $term;
+            }
+            $include = (array) $_args['include'];
+            $gmediaTerms = array();
+            foreach($include as $tid){
+                if(isset($_gmediaTerms["{$tid}"])){
+                    $gmediaTerms[] = $_gmediaTerms["{$tid}"];
+                }
+            }
+        }
         $props['items_count'] = count($gmediaTerms);
 
         $out['albums'] = array('cap'        => $cap,

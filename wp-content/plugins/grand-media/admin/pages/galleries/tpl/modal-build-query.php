@@ -205,9 +205,10 @@ global $user_ID, $gmDB, $gmCore
 								$users        = '';
 								$_users = array();
 								if(count($filter_users)) {
+                                    $author__in = wp_parse_id_list($query_data['author__in']);
 									foreach((array)$filter_users as $user) {
 										$user->ID  = (int)$user->ID;
-										$_selected = in_array($user->ID, $query_data['author__in'])? ' selected="selected"' : '';
+										$_selected = in_array($user->ID, $author__in)? ' selected="selected"' : '';
 										$users .= "<option value='{$user->ID}'{$_selected}>" . esc_html($user->display_name) . "</option>";
 										$_users[] = array('value' => $user->ID, 'text' => esc_html($user->display_name));
 									}
@@ -395,6 +396,7 @@ global $user_ID, $gmDB, $gmCore
 
 					});
 					var cats = $('.combobox_gmedia_category').selectize({
+                        plugins: ['drag_drop'],
 						create: false,
 						options: gmedia_categories,
 						preload: true,
@@ -444,6 +446,7 @@ global $user_ID, $gmDB, $gmCore
 					});
 
 					var tags = $('.combobox_gmedia_tag').selectize({
+                        plugins: ['drag_drop'],
 						create: false,
 						options: gmedia_tags,
 						hideSelected: true,

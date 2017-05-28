@@ -1041,6 +1041,9 @@ var GmediaFunction = {
                 backdrop: true,
                 show: true
             }).one('hidden.bs.modal', function() {
+                if (jQuery('.gmedia-modal:visible').length) {
+                    jQuery('body').addClass('modal-open');
+                }
                 modal_title.empty();
                 modal_body.empty();
                 modal_dialog.removeAttr('style').attr('class', 'modal-dialog');
@@ -1174,7 +1177,7 @@ var GmediaFunction = {
             query = query_field.val();
 
             modal_div.modal({
-                backdrop: false,
+                backdrop: true,
                 show: true,
                 keyboard: false
             }).one('shown.bs.modal', function() {
