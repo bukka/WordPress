@@ -697,14 +697,15 @@ div#pluploadUploader_container .plupload_filelist_footer {
 }
 div#pluploadUploader_buttons { margin-bottom:5px; }
 div.plupload_started { float:left; }
-div.panel-body, div#gmedia-msg-panel {
+div.panel-body, div#gmedia-msg-panel, #gmedia-service-msg-panel {
   -webkit-transition:all .2s ease-in-out;
   transition:all .2s ease-in-out;
 }
-div.panel-body:empty, div#gmedia-msg-panel:empty {
+div.panel-body:empty, div#gmedia-msg-panel:empty, #gmedia-service-msg-panel:empty {
   padding:0;
 }
-div#gmedia-msg-panel .alert {
+div#gmedia-msg-panel .alert,
+#gmedia-service-msg-panel .alert {
   padding:2px 35px 2px 12px;
   margin-bottom:5px;
 }
@@ -878,7 +879,6 @@ a.edit_tag_save.btn {
 #gmedia-edit-term .gm-img-thumbnail img { max-height: 150px; }
 .choose-module {
   padding:10px;
-  cursor:pointer;
   overflow:hidden;
   margin:0;
 }
@@ -905,11 +905,20 @@ a.edit_tag_save.btn {
   padding-bottom:0;
   margin-bottom:0;
 }
+#gmedia_modules .buttons a.btn {
+  margin-bottom: 7px;
+}
 #chooseModuleModal .choose-module {
   border-bottom: 1px solid #444444;
 }
 #chooseModuleModal .choose-module:last-child {
   border-bottom: none;
+}
+.modules-body .media {
+  display:none;
+}
+.modules-body .module-filtered {
+  display:block;
 }
 .presetlist a { }
 .gm-preset-id {
@@ -1466,4 +1475,71 @@ select[multiple].input-group-xs > .input-group-btn > .btn {
 .input-group-btn:last-child > .dropdown-toggle {
   border-bottom-left-radius:0;
   border-top-left-radius:0;
+}
+
+.notice.updated.gm-message {
+  margin-left: 0;
+  margin-bottom: 30px;
+  /* clear: both; */
+  max-width: 800px;
+}
+
+.gm-plugin-icon {
+  float: left;
+  margin-right: 15px;
+}
+
+.gm-message-content * {
+  font-size: 14px;
+}
+
+.gm-message-actions {
+  background-color: #e6eef1;
+  padding: 10px 12px;
+  margin: 0 -12px;
+  text-align: right;
+}
+
+.gm-message-actions button {
+  margin-left: 20px !important;
+}
+
+.gm-message-plus.gm-closed ul {
+  display: none;
+}
+
+.gm-message-plus {
+  text-align: center;
+  padding: 4px 0;
+}
+
+.gm-message-plus.gm-opened ul {
+  display: block;
+  text-align: left;
+  margin: 20px 20px 10px 20px;
+}
+
+.gm-message-plus ul li {
+  margin-bottom: 12px;
+}
+
+.gm-message-plus ul li i.dashicons {
+  float: left;
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.gm-message-plus ul li div {
+  margin-left: 55px;
+}
+
+.gm-message-plus ul li div span {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #23282d;
+}
+
+.gm-message-plus ul li div p{
+  margin: 2px 0 0 0
 }

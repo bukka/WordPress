@@ -935,6 +935,29 @@ var GmediaFunction = {
             return GmediaFunction.confirm(jQuery(this).data('confirm'));
         });
 
+        jQuery(document).on('click.gmedia', '.gm_service_action', function() {
+            var el = jQuery(this),
+                service = jQuery(this).attr('data-action'),
+                nonce = jQuery(this).attr('data-nonce');
+            var post_data = {
+                action: 'gmedia_application',
+                service: service,
+                _wpnonce: nonce
+            };
+            jQuery.post(ajaxurl, post_data, function(data, textStatus, jqXHR) {
+                console.log(data);
+                el.siblings('.spinner').removeClass('is-active');
+                if(data.error) {
+                    jQuery('#gmedia-service-msg-panel').prepend(data.error);
+                } else if(data.message) {
+                    jQuery('#gmedia-service-msg-panel').html(data.message);
+                }
+            });
+
+            el.siblings('.spinner').addClass('is-active');
+            jQuery('.gmedia-service__message').remove();
+        });
+
         gmedia_DOM.on('click', '.show-settings-link', function(e) {
             e.preventDefault();
             jQuery('#show-settings-link').trigger('click');
@@ -1276,7 +1299,7 @@ var GmediaFunction = {
         });
 
 
-        gmedia_DOM.on('change', 'form.edit-gmedia :input', function() {
+        gmedia_DOM.on('change', 'form.edit-gmedia :input:not([name="doaction[]"])', function() {
             if(jQuery(this).hasClass('edit-gmedia-ignore')) {
                 return;
             }
@@ -1367,7 +1390,7 @@ var GmediaFunction = {
             });
         });
 
-        gmedia_DOM.on('keydown', 'form :input:visible:not(:submit,:button,:reset,textarea,#gmedia-search)', function(e) {
+        gmedia_DOM.on('keydown', 'form :input:visible:not(:submit,:button,:reset,textarea,.allow-key-enter)', function(e) {
             var charCode = e.charCode || e.keyCode || e.which;
             if(13 == charCode && !jQuery(this).parent().hasClass('selectize-input')) {
                 var inputs = jQuery(this).parents("form").eq(0).find(":input:visible");
@@ -1451,6 +1474,25 @@ var GmediaFunction = {
                 jQuery('body').removeClass('gmedia-busy');
             });
         });
+
+        gmedia_DOM.on('click', '.filter-modules > *', function(){
+            jQuery('.filter-modules > .btn-primary').removeClass('btn-primary').addClass('btn-default');
+            jQuery('.filter-modules > .label-primary').removeClass('label-primary').addClass('label-default');
+            if(jQuery(this).is('button')){
+                jQuery(this).addClass('btn-primary').removeClass('btn-default');
+            } else{
+                jQuery(this).addClass('label-primary').removeClass('label-default');
+            }
+            var filter = jQuery(this).attr('data-filter');
+            jQuery('#gmedia_modules .media').removeClass('module-filtered').filter('.module-' + filter).addClass('module-filtered');
+            if(!jQuery('#gmedia_modules .module-filtered').length){
+                if('not-installed' == filter){
+                    jQuery('#gmedia_modules .nomodules.nomodule-' + filter).addClass('module-filtered');
+                } else{
+                    jQuery('#gmedia_modules .nomodules.nomodule-tag').addClass('module-filtered');
+                }
+            }
+        })
 
         if(jQuery(".panel-fixed-header").length) {
             setPanelHeadersWidth();

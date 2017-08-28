@@ -756,7 +756,11 @@ function gmedia_post_type__the_content($content){
                 $ext2 = wp_get_video_extensions();
                 $ext  = array_merge($ext1, $ext2);
                 if(in_array($gmedia->ext, $ext)){
-                    $embed = do_shortcode("[embed]$gmedia->url[/embed]");
+                    global $wp_embed;
+                    $embed = $wp_embed->run_shortcode("[embed]$gmedia->url[/embed]");
+                    if('[' == substr($embed, 0, 1)){
+                        $embed = do_shortcode($embed);
+                    }
                     echo $embed;
                 } else{
                     $cover_url = $gmCore->gm_get_media_image($gmedia, 'web');

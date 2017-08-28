@@ -20,6 +20,9 @@ function get_gmedia_modules($including_remote = true){
     if(($plugin_modules = glob(GMEDIA_ABSPATH . 'module/*', GLOB_ONLYDIR | GLOB_NOSORT))){
         foreach($plugin_modules as $path){
             $mfold                   = basename($path);
+            if(in_array($mfold, array('minima', 'afflux'))){
+                continue;
+            }
             $modules['in'][ $mfold ] = array('place'       => 'plugin',
                                              'module_name' => $mfold,
                                              'module_url'  => $gmCore->gmedia_url . "/module/{$mfold}",
@@ -53,7 +56,7 @@ function get_gmedia_modules($including_remote = true){
                 unset($modules['in'][ $mfold ]);
                 continue;
             }
-            $modules['in'][ $mfold ]           = array_merge($module, (array)$module_info);
+            $modules['in'][ $mfold ]           = array_merge(array('id' => 0, 'tags' => array(), 'screenshots' => array()), $module, (array)$module_info);
             $modules['in'][ $mfold ]['update'] = false;
         }
     }
@@ -66,16 +69,49 @@ function get_gmedia_modules($including_remote = true){
                 foreach($xml as $m){
                     $name                             = (string)$m->name;
                     $modules['xml'][ $name ]          = get_object_vars($m);
-                    $modules['xml'][ $name ]['place'] = 'remote';
+                    if(isset($modules['xml'][ $name ]['@attributes']['id'])){
+                        $modules['xml'][ $name ]['id'] = $modules['xml'][ $name ]['@attributes']['id'];
+                        unset($modules['xml'][ $name ]['@attributes']);
+                    } else{
+                        $modules['xml'][ $name ]['id'] = 0;
+                    }
+                    if(isset($modules['xml'][ $name ]['tags']->tag)){
+                        $modules['xml'][ $name ]['tags'] = (array)$modules['xml'][ $name ]['tags']->tag;
+                    } else{
+                        $modules['xml'][ $name ]['tags'] = array();
+                    }
+                    if(isset($modules['xml'][ $name ]['screenshot']->screen)){
+                        foreach($modules['xml'][ $name ]['screenshot'] as $screen){
+                            $modules['xml'][ $name ]['screenshots'][] = (array)$screen;
+                        }
+                    } else{
+                        $modules['xml'][ $name ]['screenshots'] = array();
+                    }
+                    unset($modules['xml'][ $name ]['screenshot']);
+                    $modules['xml'][ $name ]['description'] = (string)$modules['xml'][ $name ]['description'];
                     if(isset($modules['in'][ $name ]) && !empty($modules['in'][ $name ])){
-                        $modules['in'][ $name ] = array_merge(get_object_vars($m), $modules['in'][ $name ]);
+                        $xml_module = $modules['xml'][ $name ];
+                        unset($xml_module['version']);
+                        $modules['in'][ $name ] = array_merge($modules['in'][ $name ], $xml_module);
                         if(version_compare($modules['xml'][ $name ]['version'], $modules['in'][ $name ]['version'], '>')){
                             $modules['in'][ $name ]['update'] = $modules['xml'][ $name ]['version'];
+                            $modules['xml'][ $name ]['place'] = 'remote';
+                            $modules['xml'][ $name ]['update'] = true;
                             $modules['out'][ $name ]          = $modules['xml'][ $name ];
                         }
                     } else{
+                        $modules['xml'][ $name ]['place'] = 'remote';
+                        $modules['xml'][ $name ]['update'] = false;
                         $modules['out'][ $name ] = $modules['xml'][ $name ];
                     }
+                }
+                array_multisort(array_map(function($element) {
+                    return $element['id'];
+                }, $modules['in']), SORT_DESC, $modules['in']);
+                if(!empty($modules['out'])){
+                    array_multisort(array_map(function($element){
+                        return $element['id'];
+                    }, $modules['out']), SORT_DESC, $modules['out']);
                 }
             }
         } else{
@@ -85,6 +121,7 @@ function get_gmedia_modules($including_remote = true){
             }
         }
     }
+
 
     return $modules;
 }
@@ -120,7 +157,7 @@ function gmedia_item_more_data(&$item){
         $item->url_web       = $gmCore->upload['url'] . '/' . $gmGallery->options['folder']['image'] . '/' . $item->gmuid;
         $item->url_original  = $gmCore->upload['url'] . '/' . $gmGallery->options['folder']['image_original'] . '/' . $item->gmuid;
         if(!is_file($item->path_original)){
-            $item->path_original = null;
+            $item->path_original = false;
             $item->url_original = $item->url_web;
         }
         if(!empty($metadata['image_meta']['GPS'])){

@@ -1,14 +1,14 @@
 === Gallery - Gmedia Photo Gallery. Music Player, Video Gallery, Media Library ===
 Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
-Tags: gallery, image gallery, photo gallery, lightbox gallery, comments gallery
+Tags: gallery, gallery image, photo gallery, gallery lightbox, gallery comments
 Requires at least: 3.7
-Tested up to: 4.7.5
+Tested up to: 4.8.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Gallery Gmedia - photo gallery with comments, EXIF & Metadata, map geolocation (GPS), private galleries, music & video player.
+Gallery Gmedia - photo gallery with comments, gallery with EXIF & Metadata, gallery with map geolocation (GPS), private galleries, music gallery & video gallery.
 
 == Description ==
 
@@ -37,7 +37,7 @@ Friendly for iPad and iPhone. Doesn’t slow down your website. **Unlimited gall
 #### Photo Gallery Modules, Music Players, Mixed Galleries demos
 
 *   [AlbumsGrid - Splash Gallery for your Albums, Categories, Tags](https://codeasily.com/portfolio/gmedia-gallery-modules/albumsgrid/).
-*   [AlbumsStripes - Slider for your Albums](https://codeasily.com/portfolio/gmedia-gallery-modules/stripes/).
+*   [PhotoCluster - Accordeon Splash Slider for your Albums and Categories](https://codeasily.com/portfolio/gmedia-gallery-modules/photocluster/).
 *   [Cubik 3D - Mixed 3D Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/cubik-3d-photo-gallery-for-wordpress/) is the 3D Cube Gallery with social sharing - highly customizible grid and Magnific Popup lightbox with additional information for each photo.
 *   [Phantom Pro - Mixed Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/phantom-pro/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more.
 *   [WaveSurfer - Music Module](https://codeasily.com/portfolio/gmedia-gallery-modules/wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
@@ -155,6 +155,43 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.11.0 =
+* Fixed Modules update
+
+= Gmedia Gallery v1.11.0 =
+* Added Support page
+* Added user permission to enable GmediaService
+* Added user feedback form before deactivate plugin
+* Fixed links to home website
+* Hide flash modules from the list of available modules
+* Small fixes and improvements
+
+= Gmedia Gallery v1.10.07 =
+* Added files in the import tree view
+* Added logging of views and likes from iOS app
+* Fixed links to home website
+* Fixed PHP Notice when original image is not available on the server
+
+= Gmedia Gallery v1.10.06 =
+* Fixed iOS app service activation on some servers
+* Fixed non-images single posts was empty
+
+= Gmedia Gallery v1.10.05 =
+* Fixed compatibility with WP-SpamShield
+* Modules admin page new layout with filters by feature
+
+= Gmedia Gallery v1.10.04 =
+* Added option to disable Gmedia Logger
+* Added compatibility with the future gallery module
+
+= Gmedia Gallery v1.10.03 =
+* Added Gmedia Logger as a premium option
+* Fixed ENTER key on pagination
+* Other small improvements
+
+= Gmedia Gallery v1.9.20 =
+* Added few action hooks for developers
 
 = Gmedia Gallery v1.9.19 =
 * Query Builder modal small fix

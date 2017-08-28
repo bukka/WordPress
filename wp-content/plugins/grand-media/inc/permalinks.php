@@ -218,8 +218,9 @@ class gmediaPermalinks {
      */
     public function bridge($wp) {
         if (isset($_GET['gmServiceLink'])) {
-            $transient_key = preg_replace('/[^A-Za-z0-9]/', '', $_GET['gmServiceLink']);
+            $transient_key = preg_replace('/[^A-Za-z0-9_]/', '', $_GET['gmServiceLink']);
             if (false !== ($result = get_transient($transient_key))) {
+                delete_transient($transient_key);
                 header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
                 echo json_encode($result);
                 die();

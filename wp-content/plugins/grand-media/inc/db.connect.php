@@ -338,7 +338,7 @@ class GmediaDB{
         foreach($params as $key => $value){
             $result .= '<input type="hidden" name="' . $key . '" value="' . $value . '" />';
         }
-        $result .= '<input class="form-control pager_current_page" name="pager" type="text" value="' . $this->openPage . '" /><span class="input-group-addon">' . __("of", "grand-media") . ' ' . $this->pages . '</span>';
+        $result .= '<input class="form-control pager_current_page allow-key-enter" name="pager" type="text" value="' . $this->openPage . '" /><span class="input-group-addon">' . __("of", "grand-media") . ' ' . $this->pages . '</span>';
         $result .= '</form>';
 
         $result .= '<div class="btn-group btn-group-xs">';

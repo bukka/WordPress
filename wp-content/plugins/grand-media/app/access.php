@@ -31,6 +31,7 @@ if(isset($_FILES['userfile']['name'])){
     $globaldata = file_get_contents("php://input");
 }
 
+$gmedia_options = get_option('gmediaOptions');
 if($globaldata){
 
     $json = json_decode($globaldata);
@@ -43,7 +44,6 @@ if($globaldata){
         gmedia_ios_app_counters($json->counter);
     }
 
-    $gmedia_options = get_option('gmediaOptions');
     if(isset($json->cookie) && !empty($json->cookie)){
         if(empty($gmedia_options['mobile_app'])){
             $out['error'] = array('code' => 'app_inactive', 'message' => 'Service not enabled/activated for this site');
@@ -1592,10 +1592,12 @@ function gmedia_ios_app_counters($data){
             $counters['views'] = $gmDB->get_metadata('gmedia', $gmID, 'views', true);
             $counters['views'] += 1;
             $gmDB->update_metadata('gmedia', $gmID, 'views', $counters['views']);
+            do_action('gmedia_view', $gmID);
             if(isset($counters['likes'])){
                 $counters['likes'] = $gmDB->get_metadata('gmedia', $gmID, 'likes', true);
                 $counters['likes'] += 1;
                 $gmDB->update_metadata('gmedia', $gmID, 'likes', $counters['likes']);
+                do_action('gmedia_like', $gmID);
             }
 
         }
@@ -1606,6 +1608,8 @@ function gmedia_ios_app_counters($data){
 $time += microtime(true);
 //$time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 $out['microtime'] = $time;
+$out['key'] = $gmedia_options['license_key'];
 
 header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+header('Access-Control-Allow-Origin: *');
 echo json_encode($out);

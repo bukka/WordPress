@@ -46,6 +46,15 @@ if( !defined('ABSPATH')){
             <p class="help-block"><?php _e('Warning: You can\'t undo this operation. Checking this option you agree to delete original images. You will not be able: restore images after modification in the Image Editor; re-create web-optimized images; ...', 'grand-media'); ?></p>
         </div>
 
+        <div class="form-group">
+            <label><?php _e('Disable Logs', 'grand-media') ?>:</label>
+            <div class="checkbox" style="margin:0;">
+                <input type="hidden" name="set[disable_logs]" value="0"/>
+                <label><input type="checkbox" name="set[disable_logs]" value="1" <?php checked($gmGallery->options['disable_logs'], '1'); ?> /> <?php _e('Disable Gmedia Logs page', 'grand-media'); ?>
+                </label>
+            </div>
+        </div>
+
         <hr/>
         <div class="form-group">
             <label><?php _e('Gmedia Tags & Categories', 'grand-media'); ?></label>
