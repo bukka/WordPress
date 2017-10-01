@@ -148,16 +148,21 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Minimum requirements for Gmedia Gallery =
 
-    WordPress 3.6
-    PHP 5.2
+    WordPress 3.7+
+    PHP 5.3+
 
 == Changelog ==
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
-= Gmedia Gallery v1.11.0 =
+= Gmedia Gallery v1.11.2 =
+* Fixed iOS app service activation on some servers
+* Added premium gallery module
+
+= Gmedia Gallery v1.11.1 =
 * Fixed Modules update
+* Fixed PHP Notice
 
 = Gmedia Gallery v1.11.0 =
 * Added Support page

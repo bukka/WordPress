@@ -32,8 +32,8 @@ function gmediaApp(){
     <div class="panel panel-default" id="gm_application">
         <?php wp_nonce_field('GmediaService'); ?>
         <div class="panel-body" id="gmedia-service-msg-panel"><?php
-
-            if('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR']){
+            echo '<pre>' . print_r($_SERVER, true) . '</pre>';
+            if(empty($_SERVER['HTTP_X_REAL_IP']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])){
                 echo $alert;
             } else{
                 if(!$mobile_app || !$site_ID){
@@ -87,6 +87,7 @@ function gmediaApp(){
                         <div class="col-xs-6">
                             <!--<p><?php echo 'Server address: ' . $_SERVER['SERVER_ADDR'];
                             echo '<br>Remote address: ' . $_SERVER['REMOTE_ADDR'];
+                            echo '<br>HTTP X Real IP: ' . isset($_SERVER['HTTP_X_REAL_IP'])? $_SERVER['HTTP_X_REAL_IP'] : '';
                             ?></p>-->
                             <div class="gmapp-description">
                                 <div style="text-align:center; margin-bottom:30px;">

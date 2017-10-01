@@ -2953,7 +2953,7 @@ class GmediaCore {
     function app_service($service){
         global $gmGallery, $gmDB, $wp_version;
 
-        if('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR']){
+	    if(empty($_SERVER['HTTP_X_REAL_IP']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])){
             return false;
         }
         if( !current_user_can('manage_options')){

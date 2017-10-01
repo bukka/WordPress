@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.11.1
+ * Version: 1.11.2
  * Author: Rattus
  * Author URI: https://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if( !class_exists('Gmedia')){
      */
     class Gmedia {
 
-        var $version = '1.11.1';
+        var $version = '1.11.2';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -198,17 +198,15 @@ if( !class_exists('Gmedia')){
 
                 return false;
             }
-            if(version_compare('5.2', phpversion(), '>')){
-                $note = sprintf(__('Attention! Your server php version is: %s. Gmedia Gallery requires php version 5.2+ in order to run properly. Please upgrade your server!', 'grand-media'), phpversion());
-                update_option('gmediaInitCheck', $note);
-                add_action('admin_notices', array(&$this, 'admin_notices'));
-            }
             if(version_compare('5.3', phpversion(), '>')){
+                $note = sprintf(__('Attention! Your server php version is: %s. Gmedia Gallery requires php version 5.3+ in order to run properly. Please upgrade your server!', 'grand-media'), phpversion());
                 if(ini_get('safe_mode')){
-                    $note = __('Attention! Your server safe mode is: ON. Gmedia Gallery requires safe mode to be OFF in order to run properly. Please set your server safe mode option!', 'grand-media');
-                    update_option('gmediaInitCheck', $note);
-                    add_action('admin_notices', array(&$this, 'admin_notices'));
+                    $note .= '<br/>' . __('Attention! Your server safe mode is: ON. Gmedia Gallery requires safe mode to be OFF in order to run properly. Please set your server safe mode option!', 'grand-media');
                 }
+	            update_option('gmediaInitCheck', $note);
+	            add_action('admin_notices', array(&$this, 'admin_notices'));
+
+	            return false;
             }
 
             return true;
@@ -964,10 +962,10 @@ if( !class_exists('Gmedia')){
                                     <div class="reason-input"><input type="text" name="better_plugin" disabled placeholder="<?php _e('What\'s the plugin\'s name?', 'grand-media'); ?>"/></div>
                                 </div>
                                 <div class="reason">
-                                    <label><input type="radio" name="reason" value="The plugin suddenly stopped working"/> <span><?php _e('The plugin suddenly stopped working', 'grand-media'); ?></span></label>
+                                    <label><input type="radio" name="reason" value="The plugin is too coomplicated for me"/> <span><?php _e('The plugin is too coomplicated for me', 'grand-media'); ?></span></label>
                                 </div>
                                 <div class="reason">
-                                    <label><input type="radio" name="reason" value="The plugin broke my site"/> <span><?php _e('The plugin broke my site', 'grand-media'); ?></span></label>
+                                    <label><input type="radio" name="reason" value="The plugin broke my life"/> <span><?php _e('The plugin broke my life', 'grand-media'); ?></span></label>
                                 </div>
                                 <div class="reason has-input">
                                     <label><input type="radio" name="reason" value="Other"/> <span><?php _e('Other', 'grand-media'); ?></span></label>
