@@ -120,7 +120,19 @@ function ethnologist_editor_manage_users() {
 		$edit_editor->add_cap('add_users');
 		$edit_editor->add_cap('delete_users');
 
+		// other editors extra caps
+		$edit_editor->add_cap('customize');
+
 		update_option( 'ethnologist_add_cap_editor_once', 'v1' );
+	}
+
+	if ( get_option( 'ethnologist_add_cap_author_once' ) != 'v1' ) {
+
+		$edit_editor = get_role('author'); // Get the user role
+		$edit_editor->add_cap('edit_pages');
+		$edit_editor->add_cap('edit_published_pages');
+
+		update_option( 'ethnologist_add_cap_author_once', 'v1' );
 	}
 }
 
