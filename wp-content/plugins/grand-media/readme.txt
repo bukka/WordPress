@@ -1,7 +1,7 @@
 === Gallery - Gmedia Photo Gallery. Music Player, Video Gallery, Media Library ===
 Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
-Tags: gallery, gallery image, photo gallery, gallery lightbox, gallery comments
+Tags: gallery, albums, photo gallery, gallery lightbox, gallery comments
 Requires at least: 3.7
 Tested up to: 4.8.0
 Stable tag: trunk
@@ -155,6 +155,9 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.11.3 =
+* Small fixes and improvements
 
 = Gmedia Gallery v1.11.2 =
 * Fixed iOS app service activation on some servers
