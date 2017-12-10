@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, albums, photo gallery, gallery lightbox, gallery comments
 Requires at least: 3.7
-Tested up to: 4.8.0
+Tested up to: 4.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -155,6 +155,10 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.11.4 =
+* Compatible with WP v4.9
+* Fixed CSS for JQ Music Player module.
 
 = Gmedia Gallery v1.11.3 =
 * Small fixes and improvements
