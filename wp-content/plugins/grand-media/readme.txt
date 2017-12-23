@@ -156,6 +156,10 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
 
+= Gmedia Gallery v1.11.5 =
+* Removed debug info on admin page
+* Added "Date" field on Edit Album page
+
 = Gmedia Gallery v1.11.4 =
 * Compatible with WP v4.9
 * Fixed CSS for JQ Music Player module.

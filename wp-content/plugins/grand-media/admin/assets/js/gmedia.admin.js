@@ -614,6 +614,16 @@ var GmediaTerms = {
             }
         });
 
+        // Date/Time picker
+        var gmedia_date_temp;
+        jQuery('.input-group.gmedia_date').datetimepicker({useSeconds: true}).on('dp.show', function() {
+            gmedia_date_temp = jQuery('input', this).val();
+        }).on('dp.hide', function() {
+            if(gmedia_date_temp != jQuery('input', this).val()) {
+                jQuery('input', this).trigger('change');
+            }
+        });
+
     }
 };
 
@@ -1528,7 +1538,7 @@ window.closeModal = function(id) {
 
 
 /*
- * jQuery functions for GRAND Flash Media
+ * jQuery functions for GRAND Media
  */
 function GmediaInit(){
     gmedia_DOM = jQuery('#gmedia-container');

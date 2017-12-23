@@ -519,6 +519,14 @@ class GmediaAdmin {
                             wp_enqueue_style('jquery-ui-smoothness', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.min.css', array(), '1.10.2', 'screen');
                             wp_enqueue_script('jquery-ui-full', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js', array(), '1.10.2');
                         }
+
+	                    wp_enqueue_script('moment', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/moment.min.js', array('jquery'), '2.5.1');
+	                    wp_enqueue_style('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', array('gmedia-bootstrap'), '2.1.32');
+	                    wp_enqueue_script('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js', array(
+		                    'jquery',
+		                    'moment',
+		                    'gmedia-bootstrap'
+	                    ), '2.1.32');
                     }
                     break;
                 case "GrandMedia_Categories" :

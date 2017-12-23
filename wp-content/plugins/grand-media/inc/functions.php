@@ -238,6 +238,7 @@ function gmedia_term_item_more_data(&$item){
         if($post_id){
             $post_item = get_post($post_id);
             if($post_item){
+                $item->post_date      = $post_item->post_date;
                 $item->slug           = $post_item->post_name;
                 $item->post_password  = $post_item->post_password;
                 $item->comment_count  = $post_item->comment_count;

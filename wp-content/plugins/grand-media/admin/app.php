@@ -32,7 +32,6 @@ function gmediaApp(){
     <div class="panel panel-default" id="gm_application">
         <?php wp_nonce_field('GmediaService'); ?>
         <div class="panel-body" id="gmedia-service-msg-panel"><?php
-            echo '<pre>' . print_r($_SERVER, true) . '</pre>';
             if(empty($_SERVER['HTTP_X_REAL_IP']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])){
                 echo $alert;
             } else{
