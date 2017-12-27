@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, albums, photo gallery, gallery lightbox, gallery comments
 Requires at least: 3.7
-Tested up to: 4.9
+Tested up to: 4.9.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,23 @@ Manage files, show image galleries and photo slideshows, play music on your site
 With Gmedia Gallery plugin you can upload an unlimited number of photo and audio files, create dozens of galleries and playlists, group pictures and other files in albums, andadd tags for each file.
 Handle any file format and link any files with images in few clicks. You can import images with captions from Worpress Media Library, Flagallery plugin and from NextGen Gallery plugin right to Gmedia Library.
 
+#### Demos:
+
+*   [AlbumsList](https://codeasily.com/portfolio/gmedia-gallery-modules/albumslist/) - Splash Slider Gallery with custom lightbox.
+*   [WoowSlider](https://codeasily.com/portfolio/gmedia-gallery-modules/woowslider/) - unique responsive Slider.
+*   [AlbumsGrid](https://codeasily.com/portfolio/gmedia-gallery-modules/albumsgrid/) - Splash Gallery for your Albums (terms).
+*   [PhotoCluster](https://codeasily.com/portfolio/gmedia-gallery-modules/photocluster/) - Accordeon Splash Slider for your Albums.
+*   [Cubik 3D](https://codeasily.com/portfolio/gmedia-gallery-modules/cubik-3d-photo-gallery-for-wordpress/) - 3D Cube Gallery with social sharing.
+*   [Phantom Pro](https://codeasily.com/portfolio/gmedia-gallery-modules/phantom-pro/) - Wall/Grid Gallery.
+*   [WaveSurfer](https://codeasily.com/portfolio/gmedia-gallery-modules/wavesurfer/) - responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers.
+*   [PhotoTravlr](https://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) - responsive gallery with terms support (tags, albums, categories) and extended details for each image.
+*   [PhotoMania (GmediaCloud demo)](https://codeasily.com/portfolio/gmedia-gallery-modules/photomania/) - free responsive gallery.
+*   [Mosaic](https://codeasily.com/portfolio/gmedia-gallery-modules/mosaic/) - gallery with masonry layout.
+*   [RealSlider](https://codeasily.com/portfolio/gmedia-gallery-modules/realslider/) - image/video gallery slider, responsive and touch friendly gallery with 50+ options for customization.
+*   [PhotoBox](https://codeasily.com/portfolio/gmedia-gallery-modules/photobox/) - silky-smooth animations and transitions.
+*   [Music Player](https://codeasily.com/portfolio/gmedia-gallery-modules/music-player/) - audio player with playlist.
+*   [More Galleries...](https://codeasily.com/portfolio/gmedia-gallery-modules/)
+
 = Gallery Links =
 
 **[Gallery Home Page](https://codeasily.com/)**, **[Gallery Skins Portfolio](https://codeasily.com/portfolio/gmedia-gallery-modules/)**,  **[Gmedia Gallery Support Forum](https://codeasily.com/community/forum/gmedia-gallery-wordpress-plugin/)**
@@ -32,22 +49,9 @@ Handle any file format and link any files with images in few clicks. You can imp
 
 **[Create responsive photo gallery in few clicks. Various customization options and awesome features.](https://codeasily.com/how-to-create-an-image-gallery-in-wordpress/)**
 
+https://www.youtube.com/watch?v=0ZBb9H4CG8U
+
 Friendly for iPad and iPhone. Doesn’t slow down your website. **Unlimited galleries** on your website with **unlimited customizations** for each gallery.
-
-#### Photo Gallery Modules, Music Players, Mixed Galleries demos
-
-*   [AlbumsGrid - Splash Gallery for your Albums, Categories, Tags](https://codeasily.com/portfolio/gmedia-gallery-modules/albumsgrid/).
-*   [PhotoCluster - Accordeon Splash Slider for your Albums and Categories](https://codeasily.com/portfolio/gmedia-gallery-modules/photocluster/).
-*   [Cubik 3D - Mixed 3D Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/cubik-3d-photo-gallery-for-wordpress/) is the 3D Cube Gallery with social sharing - highly customizible grid and Magnific Popup lightbox with additional information for each photo.
-*   [Phantom Pro - Mixed Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/phantom-pro/) is the Wall/Grid Gallery with social sharing - you can easily change thumbnail sizes, colors, navigation, borders, add stylish labels to thumbnails ... and much more.
-*   [WaveSurfer - Music Module](https://codeasily.com/portfolio/gmedia-gallery-modules/wavesurfer/) superior responsive SoundCloud like music player with terms support (tags, albums, categories) and ability to show track covers, download button, custom link button, like button, share button, plays & comments counter.
-*   [PhotoTravlr - Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/gmedia-phototravlr/) is amazing responsive gallery with terms support (tags, albums, categories) and details for each image like author, caption, download button, link button, like button, EXIF info, location map. Can be in full window and full screen mode.
-*   [PhotoMania - Gallery Module (GmediaCloud demo)](https://codeasily.com/portfolio/gmedia-gallery-modules/photomania/) - free responsive gallery with thumbs panel and other details for each image like author, caption, download button, link button, like button. Can be in full window and full screen mode.
-*   [Mosaic - Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/mosaic/) is an image gallery with masonry layout built on jQuery. Responsive gallery with built in prettyPhoto lightbox for big images.
-*   [RealSlider - Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/realslider/) is an image/video gallery slider module built on jQuery. RealSlider module is responsive and touch friendly gallery with 50+ options for customization.
-*   [PhotoBox - Gallery Module](https://codeasily.com/portfolio/gmedia-gallery-modules/photobox/) - a lightweight image gallery which uses only CSS3 for silky-smooth animations and transitions.
-*   [Music Player Module](https://codeasily.com/portfolio/gmedia-gallery-modules/music-player/) - beautiful audio player with playlist is totally written in jQuery and HTML5.
-*   [More Galleries...](https://codeasily.com/portfolio/gmedia-gallery-modules/)
 
 Help me make it **best gallery** plugin: test it and [write suggestions](https://codeasily.com/community/forum/gmedia-gallery-wordpress-plugin/) how it could be improved in feature versions.
 
@@ -155,6 +159,9 @@ Gmedia Gallery - is Grand Media Gallery (photo gallery, image gallery, music gal
 
 = Modules Updated =
 * Go to Gmedia Gallery Modules page and update installed premium modules to latest versions
+
+= Gmedia Gallery v1.11.6 =
+* Added functionality for the future module.
 
 = Gmedia Gallery v1.11.5 =
 * Removed debug info on admin page
