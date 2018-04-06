@@ -2451,3 +2451,23 @@ function gmedia_module_load_comments(){
     die();
 }
 
+add_action('wp_ajax_gmedia_get_data', 'gmedia_get_data');
+function gmedia_get_data(){
+	global $gmDB, $gmProcessor;
+
+	/** @var $gmProcessorLibrary */
+	include_once(GMEDIA_ABSPATH . 'admin/processor/class.processor.library.php');
+
+	$gmProcessorLibrary->user_options = $gmProcessor::user_options();
+	$query_args = $gmProcessorLibrary->query_args();
+	$gmedia_query = $gmDB->get_gmedias($query_args);
+	foreach($gmedia_query as &$item) {
+		gmedia_item_more_data( $item );
+	}
+
+    header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+    echo json_encode($gmedia_query);
+
+    die();
+}
+

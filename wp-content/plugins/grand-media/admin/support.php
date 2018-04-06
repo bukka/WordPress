@@ -67,6 +67,10 @@ function gmediaSupport(){
             $content .= "{$section}\r\n";
             $section = '';
         }
+
+        $license = empty($gmGallery->options['license_key'])? 'FREE' : $gmGallery->options['license_key'];
+	    $content .= "License: {$license}\r\n";
+
         $content .= "Message: \r\n{$message}\r\n\r\n";
         $headers = array(
             "From: Gmedia Support <support@gmedia.gallery>",

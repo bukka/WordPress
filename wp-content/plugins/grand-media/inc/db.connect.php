@@ -1492,7 +1492,8 @@ class GmediaDB{
 
         $where .= $whichstatus . $search;
 
-        if(empty($q['order']) || ((strtoupper($q['order']) != 'ASC') && (strtoupper($q['order']) != 'DESC'))){
+	    $empty_order = empty($q['order']);
+        if($empty_order || ((strtoupper($q['order']) != 'ASC') && (strtoupper($q['order']) != 'DESC'))){
             $q['order'] = 'DESC';
         }
 
@@ -1545,7 +1546,10 @@ class GmediaDB{
                         } else{
                             $orderby = "{$wpdb->prefix}gmedia.ID";
                         }
-                    break;
+	                    if($empty_order) {
+		                    $q['order'] = 'ASC';
+	                    }
+		                break;
                     case 'filename':
                         $orderby = "{$wpdb->prefix}gmedia.gmuid";
                     break;

@@ -425,12 +425,14 @@ function gmedia_gallery_query_data($query = array()){
     );
 }
 
-function gmedia_array_filter_recursive($input){
-    foreach($input as &$value){
-        if(is_array($value)){
-            $value = gmedia_array_filter_recursive($value);
-        }
-    }
+function gmedia_array_filter_recursive( $input ) {
+	foreach ( $input as &$value ) {
+		if ( is_array( $value ) ) {
+			$value = gmedia_array_filter_recursive( $value );
+		}
+	}
 
-    return array_filter($input);
+	return array_filter( $input, function( $val ) {
+		return is_string( $val ) ? strlen( $val ) : ! empty( $val );
+	} );
 }

@@ -144,9 +144,9 @@ class GmediaAdmin {
         $this->pages[] = add_submenu_page('GrandMedia', __('Gmedia Library', 'grand-media'), __('Gmedia Library', 'grand-media'), 'gmedia_library', 'GrandMedia', array(&$this, 'shell'));
         if(current_user_can('gmedia_library')){
             $this->pages[] = add_submenu_page('GrandMedia', __('Add Media Files', 'grand-media'), __('Add/Import Files', 'grand-media'), 'gmedia_upload', 'GrandMedia_AddMedia', array(&$this, 'shell'));
-            $this->pages[] = add_submenu_page('GrandMedia', __('Tags', 'grand-media'), __('Tags', 'grand-media'), 'gmedia_library', 'GrandMedia_Tags', array(&$this, 'shell'));
-            $this->pages[] = add_submenu_page('GrandMedia', __('Categories', 'grand-media'), __('Categories', 'grand-media'), 'gmedia_library', 'GrandMedia_Categories', array(&$this, 'shell'));
-            $this->pages[] = add_submenu_page('GrandMedia', __('Albums', 'grand-media'), __('Albums', 'grand-media'), 'gmedia_library', 'GrandMedia_Albums', array(&$this, 'shell'));
+            $this->pages[] = add_submenu_page('GrandMedia', __('Tags', 'grand-media'), __('Tags', 'grand-media'), 'gmedia_tag_manage', 'GrandMedia_Tags', array(&$this, 'shell'));
+            $this->pages[] = add_submenu_page('GrandMedia', __('Categories', 'grand-media'), __('Categories', 'grand-media'), 'gmedia_category_manage', 'GrandMedia_Categories', array(&$this, 'shell'));
+            $this->pages[] = add_submenu_page('GrandMedia', __('Albums', 'grand-media'), __('Albums', 'grand-media'), 'gmedia_album_manage', 'GrandMedia_Albums', array(&$this, 'shell'));
             $this->pages[] = add_submenu_page('GrandMedia', __('Gmedia Galleries', 'grand-media'), __('Galleries', 'grand-media'), 'gmedia_gallery_manage', 'GrandMedia_Galleries', array(&$this, 'shell'));
             $this->pages[] = add_submenu_page('GrandMedia', __('Modules', 'grand-media'), __('Modules', 'grand-media'), 'gmedia_gallery_manage', 'GrandMedia_Modules', array(&$this, 'shell'));
             $this->pages[] = add_submenu_page('GrandMedia', __('Gmedia Settings', 'grand-media'), __('Settings', 'grand-media'), 'manage_options', 'GrandMedia_Settings', array(&$this, 'shell'));
@@ -483,7 +483,10 @@ class GmediaAdmin {
         wp_register_script('selectize', $gmCore->gmedia_url . '/assets/selectize/selectize.min.js', array('jquery'), '0.12.1');
         wp_register_style('selectize', $gmCore->gmedia_url . '/assets/selectize/selectize.bootstrap3.css', array('gmedia-bootstrap'), '0.12.1', 'screen');
 
-        if(isset($_GET['page'])){
+	    wp_register_style('spectrum', $gmCore->gmedia_url . '/assets/spectrum/spectrum.min.css', array(), '1.8.0');
+	    wp_register_script('spectrum', $gmCore->gmedia_url . '/assets/spectrum/spectrum.min.js', array('jquery'), '1.8.0', true);
+
+	    if(isset($_GET['page'])){
             switch($_GET['page']){
                 case "GrandMedia" :
                     if($gmCore->caps['gmedia_edit_media']){
@@ -499,6 +502,8 @@ class GmediaAdmin {
                         }
                         if($gmProcessor->mode == 'edit'){
                             wp_enqueue_script('alphanum', $gmCore->gmedia_url . '/assets/jq-plugins/jquery.alphanum.js', array('jquery'), '1.0.16');
+
+	                        wp_enqueue_script('jquery-ui-sortable');
 
                             wp_enqueue_script('moment', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/moment.min.js', array('jquery'), '2.5.1');
                             wp_enqueue_style('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', array('gmedia-bootstrap'), '2.1.32');
@@ -563,6 +568,9 @@ class GmediaAdmin {
 
                         wp_enqueue_style('jquery.minicolors', $gmCore->gmedia_url . '/assets/minicolors/jquery.minicolors.css', array('gmedia-bootstrap'), '0.9.13');
                         wp_enqueue_script('jquery.minicolors', $gmCore->gmedia_url . '/assets/minicolors/jquery.minicolors.js', array('jquery'), '0.9.13');
+
+                        wp_enqueue_style('spectrum');
+                        wp_enqueue_script('spectrum');
                     }
                     break;
                 case "GrandMedia_Modules" :
@@ -575,6 +583,9 @@ class GmediaAdmin {
 
                         wp_enqueue_style('jquery.minicolors', $gmCore->gmedia_url . '/assets/minicolors/jquery.minicolors.css', array('gmedia-bootstrap'), '0.9.13');
                         wp_enqueue_script('jquery.minicolors', $gmCore->gmedia_url . '/assets/minicolors/jquery.minicolors.js', array('jquery'), '0.9.13');
+
+	                    wp_enqueue_style('spectrum');
+	                    wp_enqueue_script('spectrum');
                     }
                     break;
             }

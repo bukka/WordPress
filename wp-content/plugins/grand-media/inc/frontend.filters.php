@@ -784,6 +784,7 @@ function gmedia_post_type__the_content($content){
         $output      = '';
         $gmedia_term = $gmDB->get_term($post->term_id);
         if($gmedia_term && !is_wp_error($gmedia_term)){
+	        add_filter( 'comments_open', '__return_false' );
             $current_filter = current_filter();
             if('get_the_excerpt' == $current_filter){
                 $cover_id = $gmDB->get_metadata('gmedia_term', $post->term_id, '_cover', true);
