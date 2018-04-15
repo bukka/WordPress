@@ -3,7 +3,7 @@
 	Plugin Name: WF Cookie Consent
 	Plugin URI: http://www.wunderfarm.com/plugins/wf-cookie-consent
 	Description: The wunderfarm-way to show how your website complies with the EU Cookie Law.
-	Version: 1.1.2
+	Version: 1.1.3
 	License: GNU General Public License v2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Author: wunderfarm
@@ -19,7 +19,7 @@ define ('WFCOOKIECONSENT_IUBENDA_HELP_URL', 'https://www.iubenda.com/en/help/pos
 * Enqueue JS
 */
 function wf_cookieconsent_scripts() {
-	wp_enqueue_script('wf-cookie-consent-cookiechoices', plugin_dir_url( __FILE__ ) . 'js/cookiechoices.js', array(), false, true);
+	wp_enqueue_script('wf-cookie-consent-cookiechoices', plugin_dir_url( __FILE__ ) . 'js/cookiechoices.min.js', array(), false, true);
 }
 add_action( 'wp_enqueue_scripts', 'wf_cookieconsent_scripts' );
 

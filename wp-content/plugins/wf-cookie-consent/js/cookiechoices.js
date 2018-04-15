@@ -132,6 +132,7 @@
         _setElementText(infoLink, linkText);
         infoLink.href = linkHref;
         infoLink.target = '_blank';
+        infoLink.rel = 'noopener';
         infoLink.style.marginLeft = '8px';
         return infoLink;
     }
