@@ -16,8 +16,9 @@ if(!$gmedia_app){
     die();
 }
 
-global $gmCore, $gmapp_version;
+global $gmCore, $gmapp_version, $gmmodule;
 $gmapp_version = isset($_GET['gmappversion'])? $_GET['gmappversion'] : 1;
+$gmmodule = isset($_GET['gmmodule'])? (int) $_GET['gmmodule'] : 0;
 
 $out = array();
 
@@ -184,7 +185,7 @@ function gmedia_ios_app_login($json){
  * @return array
  */
 function gmedia_ios_app_library_data($data = array('site', 'authors', 'filter', 'gmedia_category', 'gmedia_album', 'gmedia_tag'), $args = array()){
-    global $user_ID, $wpdb, $gmDB, $gmGallery, $gmapp_version;
+    global $user_ID, $wpdb, $gmDB, $gmGallery, $gmapp_version, $gmmodule;
 
     if(null === $data){
         $data = array('site', 'authors', 'filter', 'gmedia_category', 'gmedia_album', 'gmedia_tag');
@@ -195,7 +196,11 @@ function gmedia_ios_app_library_data($data = array('site', 'authors', 'filter', 
         if(version_compare('3.1', $gmapp_version, '<')){
             $logic = 3;
         }
-        $terms_per_page = 40;
+        if($gmmodule){
+	        $terms_per_page = '';
+        } else {
+	        $terms_per_page = 40;
+        }
     } else{
         $logic          = 1;
         $terms_per_page = '';
@@ -550,7 +555,7 @@ function gmedia_object_to_array($obj) {
  * @return array
  */
 function gmedia_ios_app_processor($action, $data, $filter = true){
-    global $gmCore, $gmDB, $gmGallery, $user_ID, $gmapp_version;
+    global $gmCore, $gmDB, $gmGallery, $user_ID, $gmapp_version, $gmmodule;
 
     $out = array();
 
@@ -987,6 +992,10 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                                'author'       => 0,
                                'status'       => null
             );
+
+            if($gmmodule) {
+            	$args['per_page'] = -1;
+            }
 
             $terms_ids_query = array();
             if(!empty($data['tag__in'])){
