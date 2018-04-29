@@ -30,7 +30,7 @@ class PLL_Admin_Base extends PLL_Base {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ), 0 ); // High priority in case an ajax request is sent by an immediately invoked function
 
 		// Lingotek
-		if ( ! defined( 'PLL_LINGOTEK_AD' ) || PLL_LINGOTEK_AD ) {
+		if ( ! defined( 'POLYLANG_PRO' ) && ( ! defined( 'PLL_LINGOTEK_AD' ) || PLL_LINGOTEK_AD ) ) {
 			require_once POLYLANG_DIR . '/lingotek/lingotek.php';
 		}
 	}
@@ -115,7 +115,7 @@ class PLL_Admin_Base extends PLL_Base {
 		// 3 => 1 if loaded in footer
 		// FIXME: check if I can load more scripts in footer
 		$scripts = array(
-			'post'  => array( array( 'post', 'media', 'async-upload', 'edit' ), array( 'jquery', 'wp-ajax-response', 'post', 'jquery-ui-autocomplete' ), 0, 1 ),
+			'post'  => array( array( 'post', 'media', 'async-upload', 'edit' ), array( 'jquery', 'wp-ajax-response', 'post', 'jquery-ui-autocomplete' ), 0, 0 ),
 			'media' => array( array( 'upload' ), array( 'jquery' ), 0, 1 ),
 			'term'  => array( array( 'edit-tags', 'term' ), array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), 0, 1 ),
 			'user'  => array( array( 'profile', 'user-edit' ), array( 'jquery' ), 0, 0 ),
@@ -329,8 +329,6 @@ class PLL_Admin_Base extends PLL_Base {
 	 * @param object $wp_admin_bar
 	 */
 	public function admin_bar_menu( $wp_admin_bar ) {
-		$url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
 		$all_item = (object) array(
 			'slug' => 'all',
 			'name' => __( 'Show all languages', 'polylang' ),
@@ -349,7 +347,7 @@ class PLL_Admin_Base extends PLL_Base {
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'languages',
 			'title'  => $selected->flag . $title,
-			'href'   => esc_url( add_query_arg( 'lang', $selected->slug, remove_query_arg( 'paged', $url ) ) ),
+			'href'   => esc_url( add_query_arg( 'lang', $selected->slug, remove_query_arg( 'paged' ) ) ),
 			'meta'   => array( 'title' => __( 'Filters content by language', 'polylang' ) ),
 		) );
 
@@ -362,7 +360,7 @@ class PLL_Admin_Base extends PLL_Base {
 				'parent' => 'languages',
 				'id'     => $lang->slug,
 				'title'  => $lang->flag . esc_html( $lang->name ),
-				'href'   => esc_url( add_query_arg( 'lang', $lang->slug, remove_query_arg( 'paged', $url ) ) ),
+				'href'   => esc_url( add_query_arg( 'lang', $lang->slug, remove_query_arg( 'paged' ) ) ),
 				'meta'   => 'all' === $lang->slug ? array() : array( 'lang' => esc_attr( $lang->get_locale( 'display' ) ) ),
 			) );
 		}
