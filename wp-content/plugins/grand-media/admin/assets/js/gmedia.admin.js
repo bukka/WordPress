@@ -1089,7 +1089,7 @@ var GmediaFunction = {
                 backdrop: true,
                 show: true
             }).one('hidden.bs.modal', function() {
-                if (jQuery('.gmedia-modal:visible').length) {
+                if (jQuery('div.gmedia-modal:visible').length) {
                     jQuery('body').addClass('modal-open');
                 }
                 modal_title.empty();

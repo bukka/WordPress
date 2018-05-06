@@ -1155,17 +1155,17 @@ function gmedia_ios_app_processor($action, $data, $filter = true){
                 }
                 $gmedias[ $i ]->albums = $albums;
 
-                if('image' == $type[0]){
-                    $terms      = $gmDB->get_the_gmedia_terms($item->ID, 'gmedia_category');
-                    $categories = array();
-                    if($terms){
-                        $terms = array_values((array)$terms);
-                        foreach($terms as $term){
-                            $categories[] = array('term_id' => $term->term_id, 'name' => $term->term_id, 'title' => $term->name);
-                        }
-                    }
-                    $gmedias[ $i ]->categories = $categories;
+	            $terms      = $gmDB->get_the_gmedia_terms($item->ID, 'gmedia_category');
+	            $categories = array();
+	            if($terms){
+		            $terms = array_values((array)$terms);
+		            foreach($terms as $term){
+			            $categories[] = array('term_id' => $term->term_id, 'name' => $term->term_id, 'title' => $term->name);
+		            }
+	            }
+	            $gmedias[ $i ]->categories = $categories;
 
+                if('image' == $type[0]){
                     $gmedias[ $i ]->meta                  = array('thumb'    => $_metadata['thumb'],
                                                                   'web'      => $_metadata['web'],
                                                                   'original' => $_metadata['original']

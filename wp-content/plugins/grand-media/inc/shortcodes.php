@@ -302,7 +302,7 @@ function gmedia_shortcode($atts, $shortcode_post_content = ''){
     $out = '<div class="' . $sc_classes . '" id="' . esc_attr($sc_id) . '" data-gmid="' . esc_attr($id) . '" data-module="' . esc_attr($_module) . '"' . $sc_styles . '>';
 
     if(
-    	in_array($_module, array('albumsListMasonry', 'albumsList', 'albums-switcher', 'photocluster', 'albumsview', 'albumsgrid'))
+    	in_array($_module, array('albumsListMasonry', 'albums-switcher', 'photocluster', 'albumsview', 'albumsgrid'))
         && empty($query['album__in']) && empty($query['category__in']) && empty($query['tag__in'])
     ){
     	$out = __('This Gmedia gallery module require at least one term (album, category or tag) to be chosen in Query Builder.', 'grand-media');
