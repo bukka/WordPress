@@ -37,13 +37,18 @@ if($globaldata){
 
     $json = json_decode($globaldata);
 
-    require_once(dirname(__FILE__) . '/inc/json.auth.php');
+	if(isset($json->counter)){
+		gmedia_ios_app_counters($json->counter);
+		$out['alert'] = array('title' => 'Success', 'message' => "\nCounters updated");
+		header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
+		header('Access-Control-Allow-Origin: *');
+		echo json_encode($out);
+		die();
+	}
+
+	require_once(dirname(__FILE__) . '/inc/json.auth.php');
     global $gmAuth;
     $gmAuth = new Gmedia_JSON_API_Auth_Controller();
-
-    if(isset($json->counter)){
-        gmedia_ios_app_counters($json->counter);
-    }
 
     if(isset($json->cookie) && !empty($json->cookie)){
         if(empty($gmedia_options['mobile_app'])){

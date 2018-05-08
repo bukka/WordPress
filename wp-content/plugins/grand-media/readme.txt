@@ -142,6 +142,10 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.12.8 =
+* Fixed counters for gallery modules
+* Fixed AlbumsList Masonry module
+
 = v1.12.7 =
 * Fixed scroll bug on Gmedia Library
 * Fixed AlbumsList module
