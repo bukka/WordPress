@@ -201,6 +201,13 @@ class GmediaAdmin {
                     <small> by CodEasily.com</small>
                 </div>
                 <h2><?php echo $sideLinks['grandTitle']; ?></h2>
+                <?php
+                if ( ! is_plugin_active( 'woowbox/woowbox.php' ) ){
+	                ?>
+                    <div class="promote-woowbox"><a href="https://bit.ly/woowbox" target="_blank"><img src="<?php echo plugins_url('/grand-media/admin/assets/img/woowbox-promote.png') ?>" alt="Try WoowBox Gallery plugin" /></a></div>
+	                <?php
+                }
+                ?>
             </div>
             <div class="container-fluid">
                 <div class="row row-fx180-fl">
