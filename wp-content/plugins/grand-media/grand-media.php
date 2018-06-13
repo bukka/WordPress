@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.12.9
+ * Version: 1.12.11
  * Author: Rattus
  * Author URI: https://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if( !class_exists('Gmedia')){
      */
     class Gmedia {
 
-        var $version = '1.12.9';
+        var $version = '1.12.11';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -370,6 +370,7 @@ if( !class_exists('Gmedia')){
         function register_scripts_frontend(){
             global $gmCore, $wp_scripts, $wp;
 
+            wp_register_style('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.css', array(), '1.12.11');
             wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.9.16');
             wp_localize_script('gmedia-global-frontend', 'GmediaGallery', array(
                 'ajaxurl'       => admin_url('admin-ajax.php'),
@@ -447,6 +448,7 @@ if( !class_exists('Gmedia')){
 
         function load_scripts(){
             wp_enqueue_script('jquery');
+            wp_enqueue_style('gmedia-global-frontend');
             wp_enqueue_script('gmedia-global-frontend');
         }
 

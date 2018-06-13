@@ -142,6 +142,12 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.12.11 =
+* Magnific Popup arrows fix for some themes
+
+= v1.12.10 =
+* Required changes for AlbumsGrid module
+
 = v1.12.9 =
 * New WoowBox Gallery plugin
 
