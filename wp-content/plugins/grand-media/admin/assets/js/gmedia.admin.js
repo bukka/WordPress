@@ -298,7 +298,7 @@ var GmediaLibrary = {
 
         // Date/Time picker
         var gmedia_date_temp;
-        jQuery('.input-group.gmedia_date').datetimepicker({useSeconds: true}).on('dp.show', function() {
+        jQuery('.input-group.gmedia_date').datetimepicker({format: 'YYYY-MM-DD HH:mm:ss', focusOnShow: false}).on('dp.show', function() {
             gmedia_date_temp = jQuery('input', this).val();
         }).on('dp.hide', function() {
             if(gmedia_date_temp != jQuery('input', this).val()) {
@@ -636,7 +636,7 @@ var GmediaTerms = {
 
         // Date/Time picker
         if(jQuery.fn.datetimepicker){
-            jQuery('.input-group.gmedia_date').datetimepicker({useSeconds: true});
+            jQuery('.input-group.gmedia_date').datetimepicker({format: 'YYYY-MM-DD HH:mm:ss', focusOnShow: false});
         }
 
     }

@@ -82,7 +82,8 @@ function gmedia_shortcode($atts, $shortcode_post_content = ''){
     $id     = isset($atts['id'])? (int)$atts['id'] : 0;
     $userid = get_current_user_id();
     if($id && ($term = gmedia_shortcode_id_data($id))){
-        if(('publish' !== $term->status && !$userid) || ('draft' === $term->status && $userid != $term->global)){
+    	$is_gallery_visible = ('publish' !== $term->status && !$userid) || ('draft' === $term->status && $userid != $term->global && !is_super_admin());
+        if(apply_filters('is_gmedia_gallery_visible', $is_gallery_visible)){
             return '';
         }
 

@@ -23,6 +23,10 @@ input[type="checkbox"] {
 input[type="checkbox"], input[type="radio"] {
   height:16px;
   width:16px;
+  min-width: 0 !important;
+}
+input[type="button"] {
+  min-width: 0 !important;
 }
 .checkbox, .radio {
   margin-top:5px;
@@ -287,7 +291,7 @@ body.gmedia-blank .panel-absoluteHeader .panel-heading,
   border-bottom-right-radius:3px;
   border-bottom-left-radius:3px;
 }
-.dropdown-menu {
+.dropdown-menu:not(.bootstrap-datetimepicker-widget) {
   max-height: calc(100vh - 50px);
   overflow-y: auto;
 }
@@ -1307,6 +1311,10 @@ div#wp-link-wrap label {
   font-weight: normal;
   display: block;
   margin: 0;
+}
+
+.input-group.gmedia_date input {
+  pointer-events: none;
 }
 
 @media (min-width:782px) {

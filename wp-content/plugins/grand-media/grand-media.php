@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.12.11
+ * Version: 1.13.2
  * Author: Rattus
  * Author URI: https://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if( !class_exists('Gmedia')){
      */
     class Gmedia {
 
-        var $version = '1.12.11';
+        var $version = '1.13.2';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -343,16 +343,17 @@ if( !class_exists('Gmedia')){
         function register_scripts_backend(){
             global $gmCore;
 
-            wp_register_script('gmedia-global-backend', $gmCore->gmedia_url . '/admin/assets/js/gmedia.global.js', array('jquery'), '1.8.26');
+            wp_register_script('gmedia-global-backend', $gmCore->gmedia_url . '/admin/assets/js/gmedia.global.js', array('jquery'), '1.13.0');
             wp_localize_script('gmedia-global-backend', 'GmediaGallery', array(
                 'ajaxurl'       => admin_url('admin-ajax.php'),
                 '_wpnonce'      => wp_create_nonce('GmediaGallery'),
                 'upload_dirurl' => $gmCore->upload['url'],
-                'plugin_dirurl' => $gmCore->gmedia_url
+                'plugin_dirurl' => $gmCore->gmedia_url,
+                'google_api_key'=> $this->options['google_api_key']
             ));
 
-            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.12.9', 'all');
-            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.12.0');
+            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.13.0', 'all');
+            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.13.0');
             wp_localize_script('grand-media', 'grandMedia', array(
                 'error3'   => __('Disable your Popup Blocker and try again.', 'grand-media'),
                 'download' => __('downloading...', 'grand-media'),
@@ -371,14 +372,15 @@ if( !class_exists('Gmedia')){
             global $gmCore, $wp_scripts, $wp;
 
             wp_register_style('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.css', array(), '1.12.11');
-            wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.9.16');
+            wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.13.0');
             wp_localize_script('gmedia-global-frontend', 'GmediaGallery', array(
                 'ajaxurl'       => admin_url('admin-ajax.php'),
                 'nonce'         => wp_create_nonce('GmediaGallery'),
                 'upload_dirurl' => $gmCore->upload['url'],
                 'plugin_dirurl' => $gmCore->upload['url'],
                 'license'       => strtolower($this->options['license_key']),
-                'license2'      => $this->options['license_key2']
+                'license2'      => $this->options['license_key2'],
+                'google_api_key'=> $this->options['google_api_key']
             ));
 
 
@@ -459,6 +461,7 @@ if( !class_exists('Gmedia')){
             foreach($this->do_module as $m => $module){
                 $deps = array_merge($deps, explode(',', $module['info']['dependencies']));
                 $deps = apply_filters('gmedia_module_js_dependencies', $deps, $m);
+                $deps = array_filter(array_unique($deps));
                 foreach($deps as $handle){
                     if(wp_script_is($handle, 'registered')){
                         wp_enqueue_script($handle, $_src = false, $_deps = array('jquery'), $this->version, $_in_footer = true);
@@ -481,10 +484,11 @@ if( !class_exists('Gmedia')){
                 $files = glob($module['path'] . '/js/*.js', GLOB_NOSORT);
                 if( !empty($files)){
                     $files = array_map('basename', $files);
+                    $files_deps = array_merge(array('jquery'), $deps);
                     foreach($files as $file){
                         $_ver   = isset($module['info']['version'])? $module['info']['version'] : false;
                         $handle = "{$module['name']}_{$file}";
-                        wp_enqueue_script($handle, "{$module['url']}/js/{$file}", array('jquery'), $_ver, true);
+                        wp_enqueue_script($handle, "{$module['url']}/js/{$file}", $files_deps, $_ver, true);
                         if($xmlhttprequest){
                             wp_print_scripts($handle);
                         }

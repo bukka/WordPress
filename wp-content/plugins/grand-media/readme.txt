@@ -1,7 +1,7 @@
 === Gmedia Photo Gallery ===
 Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
-Tags: gallery, albums, photo gallery, gallery lightbox, gallery comments
+Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
 Requires at least: 3.7
 Tested up to: 4.9.1
 Stable tag: trunk
@@ -141,6 +141,20 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.13.2 =
+* Fix issue with ajax modules
+
+= v1.13.0 =
+* Added Google API Key field to Settings page (required for Google Maps properly working)
+* Added draft galleries/albums to shortcode generator
+* Fixed admin user now can see draft galleries
+* Fixed conflict with Elementor plugin
+* Fixed datetime JS error
+* Small fixes and improvements
+
+= v1.12.12 =
+* Fixed conflict with "Everest Tab" plugin
 
 = v1.12.11 =
 * Magnific Popup arrows fix for some themes

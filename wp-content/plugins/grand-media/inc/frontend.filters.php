@@ -279,7 +279,7 @@ function gmedia_post_type__the_excerpt($content){
  * @return mixed|string
  */
 function gmedia_post_type__the_content($content){
-    global $post, $gmDB, $gmCore;
+    global $post, $gmDB, $gmCore, $gmGallery;
 
     if('gmedia' !== substr($post->post_type, 0, 6)){
         return $content;
@@ -427,7 +427,7 @@ function gmedia_post_type__the_content($content){
                                         <div class="gmsingle_location_info">
                                             <a href='https://www.google.com/maps/place/<?php echo $loc; ?>'
                                                target='_blank'><img
-                                                        src='//maps.googleapis.com/maps/api/staticmap?key=AIzaSyBMiF6nlG5O1tE81Q-35_dckOwW4ypMRuk&size=320x240&zoom=10&scale=2&maptype=roadmap&markers=<?php echo $loc; ?>'
+                                                        src='//maps.googleapis.com/maps/api/staticmap?key=<?php esc_attr_e($gmGallery->options['google_api_key']); ?>&size=320x240&zoom=10&scale=2&maptype=roadmap&markers=<?php echo $loc; ?>'
                                                         alt='' width='320' height='240'/></a>
                                         </div>
                                     </div>

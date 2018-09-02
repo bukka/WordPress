@@ -512,13 +512,13 @@ class GmediaAdmin {
 
 	                        wp_enqueue_script('jquery-ui-sortable');
 
-                            wp_enqueue_script('moment', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/moment.min.js', array('jquery'), '2.5.1');
-                            wp_enqueue_style('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', array('gmedia-bootstrap'), '2.1.32');
+                            wp_enqueue_script('moment', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/moment.min.js', array('jquery'), '2.22.2');
+                            wp_enqueue_style('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', array('gmedia-bootstrap'), '4.17.47');
                             wp_enqueue_script('datetimepicker', $gmCore->gmedia_url . '/assets/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js', array(
                                 'jquery',
                                 'moment',
                                 'gmedia-bootstrap'
-                            ), '2.1.32');
+                            ), '4.17.47');
                         }
                     }
                     wp_enqueue_script('wavesurfer', $gmCore->gmedia_url . '/assets/wavesurfer/wavesurfer.min.js', array('jquery'), '1.1.5');

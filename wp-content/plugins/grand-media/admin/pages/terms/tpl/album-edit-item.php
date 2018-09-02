@@ -163,9 +163,8 @@ $_module_preset = !empty($term->meta['_module_preset'][0])? $term->meta['_module
                             <label><?php _e('Date', 'grand-media'); ?></label>
 
                             <div class="input-group gmedia_date input-group-sm" data-date-format="YYYY-MM-DD HH:mm:ss">
-                                <input name="term[post_date]" type="text" readonly="readonly" class="form-control input-sm" value="<?php echo $term->post_date; ?>"/>
-                                <span class="input-group-btn"><button type="button" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-calendar"></span></button></span>
+                                <input name="term[post_date]" type="text" readonly="readonly" class="form-control input-sm" value="<?php echo $term->post_date; ?>" tabindex="-1"/>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                     <?php } ?>

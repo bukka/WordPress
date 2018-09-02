@@ -91,6 +91,8 @@ function gmedia_default_options(){
     $gm['license_key']  = '';
     $gm['license_key2'] = '';
 
+    $gm['google_api_key'] = '';
+
     $gm['taxonomies']['gmedia_category'] = array();
     $gm['taxonomies']['gmedia_tag']      = array();
     $gm['taxonomies']['gmedia_album']    = array();
