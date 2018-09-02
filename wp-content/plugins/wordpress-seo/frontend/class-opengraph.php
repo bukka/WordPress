@@ -268,7 +268,7 @@ class WPSEO_OpenGraph {
 		 *
 		 * @api string $unsigned Canonical URL.
 		 */
-		$url = apply_filters( 'wpseo_opengraph_url', WPSEO_Frontend::get_instance()->canonical( false ) );
+		$url = apply_filters( 'wpseo_opengraph_url', WPSEO_Frontend::get_instance()->canonical( false, true ) );
 
 		if ( is_string( $url ) && $url !== '' ) {
 			$this->og_tag( 'og:url', esc_url( $url ) );
@@ -681,10 +681,10 @@ class WPSEO_OpenGraph {
 
 		$terms = get_the_category();
 
-		if ( ! is_wp_error( $terms ) && ( is_array( $terms ) && $terms !== array() ) ) {
+		if ( ! is_wp_error( $terms ) && is_array( $terms ) && ! empty( $terms ) ) {
 			// We can only show one section here, so we take the first one.
-			$this->og_tag( 'article:section', $terms[0]->name );
-
+			$term = reset( $terms );
+			$this->og_tag( 'article:section', $term->name );
 			return true;
 		}
 
@@ -738,7 +738,6 @@ class WPSEO_OpenGraph {
 		}
 	}
 
-
 	/**
 	 * Outputs the site owner.
 	 *
@@ -768,5 +767,4 @@ class WPSEO_OpenGraph {
 
 		$this->image( $image );
 	}
-
 } /* End of class */

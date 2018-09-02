@@ -15,7 +15,8 @@ if ( ! function_exists( 'add_filter' ) ) {
  * {@internal Nobody should be able to overrule the real version number as this can cause
  *            serious issues with the options, so no if ( ! defined() ).}}
  */
-define( 'WPSEO_VERSION', '7.6.1' );
+define( 'WPSEO_VERSION', '8.1' );
+
 
 if ( ! defined( 'WPSEO_PATH' ) ) {
 	define( 'WPSEO_PATH', plugin_dir_path( WPSEO_FILE ) );
@@ -274,7 +275,7 @@ function wpseo_init() {
 
 	if ( version_compare( WPSEO_Options::get( 'version', 1 ), WPSEO_VERSION, '<' ) ) {
 		if ( function_exists( 'opcache_reset' ) ) {
-			opcache_reset();
+			@opcache_reset();
 		}
 
 		new WPSEO_Upgrade();
@@ -302,6 +303,17 @@ function wpseo_init() {
 	 */
 	$link_watcher = new WPSEO_Link_Watcher_Loader();
 	$link_watcher->load();
+
+	$integrations   = array();
+	$integrations[] = new WPSEO_Slug_Change_Watcher();
+
+	if ( defined( 'YOAST_FEATURE_GUTENBERG_STRUCTURED_DATA_BLOCKS' ) ) {
+		$integrations[] = new WPSEO_Structured_Data_Blocks();
+	}
+
+	foreach ( $integrations as $integration ) {
+		$integration->register_hooks();
+	}
 
 	// Loading Ryte integration.
 	$wpseo_onpage = new WPSEO_OnPage();
@@ -371,7 +383,6 @@ function wpseo_frontend_head_init() {
 	if ( WPSEO_Options::get( 'opengraph' ) === true ) {
 		$GLOBALS['wpseo_og'] = new WPSEO_OpenGraph();
 	}
-
 }
 
 /**

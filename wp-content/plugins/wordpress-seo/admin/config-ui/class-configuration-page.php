@@ -48,7 +48,6 @@ class WPSEO_Configuration_Page {
 		exit;
 	}
 
-
 	/**
 	 *  Registers the page for the wizard.
 	 */
@@ -88,7 +87,7 @@ class WPSEO_Configuration_Page {
 
 		wp_localize_script( WPSEO_Admin_Asset_Manager::PREFIX . 'configuration-wizard', 'yoastWizardConfig', $config );
 
-		$yoast_components_l10n = new WPSEO_Admin_Asset_Yoast_Components_l10n();
+		$yoast_components_l10n = new WPSEO_Admin_Asset_Yoast_Components_L10n();
 		$yoast_components_l10n->localize_script( WPSEO_Admin_Asset_Manager::PREFIX . 'configuration-wizard' );
 	}
 
@@ -157,7 +156,6 @@ class WPSEO_Configuration_Page {
 		</body>
 		</html>
 		<?php
-
 	}
 
 	/**
@@ -267,5 +265,4 @@ class WPSEO_Configuration_Page {
 	private function remove_notification_option() {
 		WPSEO_Options::set( 'show_onboarding_notice', false );
 	}
-
 }

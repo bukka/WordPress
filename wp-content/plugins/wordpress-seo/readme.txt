@@ -5,8 +5,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Google Search Console, Content analysis, Readability
 Requires at least: 4.8
-Tested up to: 4.9.6
-Stable tag: 7.6.1
+Tested up to: 4.9.8
+Stable tag: 8.1
 Requires PHP: 5.2.4
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -106,57 +106,48 @@ You'll find answers to many of your questions on [kb.yoast.com](https://yoa.st/1
 
 == Changelog ==
 
-= 7.6.1 =
-Release Date: June 7th, 2018
-
-Bugfixes:
-* Fixes a bug where a JavaScript error was thrown on the post-edit page when certain plugins are active.
-* Fixes a bug where stylesheet definitions would impact form fields of metaboxes on the post-edit pages. The definitions have been contained in a Yoast-selector.
-
-= 7.6.0 =
-Release Date: June 5th, 2018
+= 8.1.0 =
+Release Date: August 28th, 2018
 
 Enhancements:
-* Adds Flesch Reading Ease for Russian.
-* Adds Catalan transition words.
-* Adds a tab to the Help Center on posts, pages, terms and custom post types which explains which template variables can be used in the Snippet Preview.
+
+* Adds the Snippet Preview Editor to the sidebar.
+* Introduces the Primary Category picker to Gutenberg.
+* Introduces a loading indicator in the analysis that is shown until we're ready to analyze the content.
+* Optimizes the content analysis calculations. This fixes the issue where the UI could freeze when you have a long post.
+* Changes the "Check Inlinks (OSE)" menu item in the Yoast Admin bar "Analyze this page" dropdown from the Moz OpenSite Explorer (OSE) to Google Search Console, as the former service is being disabled on August 30th 2018.
 
 Bugfixes:
-* Fixes a bug where sequences of symbols which do not contain a single letter or digit were considered as valid keywords.
-* Fixes a bug where Flesch Reading Ease translation strings were not fully translated.
-* Fixes a bug where numbers-only keywords caused the analysis to fail.
-* Fixes a bug where the active keyword in the state wasn't updated whenever changes were made in the keyword field.
-* Fixes a bug where replacevars based on custom fields would throw an error due to a missing ID.
+
+* Fixes a bug where the analysis scores would change multiple times due to a delay in the loading of the actual scores. We now show loading indicators until the actual scores have been calculated.
+* Fixes a bug where the parent title snippet variable wasn't properly being replaced with the actual parent title in Gutenberg.
+* Fixes a plugin compatibility bug where the SEO score in the admin bar could not be retrieved.
+* Fixes a bug where the editor would not be usable when deferred or async loading of JavaScript is being forced.
+* Fixes a bug where the analysis for previously used keywords would only be triggered if the keyword was changed, resulting in an incorrect SEO score.
+
+= 8.0.0 =
+Release Date: August 14th, 2018
+
+Enhancements:
+
+* Implements the Yoast sidebar for Gutenberg: added the Readability, Focus Keyword and Cornerstone content tabs to the sidebar.
+* Revamps the Yoast metabox to use the same vertical design as the new sidebar.
+* Implements the same tabbed layout in the plugin's network settings screen that is also used in the plugin's site settings screens.
+* Implements a plugin-specific network settings API and use it in the network settings screen.
+* Introduces a network admin-specific admin bar menu.
+* Adds notifications to the Notification Center in regards to Gutenberg compatibility. If Gutenberg is older than the minimum supported version by Yoast SEO, a 'problem' notification is added. If Gutenberg is only slightly outdated, a 'normal' notification is added.
+* Implements the automatic detection of the keyword for terms based on the term's title.
+
+Bugfixes:
+
+* Fixes a bug where `/sitemap.xml` would not correctly redirect to `/sitemap_index.xml` in some environments.
+* Fixes a bug where sitemap cache transients would not be correctly cleared.
+* Fixes a bug where markers were wrongfully displayed in Gutenberg.
+* Fixes a bug where SEO titles were incorrectly evaluated as being of a good length when they were actually slightly too long.
 
 Other:
-* Changes the maximum meta description length from 320 to 156 characters.
-* Fixes typo in $field_defs parameter description for wpseo_metabox_entries filter.
-* Restores the warning for using unsupported replacement variables on the search appearance settings page.
 
-= 7.5.3 =
-Release Date: May 30th, 2018
-
-* Added hooks and filters to allow our new [search index purge](https://wordpress.org/plugins/yoast-seo-search-index-purge/) plugin to work. You’re encouraged to read [this post about an attachment URL problem](https://yoa.st/2r8) for more info.
-
-= 7.5.1 =
-Release Date: May 16th, 2018
-
-Bugfixes:
-* Fixes a bug where the auto-generating of the slug did not work as expected due to persisting of the post name too agressively.
-
-= 7.5.0 =
-Release Date: May 15th, 2018
-
-Enhancements:
-* Adds readability analysis for Russian.
-* Improves accessibility.
-
-Bugfixes:
-* Fixes a bug where images with specific aspect ratios where removed from OpenGraph consideration. This was causing unexpected results with Facebook sharing. The aspect ratio check has been removed completely.
-* Fixes a bug where sentences ending in multiple sentence marks, exclamation marks or ellipses were treated as multiple sentences.
-* Fixes a bug where attempting to get Yoast SEO options in multi-site, would result in wrong values being returned.
-* Fixes a bug where the sitemap styling could not be loaded when the Site domain differs from the Admin domain.
-* Fixes a bug where the admin bar still used old copy: Dashboard has been renamed to General.
+* Moves the network's Restore Site functionality into its own tab.
 
 = Earlier versions =
 
