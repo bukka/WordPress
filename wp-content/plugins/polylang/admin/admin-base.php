@@ -46,6 +46,7 @@ class PLL_Admin_Base extends PLL_Base {
 			return;
 		}
 
+		$this->notices = new PLL_Admin_Notices( $this );
 		$this->links = new PLL_Admin_Links( $this ); // FIXME needed here ?
 		$this->static_pages = new PLL_Admin_Static_Pages( $this ); // FIXME needed here ?
 		$this->filters_links = new PLL_Filters_Links( $this ); // FIXME needed here ?
@@ -158,38 +159,38 @@ class PLL_Admin_Base extends PLL_Base {
 
 		$str = http_build_query( $params );
 		$arr = json_encode( $params );
-?>
-<script type="text/javascript">
-	if (typeof jQuery != 'undefined') {
-		(function($){
-			$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-				if ( -1 != options.url.indexOf( ajaxurl ) || -1 != ajaxurl.indexOf( options.url ) ) {
-					if ( 'undefined' === typeof options.data ) {
-						options.data = ( 'get' === options.type.toLowerCase() ) ? '<?php echo $str; ?>' : <?php echo $arr; ?>;
-					} else {
-						if ( 'string' === typeof options.data ) {
-							if ( '' === options.data && 'get' === options.type.toLowerCase() ) {
-								options.url = options.url+'&<?php echo $str; ?>';
+		?>
+		<script type="text/javascript">
+			if (typeof jQuery != 'undefined') {
+				(function($){
+					$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+						if ( -1 != options.url.indexOf( ajaxurl ) || -1 != ajaxurl.indexOf( options.url ) ) {
+							if ( 'undefined' === typeof options.data ) {
+								options.data = ( 'get' === options.type.toLowerCase() ) ? '<?php echo $str; ?>' : <?php echo $arr; ?>;
 							} else {
-								try {
-									o = $.parseJSON(options.data);
-									o = $.extend(o, <?php echo $arr; ?>);
-									options.data = JSON.stringify(o);
-								}
-								catch(e) {
-									options.data = '<?php echo $str; ?>&'+options.data;
+								if ( 'string' === typeof options.data ) {
+									if ( '' === options.data && 'get' === options.type.toLowerCase() ) {
+										options.url = options.url+'&<?php echo $str; ?>';
+									} else {
+										try {
+											var o = $.parseJSON(options.data);
+											o = $.extend(o, <?php echo $arr; ?>);
+											options.data = JSON.stringify(o);
+										}
+										catch(e) {
+											options.data = '<?php echo $str; ?>&'+options.data;
+										}
+									}
+								} else {
+									options.data = $.extend(options.data, <?php echo $arr; ?>);
 								}
 							}
-						} else {
-							options.data = $.extend(options.data, <?php echo $arr; ?>);
 						}
-					}
-				}
-			});
-		})(jQuery)
-	}
-</script>
-<?php
+					});
+				})(jQuery)
+			}
+		</script>
+		<?php
 	}
 
 	/**
@@ -284,6 +285,7 @@ class PLL_Admin_Base extends PLL_Base {
 	/**
 	 * Avoids parsing a tax query when all languages are requested
 	 * Fixes https://wordpress.org/support/topic/notice-undefined-offset-0-in-wp-includesqueryphp-on-line-3877 introduced in WP 4.1
+	 *
 	 * @see the suggestion of @boonebgorges, https://core.trac.wordpress.org/ticket/31246
 	 *
 	 * @since 1.6.5
