@@ -1,5 +1,6 @@
 
-<div id="map_address" data-address="<?php echo $params['map_address'];?>" data-zoom="<?php echo $params['map_zoom'];?>"></div>
+
+<!-- <div id="map_address" data-address="<?php echo $params['map_address'];?>" data-zoom="<?php echo $params['map_zoom'];?>"></div> -->
 
 <div id="content" class="container">
 	<div class="row">
