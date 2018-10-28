@@ -154,8 +154,7 @@ global $user_ID, $gmDB, $gmCore
 							<div class="pull-right">
                                 <a id="_use_lib_selected" title="<?php _e('Select Media', 'grand-media'); ?>" href="<?php echo $gmCore->get_admin_url(array('page'        => 'GrandMedia',
                                     'mode'        => 'select_multiple',
-                                    'gmediablank' => 'library',
-                                    'filter'      => 'image'
+                                    'gmediablank' => 'library'
                                 ), array(), true); ?>" class="label label-primary preview-modal" data-target="#previewModal" data-width="1200" data-height="500" data-cls="select_gmedia"><?php _e('Select in Library', 'grand-media'); ?></a>
                             </div>
 							<label><?php _e('Gmedia IDs <small class="text-muted">separated by comma</small>', 'grand-media'); ?> </label>

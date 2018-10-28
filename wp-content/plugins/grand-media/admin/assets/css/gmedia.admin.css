@@ -110,6 +110,10 @@ div#gmedia-container {
 div#gmedia-container * {
   box-sizing:inherit;
 }
+div#gmedia-container .row,
+div.gmedia-modal .row {
+  padding: 0;
+}
 
 body.gmedia-blank div#gmedia-container {
   margin:0;
@@ -1314,7 +1318,7 @@ div#wp-link-wrap label {
 }
 
 .input-group.gmedia_date input {
-  pointer-events: none;
+  background: #ffffff;
 }
 
 @media (min-width:782px) {
