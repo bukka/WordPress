@@ -29,7 +29,7 @@ class GmediaDB{
      */
     function get_wp_media_lib($arg){
         /** @var $wpdb wpdb */
-        global $user_ID, $wpdb, $gmCore;
+        global $wpdb, $gmCore;
         $default_arg = array('mime_type' => '', 'orderby' => 'ID', 'order' => '', 'limit' => '0', 'filter' => '', 'selected' => false, 's' => '');
         $arg         = array_merge($default_arg, $arg);
         /** @var $mime_type
@@ -78,7 +78,7 @@ class GmediaDB{
 
             // split the words it a array if seperated by a space or comma
             preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
-            $search_terms = array_map(create_function('$a', 'return trim($a, "\\"\'\\n\\r ");'), $matches[0]);
+            $search_terms = array_map(function($a){ return trim($a, "\"'\n\r "); }, $matches[0]);
 
             $n         = '%';
             $searchand = '';
@@ -181,7 +181,6 @@ class GmediaDB{
      * @return mixed
      */
     function count_wp_media($arg){
-        global $user_ID;
         /** @var $wpdb wpdb */
         global $wpdb;
         /** @var $filter
@@ -216,7 +215,7 @@ class GmediaDB{
 
             // split the words it a array if seperated by a space or comma
             preg_match_all('/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches);
-            $search_terms = array_map(create_function('$a', 'return trim($a, "\\"\'\\n\\r ");'), $matches[0]);
+            $search_terms = array_map(function($a){ return trim($a, "\"'\n\r "); }, $matches[0]);
 
             $n         = '%';
             $searchand = '';
@@ -1751,6 +1750,7 @@ class GmediaDB{
 					AND name = {$q['category_name']}
 				");
             if($cat){
+            	unset($q['category_name']);
                 $q['category__in'][] = $cat;
             }
         }
@@ -1826,6 +1826,7 @@ class GmediaDB{
 					AND name = {$q['album_name']}
 				");
             if($alb){
+            	unset($q['album_name']);
                 $q['album__in'][] = $alb;
             }
         }
@@ -1921,6 +1922,34 @@ class GmediaDB{
             }
         }
 
+	    if(isset($q['tag_name__in']) && !empty($q['tag_name__in'])){
+		    $q['tag_name__in'] = "'" . implode("','", array_map('esc_sql', array_unique((array)$q['tag_name__in']))) . "'";
+		    $tag__in = $wpdb->get_col("
+					SELECT term_id
+					FROM {$wpdb->prefix}gmedia_term
+					WHERE taxonomy = 'gmedia_tag'
+					AND name IN ({$q['tag_name__in']})
+				");
+		    if(!empty($tag__in)){
+			    unset($q['tag_name__in']);
+			    $q['tag__in'] = $tag__in;
+		    }
+	    }
+
+	    if(isset($q['tag_name__and']) && !empty($q['tag_name__and'])){
+		    $q['tag_name__and'] = "'" . implode("','", array_map('esc_sql', array_unique((array)$q['tag_name__and']))) . "'";
+		    $tag__and = $wpdb->get_col("
+					SELECT term_id
+					FROM {$wpdb->prefix}gmedia_term
+					WHERE taxonomy = 'gmedia_tag'
+					AND name IN ({$q['tag_name__and']})
+				");
+		    if(!empty($tag__and)){
+			    unset($q['tag_name__and']);
+			    $q['tag__and'] = $tag__and;
+		    }
+	    }
+
         if(isset($q['tag__in']) && !empty($q['tag__in'])){
             $q['tag__in'] = wp_parse_id_list($q['tag__in']);
         } elseif(isset($q['tag_id']) && !empty($q['tag_id'])){
@@ -1934,32 +1963,6 @@ class GmediaDB{
 
         if(isset($q['tag__and']) && !empty($q['tag__and'])){
             $q['tag__and'] = wp_parse_id_list($q['tag__and']);
-        }
-
-        if(isset($q['tag_name__in']) && !empty($q['tag_name__in'])){
-            $q['tag_name__in'] = "'" . implode("','", array_map('esc_sql', array_unique((array)$q['tag_name__in']))) . "'";
-            $q['tag_name__in'] = $wpdb->get_col("
-					SELECT term_id
-					FROM {$wpdb->prefix}gmedia_term
-					WHERE taxonomy = 'gmedia_tag'
-					AND name IN ({$q['tag_name__in']})
-				");
-            if(empty($q['tag_name__in'])){
-                $q['tag_name__in_null'] = true;
-            }
-        }
-
-        if(isset($q['tag_name__and']) && !empty($q['tag_name__and'])){
-            $q['tag_name__and'] = "'" . implode("','", array_map('esc_sql', array_unique((array)$q['tag_name__and']))) . "'";
-            $q['tag_name__and'] = $wpdb->get_col("
-					SELECT term_id
-					FROM {$wpdb->prefix}gmedia_term
-					WHERE taxonomy = 'gmedia_tag'
-					AND name IN ({$q['tag_name__and']})
-				");
-            if(empty($q['tag_name__and'])){
-                $q['tag_name__and_null'] = true;
-            }
         }
     }
 
@@ -3655,7 +3658,7 @@ class GmediaDB{
      *
      * @return array|bool False on failure. Array of term objects on success.
      */
-    function get_the_gmedia_terms($id = 0, $taxonomy){
+    function get_the_gmedia_terms($id, $taxonomy){
         $id = (int)$id;
 
         if(!$id){

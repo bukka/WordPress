@@ -518,7 +518,7 @@ global $user_ID, $gmDB, $gmCore
                         $('input.gm-selectize, select.gm-selectize', '#buildQuery').each(function(){
                             this.selectize.clear();
                         });
-                        $('input[type="text"], select', '#buildQuery').each(function(){
+                        $('input[type="text"], select, textarea', '#buildQuery').each(function(){
                             $(this).val('');
                         });
                         $('input[type="checkbox"]', '#buildQuery').prop('checked', false);

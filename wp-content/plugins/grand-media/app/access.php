@@ -214,7 +214,7 @@ function gmedia_ios_app_library_data($data = array('site', 'authors', 'filter', 
 
 	$cache_expiration = isset($gmGallery->options['cache_expiration'])? (int) $gmGallery->options['cache_expiration'] * HOUR_IN_SECONDS : 24 * HOUR_IN_SECONDS;
 	if($cache_expiration) {
-		$cache_key   = 'gm_cache_' . md5( json_encode( [ (int) $user_ID, $data, $args, $gmmodule, $gmapp_version ] ) );
+		$cache_key   = 'gm_cache_' . md5( json_encode( array( (int) $user_ID, $data, $args, $gmmodule, $gmapp_version ) ) );
 		$cache_value = get_transient( $cache_key );
 		if ( ! empty( $cache_value ) && is_array( $cache_value ) ) {
 			return $cache_value;
@@ -992,7 +992,7 @@ function gmedia_ios_app_processor($action, $data, $filter = true, $cache = true)
         case 'library':
 	        $cache_expiration = isset($gmGallery->options['cache_expiration'])? (int) $gmGallery->options['cache_expiration'] * HOUR_IN_SECONDS : 24 * HOUR_IN_SECONDS;
         	if($cache && $cache_expiration) {
-		        $cache_key   = 'gm_cache_' . md5( json_encode( [ (int) $user_ID, $data, $filter, $gmmodule, $gmapp_version ] ) );
+		        $cache_key   = 'gm_cache_' . md5( json_encode( array( (int) $user_ID, $data, $filter, $gmmodule, $gmapp_version ) ) );
 		        $cache_value = get_transient( $cache_key );
 		        if ( ! empty( $cache_value ) && is_array( $cache_value ) ) {
 			        $out = $cache_value;

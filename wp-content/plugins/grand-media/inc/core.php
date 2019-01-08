@@ -17,7 +17,6 @@ class GmediaCore {
      *
      */
     function __construct(){
-        global $gmGallery;
 
         $this->upload     = $this->gm_upload_dir();
         $this->gmedia_url = plugins_url(GMEDIA_FOLDER);
@@ -3950,7 +3949,7 @@ class GmediaCore {
                 'log_author' => (int) $user_ID,
                 'log_date'   => current_time('mysql'),
                 'log_data'   => '1',
-                'ip_address' => $this->ip()
+                'ip_address' => preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '*', $this->ip())
             );
             $id   = $wpdb->insert($wpdb->prefix . 'gmedia_log', $data);
         }
@@ -3972,7 +3971,7 @@ class GmediaCore {
                 'log_author' => (int) $user_ID,
                 'log_date'   => current_time('mysql'),
                 'log_data'   => '1',
-                'ip_address' => $this->ip()
+                'ip_address' => preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '*', $this->ip())
             );
             $wpdb->insert($wpdb->prefix . 'gmedia_log', $data);
         }
@@ -3995,7 +3994,7 @@ class GmediaCore {
                 'log_author' => (int) $user_ID,
                 'log_date'   => current_time('mysql'),
                 'log_data'   => $val,
-                'ip_address' => $this->ip()
+                'ip_address' => preg_replace('/(?!\d{1,3}\.\d{1,3}\.)\d/', '*', $this->ip())
             );
             $wpdb->insert($wpdb->prefix . 'gmedia_log', $data);
         }

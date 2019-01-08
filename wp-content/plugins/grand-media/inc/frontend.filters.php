@@ -72,7 +72,7 @@ function gmedia_alter_query( $query ) {
 		return;
 	}
 
-	$args = [ 'fields' => 'post_ids', 'status' => [ 'publish' ] ];
+	$args = array( 'fields' => 'post_ids', 'status' => array( 'publish' ) );
 	if ( get_current_user_id() ) {
 		$args['status'][] = 'private';
 	}
@@ -89,7 +89,7 @@ function gmedia_alter_query( $query ) {
 		$wp_query->is_category = true;
 	}
 	$gmedias  = $gmDB->get_gmedias( $args );
-	$post_ids = [];
+	$post_ids = array();
 	foreach ( $gmedias as $item ) {
 		$post_ids[] = $item->post_id;
 	}
@@ -119,7 +119,7 @@ function gmedia_alter_query_author( $query ) {
 	}
 	global $gmGallery;
 
-	$gmedia_post_type = [];
+	$gmedia_post_type = array();
 	if ( (int) $gmGallery->options['wp_author_related_gmedia'] ) {
 		$gmedia_post_type[] = 'gmedia';
 	}
@@ -134,12 +134,12 @@ function gmedia_alter_query_author( $query ) {
 		return;
 	}
 
-	$post_type = $query->get( 'post_type', [ 'post' ] );
+	$post_type = $query->get( 'post_type', array( 'post' ) );
 	$post_type = array_unique( array_merge( $gmedia_post_type, (array) $post_type ) );
 	$query->set( 'post_type', $post_type );
 
 	if ( get_current_user_id() ) {
-		$query->set( 'post_status', [ 'publish', 'private' ] );
+		$query->set( 'post_status', array( 'publish', 'private' ) );
 	}
 
 	//we remove the actions hooked on the '__after_loop' (post navigation)
@@ -175,7 +175,7 @@ function gmedia_the_posts_filter_taxonomy( $posts, $query ) {
 		return $posts;
 	}
 
-	$args = [ 'fields' => 'post_ids', 'status' => [ 'publish' ], 'limit' => 1 ];
+	$args = array( 'fields' => 'post_ids', 'status' => array( 'publish' ), 'limit' => 1 );
 	if ( get_current_user_id() ) {
 		$args['status'][] = 'private';
 	}
@@ -212,7 +212,7 @@ function gmedia_the_post( $post ) {
 			global $post;
 			$term               = $gmDB->get_term( $wp_query->gmedia_term_post );
 			$date               = gmdate( 'Y-m-d H:i:s' );
-			$post               = (object) [
+			$post               = (object) array(
 				'ID'                    => 0,
 				'term_id'               => $term->term_id,
 				'post_author'           => 0,
@@ -238,7 +238,7 @@ function gmedia_the_post( $post ) {
 				'post_mime_type'        => '',
 				'comment_count'         => '0',
 				'filter'                => 'raw',
-			];
+			);
 			$wp_query->posts[0] = $post;
 			$wp_query->post     = $post;
 			unset( $wp_query->gmedia_term_post );
@@ -246,10 +246,10 @@ function gmedia_the_post( $post ) {
 		add_filter( 'get_the_excerpt', 'gmedia_post_type__the_excerpt', 150 );
 		add_filter( 'the_content', 'gmedia_post_type__the_content', 200 );
 	} elseif ( is_single() ) {
-		$gmedia_post_types = array_merge( [
+		$gmedia_post_types = array_merge( array(
 			'post',
 			'page',
-		], (array) $gmGallery->options['gmedia_post_types_support'] );
+		), (array) $gmGallery->options['gmedia_post_types_support'] );
 		$gm_post_types     = apply_filters( 'gmedia-post-types', $gmedia_post_types );
 		if ( in_array( $post->post_type, $gm_post_types ) ) {
 			$show_related = get_post_meta( $post->ID, '_related_gmedia', true );
@@ -400,7 +400,7 @@ function gmedia_post_type__the_content( $content ) {
 										<?php
 									}
 									if ( ! empty( $gmedia->categories ) ) {
-										$item_cats = [];
+										$item_cats = array();
 										foreach ( $gmedia->categories as $term ) {
 											$term->slug = $term->name;
 											$term_url   = get_term_link( $term );
@@ -415,7 +415,7 @@ function gmedia_post_type__the_content( $content ) {
 										<?php
 									}
 									if ( ! empty( $gmedia->tags ) ) {
-										$item_tags = [];
+										$item_tags = array();
 										foreach ( $gmedia->tags as $term ) {
 											$term->slug = $term->name;
 											$term_url   = get_term_link( $term );
@@ -465,16 +465,16 @@ function gmedia_post_type__the_content( $content ) {
                                 */
 										$exif = $gmCore->metadata_info( $gmedia->ID );
 
-										$details = [];
+										$details = array();
 										if ( ! empty( $exif ) ) {
 											$details['model']           = empty( $exif['model'] ) ? '' : $exif['model']['value'];
 											$details['lens']            = empty( $exif['lens'] ) ? '' : $exif['lens']['value'];
-											$details['camera_settings'] = [
+											$details['camera_settings'] = array(
 												'focallength' => empty( $exif['focallength'] ) ? ( empty( $exif['focallength35'] ) ? '' : $exif['focallength35']['value'] ) : $exif['focallength']['value'],
 												'aperture'    => empty( $exif['aperture'] ) ? '' : str_replace( 'f', 'ƒ', $exif['aperture']['value'] ),
 												'exposure'    => empty( $exif['exposure'] ) ? '' : $exif['exposure']['value'],
 												'iso'         => empty( $exif['iso'] ) ? '' : 'ISO ' . $exif['iso']['value'],
-											];
+											);
 											$details['camera_settings'] = array_filter( $details['camera_settings'] );
 											$details['taken']           = empty( $exif['created_timestamp'] ) ? '' : date_i18n( get_option( 'date_format' ), $exif['created_timestamp']['value'] );
 										}
@@ -486,7 +486,7 @@ function gmedia_post_type__the_content( $content ) {
 												<?php if ( ! empty( $details['lens'] ) ) { ?>
 													<div class='gmsingle_label_small gmsingle_exif_lens'><?php echo $details['lens']; ?></div>
 												<?php }
-												$camera_settings = [];
+												$camera_settings = array();
 												foreach ( $details['camera_settings'] as $key => $value ) {
 													$camera_settings[] = "<span class='gmsingle_exif_{$key}'>{$value}</span>";
 												}
@@ -775,7 +775,7 @@ function gmedia_post_type__the_content( $content ) {
 						<?php
 					}
 					if ( ! empty( $gmedia->categories ) ) {
-						$item_cats = [];
+						$item_cats = array();
 						foreach ( $gmedia->categories as $term ) {
 							$term->slug = $term->name;
 							$term_url   = get_term_link( $term );
@@ -790,7 +790,7 @@ function gmedia_post_type__the_content( $content ) {
 						<?php
 					}
 					if ( ! empty( $gmedia->tags ) ) {
-						$item_tags = [];
+						$item_tags = array();
 						foreach ( $gmedia->tags as $term ) {
 							$term->slug = $term->name;
 							$term_url   = get_term_link( $term );
@@ -810,7 +810,7 @@ function gmedia_post_type__the_content( $content ) {
 				}
 
 			} elseif ( 'audio' == $gmedia->type && ( $module = $gmCore->get_module_path( 'wavesurfer' ) ) && $module['name'] === 'wavesurfer' ) {
-				echo gmedia_shortcode( [ 'module' => 'wavesurfer', 'library' => $gmedia->ID, 'native' => true ] );
+				echo gmedia_shortcode( array( 'module' => 'wavesurfer', 'library' => $gmedia->ID, 'native' => true ) );
 				if ( is_single() ) {
 					echo apply_filters( 'the_gmedia_content', wpautop( $gmedia->description ) );
 				}
@@ -851,7 +851,7 @@ function gmedia_post_type__the_content( $content ) {
 					<?php
 				}
 				if ( ! empty( $gmedia->categories ) ) {
-					$item_cats = [];
+					$item_cats = array();
 					foreach ( $gmedia->categories as $term ) {
 						$term->slug = $term->name;
 						$term_url   = get_term_link( $term );
@@ -866,7 +866,7 @@ function gmedia_post_type__the_content( $content ) {
 					<?php
 				}
 				if ( ! empty( $gmedia->tags ) ) {
-					$item_tags = [];
+					$item_tags = array();
 					foreach ( $gmedia->tags as $term ) {
 						$term->slug = $term->name;
 						$term_url   = get_term_link( $term );
@@ -925,7 +925,7 @@ function gmedia_post_type__the_content( $content ) {
 
 	$output = $before . $output . $after;
 
-	$output = str_replace( [ "\r\n", "\r", "\n" ], '', $output );
+	$output = str_replace( array( "\r\n", "\r", "\n" ), '', $output );
 	$output = preg_replace( '/ {2,}/', ' ', $output );
 
 	$post->post_content   = $output;
@@ -949,12 +949,12 @@ function gmedia_related__the_content( $content ) {
 		return $content;
 	}
 
-	$args = [
-		'status'    => [ 'publish' ],
+	$args = array(
+		'status'    => array( 'publish' ),
 		'orderby'   => $gmGallery->options['in_tag_orderby'],
 		'order'     => $gmGallery->options['in_tag_order'],
 		'null_tags' => true,
-	];
+	);
 	if ( $user_ID ) {
 		$args['status'][] = 'private';
 	}
@@ -973,9 +973,9 @@ function gmedia_related__the_content( $content ) {
 	}
 
 	unset( $args['null_tags'] );
-	$gmedia_content = gmedia_shortcode( [ 'query' => $args ] );
+	$gmedia_content = gmedia_shortcode( array( 'query' => $args ) );
 
-	$gmedia_content = str_replace( [ "\r\n", "\r", "\n" ], '', $gmedia_content );
+	$gmedia_content = str_replace( array( "\r\n", "\r", "\n" ), '', $gmedia_content );
 	$gmedia_content = preg_replace( '/ {2,}/', ' ', $gmedia_content );
 
 	$content .= apply_filters( 'before_gmedia_related__the_content', '' );
@@ -987,7 +987,7 @@ function gmedia_related__the_content( $content ) {
 
 function gmedia_widget_comments_args( $args ) {
 	if ( get_current_user_id() ) {
-		$args['post_status'] = [ 'publish', 'private' ];
+		$args['post_status'] = array( 'publish', 'private' );
 	}
 
 	return $args;

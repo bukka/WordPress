@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
 Requires at least: 3.7
-Tested up to: 4.9.1
+Tested up to: 5.0.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -142,6 +142,22 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.14.4 =
+* Added compatibility with Gutenberg
+* Added Gutenberg blocks for Galleries, Albums, Categories and Tags
+* Fixed related gmedia images by tags for WP Posts
+* Fixed compatibility with some themes
+* Changed: the full IP address now not saved to database in logger
+
+= v1.14.2 =
+* Added option to disable WoowBox Banner
+* Added compatibility with PHP 7.2
+* Added compatibility with PHP 5.3
+* Fixed cache of gallery modules
+* Fixed uninstall error
+* Fixed clear button in Build Query
+
 
 = v1.14.0 =
 * Added cache for Gmedia Modules queries

@@ -9,6 +9,7 @@ if(!defined('WP_UNINSTALL_PLUGIN')) {
 }
 
 require_once(dirname(__FILE__) . '/grand-media.php');
+require_once(dirname(__FILE__) . '/inc/functions.php');
 
 if(function_exists('is_multisite') && is_multisite()) {
     global $wpdb;

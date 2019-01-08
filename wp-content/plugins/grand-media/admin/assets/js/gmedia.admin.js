@@ -1288,7 +1288,7 @@ var GmediaFunction = {
                 return !!jQuery(this).val();
             });
 
-            var qform = decodeURIComponent(qform.serialize());
+            qform = decodeURIComponent(qform.serialize());
             console.log(qform);
             jQuery('#build_query_field').val(qform);
             jQuery('#buildQuery').modal('hide');

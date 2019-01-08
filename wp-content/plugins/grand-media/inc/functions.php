@@ -227,32 +227,35 @@ function gmedia_term_item_more_data(&$item){
 
     if($item->global){
         $item->author_name = get_the_author_meta('display_name', $item->global);
+        if(!$item->author_name){
+        	$item->global = 0;
+        }
     } else{
         $item->author_name = false;
     }
 
     $item->taxterm = str_replace('gmedia_', '', $item->taxonomy);
     if('gmedia_album' == $item->taxonomy){
-        $post_id       = isset($meta['_post_ID'][0])? (int)$meta['_post_ID'][0] : 0;
-        $item->post_id = $post_id;
-        if($post_id){
-            $post_item = get_post($post_id);
-            if($post_item){
-                $item->post_date      = $post_item->post_date;
-                $item->slug           = $post_item->post_name;
-                $item->post_password  = $post_item->post_password;
-                $item->comment_count  = $post_item->comment_count;
-                $item->comment_status = $post_item->comment_status;
-            }
+	    $post_id         = isset( $meta['_post_ID'][0] ) ? (int) $meta['_post_ID'][0] : 0;
+	    $item->post_id   = $post_id;
+	    $item->slug      = '';
+	    $item->post_link = '';
+        if($post_id) {
+	        $post_item = get_post( $post_id );
+	        if($post_item){
+		        $item->post_date      = $post_item->post_date;
+		        $item->slug           = $post_item->post_name;
+		        $item->post_password  = $post_item->post_password;
+		        $item->comment_count  = $post_item->comment_count;
+		        $item->comment_status = $post_item->comment_status;
+
+		        if(!empty($item->meta['_post_ID'][0])){
+			        $item->post_link = (string) get_permalink($item->meta['_post_ID'][0]);
+		        }
+	        }
         }
     }
-
     $item->cloud_link = $gmCore->gmcloudlink($item->term_id, $item->taxterm);
-    if(!empty($item->meta['_post_ID'][0])){
-        $item->post_link = get_permalink($item->meta['_post_ID'][0]);
-    } else{
-        $item->post_link = '';
-    }
 
     if(is_user_logged_in()){
         $allow_terms_delete = gm_user_can('terms_delete');
@@ -319,24 +322,24 @@ function gmedia_gallery_more_data(&$item){
             }
         }
 
-        $post_id       = isset($meta['_post_ID'][0])? (int)$meta['_post_ID'][0] : 0;
-        $item->post_id = $post_id;
-        if($post_id){
-            $post_item = get_post($post_id);
-            if($post_item){
-                $item->slug           = $post_item->post_name;
-                $item->post_password  = $post_item->post_password;
-                $item->comment_count  = $post_item->comment_count;
-                $item->comment_status = $post_item->comment_status;
-            }
-        }
+        $post_id         = isset( $meta['_post_ID'][0] ) ? (int) $meta['_post_ID'][0] : 0;
+	    $item->post_id   = $post_id;
+	    $item->slug      = '';
+	    $item->post_link = '';
+        if($post_id) {
+	        $post_item = get_post( $post_id );
+	        if($post_item){
+		        $item->slug           = $post_item->post_name;
+		        $item->post_password  = $post_item->post_password;
+		        $item->comment_count  = $post_item->comment_count;
+		        $item->comment_status = $post_item->comment_status;
 
-        $item->cloud_link = $gmCore->gmcloudlink($item->term_id, $item->taxterm);
-        if(!empty($item->meta['_post_ID'])){
-            $item->post_link = get_permalink($item->meta['_post_ID']);
-        } else{
-            $item->post_link = '';
+		        if(!empty($item->meta['_post_ID'])){
+			        $item->post_link = (string) get_permalink($item->meta['_post_ID']);
+		        }
+	        }
         }
+        $item->cloud_link = $gmCore->gmcloudlink($item->term_id, $item->taxterm);
 
         if(is_user_logged_in()){
             $allow_terms_delete = gm_user_can('terms_delete');
@@ -370,6 +373,9 @@ function gmedia_gallery_more_data(&$item){
 
     if($item->global){
         $item->author_name = get_the_author_meta('display_name', $item->global);
+        if( !$item->author_name ) {
+	        $item->global = 0;
+        }
     } else{
         $item->author_name = false;
     }

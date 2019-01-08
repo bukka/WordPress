@@ -134,6 +134,7 @@ function gmedia_update_data(){
         if( !empty($meta_error)){
             $result->meta_error = $meta_error;
         }
+	    gmedia_delete_transients( 'gm_cache' );
 
         header('Content-Type: application/json; charset=' . get_option('blog_charset'), true);
         echo json_encode($result);
