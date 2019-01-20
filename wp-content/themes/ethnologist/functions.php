@@ -8,7 +8,7 @@ error_reporting(E_ALL & ~E_DEPRECATED);
  *
  * @var int
  */
-define( 'ETHNOLOGIST_STYLE_VERSION', 12 );
+define( 'ETHNOLOGIST_STYLE_VERSION', 15 );
 
 /**
  * Translate a string
@@ -65,6 +65,16 @@ function ethnologist_after_setup_theme() {
 
 	// register nav menus
 	ethnologist_navmenu_register();
+
+	/**
+	 * Add support for Gutenberg.
+	 *
+	 * @link https://wordpress.org/gutenberg/handbook/reference/theme-support/
+	 */
+	add_theme_support( 'gutenberg', array(
+		// Theme supports wide images, galleries and videos.
+		'wide-images' => true
+	) );
 }
 add_action( 'after_setup_theme', 'ethnologist_after_setup_theme' );
 
