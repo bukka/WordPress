@@ -11,6 +11,13 @@ class Ethnologist_Widget_Base extends WP_Widget {
 	 */
 	protected $instance_keys = array();
 
+	/**
+	 * Form fields
+	 *
+	 * @var array
+	 */
+	protected $form_fields = array();
+
 
 	/**
 	 * View name
@@ -31,14 +38,15 @@ class Ethnologist_Widget_Base extends WP_Widget {
 	 *                                on accepted arguments. Default empty array.
 	 */
 	public function __construct( $id_base, $name, $widget_options = array() ) {
-		$widget_ops = array(
-			'classname'   => 'Ethnologist_Widget_Contact',
-			'description' => __( 'Use this widget to add a Vcard to your site', 'ethnologist' )
-		);
-
 		parent::__construct( $id_base, $name, $widget_options );
 
 		$this->alt_option_name = $id_base;
+
+		if ( empty( $this->form_fields ) && !empty( $this->instance_keys ) ) {
+			foreach ( $this->instance_keys as $instance_key ) {
+				$this->form_fields[$instance_key] = ucfirst( $instance_key ) . ':';
+			}
+		}
 
 		add_action( 'save_post', array( $this, 'flush_widget_cache' ) );
 		add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
@@ -138,6 +146,15 @@ class Ethnologist_Widget_Base extends WP_Widget {
 	}
 
 	/**
+	 * Get form fields.
+	 *
+	 * @return array
+	 */
+	public function get_form_fields() {
+		return $this->form_fields;
+	}
+
+	/**
 	 * Flush widget cache action
 	 */
 	function flush_widget_cache() {
@@ -161,7 +178,8 @@ class Ethnologist_Widget_Base extends WP_Widget {
 		}
 
 		if ( $this->view_name !== null ) {
-			ethnologist_view( 'widget', $this->view_name . '-form', $this->filter_form_params( $params ), $this );
+			$filtered_params = $this->filter_form_params( $params );
+			ethnologist_view( 'widget', $this->view_name . '-form', $filtered_params, $this );
 		}
 	}
 }

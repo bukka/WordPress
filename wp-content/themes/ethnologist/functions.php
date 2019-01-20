@@ -454,6 +454,9 @@ function ethnologist_register_widgets() {
 	require_once __DIR__ . '/inc/widget-image.php';
 	register_widget( 'Ethnologist_Widget_Image' );
 
+	require_once __DIR__ . '/inc/widget-pay-pal-donate.php';
+	register_widget( 'Ethnologist_Widget_PayPalDonate' );
+
 	require_once __DIR__ . '/inc/widget-recent-posts.php';
 	register_widget( 'Ethnologist_Widget_RecentPosts' );
 
