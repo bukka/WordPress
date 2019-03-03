@@ -69,6 +69,12 @@
 .entry-content {
 	font-size: 15px;
 }
+.entry-content p, .entry-content h5 {
+	text-align: justify;
+}
+.entry-content .wp-block-image img {
+	margin: 0;
+}
 .entry-content .footnote_plugin_tooltip_text {
     vertical-align: top !important;
     position: relative !important;

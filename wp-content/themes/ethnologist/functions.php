@@ -8,7 +8,7 @@ error_reporting(E_ALL & ~E_DEPRECATED);
  *
  * @var int
  */
-define( 'ETHNOLOGIST_STYLE_VERSION', 15 );
+define( 'ETHNOLOGIST_STYLE_VERSION', 18 );
 
 /**
  * Translate a string
