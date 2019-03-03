@@ -554,10 +554,6 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                                                 sharelink = 'https://pinterest.com/pin/create/button/?url=' + encodeURIComponent(url) + '&media=' + encodeURIComponent(imgsrc) + '&description=' + encodeURIComponent(title);
                                                 window.open(sharelink, '_blank');
                                             }
-                                            if($(this).hasClass('mfp-share_google')) {
-                                                sharelink = 'https://plus.google.com/share?url=' + encodeURIComponent(url);
-                                                window.open(sharelink, '_blank');
-                                            }
                                             if($(this).hasClass('mfp-share_stumbleupon')) {
                                                 sharelink = 'http://www.stumbleupon.com/submit?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
                                                 window.open(sharelink, '_blank');
@@ -738,7 +734,6 @@ if(typeof jQuery.fn.gmCubikLite == 'undefined') {
                             '         <li><a class="mfp-share_facebook mfp-share_sharelizer">Facebook</a></li>' +
                             '         <li><a class="mfp-share_twitter mfp-share_sharelizer">Twitter</a></li>' +
                             '         <li><a class="mfp-share_pinterest mfp-share_sharelizer">Pinterest</a></li>' +
-                            '         <li><a class="mfp-share_google mfp-share_sharelizer">Google+</a></li>' +
                             '         <li><a class="mfp-share_stumbleupon mfp-share_sharelizer">StumbleUpon</a></li>' +
                             '     </ul>' +
                             '</div>';

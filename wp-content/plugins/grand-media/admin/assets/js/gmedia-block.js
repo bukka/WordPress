@@ -33,6 +33,7 @@
       var id = props.attributes.id;
       var elclass = 'gmedia-id';
       var image = gmedia_data.gmedia_image;
+      var form_fields = [];
       var children = [];
       var options = [];
 
@@ -45,7 +46,7 @@
         });
       }
 
-      children.push(
+      form_fields.push(
         el('h3', null, 'Gmedia Gallery')
       );
 
@@ -58,8 +59,16 @@
       if(!id) {
         elclass += ' gmedia-required';
       }
-      children.push(
+      form_fields.push(
         el('select', {className: elclass, value: id, onChange: setGallery}, options)
+      );
+
+      if(id) {
+        form_fields.push(GmediaGallery(props.attributes));
+      }
+
+      children.push(
+        el('div', {className: 'form-fields'}, form_fields)
       );
 
       if(id) {
@@ -69,10 +78,6 @@
       children.push(
         el('img', {className: 'gmedia-module-screenshot', src: image})
       );
-
-      if(id) {
-        children.push(GmediaGallery(props.attributes));
-      }
 
       return el('form', {className: 'gmedia-preview', onSubmit: setGallery}, children);
     },
@@ -109,6 +114,7 @@
       var default_module = gmedia_data.default_module;
       var elclass = 'gmedia-id';
       var image = gmedia_data.gmedia_image;
+      var form_fields = [];
       var children = [];
       var modules = [];
       var options = [];
@@ -135,7 +141,7 @@
         });
       }
 
-      children.push(
+      form_fields.push(
         el('h3', null, 'Gmedia Album')
       );
 
@@ -148,7 +154,7 @@
       if(!id) {
         elclass += ' gmedia-required';
       }
-      children.push(
+      form_fields.push(
         el('select', {className: elclass, value: id, onChange: setGallery}, options)
       );
 
@@ -166,8 +172,16 @@
           el('optgroup', {label: gmedia_data.modules_options[key].title, module: key}, null, options),
         );
       });
-      children.push(
+      form_fields.push(
         el('select', {className: 'gmedia-overwrite-module', value: module, onChange: setGallery}, modules)
+      );
+
+      if(id) {
+        form_fields.push(GmediaTerm(props.attributes, 'album'));
+      }
+
+      children.push(
+        el('div', {className: 'form-fields'}, form_fields)
       );
 
       if(id) {
@@ -177,10 +191,6 @@
       children.push(
         el('img', {className: 'gmedia-module-screenshot', src: image})
       );
-
-      if(id) {
-        children.push(GmediaTerm(props.attributes, 'album'));
-      }
 
       return el('form', {className: 'gmedia-preview', onSubmit: setGallery}, children);
     },
@@ -217,6 +227,7 @@
       var default_module = gmedia_data.default_module;
       var elclass = 'gmedia-id';
       var image = gmedia_data.gmedia_image;
+      var form_fields = [];
       var children = [];
       var modules = [];
       var options = [];
@@ -243,7 +254,7 @@
         });
       }
 
-      children.push(
+      form_fields.push(
         el('h3', null, 'Gmedia Category')
       );
 
@@ -256,7 +267,7 @@
       if(!id) {
         elclass += ' gmedia-required';
       }
-      children.push(
+      form_fields.push(
         el('select', {className: elclass, value: id, onChange: setGallery}, options)
       );
 
@@ -274,8 +285,16 @@
           el('optgroup', {label: gmedia_data.modules_options[key].title, module: key}, null, options),
         );
       });
-      children.push(
+      form_fields.push(
         el('select', {className: 'gmedia-overwrite-module', value: module, onChange: setGallery}, modules)
+      );
+
+      if(id) {
+        form_fields.push(GmediaTerm(props.attributes, 'category'));
+      }
+
+      children.push(
+        el('div', {className: 'form-fields'}, form_fields)
       );
 
       if(id) {
@@ -285,10 +304,6 @@
       children.push(
         el('img', {className: 'gmedia-module-screenshot', src: image})
       );
-
-      if(id) {
-        children.push(GmediaTerm(props.attributes, 'category'));
-      }
 
       return el('form', {className: 'gmedia-preview', onSubmit: setGallery}, children);
     },
@@ -325,6 +340,7 @@
       var default_module = gmedia_data.default_module;
       var elclass = 'gmedia-id';
       var image = gmedia_data.gmedia_image;
+      var form_fields = [];
       var children = [];
       var modules = [];
       var options = [];
@@ -351,7 +367,7 @@
         });
       }
 
-      children.push(
+      form_fields.push(
         el('h3', null, 'Gmedia Tag')
       );
       // Choose galleries
@@ -363,7 +379,7 @@
       if(!id) {
         elclass += ' gmedia-required';
       }
-      children.push(
+      form_fields.push(
         el('select', {className: elclass, value: id, onChange: setGallery}, options)
       );
 
@@ -381,8 +397,16 @@
           el('optgroup', {label: gmedia_data.modules_options[key].title, module: key}, null, options),
         );
       });
-      children.push(
+      form_fields.push(
         el('select', {className: 'gmedia-overwrite-module', value: module, onChange: setGallery}, modules)
+      );
+
+      if(id) {
+        form_fields.push(GmediaTerm(props.attributes, 'tag'));
+      }
+
+      children.push(
+        el('div', {className: 'form-fields'}, form_fields)
       );
 
       if(id) {
@@ -392,10 +416,6 @@
       children.push(
         el('img', {className: 'gmedia-module-screenshot', src: image})
       );
-
-      if(id) {
-        children.push(GmediaTerm(props.attributes, 'tag'));
-      }
 
       return el('form', {className: 'gmedia-preview', onSubmit: setGallery}, children);
     },

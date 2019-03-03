@@ -291,10 +291,6 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                                                 sharelink = 'https://pinterest.com/pin/create/button/?url=' + encodeURIComponent(url) + '&media=' + encodeURIComponent(imgsrc) + '&description=' + encodeURIComponent(title);
                                                 window.open(sharelink, '_blank');
                                             }
-                                            if($(this).hasClass('mfp-share_google')) {
-                                                sharelink = 'https://plus.google.com/share?url=' + encodeURIComponent(url);
-                                                window.open(sharelink, '_blank');
-                                            }
                                             if($(this).hasClass('mfp-share_stumbleupon')) {
                                                 sharelink = 'http://www.stumbleupon.com/submit?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
                                                 window.open(sharelink, '_blank');
@@ -441,7 +437,7 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                             },
                             gallery: {
                                 enabled: true,
-                                arrowMarkup: '<div title="%title%" type="button" class="mfp-button mfp-arrow mfp-arrow-%dir%"></div>',
+                                arrowMarkup: '<div title="%title%" class="mfp-button mfp-arrow mfp-arrow-%dir%"></div>',
                                 tCounter: '%curr% / %total%'
                             },
 
@@ -497,7 +493,6 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                             '         <li><a class="mfp-share_facebook mfp-share_sharelizer">Facebook</a></li>' +
                             '         <li><a class="mfp-share_twitter mfp-share_sharelizer">Twitter</a></li>' +
                             '         <li><a class="mfp-share_pinterest mfp-share_sharelizer">Pinterest</a></li>' +
-                            '         <li><a class="mfp-share_google mfp-share_sharelizer">Google+</a></li>' +
                             '         <li><a class="mfp-share_stumbleupon mfp-share_sharelizer">StumbleUpon</a></li>' +
                             '     </ul>' +
                             '</div>';
@@ -887,9 +882,9 @@ if(typeof jQuery.fn.gmPhantom == 'undefined') {
                             var img = $('.gmPhantom_Thumb > img', this);
                             var thumb_ratio = $(this).data('ratio');
                             if(opt.ratio <= thumb_ratio) {
-                                img.attr('class', 'landscape');
+                              img.removeClass('portrait').addClass('landscape');
                             } else {
-                                img.attr('class', 'portrait');
+                              img.removeClass('landscape').addClass('portrait');
                                 if(1 != thumb_ratio) {
                                     img.css('margin', Math.floor((opt.thumbWidth / thumb_ratio - opt.thumbHeight) / opt.thumbHeight * 10) + '% 0 0 0');
                                 }

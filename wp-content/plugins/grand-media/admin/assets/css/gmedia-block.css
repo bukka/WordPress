@@ -1,11 +1,17 @@
 form.gmedia-preview {
 	position: relative;
-	padding-left: 270px;
-	padding-bottom: 30px;
 	overflow: hidden;
 	box-sizing: border-box;
-	height: 208px;
 	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row-reverse;
+	justify-content: center;
+}
+
+form.gmedia-preview .form-fields {
+	flex: 1;
+	min-width: 30%;
 }
 
 form.gmedia-preview input,
@@ -21,12 +27,11 @@ form.gmedia-preview select {
 }
 
 img.gmedia-module-screenshot {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 260px;
-	height: 100% !important;
 	object-fit: contain;
+	flex: 1;
+	width: 320px !important;
+	height: 240px !important;
+	margin: 0 20px 0 0;
 }
 
 .gmedia-shortcode {

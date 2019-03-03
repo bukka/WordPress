@@ -1210,10 +1210,10 @@ class GmediaDB{
         }
 
         if(!empty($tax_query)){
-            if(isset($q['terms_relation']) && strtoupper($q['terms_relation']) == 'OR'){
-                $terms_relation = 'OR';
-            } else{
+            if(isset($q['terms_relation']) && strtoupper($q['terms_relation']) == 'AND'){
                 $terms_relation = 'AND';
+            } else{
+                $terms_relation = 'OR';
             }
             $clauses['join']  = '';
             $clauses['where'] = array();

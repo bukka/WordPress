@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.14.4
+ * Version: 1.15.3
  * Author: Rattus
  * Author URI: https://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if( !class_exists('Gmedia')){
      */
     class Gmedia {
 
-        var $version = '1.14.4';
+        var $version = '1.15.3';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -351,8 +351,8 @@ if( !class_exists('Gmedia')){
                 'google_api_key'=> $this->options['google_api_key']
             ));
 
-            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.14.0', 'all');
-            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.14.0');
+            wp_register_style('grand-media', $gmCore->gmedia_url . '/admin/assets/css/gmedia.admin.css', array(), '1.14.7', 'all');
+            wp_register_script('grand-media', $gmCore->gmedia_url . '/admin/assets/js/gmedia.admin.js', array('jquery', 'gmedia-global-backend'), '1.14.7');
             wp_localize_script('grand-media', 'grandMedia', array(
                 'error3'   => __('Disable your Popup Blocker and try again.', 'grand-media'),
                 'download' => __('downloading...', 'grand-media'),
@@ -370,7 +370,7 @@ if( !class_exists('Gmedia')){
         function register_scripts_frontend(){
             global $gmCore, $wp_scripts;
 
-            wp_register_style('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.css', array(), '1.12.11');
+            wp_register_style('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.css', array(), '1.15.0');
             wp_register_script('gmedia-global-frontend', $gmCore->gmedia_url . '/assets/gmedia.global.front.js', array('jquery'), '1.13.0');
             wp_localize_script('gmedia-global-frontend', 'GmediaGallery', array(
                 'ajaxurl'       => admin_url('admin-ajax.php'),

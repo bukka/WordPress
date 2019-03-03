@@ -133,7 +133,10 @@ class GmediaAdmin {
 		if ( current_user_can( 'gmedia_module_manage' ) ) {
 			global $gmGallery;
 			if ( $gmGallery->options['modules_update'] ) {
-				$count = " <span class='update-plugins count-{$gmGallery->options['modules_update']}'><span class='plugin-count gm-module-count'>" . $gmGallery->options['modules_update'] . "</span></span>";
+				$count .= " <span class='update-plugins count-{$gmGallery->options['modules_update']}' style='background-color: #bb391b;'><span class='plugin-count gm-module-count gm-modules-update-count' title='" . __( 'Modules Updates', 'grand-media' ) . "'>{$gmGallery->options['modules_update']}</span></span>";
+			}
+			if ( $gmGallery->options['modules_new'] ) {
+				$count .= " <span class='update-plugins count-{$gmGallery->options['modules_new']}' style='background-color: #367236;'><span class='plugin-count gm-module-count gm-modules-new-count' title='" . __( 'New Modules', 'grand-media' ) . "'>{$gmGallery->options['modules_new']}</span></span>";
 			}
 		}
 
@@ -152,7 +155,7 @@ class GmediaAdmin {
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Modules', 'grand-media' ), __( 'Modules', 'grand-media' ), 'gmedia_gallery_manage', 'GrandMedia_Modules', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Settings', 'grand-media' ), __( 'Settings', 'grand-media' ), 'manage_options', 'GrandMedia_Settings', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'iOS Application', 'grand-media' ), __( 'iOS Application', 'grand-media' ), 'gmedia_settings', 'GrandMedia_App', array( &$this, 'shell' ) );
-			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Wordpress Media Library', 'grand-media' ), __( 'WP Media Library', 'grand-media' ), 'gmedia_import', 'GrandMedia_WordpressLibrary', array( &$this, 'shell' ) );
+			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'WordPress Media Library', 'grand-media' ), __( 'WP Media Library', 'grand-media' ), 'gmedia_import', 'GrandMedia_WordpressLibrary', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Logs', 'grand-media' ), __( 'Gmedia Logs', 'grand-media' ), 'manage_options', 'GrandMedia_Logs', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Support', 'grand-media' ), __( 'Support', 'grand-media' ), 'manage_options', 'GrandMedia_Support', array( &$this, 'shell' ) );
 		}
@@ -242,17 +245,8 @@ class GmediaAdmin {
 						if ( (int) $gmGallery->options['twitter'] ) {
 							?>
 							<div class="row panel visible-lg-block">
-								<a class="twitter-timeline" href="https://twitter.com/CodEasily/timelines/648240437141086212" data-widget-id="648245214201692161"></a>
-								<script>!function(d, s, id) {
-                                    var js, fjs = d.getElementsByTagName(s)[0],
-                                      p = /^http:/.test(d.location) ? 'http' : 'https';
-                                    if(!d.getElementById(id)) {
-                                      js = d.createElement(s);
-                                      js.id = id;
-                                      js.src = p + '://platform.twitter.com/widgets.js';
-                                      fjs.parentNode.insertBefore(js, fjs);
-                                    }
-                                  }(document, 'script', 'twitter-wjs');</script>
+								<a class="twitter-timeline" href="https://twitter.com/CodEasily/timelines/648240437141086212?ref_src=twsrc%5Etfw">#GmediaGallery - Curated tweets by CodEasily</a>
+								<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 							</div>
 							<?php
 						} ?>
@@ -290,9 +284,8 @@ class GmediaAdmin {
 			}
 			$menuData = '';
 			if ( $menuItem[2] == 'GrandMedia_Modules' && gm_user_can( 'module_manage' ) ) {
-				if ( $gmGallery->options['modules_update'] ) {
-					$menuData = '<span class="badge badge-error pull-right gm-module-count" title="' . __( 'Module Updates' ) . '">' . $gmGallery->options['modules_update'] . '</span>';
-				}
+				$menuData = '<span class="badge badge-success pull-right gm-module-count-' . $gmGallery->options['modules_new'] . '" title="' . __( 'New Modules', 'grand-media' ) . '">' . $gmGallery->options['modules_new'] . '</span>';
+				$menuData .= '<span class="badge badge-error pull-right gm-module-count-' . $gmGallery->options['modules_update'] . '" title="' . __( 'Modules Updates', 'grand-media' ) . '">' . $gmGallery->options['modules_update'] . '</span>';
 			}
 
 			$content['sideLinks'] .= "\n" . '<a class="list-group-item' . $iscur . '" href="' . admin_url( 'admin.php?page=' . $menuItem[2] ) . '">' . $menuItem[0] . $menuData . '</a>';
@@ -617,11 +610,12 @@ class GmediaAdmin {
 	function gutenberg_assets() {
 		global $gmGallery, $gmDB, $gmCore;
 
-		wp_enqueue_style( 'gmedia-block-editor', $gmCore->gmedia_url . '/admin/assets/css/gmedia-block.css' );
+		wp_enqueue_style( 'gmedia-block-editor', $gmCore->gmedia_url . '/admin/assets/css/gmedia-block.css', array(), $gmGallery->version );
 		wp_register_script(
 			'gmedia-block-editor',
 			$gmCore->gmedia_url . '/admin/assets/js/gmedia-block.js',
-			array( 'wp-blocks', 'wp-element' )
+			array( 'wp-blocks', 'wp-element' ),
+			$gmGallery->version
 		);
 
 		$default_module = $gmGallery->options['default_gmedia_module'];
@@ -644,7 +638,7 @@ class GmediaAdmin {
 					$by_author = '';
 					if ( (int) $preset->global ) {
 						$display_name = get_the_author_meta( 'display_name', $preset->global );
-						$by_author = $display_name? ' [' . $display_name . ']' : '';
+						$by_author    = $display_name ? ' [' . $display_name . ']' : '';
 					}
 					if ( '[' . $module_name . ']' === $preset->name ) {
 						$option[ $preset->term_id ] = $module_data['title'] . $by_author . ' - ' . __( 'Default Settings' );
@@ -675,7 +669,7 @@ class GmediaAdmin {
 				$_term->module_name = $gmDB->get_metadata( 'gmedia_term', $_term->term_id, '_module', true );
 				if ( $_term->global ) {
 					$display_name = sprintf( __( 'by %s', 'grand-media' ), get_the_author_meta( 'display_name', $_term->global ) );
-					$_term->name .= 'by ' === $display_name? '' : ' ' . $display_name;
+					$_term->name  .= 'by ' === $display_name ? '' : ' ' . $display_name;
 				}
 				if ( $_term->status && 'publish' !== $_term->status ) {
 					$_term->name .= " [{$_term->status}]";
@@ -683,10 +677,12 @@ class GmediaAdmin {
 				$gm_galleries[ $_term->term_id ] = $_term;
 			}
 		}
-		$gm_galleries = array( 0 => array(
-				'term_id' => 0,
-				'name'    => __( ' - select gallery - ', 'grand-media' ),
-			) ) + $gm_galleries;
+		$gm_galleries = array(
+			                0 => array(
+				                'term_id' => 0,
+				                'name'    => __( ' - select gallery - ', 'grand-media' ),
+			                ),
+		                ) + $gm_galleries;
 
 		$gm_terms = $gmDB->get_terms( 'gmedia_album' );
 		if ( count( $gm_terms ) ) {
@@ -694,15 +690,15 @@ class GmediaAdmin {
 				unset( $_term->description );
 				unset( $_term->taxonomy );
 				$module_preset = $gmDB->get_metadata( 'gmedia_term', $_term->term_id, '_module_preset', true );
-				if($module_preset){
-					$preset = $gmCore->getModulePreset( $module_preset );
+				if ( $module_preset ) {
+					$preset             = $gmCore->getModulePreset( $module_preset );
 					$_term->module_name = $preset['module'];
 				} else {
 					$_term->module_name = '';
 				}
 				if ( $_term->global ) {
 					$display_name = sprintf( __( 'by %s', 'grand-media' ), get_the_author_meta( 'display_name', $_term->global ) );
-					$_term->name .= 'by ' === $display_name? '' : ' ' . $display_name;
+					$_term->name  .= 'by ' === $display_name ? '' : ' ' . $display_name;
 				}
 				if ( $_term->status && 'publish' !== $_term->status ) {
 					$_term->name .= " [{$_term->status}]";
@@ -711,10 +707,12 @@ class GmediaAdmin {
 				$gm_albums[ $_term->term_id ] = $_term;
 			}
 		}
-		$gm_albums = array( 0 => array(
-				'term_id' => 0,
-				'name'    => __( ' - select album - ', 'grand-media' ),
-			) ) + $gm_albums;
+		$gm_albums = array(
+			             0 => array(
+				             'term_id' => 0,
+				             'name'    => __( ' - select album - ', 'grand-media' ),
+			             ),
+		             ) + $gm_albums;
 
 		$gm_terms = $gmDB->get_terms( 'gmedia_category' );
 		if ( count( $gm_terms ) ) {
@@ -727,10 +725,12 @@ class GmediaAdmin {
 				$gm_categories[ $_term->term_id ] = $_term;
 			}
 		}
-		$gm_categories = array( 0 => array(
-				'term_id' => 0,
-				'name'    => __( ' - select category - ', 'grand-media' ),
-			) ) + $gm_categories;
+		$gm_categories = array(
+			                 0 => array(
+				                 'term_id' => 0,
+				                 'name'    => __( ' - select category - ', 'grand-media' ),
+			                 ),
+		                 ) + $gm_categories;
 
 		$gm_terms = $gmDB->get_terms( 'gmedia_tag' );
 		if ( count( $gm_terms ) ) {
@@ -743,10 +743,12 @@ class GmediaAdmin {
 				$gm_tags[ $_term->term_id ] = $_term;
 			}
 		}
-		$gm_tags = array( 0 => array(
-				'term_id' => 0,
-				'name'    => __( ' - select tag - ', 'grand-media' ),
-			) ) + $gm_tags;
+		$gm_tags = array(
+			           0 => array(
+				           'term_id' => 0,
+				           'name'    => __( ' - select tag - ', 'grand-media' ),
+			           ),
+		           ) + $gm_tags;
 
 		$data = array(
 			'modules'         => $modules,
