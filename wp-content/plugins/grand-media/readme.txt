@@ -136,6 +136,9 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.16.0 =
+* Fixed conflict with Swiper JS library on some themes
+
 = v1.15.4 =
 * Fixed datetime picker on album edit page
 

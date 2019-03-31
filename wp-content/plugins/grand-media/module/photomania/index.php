@@ -12,7 +12,7 @@ $module_info = array(
     'price'        => '0',
     'demo'         => 'http://codeasily.com/portfolio/gmedia-gallery-modules/photomania/',
     'download'     => 'http://codeasily.com/download/photomania-module-zip/',
-    'dependencies' => 'swiper,mousetrap'
+    'dependencies' => 'gmedia-swiper,mousetrap'
 );
 if (preg_match('#' . basename(dirname(__FILE__)) . '/' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) {
     if (isset($_GET['info'])) {
