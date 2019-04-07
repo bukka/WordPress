@@ -3,7 +3,7 @@
  * Plugin Name: Gmedia Gallery
  * Plugin URI: http://wordpress.org/extend/plugins/grand-media/
  * Description: Gmedia Gallery - powerful media library plugin for creating beautiful galleries and managing files.
- * Version: 1.16.0
+ * Version: 1.16.1
  * Author: Rattus
  * Author URI: https://codeasily.com/
  * Requires at least: 3.7
@@ -42,7 +42,7 @@ if( !class_exists('Gmedia')){
      */
     class Gmedia {
 
-        var $version = '1.16.0';
+        var $version = '1.16.1';
         var $dbversion = '1.8.0';
         var $minium_WP = '3.7';
         var $options = '';
@@ -397,12 +397,12 @@ if( !class_exists('Gmedia')){
                 wp_register_script('wavesurfer', $gmCore->gmedia_url . '/assets/wavesurfer/wavesurfer.min.js', array('jquery'), '1.2.8', true);
             }
 
-            if( !wp_script_is('swiper', 'registered') || version_compare($wp_scripts->registered['swiper']->ver, '3.4.0', '<')){
-                wp_deregister_style('swiper');
-                wp_deregister_script('swiper');
-                wp_register_style('swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.min.css', array(), '3.4.0', 'screen');
-                wp_register_script('swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.jquery.min.js', array('jquery'), '3.4.0', true);
-            }
+            //if( !wp_script_is('swiper', 'registered') || version_compare($wp_scripts->registered['swiper']->ver, '3.4.0', '<')){
+            //    wp_deregister_style('swiper');
+            //    wp_deregister_script('swiper');
+            //    wp_register_style('swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.min.css', array(), '3.4.0', 'screen');
+            //    wp_register_script('swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.jquery.min.js', array('jquery'), '3.4.0', true);
+            //}
 
 	        wp_register_style('gmedia-swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.min.css', array(), '3.4.0', 'screen');
 	        wp_register_script('gmedia-swiper', $gmCore->gmedia_url . '/assets/swiper/swiper.jquery.min.js', array('jquery'), '3.4.0', true);

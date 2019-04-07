@@ -5,7 +5,12 @@ $default_options = array(
 	'collectionPreloaderColor' => '333333',
 	'linkTargetWindow' => '_blank',
 	'thumbSpacing' => '10',
-	//Thumbnails
+    //Tags Cloud
+    'tagsFilter' => '1',
+    'tagCloudAll' => 'All',
+    'tagCloudTextColor' => '000000',
+    'tagCloudBgColor' => 'eeeeee',
+    //Thumbnails
 	'collectionThumbHoverColor' => 'rgba(0, 0, 0, .7)',
 	'collectionThumbContentBGColor' => 'rgba(245,245,245,1)',
 	'collectionThumbTitleShow' => '1',
@@ -86,6 +91,30 @@ $options_tree = array(
 			),
 		)
 	),
+    array('label' => 'Tags Filter',
+        'fields' => array(
+            'tagsFilter' => array('label' => 'Tags Cloud enable',
+                'tag' => 'checkbox',
+                'attr' => 'data-watch="change"',
+                'text' => 'Add tags filter for selected collection'
+            ),
+            'tagCloudAll' => array('label' => 'Tag ALL - name',
+                'tag' => 'input',
+                'attr' => '',
+                'text' => ''
+            ),
+            'tagCloudTextColor' => array('label' => 'Text color',
+                'tag' => 'input',
+                'attr' => 'type="text" data-type="color" data-tagsFilter="is:1"',
+                'text' => 'Tag button'
+            ),
+            'tagCloudBgColor' => array('label' => 'Background color',
+                'tag' => 'input',
+                'attr' => 'type="text" data-type="color" data-tagsFilter="is:1"',
+                'text' => 'Tag button'
+            )
+        )
+    ),
     array('label' => 'Thumbnails Settings',
 		'fields' => array(
 			'collectionThumbHoverColor' => array('label' => 'Hover color',

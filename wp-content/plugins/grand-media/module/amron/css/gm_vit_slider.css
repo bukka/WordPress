@@ -1,0 +1,399 @@
+.gm_grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+.gm_grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+/******************************** CollectionSlider View ********************/
+.gmedia_v2_ColectionSlider *{
+    box-sizing: border-box !important;
+    line-height: 1.4;
+}
+.gmedia_v2_hints
+{
+    position: absolute;
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: normal;
+    background-color: rgba(0,0,0,.8);
+    color: white;
+    transform: translateY(-100%);
+    border-radius: 2px;
+    transition: .4s;
+}
+.gmedia_v2_ColectionSlider
+{
+    position: fixed;
+    z-index: 99999;
+    /*width: 100%;*/
+    /*height: 100vh;*/
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    visibility: hidden;
+    opacity: 0;
+    -ms-touch-action: none;
+    touch-action: none;
+    -webkit-text-size-adjust: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-transition: opacity .4s ease;
+    transition: opacity .4s ease, visibility .4s ease
+}
+.gmedia_v2_ColectionSliderActivate
+{
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+}
+.gmedia_v2_ColectionSlider .gmSliderBg
+{
+    width: 100%;
+    height: 100%;
+    transform: translateZ(0);
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesWrap
+{
+    position: absolute;
+    /*will-change: transform;*/
+    width: 100%;
+    top:0;
+    bottom: 0;
+}
+.gmedia_v2_ColectionSlider .miniScreen
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage
+{
+    position: absolute;
+    display: block;
+    transform: translate3d(0px,0px,0px);
+    width: 100%;
+    top:0;
+    bottom: 0;
+    left: 0;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SliderPage .sliderItemsButtons
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: transform.5s;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_iconHolder
+{
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-50%) translateX(-50%);
+    left: 50%;
+    top:50%;
+    padding: 30px;
+    visibility: hidden;
+    will-change: transform;
+    cursor: pointer;
+}
+.gmedia_v2_SliderPage .gmedia_iconHolder svg
+{
+    width: 100%;
+    height: 100%;
+    fill: rgba(0, 0, 0, 0.4);
+}
+.gmedia_v2_SliderPage.info_icon .gmedia_iconHolder
+{
+    visibility: visible;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_sliderPage_inner
+{
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    transform: translate3d(0,0,0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_sliderPage_inner img
+{
+    /*will-change: opacity;*/
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: absolute !important;
+    display: block !important;
+    border: none !important;
+    max-width: none !important;
+    /*transform-origin: 0 0 !important;*/
+    opacity: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    transform: translate3d(0,0,0);
+    transition: opacity .35s ease;
+}
+.gmedia_v2_SliderPage.video_play .gmedia_sliderPage_inner img{
+    visibility: hidden;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_sliderPage_inner img.onLoad
+{
+    opacity: 1;
+}
+.gmedia_v2_SliderPage .gmedia_sliderPage_inner .gmedia_video_wrap
+{
+    position: absolute;
+    display: block;
+    border: none;
+}
+.gmedia_v2_SliderPage .gmedia_sliderPage_inner .gmedia_video_wrap iframe
+{
+    width: 100% !important;
+    height: 100% !important;
+    top:0;
+    left: 0;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_v2_ItemPage
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    overflow: hidden;
+}
+.gmedia_SliderImage {
+    position: absolute !important;
+    display: block !important;
+    border: none !important;
+    max-width: none !important;
+    transform-origin: 0 0 !important;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_v2_ItemPage .gmflexe
+{
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_v2_ItemPage img
+{
+    position: absolute;
+    display: block;
+    border: none;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_v2_ItemPage .gmedia_video_wrap
+{
+    position: absolute;
+    display: block;
+    border: none;
+}
+.gmedia_v2_SlidesWrap .gmedia_v2_SliderPage .gmedia_v2_ItemPage .gmedia_video_wrap iframe
+{
+    width: 100% !important;
+    height: 100% !important;
+    top:0;
+    left: 0;
+}
+.gmedia_v2_ColectionSlider .sliderNextPrevButtons
+{
+    position: absolute;
+    width: 50px;
+    height: 34px;
+    top: 50%;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color .2s, transform .4s ease-out;
+    border-radius: 2px;
+}
+.gmedia_v2_ColectionSlider .sliderNextPrevButtonsMiniScreen
+{
+    display: none;
+}
+.gmedia_v2_ColectionSlider .sliderNextPrevButtons svg
+{
+    width: 100%;
+    height: 100%;
+    vertical-align: baseline !important;
+}
+.gmedia_v2_ColectionSlider .sliderItemsButtons
+{
+    position: relative;
+    padding: 9px;
+    width: 38px;
+    height: 38px;
+    margin: 0 2px 2px 0;
+    cursor: pointer;
+    float: left;
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: background-color .2s, transform .4s ease-out;
+    border-radius: 2px;
+}
+.gmedia_v2_ColectionSlider .sliderItemsButtons svg
+{
+    width: 100%;
+    height: 100%;
+    transition: fill .2s, transform .4s ease-out;
+    vertical-align: baseline !important;
+}
+.gmedia_v2_ColectionSlider .gmNoneTransition
+{
+    transition: none;
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesHeader
+{
+    position: absolute;
+    height:auto;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0),rgba(0, 0, 0, 1));
+    width: 100%;
+    top: 0;
+    transform: translateY(-100%);
+    /*will-change: transform;*/
+    transition: transform .4s ease-out;
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesHeaderMiniScreen
+{
+    /*background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0),rgba(0, 0, 0, 1));*/
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesHeaderActivate
+{
+    transform: translateY(0);
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesFooter
+{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0),rgba(0, 0, 0, 1));
+    transform: translateY(100%);
+    /*will-change: transform;*/
+    transition: transform .4s ease-out;
+}
+.gmedia_v2_ColectionSlider .gmedia_v2_SlidesFooterActivate
+{
+    transform: translateY(0);
+}
+.gmedia_v2_ColectionSlider .gmInfoBox1
+{
+    position: relative;
+    float: left;
+    margin: 10px 20px;
+    overflow: hidden;
+}
+.gmedia_v2_ColectionSliderItemTitle
+{
+    text-rendering: auto;
+    color: #fff;
+    font-size: 36px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1;
+    box-sizing: content-box;
+    letter-spacing: 0;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+}
+.gmedia_v2_ColectionSliderItemTitleMiniScreen
+{
+    padding-bottom: 10px;
+}
+.gmedia_v2_ColectionSliderTermTitle
+{
+
+}
+.gmedia_v2_ColectionSliderTermTitleMiniScreen
+{
+
+}
+/******************************** Slider ScrollBar *************************/
+.gmedia_v2_TermScrollBarWrap
+{
+    position: relative;
+    width: 100%;
+    margin: 10px 0;
+    overflow: hidden;
+}
+.gmedia_v2_TermScrollBarWrap .gmedia_v2_ScrollView
+{
+    position: absolute;
+    overflow: hidden;
+}
+.gmedia_v2_ScrollBarItem
+{
+    position: absolute;
+    height: 80px;
+    width: 100px;
+    overflow: hidden;
+}
+.gmedia_v2_TermScrollBarWrap .miniScreen
+{
+    height: 50px;
+    width: 70px;
+    margin: 0 0;
+}
+.gmedia_v2_ScrollBarItem .gmedia_v2_ScrollBarItemBg
+{
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    bottom: 3px;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.gmedia_v2_ScrollBarItem .gmedia_v2_ScrollBarItemHover
+{
+    position: absolute;
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #fff;
+}
+.gmedia_v2_ScrollBarItem .gmedia_v2_ScrollBarItemLink
+{
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+.gmedia_v2_ScrollBarItemLink.rotate svg{
+    animation: 1s spinner linear infinite;
+}
+.gmedia_v2_ScrollBarItemLink svg
+{
+    width: 100%;
+    height: 100%;
+    fill: rgba(0, 0, 0, 0.58);
+    vertical-align: baseline !important;
+}
