@@ -136,7 +136,7 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
-= v1.16.1 =
+= v1.16.2 =
 * Updated free Amron gallery module. Added filter images by tags
 
 = v1.16.0 =
