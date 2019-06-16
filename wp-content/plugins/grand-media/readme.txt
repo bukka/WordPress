@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
 Requires at least: 3.7
-Tested up to: 5.0.3
+Tested up to: 5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -26,6 +26,8 @@ Handle any file format and link any files with images in few clicks. You can imp
 
 #### Demos:
 
+*   [UltraBox](https://codeasily.com/portfolio/gmedia-gallery-modules/ultrabox/) - Grid/Justify/Massonry gallery with Related Images support in lightbox + EXIF/GPS info, global search, tag filter.
+*   [GmediaSlider](https://codeasily.com/portfolio/gmedia-gallery-modules/gmediaslider/) - Responsive Image Slider with slideshow.
 *   [MultiSlider (3 in 1)](https://codeasily.com/portfolio/gmedia-gallery-modules/multislider/) - Image Slider with a lot of options and 3 different layouts.
 *   [PhotoBlog Style Gallery](https://codeasily.com/portfolio/gmedia-gallery-modules/photoblog/) - Pinterest style gallery with global search and photo proofing.
 *   [AlbumsList Masonry](https://codeasily.com/portfolio/gmedia-gallery-modules/albumslist-masonry/) - Splash Slider with custom lightbox and masonry collection view.
@@ -135,6 +137,9 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.16.3 =
+* Added code for support future module's features
 
 = v1.16.2 =
 * Updated free Amron gallery module. Added filter images by tags
