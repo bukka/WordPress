@@ -16,11 +16,6 @@ Gmedia Gallery - photo gallery with comments, show EXIF & Metadata, gallery with
 
 Manage files, show image galleries and photo slideshows, play music on your site with Gmedia Gallery plugin. Gmedia Gallery plugin provides a comprehensive interface for handling galleries, images, video & audio files.
 
-> #### Gallery iOS application client
->
-> Now You can upload and manage your Gmedia Library (images, tags, albums) anywhere!!!
-> Get new **[Gmedia Gallery application for iPhone](https://codeasily.com/gmedia-ios-app/)**
-
 With Gmedia Gallery plugin you can upload an unlimited number of photo and audio files, create dozens of galleries and playlists, group pictures and other files in albums, add tags for each file.
 Handle any file format and link any files with images in few clicks. You can import images with captions from Worpress Media Library, Flagallery plugin and from NextGen Gallery plugin right to Gmedia Library.
 
@@ -137,6 +132,12 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.16.4 =
+* Added option to disable menu label with quantity of new modules.
+* Fixed import from WP Library not save image author.
+* iOS app page removed. (No money to pay for Apple developers license)
+
 
 = v1.16.3 =
 * Added code for support future module's features

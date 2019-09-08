@@ -2636,7 +2636,9 @@ class GmediaCore {
                 'terms'       => $terms
             );
 
-            if( !current_user_can('gmedia_delete_others_media')){
+            if(!empty($file['auhtor'])){
+	            $media_data['author'] = (int) $file['auhtor'];
+            } else if( !current_user_can('gmedia_delete_others_media')){
                 $media_data['author'] = get_current_user_id();
             }
 
