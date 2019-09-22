@@ -149,13 +149,17 @@ function gmedia_alter_query_author( $query ) {
 /** Add related media for tags and categories
  *
  * @param $posts
- * @param $query
+ * @param WP_Query $query
  *
  * @return mixed
  */
 function gmedia_the_posts_filter_taxonomy( $posts, $query ) {
 
-	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+	if( ! $query ) {
+		return $posts;
+	}
+
+	$paged = ( $query->get( 'paged' ) ) ? $query->get( 'paged' ) : 1;
 	if ( $paged != 1 ) {
 		return $posts;
 	}

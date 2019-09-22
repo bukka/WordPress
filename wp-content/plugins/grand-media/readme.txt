@@ -133,6 +133,10 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.16.5 =
+* Fixed PHP warning on some themes.
+* Updated bundled modules.
+
 = v1.16.4 =
 * Added option to disable menu label with quantity of new modules.
 * Fixed import from WP Library not save image author.

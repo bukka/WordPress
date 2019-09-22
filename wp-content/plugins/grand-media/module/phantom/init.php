@@ -393,10 +393,12 @@ if(!$is_bot){
     }
     ?>
     <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function(){
         jQuery(function() {
             var settings = <?php echo json_encode($settings); ?>;
             jQuery('#GmediaGallery_<?php echo $id; ?>').gmPhantom([settings]);
         });
+      });
     </script><?php
     if($shortcode_raw){
         echo '</pre>';

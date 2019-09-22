@@ -3,7 +3,7 @@ $module_info = array(
     'base'         => 'cubik-lite',
     'name'         => 'cubik-lite',
     'title'        => 'Cubik Lite',
-    'version'      => '1.5',
+    'version'      => '1.6',
     'author'       => 'GalleryCreator',
     'description'  => __('Perfect gallery module for widget. This is a light version of Cubik module.
 
