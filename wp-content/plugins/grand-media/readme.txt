@@ -21,6 +21,7 @@ Handle any file format and link any files with images in few clicks. You can imp
 
 #### Demos:
 
+*   [Amron](https://codeasily.com/amron/) - bundled FREE lightweight and fast gllery which will fit any website.
 *   [UltraBox](https://codeasily.com/portfolio/gmedia-gallery-modules/ultrabox/) - Grid/Justify/Massonry gallery with Related Images support in lightbox + EXIF/GPS info, global search, tag filter.
 *   [GmediaSlider](https://codeasily.com/portfolio/gmedia-gallery-modules/gmediaslider/) - Responsive Image Slider with slideshow.
 *   [MultiSlider (3 in 1)](https://codeasily.com/portfolio/gmedia-gallery-modules/multislider/) - Image Slider with a lot of options and 3 different layouts.
@@ -132,6 +133,10 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.16.6 =
+* Updated Amron module.
+* Small fixes.
 
 = v1.16.5 =
 * Fixed PHP warning on some themes.

@@ -35,7 +35,7 @@ $default_options = array(
 	// Slider Page
 	'lightBoxEnable' => '1',
 	'sliderPreloaderColor' =>'ffffff',
-	'sliderBgColor' => 'rgba(0,0,0,1)',
+	'sliderBgColor' => 'rgba(0,0,0,0.8)',
 	'sliderHeaderFooterBgColor' => '000000',
 	'sliderNavigationColor' => 'rgba(0,0,0,1)',
 	'sliderNavigationIconColor' => 'rgba(255,255,255,1)',

@@ -245,7 +245,7 @@ class GmediaAdmin {
 						if ( (int) $gmGallery->options['twitter'] ) {
 							?>
 							<div class="row panel visible-lg-block">
-								<a class="twitter-timeline" href="https://twitter.com/CodEasily/timelines/648240437141086212?ref_src=twsrc%5Etfw">#GmediaGallery - Curated tweets by CodEasily</a>
+								<a class="twitter-timeline" data-height="600" href="https://twitter.com/CodEasily/timelines/648240437141086212?ref_src=twsrc%5Etfw">#GmediaGallery - Curated tweets by CodEasily</a>
 								<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 							</div>
 							<?php
