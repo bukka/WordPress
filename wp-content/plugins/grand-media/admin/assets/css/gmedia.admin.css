@@ -739,6 +739,18 @@ p.thumbnail.gmedia-related-image img.gmedia-thumb {
 .term_id {
   font-size:80%;
 }
+.term_date {
+  font-size:80%;
+}
+.term_date:empty {
+  display: none;
+}
+.term_date:before {
+  content: '[';
+}
+.term_date:after {
+  content: ']';
+}
 #gm-list-table .hidden {
   display:none !important;
   visibility:hidden !important;

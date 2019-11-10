@@ -134,6 +134,13 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.16.8 =
+* Optimize also images with small resolution for less file size.
+
+= v1.16.7 =
+* Updated Amron module.
+* Added Albums Order option in Build Query popup.
+
 = v1.16.6 =
 * Updated Amron module.
 * Small fixes.
