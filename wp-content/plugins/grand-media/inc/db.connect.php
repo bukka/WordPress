@@ -869,6 +869,7 @@ class GmediaDB{
                       'meta_value',
                       's',
                       'fields',
+                      'limit',
                       'robots'
         );
 
@@ -1512,8 +1513,10 @@ class GmediaDB{
                 $q['orderby'] = 'meta_value_num';
                 $join .= " LEFT JOIN {$wpdb->prefix}gmedia_meta ON ({$wpdb->prefix}gmedia.ID = {$wpdb->prefix}gmedia_meta.gmedia_id AND " . $wpdb->prepare("{$wpdb->prefix}gmedia_meta.meta_key = %s", $q['meta_key']) . ")";
             }
-            if(!empty($q['meta_key'])){
-                $allowed_keys[] = $q['meta_key'];
+            if(!empty($q['meta_key']) || !empty($q['meta_query'])){
+            	if(!empty($q['meta_key'])) {
+		            $allowed_keys[] = $q['meta_key'];
+	            }
                 $allowed_keys[] = 'meta_value';
                 $allowed_keys[] = 'meta_value_num';
             }
@@ -1762,7 +1765,7 @@ class GmediaDB{
                 $q['cat']  = '';
                 $req_cats  = array();
                 foreach((array)$cat_array as $cat){
-                    $cat        = intval($cat);
+                    $cat        = intval($cat, 10);
                     $req_cats[] = $cat;
                     $in         = ($cat >= 0);
                     $cat        = abs($cat);
@@ -1852,7 +1855,7 @@ class GmediaDB{
                 $q['alb']  = '';
                 $req_albs  = array();
                 foreach((array)$alb_array as $alb){
-                    if(!($alb = intval($alb))){
+                    if(!($alb = intval($alb, 10))){
                         continue;
                     }
                     $in  = ($alb >= 0);

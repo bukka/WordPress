@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
 Requires at least: 3.7
-Tested up to: 5.2
+Tested up to: 5.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,21 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.17.4 =
+* Fixed cache for logged in users
+* Disabled cache for gallery preview in admin
+* Updated Amron gallery module
+
+= v1.17.2 =
+* Fixed GmediaCloud social buttons
+
+= v1.17.1 =
+* Updated Amron gallery module
+* Fixed download original image in Amron module
+
+= v1.16.9 =
+* Fixed queries with meta_query
 
 = v1.16.8 =
 * Optimize also images with small resolution for less file size.

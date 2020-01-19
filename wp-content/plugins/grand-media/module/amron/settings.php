@@ -8,10 +8,13 @@ $default_options = array(
     //Tags Cloud
     'tagsFilter' => '1',
     'tagCloudAll' => 'All',
-    'tagCloudTextColor' => '000000',
-    'tagCloudBgColor' => 'eeeeee',
+	'tagCloudTextColor' => 'rgba(0, 0, 0, 1)',
+	'tagCloudTextColorOver' => 'rgba(255,255, 255, 1)',
+	'tagCloudBgColor' => 'rgba(211, 211, 211, 1)',
+	'tagCloudBgColorOver' => 'rgba(11, 11, 11, 1)',
     //Thumbnails
 	'collectionThumbHoverColor' => 'rgba(0, 0, 0, .7)',
+	'collectionThumbContentBGColor' => 'rgba(245,245,245,1)',
 	'collectionThumbContentBGColor' => 'rgba(245,245,245,1)',
 	'collectionThumbTitleShow' => '1',
 	'collectionThumbTitleColor' => 'rgba(0,0,0,1)',
@@ -28,7 +31,6 @@ $default_options = array(
 	'modaBgColor'=> 'rgba(0,0,0,0.9)',
 	'modalInfoBoxBgColor' => 'rgba(255,255,255,1)',
 	'modalInfoBoxTitleTextColor' => '000000',
-	'shareTitlePlaceHolder' => 'Share',
 	'modalInfoBoxTextColor' => '333333',
 	'infoBarCountersEnable'=> '1',
 	'infoBarDateInfoEnable'=> '1',
@@ -39,6 +41,8 @@ $default_options = array(
 	'sliderHeaderFooterBgColor' => '000000',
 	'sliderNavigationColor' => 'rgba(0,0,0,1)',
 	'sliderNavigationIconColor' => 'rgba(255,255,255,1)',
+	'sliderNavigationColorOver' => 'rgba(255,255,255,1)',
+	'sliderNavigationIconColorOver' => 'rgba(0,0,0,1)',
 	'sliderItemTitleFontSize' => '24',
 	'sliderItemTitleTextColor' => 'ffffff',
 	'sliderThumbBarEnable' => '0',
@@ -100,19 +104,29 @@ $options_tree = array(
             ),
             'tagCloudAll' => array('label' => 'Tag ALL - name',
                 'tag' => 'input',
-                'attr' => '',
+                'attr' => 'data-tagsFilter="is:1"',
                 'text' => ''
             ),
             'tagCloudTextColor' => array('label' => 'Text color',
                 'tag' => 'input',
-                'attr' => 'type="text" data-type="color" data-tagsFilter="is:1"',
+                'attr' => 'type="text" data-type="rgba" data-tagsFilter="is:1"',
+                'text' => 'Tag button'
+			),
+			'tagCloudTextColorOver' => array('label' => 'Text color (Over)',
+                'tag' => 'input',
+                'attr' => 'type="text" data-type="rgba" data-tagsFilter="is:1"',
                 'text' => 'Tag button'
             ),
             'tagCloudBgColor' => array('label' => 'Background color',
                 'tag' => 'input',
-                'attr' => 'type="text" data-type="color" data-tagsFilter="is:1"',
+                'attr' => 'type="text" data-type="rgba" data-tagsFilter="is:1"',
                 'text' => 'Tag button'
-            )
+			),
+			'tagCloudBgColorOver' => array('label' => 'Background color (Over)',
+                'tag' => 'input',
+                'attr' => 'type="text" data-type="rgba" data-tagsFilter="is:1"',
+                'text' => 'Tag button'
+			),
         )
     ),
     array('label' => 'Thumbnails Settings',
@@ -122,6 +136,11 @@ $options_tree = array(
 				'attr' => 'type="text" data-type="rgba"',
 				'text' => ''
 			),
+			'collectionThumbContentBGColor' => array('label' => 'Description bar background color',
+                'tag' => 'input',
+                'attr' => 'type="text" data-type="rgba"',
+                'text' => ''
+            ),
 			'collectionThumbTitleShow' => array('label' => 'Title',
 				'tag' => 'checkbox',
 				'attr' => 'data-watch="change"',
@@ -196,11 +215,6 @@ $options_tree = array(
 				'attr' => 'type="text" data-type="color"',
 				'text' => ''
 			),
-			'shareTitlePlaceHolder' => array('label' => 'Share bar name',
-				'tag' => 'input',
-				'attr' => '',
-				'text' => ''
-			),
 			'modalInfoBoxTextColor' => array('label' => 'Info Bar Text Color',
 				'tag' => 'input',
 				'attr' => 'type="text" data-type="color"',
@@ -245,7 +259,17 @@ $options_tree = array(
 				'attr' => 'type="text" data-type="rgba"',
 				'text' => ''
 			),
+			'sliderNavigationColorOver' => array('label' => 'Navigation button color (over)',
+				'tag' => 'input',
+				'attr' => 'type="text" data-type="rgba"',
+				'text' => ''
+			),
 			'sliderNavigationIconColor' => array('label' => 'Navigation button Icons color',
+				'tag' => 'input',
+				'attr' => 'type="text" data-type="rgba"',
+				'text' => ''
+			),
+			'sliderNavigationIconColorOver' => array('label' => 'Navigation button Icons color (over)',
 				'tag' => 'input',
 				'attr' => 'type="text" data-type="rgba"',
 				'text' => ''

@@ -443,7 +443,7 @@ function gmedia_post_type__the_content( $content ) {
 
 										<div class="gmsingle_location_info">
 											<a href='https://www.google.com/maps/place/<?php echo $loc; ?>'
-												target='_blank'><img
+												target='_blank'><img class="noLazy"
 													src='//maps.googleapis.com/maps/api/staticmap?key=<?php esc_attr_e( $gmGallery->options['google_api_key'] ); ?>&size=320x240&zoom=10&scale=2&maptype=roadmap&markers=<?php echo $loc; ?>'
 													alt='' width='320' height='240'/></a>
 										</div>

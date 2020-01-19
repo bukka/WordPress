@@ -38,7 +38,7 @@ function gmediacloud_meta_generator(){
         if(did_action('gmedia_shortcode') && count($gmGallery->shortcode)){
             $og_imgs = array();
             $shortcode = reset($gmGallery->shortcode);
-            $query = array_merge($shortcode['query'], array('status' => 'publish', 'mime_type' => 'image', 'nopaging' => true, 'limit' => 3));
+            $query = array_merge(array('status' => 'publish', 'nopaging' => true), $shortcode['query']);
             $gmedias = $gmDB->get_gmedias($query);
             foreach($gmedias as $item){
                 $og_imgs[] = $gmCore->gm_get_media_image($item->ID);
@@ -260,10 +260,10 @@ function gmediacloud_social_sharing(){
 
     $url   = urlencode(esc_url_raw(home_url(add_query_arg(array(), $wp->request))));
     $text  = $gmedia->description;
-    $title = the_gmedia_title(true);
+    $title = wp_strip_all_tags( the_gmedia_title(true) );
     $image = urlencode($gmedia_share_img[0]);
-    $title_text = urldecode($title . ' ' . $text);
-    $mailbody = urlencode($text . ' ' . $url);
+    $title_text = urlencode($title . ' ' . wp_strip_all_tags($text));
+    $mailbody = esc_attr($text . ' ' . $url);
     ?>
     <style>
         /*@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css') all;*/
@@ -310,10 +310,6 @@ function gmediacloud_social_sharing(){
             background: #55acee;
         }
 
-        .share-btn.google-plus {
-            background: #dd4b39;
-        }
-
         .share-btn.pinterest-p {
             background: #cb2027;
         }
@@ -334,10 +330,6 @@ function gmediacloud_social_sharing(){
         <!-- Twitter -->
         <a href="http://twitter.com/share?url=<?php echo $url; ?>&text=<?php echo $title_text; ?>" target="_blank" class="share-btn twitter">
             <i class="fa fa-twitter"><span>Twitter</span></i>
-        </a>
-        <!-- Google Plus -->
-        <a href="https://plus.google.com/share?url=<?php echo $url; ?>" target="_blank" class="share-btn google-plus">
-            <i class="fa fa-google-plus"><span>Google+</span></i>
         </a>
         <!-- Pinterest -->
         <a href="http://pinterest.com/pin/create/button/?url=<?php echo $url; ?>&description=<?php echo $title_text; ?>&media=<?php echo $image; ?>" target="_blank"

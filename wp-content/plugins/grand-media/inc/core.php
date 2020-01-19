@@ -32,7 +32,7 @@ class GmediaCore {
 //        add_action( 'updated_gmedia_term_meta', array( &$this, 'clear_cache' ) );
 //        add_action( 'deleted_gmedia_meta', array( &$this, 'clear_cache' ) );
 //        add_action( 'deleted_gmedia_term_meta', array( &$this, 'clear_cache' ) );
-//        add_action('created_gmedia_term', array(&$this, 'clear_cache'));
+        add_action( 'created_gmedia_term', array( &$this, 'clear_cache' ) );
 		add_action( 'edited_gmedia_term', array( &$this, 'clear_cache' ) );
 		add_action( 'deleted_gmedia_term', array( &$this, 'clear_cache' ) );
 //        add_action( 'gmedia_clean_object_term_cache', array( &$this, 'clear_cache' ) );

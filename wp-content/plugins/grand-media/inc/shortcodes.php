@@ -24,7 +24,7 @@ $gmedia_shortcode_instance = array();
  * @return string
  */
 function gmedia_shortcode( $atts, $shortcode_post_content = '' ) {
-	global $gmDB, $gmGallery, $gmCore;
+	global $wp, $gmDB, $gmGallery, $gmCore;
 	global $gmedia_shortcode_instance, $gmedia_shortcode_ids;
 
 	$shortcode_raw  = ( isset( $atts['_raw'] ) && '1' === $atts['_raw'] );
@@ -65,7 +65,11 @@ function gmedia_shortcode( $atts, $shortcode_post_content = '' ) {
 		);
 	}
 	$shortcode_raw    = ( isset( $gmGallery->options['shortcode_raw'] ) && '1' === $gmGallery->options['shortcode_raw'] );
-	$cache_expiration = isset( $gmGallery->options['cache_expiration'] ) ? (int) $gmGallery->options['cache_expiration'] * HOUR_IN_SECONDS : 24 * HOUR_IN_SECONDS;
+	if ( ! isset( $_GET['is_admin_preview'] ) ) {
+		$cache_expiration = isset( $gmGallery->options['cache_expiration'] ) ? (int) $gmGallery->options['cache_expiration'] * HOUR_IN_SECONDS : HOUR_IN_SECONDS;
+	} else {
+		$cache_expiration = 0;
+	}
 
 	$query = array();
 	if ( ! empty( $atts['query'] ) ) {
@@ -185,9 +189,10 @@ function gmedia_shortcode( $atts, $shortcode_post_content = '' ) {
 
 	$moduleCSS = isset( $gmGallery->do_module[ $_module ] ) ? '' : $gmGallery->load_module_styles( $module );
 	$customCSS = ( isset( $settings['customCSS'] ) && ( '' !== trim( $settings['customCSS'] ) ) ) ? $settings['customCSS'] : '';
+	$current_url = home_url($wp->request);
 
 	$gmGallery->do_module[ $_module ] = $module;
-	$gmGallery->shortcode[ $id ]      = compact( 'id', 'query', 'module', 'settings', 'term' );
+	$gmGallery->shortcode[ $id ]      = compact( 'id', 'query', 'module', 'settings', 'term', 'current_url' );
 
 	$is_bot = false;
 	if ( ! ( $is_mob = wp_is_mobile() ) ) {
