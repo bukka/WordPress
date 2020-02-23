@@ -157,7 +157,7 @@ class GmediaAdmin {
 			//$this->pages[] = add_submenu_page( 'GrandMedia', __( 'iOS Application', 'grand-media' ), __( 'iOS Application', 'grand-media' ), 'gmedia_settings', 'GrandMedia_App', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'WordPress Media Library', 'grand-media' ), __( 'WP Media Library', 'grand-media' ), 'gmedia_import', 'GrandMedia_WordpressLibrary', array( &$this, 'shell' ) );
 			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Logs', 'grand-media' ), __( 'Gmedia Logs', 'grand-media' ), 'manage_options', 'GrandMedia_Logs', array( &$this, 'shell' ) );
-			$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Support', 'grand-media' ), __( 'Support', 'grand-media' ), 'manage_options', 'GrandMedia_Support', array( &$this, 'shell' ) );
+			//$this->pages[] = add_submenu_page( 'GrandMedia', __( 'Gmedia Support', 'grand-media' ), __( 'Support', 'grand-media' ), 'manage_options', 'GrandMedia_Support', array( &$this, 'shell' ) );
 		}
 
 		foreach ( $this->pages as $page ) {
@@ -292,6 +292,7 @@ class GmediaAdmin {
 
 			$content['sideLinks'] .= "\n" . '<a class="list-group-item' . $iscur . '" href="' . admin_url( 'admin.php?page=' . $menuItem[2] ) . '">' . $menuItem[0] . $menuData . '</a>';
 		}
+		$content['sideLinks'] .= "\n" . '<a class="list-group-item" target="_blank" href="https://wordpress.org/support/plugin/grand-media/">' . __( 'Support', 'grand-media' ) . '</a>';
 		$content['sideLinks'] .= '
 				</li></ul>
 			</div>
@@ -819,7 +820,7 @@ class GmediaAdmin {
 <p>By clicking "Opt Out", we will no longer be sending any data from <strong>Gmedia Gallery</strong> to <a href="https://codeasily.com" target="_blank">codeasily.com</a>.</p>
 <p>You\'ll also not be able to use Gmedia iOS application.</p>', 'grand-media' )
 						             . '<p><button class="button button-default gm_service_action"  data-action="app_deactivate" data-nonce="' . $nonce . '">' . __( 'Opt Out', 'grand-media' ) . '</button><span class="spinner" style="float: none;"></span></p>'
-						             . '<div style="display:none;">Test: 
+						             . '<div style="display:none;">Test:
 <button type="button" data-action="app_updateinfo" data-nonce="' . $nonce . '" class="btn btn-sm btn-primary gm_service_action">Update</button>
 <button type="button" data-action="app_updatecron" data-nonce="' . $nonce . '" class="btn btn-sm btn-primary gm_service_action">CronJob</button> &nbsp;&nbsp;
 <button type="button" data-action="app_deactivateplugin" data-nonce="' . $nonce . '" class="btn btn-sm btn-primary gm_service_action">Deactivate Plugin</button>

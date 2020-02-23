@@ -1,6 +1,7 @@
 /**
  * Gmedia Library
  */
+var wp = window.wp || {};
 var gmedia_DOM;
 var GmediaLibrary = {
     init: function() {

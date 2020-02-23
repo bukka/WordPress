@@ -134,6 +134,13 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.17.6 =
+* Updated Amron gallery module (Tags Filter)
+
+= v1.17.5 =
+* Fixed conflict with Envira Gallery
+* Updated Amron gallery module
+
 = v1.17.4 =
 * Fixed cache for logged in users
 * Disabled cache for gallery preview in admin
