@@ -1361,10 +1361,6 @@ class GmediaCore {
 							return $return;
 						}
 
-						if ( ( 'JPG' == $extensions[ $size[2] ] ) && ! ( extension_loaded( 'imagick' ) || class_exists( "Imagick" ) ) ) {
-							$this->copy_exif( $fileinfo['filepath_original'], $fileinfo['filepath'] );
-						}
-
 						// Thumbnail
 						$editor->set_quality( $thumbimg['quality'] );
 						if ( $thumbimg['resize'] ) {
@@ -1399,6 +1395,11 @@ class GmediaCore {
 							);
 
 							return $return;
+						}
+
+						if ( ( 'JPG' == $extensions[ $size[2] ] ) && ! ( extension_loaded( 'imagick' ) || class_exists( "Imagick" ) ) ) {
+							$this->copy_exif( $fileinfo['filepath_original'], $fileinfo['filepath'] );
+							$this->copy_exif( $fileinfo['filepath_original'], $fileinfo['filepath_thumb'] );
 						}
 
 						$is_webimage = true;

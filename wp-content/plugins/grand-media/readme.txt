@@ -3,7 +3,7 @@ Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
 Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
 Requires at least: 3.7
-Tested up to: 5.3.1
+Tested up to: 5.4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,13 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.18.0 =
+* Fixed compatibility with Elementor Swiper.js library.
+* Added Exif saving for thumbnails
+* Updated Gutenberg blocks for Gmedia
+* Updated Photomania, Phototravlr, Desire, AlbumStripes modules
+* Be sure you have latest versions of modules listed above.
 
 = v1.17.6 =
 * Updated Amron gallery module (Tags Filter)
@@ -443,6 +450,9 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 * Updated: PhotoMania gallery module
 
 == Upgrade Notice ==
+
+= v1.18.0 =
+Update Gallery modules to the latest version: PhotoMania, PhotoTravlr, Desire !!!
 
 = v1.8.0 =
 Database changed. Backup before updating.
