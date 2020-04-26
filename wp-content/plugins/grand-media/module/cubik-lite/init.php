@@ -168,7 +168,7 @@ reset($gmedias);
                         }
                         ?>
                         <div class="gmCubikLite_thumb gmCubikLite_thumbLoader<?php echo ($item->type !== 'image')? ' mfp-iframe' : ''; ?>"<?php echo $item->attr_data_html; ?>>
-                            <a class="gmCubikLite_thumbImg" href="<?php echo $item->url; ?>" title="<?php esc_attr_e($item->title); ?>"><img src="<?php echo $item->url_thumb; ?>" data-src="<?php echo $item->url_web; ?>" alt="<?php esc_attr_e($item->alttext); ?>"></a>
+                            <a class="gmCubikLite_thumbImg" href="<?php echo $item->url; ?>" title="<?php echo esc_attr($item->title); ?>"><img src="<?php echo $item->url_thumb; ?>" data-src="<?php echo $item->url_web; ?>" alt="<?php echo esc_attr($item->alttext); ?>"></a>
                             <script type="text/html" class="gmCubikLite_thumbDetails"><?php echo $item->details_html; ?></script>
                         </div>
                         <?php
@@ -185,7 +185,7 @@ reset($gmedias);
                         }
                         ?>
                         <div class="gmCubikLite_thumb<?php echo ($item->type !== 'image')? ' mfp-iframe' : ''; ?>"<?php echo $item->attr_data_html; ?>>
-                            <a class="gmCubikLite_thumbImg" href="<?php echo $item->url; ?>" title="<?php esc_attr_e($item->title); ?>"><img data-src="<?php echo $item->url_web; ?>" alt="<?php esc_attr_e($item->alttext); ?>"></a>
+                            <a class="gmCubikLite_thumbImg" href="<?php echo $item->url; ?>" title="<?php echo esc_attr($item->title); ?>"><img data-src="<?php echo $item->url_web; ?>" alt="<?php echo esc_attr($item->alttext); ?>"></a>
                             <script type="text/html" class="gmCubikLite_thumbDetails"><?php echo $item->details_html; ?></script>
                         </div>
                         <?php
@@ -279,7 +279,7 @@ if(!$is_bot){
       document.addEventListener('DOMContentLoaded', function(){
         jQuery(function() {
             var settings = <?php echo json_encode($settings); ?>;
-            jQuery('#GmediaGallery_<?php echo $id; ?>').gmCubikLite([settings]);
+            jQuery('#GmediaGallery_<?php echo absint( $id ); ?>').gmCubikLite([settings]);
         });
       });
     </script><?php
