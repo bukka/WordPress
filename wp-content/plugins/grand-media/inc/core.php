@@ -2442,6 +2442,8 @@ class GmediaCore {
 			$_terms['gmedia_tag'] = [];
 		}
 
+		$all_tags = $_terms['gmedia_tag'];
+
 		$c = count( $files );
 		$i = 0;
 		foreach ( $files as $file ) {
@@ -2451,6 +2453,12 @@ class GmediaCore {
 			$link        = '';
 			$status      = $_status;
 			$terms       = $_terms;
+
+			if ( isset( $file['terms'] ) && is_array( $file['terms'] ) ) {
+				$terms    = array_merge_recursive( $file['terms'], $terms );
+				$all_tags = array_merge( $all_tags, $terms['gmedia_tag'] );
+			}
+
 
 			if ( is_array( $file ) ) {
 				if ( isset( $file['file'] ) ) {
@@ -2780,7 +2788,7 @@ class GmediaCore {
 
 		echo '<p><b>' . __( 'Category' ) . ':</b> ' . ( ! empty( $_terms['gmedia_category'] ) ? esc_html( implode( ', ', $_terms['gmedia_category'] ) ) : '-' ) . PHP_EOL;
 		echo '<br /><b>' . __( 'Album' ) . ':</b> ' . ( ! empty( $_terms['gmedia_album'] ) ? ( isset( $album_name ) ? $album_name : esc_html( $_terms['gmedia_album'] ) ) : '-' ) . PHP_EOL;
-		echo '<br /><b>' . __( 'Tags' ) . ':</b> ' . ( ! empty( $_terms['gmedia_tag'] ) ? esc_html( implode( ', ', $_terms['gmedia_tag'] ) ) : '-' ) . '</p>' . PHP_EOL;
+		echo '<br /><b>' . __( 'Tags' ) . ':</b> ' . ( ! empty( $all_tags ) ? esc_html( implode( ', ', array_unique( $all_tags ) ) ) : '-' ) . '</p>' . PHP_EOL;
 
 		wp_ob_end_flush_all();
 		flush();

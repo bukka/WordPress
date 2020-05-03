@@ -102,8 +102,8 @@ function gmedia_filter_message() {
 		echo '<div class="custom-message alert alert-info">';
 		foreach ( $gmProcessor->filters as $key => $value ) {
 			echo '<div class="custom-message-row">';
-			echo '<strong><a href="#libModal" data-modal="' . $key . '" data-action="gmedia_get_modal" class="gmedia-modal">' . $value['title'] . '</a>: </strong>';
-			echo implode( ', ', $value['filter'] );
+			echo '<strong><a href="#libModal" data-modal="' . esc_attr( $key ) . '" data-action="gmedia_get_modal" class="gmedia-modal">' . esc_html( $value['title'] ) . '</a>: </strong>';
+			echo esc_html( implode( ', ', $value['filter'] ) );
 			echo '</div>';
 		}
 		echo '</div>';

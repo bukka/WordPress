@@ -134,6 +134,12 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.18.6 =
+* Added: import image tags when importing from NextGen galleries
+
+= v1.18.5 =
+* Security fix (Thanks to Fortinet Fortiguard Labs)
+
 = v1.18.4 =
 * Fix PHP Notice in Query Builder
 
@@ -142,7 +148,7 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 * Fix WP Media import author notice
 
 = v1.18.2 =
-* Security fix
+* Security fix (Thanks to Fortinet Fortiguard Labs)
 
 = v1.18.0 =
 * Fixed compatibility with Elementor Swiper.js library.

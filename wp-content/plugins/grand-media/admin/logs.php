@@ -247,7 +247,7 @@ $gmedia_pager   = $gmDB->query_pager();
 
 									<?php if ( isset( $item->meta['_rating'][0] ) ) {
 										$ratings = maybe_unserialize( $item->meta['_rating'][0] ); ?>
-										<br/><span class="label label-default"><?php _e( 'Rating', 'grand-media' ); ?>:</span> <?php echo $ratings['value'] . ' / ' . $ratings['votes']; ?>
+										<br/><span class="label label-default"><?php _e( 'Rating', 'grand-media' ); ?>:</span> <?php echo round( $ratings['value'], 2 ) . ' / ' . $ratings['votes']; ?>
 									<?php } ?>
 									<br/><span class="label label-default"><?php _e( 'Type', 'grand-media' ); ?>:</span> <?php echo $item->mime_type; ?>
 									<br/><span class="label label-default"><?php _e( 'Filename', 'grand-media' ); ?>:</span> <a href="<?php echo esc_url( gm_get_admin_url( [ 'page' => 'GrandMedia', 'gmedia__in' => $item->ID ], [], $gmedia_url ) ); ?>"><?php echo $item->gmuid; ?></a>

@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php if ( isset( $item->meta['_rating'][0] ) ) {
 						$ratings = maybe_unserialize( $item->meta['_rating'][0] ); ?>
-						<br/><span class="label label-default"><?php _e( 'Rating', 'grand-media' ); ?>:</span> <?php echo $ratings['value'] . ' / ' . $ratings['votes']; ?>
+						<br/><span class="label label-default"><?php _e( 'Rating', 'grand-media' ); ?>:</span> <?php echo round( $ratings['value'], 2 ) . ' / ' . $ratings['votes']; ?>
 					<?php } ?>
 					<br/><span class="label label-default"><?php _e( 'Status', 'grand-media' ); ?>:</span> <?php echo $item->status; ?>
 					<br/><span class="label label-default"><?php _e( 'Link', 'grand-media' ); ?>:</span>
