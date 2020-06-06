@@ -509,7 +509,7 @@ function ethnologist_enqueue_scripts() {
 		wp_enqueue_script( 'ethnologist-gmap', 'https://maps.google.com/maps/api/js?sensor=false' );
 	}
 	if ( is_single() ) {
-		wp_enqueue_script( 'ethnologist-youtube-fix', get_stylesheet_directory_uri() . '/js/youtube-fix.js?v=4' );
+		wp_enqueue_script( 'ethnologist-youtube-fix', get_stylesheet_directory_uri() . '/js/youtube-fix.js', array( 'jquery' ), 5 );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ethnologist_enqueue_scripts', 100000 );
