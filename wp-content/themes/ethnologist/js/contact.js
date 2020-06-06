@@ -1,4 +1,4 @@
-jQuery(document).ready( function($ ) {
+jQuery(document).ready( function($) {
 	var $contactForm = $( '#contactForm' ),
 		$map = $( '#map_address' );
 	
