@@ -1,9 +1,9 @@
 === Gmedia Photo Gallery ===
 Contributors: pasyuk
 Donate link: https://codeasily.com/donate/
-Tags: gallery, image gallery, photo gallery, albums gallery, wordpress gallery plugin
+Tags: best gallery plugin, gallery, image gallery, photo gallery, wordpress gallery plugin
 Requires at least: 3.7
-Tested up to: 5.4.0
+Tested up to: 5.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,20 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
+
+= v1.19.1 =
+* Fixed uploading small images
+
+= v1.19.0 =
+* Fixed animated GIF upload
+
+= v1.18.9 =
+* Fixed assign albums
+* Fixed PHP Notice on albums page
+* Fixed screen options (ordering of terms)
+
+= v1.18.8 =
+* Changed share link for albums
 
 = v1.18.7 =
 * WoowGallery plugin promote
