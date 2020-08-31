@@ -1,11 +1,11 @@
 === Polylang ===
-Contributors: Chouby, manooweb, raaaahman, marianne38
+Contributors: Chouby, manooweb, raaaahman, marianne38, sebastienserre
 Donate link: https://polylang.pro
 Tags: multilingual, bilingual, translate, translation, language, multilanguage, international, localization
 Requires at least: 4.9
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 2.7.4
+Stable tag: 2.8.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,7 +78,38 @@ Don't hesitate to [give your feedback](http://wordpress.org/support/view/plugin-
 
 == Changelog ==
 
-= 2.7.4 ( 2020-06-29) =
+= 2.8.1 (2020-08-25) =
+
+* Pro: Fix fatal error with WP 4.9
+* Fix pll_the_languages() with 'raw' option returning html flag instead of flag url #558
+* Fix compatibility with Duplicate Posts not correcly loaded #557
+* Fix custom flag size in admin bar language switcher #559
+* Fix tag clouds mixed in the classic editor #561
+
+= 2.8 (2020-08-17) =
+
+* Pro: Add a language switcher block
+* Pro: Add compatibility with block image edition introduced in WP 5.5
+* Pro: Fix our private taxonomies being displayed in the ACF field group rules.
+* Pro: Fix incorrect flags loaded from the block editor
+* Pro: Fix SSO causing a wrong redirect when using subdomains (introduced in 2.7.4)
+* Pro: Fix a performance issue on the plugins list
+* Pro: Fix option to automatically duplicate media in all languages when uploading a new file not honored in block image
+* Use composer for autoload and Polylang Pro dependency on Polylang
+* Display a flag for each post in the posts list tables (same for terms). #515
+* Add test for the homepage translations to Site Health
+* Add debug information to Site Health
+* Add compatibility with the sitemaps introduced in WP 5.5 #451
+* Always filter WP_Query by the current language
+* Support wildcards in "admin-texts" parent keys in wpml-config.xml
+* Fix sticky posts showed for all languages when the admin language filter is active #469
+* Fix a performance issue on the pages list
+* Fix dependency to jQuery Migrate removed from WP 5.5 #539
+* Fix: output secure cookie when using a cache plugin and ssl #542
+* Fix the possibility to create 2 terms with the same name in the same language, without specifying the second slug.
+* Fix sticky posts appearing 2 times in WP 5.5
+
+= 2.7.4 (2020-06-29) =
 
 * Pro: Allow using our /untranslated-posts REST endpoint for non-public post types
 * Pro: Fix broken display in the block editor sidebar when a language has no flag
