@@ -134,6 +134,9 @@ Use [Gmedia Support Forum](https://codeasily.com/community/forum/gmedia-gallery-
 = Modules Updated =
 * Go to Gmedia Modules page and update installed premium modules to latest versions
 
+= v1.19.3 =
+* Added Custom fields to ajax response
+
 = v1.19.2 =
 * Fixed Screen Settings for WP 5.5
 
