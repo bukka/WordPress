@@ -279,7 +279,7 @@ if(!$is_bot){
       document.addEventListener('DOMContentLoaded', function(){
         jQuery(function() {
             var settings = <?php echo json_encode($settings); ?>;
-            jQuery('#GmediaGallery_<?php echo absint( $id ); ?>').gmCubikLite([settings]);
+            jQuery('#GmediaGallery_<?php echo esc_attr( $id ); ?>').gmCubikLite([settings]);
         });
       });
     </script><?php
