@@ -5,6 +5,15 @@
  * @filesource
  * @author Stefan Herndler
  * @since  1.5.0 12.09.14 10:56
+ *
+ * @lastmodified 2021-02-18T2021+0100
+ *
+ * @since 2.1.2  add versioning of settings.css for cache busting  2020-11-19T1456+0100
+ * @since 2.1.4  automate passing version number for cache busting  2020-11-30T0648+0100
+ * @since 2.1.4  optional step argument and support for floating in numbox  2020-12-05T0540+0100
+ * @since 2.1.6  fix punctuation-related localization issue in dashboard labels  2020-12-08T1547+0100
+ *
+ * @since 2.5.5  Bugfix: Stylesheets: minify to shrink the carbon footprint, increase speed and implement best practice, thanks to @docteurfitness issue report.
  */
 
 
@@ -106,7 +115,12 @@ abstract class MCI_Footnotes_LayoutEngine {
 	 * @return array meta box description to be able to append a meta box to the output.
 	 */
 	protected function addMetaBox($p_str_SectionID, $p_str_ID, $p_str_Title, $p_str_CallbackFunctionName) {
-		return array("parent" => MCI_Footnotes_Config::C_STR_PLUGIN_NAME . "-" . $p_str_SectionID, "id" => $p_str_ID, "title" => $p_str_Title, "callback" => $p_str_CallbackFunctionName);
+		return array(
+			"parent"   => MCI_Footnotes_Config::C_STR_PLUGIN_NAME . "-" . $p_str_SectionID,
+			"id"       => $p_str_ID,
+			"title"    => $p_str_Title,
+			"callback" => $p_str_CallbackFunctionName
+		);
 	}
 
 	/**
@@ -116,17 +130,17 @@ abstract class MCI_Footnotes_LayoutEngine {
 	 * @since  1.5.0
 	 */
 	public function registerSubPage() {
-        global $submenu;
-        // any sub menu for our main menu exists
-        if (array_key_exists(plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG), $submenu)) {
-            // iterate through all sub menu entries of the ManFisher main menu
-            foreach($submenu[plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG)] as $l_arr_SubMenu) {
-                if ($l_arr_SubMenu[2] == plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG . $this->getSubPageSlug())) {
-                    // remove that sub menu and add it again to move it to the bottom
-                    remove_submenu_page(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG, MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG .$this->getSubPageSlug());
-                }
-            }
-        }
+		global $submenu;
+		// any sub menu for our main menu exists
+		if (array_key_exists(plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG), $submenu)) {
+			// iterate through all sub menu entries of the ManFisher main menu
+			foreach($submenu[plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG)] as $l_arr_SubMenu) {
+				if ($l_arr_SubMenu[2] == plugin_basename(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG . $this->getSubPageSlug())) {
+					// remove that sub menu and add it again to move it to the bottom
+					remove_submenu_page(MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG, MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG .$this->getSubPageSlug());
+				}
+			}
+		}
 
 		$this->a_str_SubPageHook = add_submenu_page(
 			MCI_Footnotes_Layout_Init::C_STR_MAIN_MENU_SLUG, // parent slug
@@ -191,14 +205,41 @@ abstract class MCI_Footnotes_LayoutEngine {
 	private function appendScripts() {
 		// enable meta boxes layout and close functionality
 		wp_enqueue_script('postbox');
-        // add WordPress color picker layout
-        wp_enqueue_style('wp-color-picker');
-        // add WordPress color picker function
-        wp_enqueue_script('wp-color-picker');
-		// register stylesheet
-		wp_register_style('mci-footnotes-admin-styles', plugins_url('../../css/settings.css', __FILE__));
-		// add stylesheet to the output
-		wp_enqueue_style('mci-footnotes-admin-styles');
+		// add WordPress color picker layout
+		wp_enqueue_style('wp-color-picker');
+		// add WordPress color picker function
+		wp_enqueue_script('wp-color-picker');
+
+
+		/**
+		 * Registers and enqueues the dashboard stylesheet.
+		 *
+		 * - Bugfix: Stylesheets: minify to shrink the carbon footprint, increase speed and implement best practice, thanks to @docteurfitness issue report.
+		 *
+		 * @since 2.5.5
+		 * @date 2021-02-14T1928+0100
+		 *
+		 * @reporter @docteurfitness
+		 * @link https://wordpress.org/support/topic/simply-speed-optimisation/
+		 *
+		 * See the public stylesheet enqueuing:
+		 * @see class/init.php
+		 *
+		 * added version # after changes started to settings.css from 2.1.2 on.
+		 * automated update of version number for cache busting.
+		 * No need to use '-styles' in the handle, as '-css' is appended automatically.
+		 */
+		if ( C_BOOL_CSS_PRODUCTION_MODE === true ) {
+
+			wp_register_style( 'mci-footnotes-admin', plugins_url( 'footnotes/css/settings.min.css' ), array(), C_STR_FOOTNOTES_VERSION );
+
+		} else {
+
+			wp_register_style( 'mci-footnotes-admin', plugins_url( 'footnotes/css/settings.css' ), array(), C_STR_FOOTNOTES_VERSION );
+
+		}
+
+		wp_enqueue_style('mci-footnotes-admin');
 	}
 
 	/**
@@ -260,7 +301,7 @@ abstract class MCI_Footnotes_LayoutEngine {
 		// output special javascript for the expand/collapse function of the meta boxes
 		echo '<script type="text/javascript">';
 		echo "jQuery(document).ready(function ($) {";
-        echo 'jQuery(".mfmmf-color-picker").wpColorPicker();';
+		echo 'jQuery(".mfmmf-color-picker").wpColorPicker();';
 		echo "jQuery('.if-js-closed').removeClass('if-js-closed').addClass('closed');";
 		echo "postboxes.add_postbox_toggles('" . $this->a_str_SubPageHook . "');";
 		echo "});";
@@ -275,22 +316,22 @@ abstract class MCI_Footnotes_LayoutEngine {
 	 * @return bool
 	 */
 	private function saveSettings() {
-        $l_arr_newSettings = array();
+		$l_arr_newSettings = array();
 		// get current section
 		reset($this->a_arr_Sections);
 		$l_str_ActiveSectionID = isset($_GET['t']) ? $_GET['t'] : key($this->a_arr_Sections);
 		$l_arr_ActiveSection = $this->a_arr_Sections[$l_str_ActiveSectionID];
 
-        // iterate through each value that has to be in the specific contaienr
-        foreach(MCI_Footnotes_Settings::instance()->getDefaults($l_arr_ActiveSection["container"]) as $l_str_Key => $l_mixed_Value) {
-            // setting is available in the POST array, use it
-            if (array_key_exists($l_str_Key, $_POST)) {
-                $l_arr_newSettings[$l_str_Key] = $_POST[$l_str_Key];
-            } else {
-                // setting is not defined in the POST array, define it to avoid the Default value
-                $l_arr_newSettings[$l_str_Key] = "";
-            }
-        }
+		// iterate through each value that has to be in the specific container
+		foreach(MCI_Footnotes_Settings::instance()->getDefaults($l_arr_ActiveSection["container"]) as $l_str_Key => $l_mixed_Value) {
+			// setting is available in the POST array, use it
+			if (array_key_exists($l_str_Key, $_POST)) {
+				$l_arr_newSettings[$l_str_Key] = $_POST[$l_str_Key];
+			} else {
+				// setting is not defined in the POST array, define it to avoid the Default value
+				$l_arr_newSettings[$l_str_Key] = "";
+			}
+		}
 		// update settings
 		return MCI_Footnotes_Settings::instance()->saveOptions($l_arr_ActiveSection["container"], $l_arr_newSettings);
 	}
@@ -365,12 +406,25 @@ abstract class MCI_Footnotes_LayoutEngine {
 	 * @param string $p_str_SettingName Name of the Settings key to connect the Label with the input/select field.
 	 * @param string $p_str_Caption Label caption.
 	 * @return string
+	 *
+	 * Edited 2020-12-01T0159+0100..
+	 * @since 2.1.6 no colon
 	 */
 	protected function addLabel($p_str_SettingName, $p_str_Caption) {
 		if (empty($p_str_Caption)) {
 			return "";
 		}
-		return sprintf('<label for="%s">%s:</label>', $p_str_SettingName, $p_str_Caption);
+		// remove the colon causing localization issues with French,
+		// and with languages not using punctuation at all,
+		// and with languages using other punctuation marks instead of colon,
+		// e.g. Greek using a raised dot.
+		// In French, colon is preceded by a space, forcibly non-breaking,
+		// and narrow per new school.
+		// Add colon to label strings for inclusion in localization.
+		// Colon after label is widely preferred best practice, mandatory per style guides.
+		// <https://softwareengineering.stackexchange.com/questions/234546/colons-in-internationalized-ui>
+		return sprintf('<label for="%s">%s</label>', $p_str_SettingName, $p_str_Caption);
+		//                                ^ here deleted colon  2020-12-08T1546+0100
 	}
 
 	/**
@@ -452,36 +506,47 @@ abstract class MCI_Footnotes_LayoutEngine {
 			$l_arr_Data["name"], $l_arr_Data["id"], $l_arr_Data["value"]);
 	}
 
-    /**
-     * Returns the html tag for an input [type = text] with color selection class.
-     *
-     * @author Stefan Herndler
-     * @since  1.5.6
-     * @param string $p_str_SettingName Name of the Settings key to pre load the input field.
-     * @return string
-     */
-    protected function addColorSelection($p_str_SettingName) {
-        // collect data for given settings field
-        $l_arr_Data = $this->LoadSetting($p_str_SettingName);
-        return sprintf('<input type="text" name="%s" id="%s" class="mfmmf-color-picker" value="%s"/>',
-            $l_arr_Data["name"], $l_arr_Data["id"], $l_arr_Data["value"]);
-    }
+	/**
+	 * Returns the html tag for an input [type = text] with color selection class.
+	 *
+	 * @author Stefan Herndler
+	 * @since  1.5.6
+	 * @param string $p_str_SettingName Name of the Settings key to pre load the input field.
+	 * @return string
+	 */
+	protected function addColorSelection($p_str_SettingName) {
+		// collect data for given settings field
+		$l_arr_Data = $this->LoadSetting($p_str_SettingName);
+		return sprintf('<input type="text" name="%s" id="%s" class="mfmmf-color-picker" value="%s"/>',
+			$l_arr_Data["name"], $l_arr_Data["id"], $l_arr_Data["value"]);
+	}
 
-    /**
-     * Returns the html tag for an input [type = num].
-     *
-     * @author Stefan Herndler
-     * @since  1.5.0
-     * @param string $p_str_SettingName Name of the Settings key to pre load the input field.
-     * @param int $p_in_Min Minimum value.
-     * @param int $p_int_Max Maximum value.
-     * @return string
-     */
-    protected function addNumBox($p_str_SettingName, $p_in_Min, $p_int_Max) {
-        // collect data for given settings field
-        $l_arr_Data = $this->LoadSetting($p_str_SettingName);
-        return sprintf('<input type="number" name="%s" id="%s" value="%d" min="%d" max="%d"/>',
-            $l_arr_Data["name"], $l_arr_Data["id"], $l_arr_Data["value"], $p_in_Min, $p_int_Max);
-    }
+	/**
+	 * Returns the html tag for an input [type = num].
+	 *
+	 * @author Stefan Herndler
+	 * @since  1.5.0
+	 * @param string $p_str_SettingName Name of the Settings key to pre load the input field.
+	 * @param int    $p_in_Min Minimum value.
+	 * @param int    $p_int_Max Maximum value.
+	 * @param bool   $p_bool_Deci  true if 0.1 steps and floating to string, false if integer (default)
+	 * @return string
+	 *
+	 * Edited:
+	 * @since 2.1.4  step argument and number_format() to allow decimals  2020-12-03T0631+0100..2020-12-12T1110+0100
+	 */
+	protected function addNumBox($p_str_SettingName, $p_in_Min, $p_int_Max, $p_bool_Deci = false ) {
+		// collect data for given settings field
+		$l_arr_Data = $this->LoadSetting($p_str_SettingName);
+
+		if ($p_bool_Deci) {
+			$l_str_Value = number_format(floatval($l_arr_Data["value"]), 1);
+			return sprintf('<input type="number" name="%s" id="%s" value="%s" step="0.1" min="%d" max="%d"/>',
+			$l_arr_Data["name"], $l_arr_Data["id"], $l_str_Value, $p_in_Min, $p_int_Max);
+		} else {
+			return sprintf('<input type="number" name="%s" id="%s" value="%d" min="%d" max="%d"/>',
+			$l_arr_Data["name"], $l_arr_Data["id"], $l_arr_Data["value"], $p_in_Min, $p_int_Max);
+		}
+	}
 
 } // end of class

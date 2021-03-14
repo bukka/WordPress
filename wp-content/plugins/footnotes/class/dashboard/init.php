@@ -89,7 +89,7 @@ class MCI_Footnotes_Layout_Init {
 	 * Registers all sub menu pages for the new main menu.
 	 *
 	 * @author Stefan Herndler
-	 * @since  2.0.2
+	 * @since  1.5.0
 	 * @see http://codex.wordpress.org/Function_Reference/add_menu_page
 	 */
 	public function registerMainMenu() {
@@ -146,59 +146,9 @@ class MCI_Footnotes_Layout_Init {
 		$l_obj_Template = new MCI_Footnotes_Template(MCI_Footnotes_Template::C_STR_DASHBOARD, "manfisher");
 		echo $l_obj_Template->getContent();
 
-		printf('<em>visit <a href="http://manfisher.net/" target="_blank">ManFisher Medien ManuFaktur</a> or <a href="http://herndler.org" target="_blank">herndler.org</a></em>');
+		printf('<em>visit <a href="https://cheret.de/plugins/footnotes-2/" target="_blank">Mark Cheret</a></em>');
 		printf("<br/><br/>");
-		printf("<h3>%s</h3>", __('Take a look on other Plugins we have developed.', MCI_Footnotes_Config::C_STR_PLUGIN_NAME));
 
-		// collect plugin list as JSON
-		$l_arr_Response = wp_remote_get("http://herndler.org/project/other-wordpress-plugins.php");
-		// check if response is valid
-		if (is_wp_error($l_arr_Response)) {
-			printf(__("Error loading other WordPress Plugins from Manfisher. Sorry!", MCI_Footnotes_Config::C_STR_PLUGIN_NAME));
-			return;
-		}
-		// get the body of the response
-		$l_str_Response = $l_arr_Response["body"];
-		// convert the body to a json string
-		$l_arr_Plugins = json_decode($l_str_Response, true);
-
-        $l_str_Server = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" . $_SERVER["SERVER_NAME"];
-
-		// load template file
-		$l_obj_Template = new MCI_Footnotes_Template(MCI_Footnotes_Template::C_STR_DASHBOARD, "other-plugins");
-
-		printf('<div id="the-list">');
-		// iterate through each Plugin
-		foreach($l_arr_Plugins as $l_arr_PluginInfo) {
-            $l_str_InstallButton = '<a class="install-now button" href="'.$l_str_Server.'/wp-admin/update.php?action=install-plugin&plugin='.$l_arr_PluginInfo["name"].'&_wpnonce=e7a5c90faf" aria-label="Install '.$l_arr_PluginInfo["title"].' now">'.__("Install now", MCI_Footnotes_Config::C_STR_PLUGIN_NAME).'</a>';
-            $l_str_AlreadyInstalled = '<span class="button button-disabled" title="'.__("This Plugin is already installed and up to date.", MCI_Footnotes_Config::C_STR_PLUGIN_NAME).'">'.__("Installed", MCI_Footnotes_Config::C_STR_PLUGIN_NAME).'</span>';
-            $l_bool_isPluginInstalled = false;
-            // iterate through each installed WordPress Plugin
-            foreach (get_plugins() as $l_arr_Plugin) {
-                if (strtolower($l_arr_PluginInfo["title"]) == strtolower($l_arr_Plugin["Name"])) {
-                    $l_bool_isPluginInstalled = true;
-                    break;
-                }
-            }
-
-            // replace Plugin information
-			$l_obj_Template->replace(
-				array(
-                    "server" => $l_str_Server,
-					"plugin-name" => $l_arr_PluginInfo["name"],
-					"plugin-title" => $l_arr_PluginInfo["title"],
-                    "plugin-icon" => strlen($l_arr_PluginInfo["img"]) > 0 ? "http://plugins.svn.wordpress.org/" . $l_arr_PluginInfo["name"] ."/assets/" . $l_arr_PluginInfo["img"] : "",
-
-                    "install-link" => !$l_bool_isPluginInstalled ? $l_str_InstallButton : $l_str_AlreadyInstalled,
-                    "more-details-label" => __("More Details", MCI_Footnotes_Config::C_STR_PLUGIN_NAME),
-                    "last-updated-label" => __("Last Updated", MCI_Footnotes_Config::C_STR_PLUGIN_NAME)
-				)
-			);
-			// display Plugin
-			echo $l_obj_Template->getContent();
-			// reload template
-			$l_obj_Template->reload();
-		}
 		printf('</div>');
 	}
 
@@ -236,9 +186,9 @@ class MCI_Footnotes_Layout_Init {
 			exit;
 		}
 
-        $l_int_NumRatings = array_key_exists("num_ratings", $l_arr_Plugin) ? intval($l_arr_Plugin["num_ratings"]) : 0;
-        $l_int_Rating = array_key_exists("rating", $l_arr_Plugin) ? floatval($l_arr_Plugin["rating"]) : 0.0;
-        $l_int_Stars = round(5 * $l_int_Rating / 100.0, 1);
+		$l_int_NumRatings = array_key_exists("num_ratings", $l_arr_Plugin) ? intval($l_arr_Plugin["num_ratings"]) : 0;
+		$l_int_Rating = array_key_exists("rating", $l_arr_Plugin) ? floatval($l_arr_Plugin["rating"]) : 0.0;
+		$l_int_Stars = round(5 * $l_int_Rating / 100.0, 1);
 
 		// return Plugin information as JSON encoded string
 		echo json_encode(
@@ -247,14 +197,14 @@ class MCI_Footnotes_Layout_Init {
 				"PluginDescription" => array_key_exists("short_description", $l_arr_Plugin) ? html_entity_decode($l_arr_Plugin["short_description"]) : "Error reading Plugin information",
 				"PluginAuthor" => array_key_exists("author", $l_arr_Plugin) ? html_entity_decode($l_arr_Plugin["author"]) : "unknown",
 				"PluginRatingText" => $l_int_Stars . " " . __("rating based on", MCI_Footnotes_Config::C_STR_PLUGIN_NAME) . " " . $l_int_NumRatings . " " . __("ratings", MCI_Footnotes_Config::C_STR_PLUGIN_NAME),
-                "PluginRating1" => $l_int_Stars >= 0.5 ? "star-full" : "star-empty",
-                "PluginRating2" => $l_int_Stars >= 1.5 ? "star-full" : "star-empty",
-                "PluginRating3" => $l_int_Stars >= 2.5 ? "star-full" : "star-empty",
-                "PluginRating4" => $l_int_Stars >= 3.5 ? "star-full" : "star-empty",
-                "PluginRating5" => $l_int_Stars >= 4.5 ? "star-full" : "star-empty",
-                "PluginRating" => $l_int_NumRatings,
-                "PluginLastUpdated" => array_key_exists("last_updated", $l_arr_Plugin) ? $l_arr_Plugin["last_updated"] : "unknown",
-                "PluginDownloads" => array_key_exists("downloaded", $l_arr_Plugin) ? $l_arr_Plugin["downloaded"] : "---"
+				"PluginRating1" => $l_int_Stars >= 0.5 ? "star-full" : "star-empty",
+				"PluginRating2" => $l_int_Stars >= 1.5 ? "star-full" : "star-empty",
+				"PluginRating3" => $l_int_Stars >= 2.5 ? "star-full" : "star-empty",
+				"PluginRating4" => $l_int_Stars >= 3.5 ? "star-full" : "star-empty",
+				"PluginRating5" => $l_int_Stars >= 4.5 ? "star-full" : "star-empty",
+				"PluginRating" => $l_int_NumRatings,
+				"PluginLastUpdated" => array_key_exists("last_updated", $l_arr_Plugin) ? $l_arr_Plugin["last_updated"] : "unknown",
+				"PluginDownloads" => array_key_exists("downloaded", $l_arr_Plugin) ? $l_arr_Plugin["downloaded"] : "---"
 			)
 		);
 		exit;

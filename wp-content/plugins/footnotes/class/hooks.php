@@ -5,6 +5,9 @@
  * @filesource
  * @author Stefan Herndler
  * @since 1.5.0 12.09.14 10:56
+ * 
+ * Edited:
+ * @since 2.2.0    2020-12-12T1223+0100
  */
 
 /**
@@ -52,6 +55,9 @@ class MCI_Footnotes_Hooks {
 	 *
 	 * @author Stefan Herndler
 	 * @since 1.5.0
+	 * 
+	 * Edit: ClearAll didn’t actually work.
+	 * @since 2.2.0 this function is not called any longer when deleting the plugin
 	 */
 	public static function uninstallPlugin() {
 		// WordPress User has to be logged in
@@ -63,7 +69,7 @@ class MCI_Footnotes_Hooks {
 			wp_die(__('You do not have permission to run this script.', MCI_Footnotes_Config::C_STR_PLUGIN_NAME));
 		}
 		// deletes all settings and restore the default values
-		MCI_Footnotes_Settings::instance()->ClearAll();
+		// MCI_Footnotes_Settings::instance()->ClearAll();
 	}
 
 	/**

@@ -5,6 +5,8 @@
  * @filesource
  * @author Stefan Herndler
  * @since 1.5.0 14.09.14 14:26
+ * 
+ * Edited 2.2.0  2020-12-12T2131+0100
  */
 
 
@@ -44,9 +46,11 @@ class MCI_Footnotes_Widget_ReferenceContainer extends MCI_Footnotes_WidgetBase {
 	 * @author Stefan Herndler
 	 * @since 1.5.0
 	 * @return string
+	 * 
+	 * Edit: curly quotes 2.2.0  2020-12-12T2130+0100
 	 */
 	protected function getDescription() {
-		return __('The widget defines the position of the reference container if set to "widget area".', MCI_Footnotes_Config::C_STR_PLUGIN_NAME);
+		return __('The widget defines the position of the reference container if set to “widget area”.', MCI_Footnotes_Config::C_STR_PLUGIN_NAME);
 	}
 
 	/**
@@ -56,9 +60,11 @@ class MCI_Footnotes_Widget_ReferenceContainer extends MCI_Footnotes_WidgetBase {
 	 * @since 1.5.0
 	 * @param mixed $instance
 	 * @return void
+	 * 
+	 * Edit: curly quotes 2.2.0  2020-12-12T2130+0100
 	 */
 	public function form($instance) {
-		echo __('The widget defines the position of the reference container if set to "widget area".', MCI_Footnotes_Config::C_STR_PLUGIN_NAME);
+		echo __('The widget defines the position of the reference container if set to “widget area”.', MCI_Footnotes_Config::C_STR_PLUGIN_NAME);
 	}
 
 	/**
