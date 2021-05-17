@@ -23,7 +23,7 @@ require_once locate_template('/lib/cleanup.php');        		// Cleanup -- image o
 require_once locate_template('/lib/mobile_detect.php');        	// Mobile Detect - maybe mobile issue (check)
 require_once locate_template('/lib/aq_resizer.php');      		// Resize on the fly -- resizing - menu not working on mobile
 //require_once locate_template('/lib/plugin-activate.php');   	// Plugin Activation
-require_once locate_template('/lib/scripts.php');        		// Scripts and stylesheets - all styling and js
+//require_once locate_template('/lib/scripts.php');        		// Scripts and stylesheets - all styling and js
 //require_once locate_template('/lib/custom.php');          		// Custom functions
 //require_once locate_template('/lib/admin_scripts.php');    		// Admin Scripts functions
 //require_once locate_template('/lib/authorbox.php');         	// Author box
