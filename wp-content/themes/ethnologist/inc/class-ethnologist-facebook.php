@@ -16,14 +16,6 @@ class Ethnologist_Facebook
 			return;
 		}
 
-		switch (pll_current_language()) {
-			case 'cs':
-				$lang = 'cs_CZ';
-				break;
-			default:
-				$lang = 'en_GB';
-				break;
-		}
 
 		if ( is_author() ) {
 			$user_id = get_the_author_meta( 'ID' );
@@ -36,8 +28,6 @@ class Ethnologist_Facebook
 		}
 
 		ethnologist_view( 'facebook', 'header-script', array(
-			'api_id' => constant( self::CONST_API_ID ),
-			'lang'   => $lang,
 			'type'   => 'website',
 			'title'  => $title,
 			'url'    => self::transform_url( $url ),
@@ -54,9 +44,21 @@ class Ethnologist_Facebook
 		if ( ! isset( $args['href'] ) && is_author() ) {
 			 $args['href'] = get_author_posts_url( get_the_author_meta( 'ID' ) );
 		}
+
+		switch (pll_current_language()) {
+			case 'cs':
+				$lang = 'cs_CZ';
+				break;
+			default:
+				$lang = 'en_GB';
+				break;
+		}
+
 		$args = wp_parse_args( $args, array(
+			'api_id'     => constant( self::CONST_API_ID ),
 			'href'       => self::transform_url( get_the_permalink() ),
 			'layout'     => 'standard',
+			'lang'       => $lang,
 			'show-faces' => true,
 			'share'      => true,
 		) );
