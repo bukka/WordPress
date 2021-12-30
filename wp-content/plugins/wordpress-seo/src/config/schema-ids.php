@@ -1,16 +1,12 @@
 <?php
-/**
- * Yoast SEO Plugin File.
- *
- * @package Yoast\YoastSEO\Config
- */
 
 namespace Yoast\WP\SEO\Config;
 
 /**
- * Class Schema_IDs
+ * Class Schema_IDs.
  */
 class Schema_IDs {
+
 	/**
 	 * Hash used for the Author `@id`.
 	 */

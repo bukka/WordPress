@@ -1,16 +1,11 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Generators\Schema
- */
 
 namespace Yoast\WP\SEO\Generators\Schema;
 
 use Yoast\WP\SEO\Config\Schema_IDs;
 
 /**
- * Returns schema Person data.
+ * Returns schema Author data.
  */
 class Author extends Person {
 
@@ -25,8 +20,9 @@ class Author extends Person {
 		}
 
 		if (
-			$this->context->indexable->object_type === 'post' &&
-			$this->helpers->schema->article->is_article_post_type( $this->context->indexable->object_sub_type )
+			$this->context->indexable->object_type === 'post'
+			&& $this->helpers->schema->article->is_author_supported( $this->context->indexable->object_sub_type )
+			&& $this->context->schema_article_type !== 'None'
 		) {
 			return true;
 		}
@@ -57,6 +53,13 @@ class Author extends Person {
 			$data['mainEntityOfPage'] = [
 				'@id' => $this->context->canonical . Schema_IDs::WEBPAGE_HASH,
 			];
+		}
+
+		// If this is a post and the author archives are enabled, set the author archive url as the author url.
+		if ( $this->context->indexable->object_type === 'post' ) {
+			if ( $this->helpers->options->get( 'disable-author' ) !== true ) {
+				$data['url'] = $this->helpers->user->get_the_author_posts_url( $user_id );
+			}
 		}
 
 		return $data;
