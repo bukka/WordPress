@@ -3,7 +3,7 @@
 	Plugin Name: WF Cookie Consent
 	Plugin URI: http://www.wunderfarm.com/plugins/wf-cookie-consent
 	Description: The wunderfarm-way to show how your website complies with the EU Cookie Law.
-	Version: 1.1.4
+	Version: 1.2.0
 	License: GNU General Public License v2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Author: wunderfarm
@@ -12,8 +12,7 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-define ('WFCOOKIECONSENT_IUBENDA_DIRECT_URL', 'http://iubenda.refr.cc/N3792HZ');
-define ('WFCOOKIECONSENT_IUBENDA_HELP_URL', 'https://www.iubenda.com/en/help/posts/3284');
+define ('WFCOOKIECONSENT_BUYMEACOFFEE_URL', 'https://www.buymeacoffee.com/wunderfarm');
 
 /*
 * Enqueue JS
@@ -185,7 +184,6 @@ function wf_cookieconsent_admin_init(){
       $sectionKey,
       array(
         'fieldname' => 'wf_linkhref',
-        'fielddescription' => sprintf( wp_kses( __( '<a href="%s" target="_blank">Add your policy</a>', 'wf-cookie-consent' ), array('a'=>array('href'=>array(), 'target'=>array()))), esc_url(WFCOOKIECONSENT_IUBENDA_DIRECT_URL)),
         'lang' => $lang
       )
     );
@@ -278,11 +276,13 @@ function wf_cookieconsent_admin_notice__iubenda() {
 	if ($pagenow == 'options-general.php' && isset($_GET['page']) && $_GET['page'] == 'wf-cookieconsent') {
 ?>
   <div class="notice notice-info">
-    <p>
-			<?php print wp_kses( __( 'Websites that use third-party cookies as well as their own cookies for tracking and analytics must comply with the Cookie law and are required to obtain explicit consent from the user. Users must be provided with a clear, comprehensible and visible notice about the use of cookies by the website.', 'wf-cookie-consent' ), array('b'=>array())); ?>
+		<p>
+			<?php print sprintf( __( "<b>What do you think about our plug-in?</b>", "wf-cookie-consent" ) ); ?>
+			<br>
+			<?php print sprintf( __( "We hope you like it. There's just one catch: sustaining a free WordPress plug-in is quite pricey and believe us when we say we need a lot of good &#9749;&nbsp; coffee to keep it running.", "wf-cookie-consent" ) ); ?>
 		</p>
 		<p>
-			<?php print sprintf( wp_kses( __( '<b>The WF Cookie Consent banner is only one part of the requirement</b>, you must provide a link to a more detailed actual cookie policy. <a href="%s" target="_blank">Click here to learn more on how to generate a cookie policy.</a>', 'wf-cookie-consent' ), array('b'=>array(),'a'=>array('href'=>array(), 'target'=>array()))), esc_url(WFCOOKIECONSENT_IUBENDA_HELP_URL) ); ?>
+			<?php print sprintf( wp_kses( __( "We'd definitely appreciate it if you could <a href='%s' target='_blank'>offer us some coffee!</a>", "wf-cookie-consent" ), array('b'=>array(),'a'=>array('href'=>array(), 'target'=>array()))), esc_url(WFCOOKIECONSENT_BUYMEACOFFEE_URL) ); ?>
 		</p>
   </div>
 <?php
