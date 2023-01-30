@@ -95,10 +95,10 @@ class Polylang {
 	 */
 	public static function is_rest_request() {
 		// Handle pretty permalinks.
-		$home_path       = trim( wp_parse_url( home_url(), PHP_URL_PATH ), '/' );
+		$home_path       = trim( (string) wp_parse_url( home_url(), PHP_URL_PATH ), '/' );
 		$home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
 
-		$req_uri = trim( wp_parse_url( pll_get_requested_url(), PHP_URL_PATH ), '/' );
+		$req_uri = trim( (string) wp_parse_url( pll_get_requested_url(), PHP_URL_PATH ), '/' );
 		$req_uri = preg_replace( $home_path_regex, '', $req_uri );
 		$req_uri = trim( $req_uri, '/' );
 		$req_uri = str_replace( 'index.php', '', $req_uri );
@@ -106,7 +106,7 @@ class Polylang {
 
 		// And also test rest_route query string parameter is not empty for plain permalinks.
 		$query_string = array();
-		wp_parse_str( wp_parse_url( pll_get_requested_url(), PHP_URL_QUERY ), $query_string );
+		wp_parse_str( (string) wp_parse_url( pll_get_requested_url(), PHP_URL_QUERY ), $query_string );
 		$rest_route = isset( $query_string['rest_route'] ) ? trim( $query_string['rest_route'], '/' ) : false;
 
 		return 0 === strpos( $req_uri, rest_get_url_prefix() . '/' ) || ! empty( $rest_route );
@@ -193,9 +193,8 @@ class Polylang {
 		 */
 		$class = apply_filters( 'pll_model', PLL_SETTINGS || self::is_wizard() ? 'PLL_Admin_Model' : 'PLL_Model' );
 		$model = new $class( $options );
-		$links_model = $model->get_links_model();
 
-		if ( ! $model->get_languages_list() ) {
+		if ( ! $model->has_languages() ) {
 			/**
 			 * Fires when no language has been defined yet
 			 * Used to load overridden textdomains
@@ -213,7 +212,7 @@ class Polylang {
 			$class = 'PLL_Admin';
 		} elseif ( self::is_rest_request() ) {
 			$class = 'PLL_REST_Request';
-		} elseif ( $model->get_languages_list() ) {
+		} elseif ( $model->has_languages() ) {
 			$class = 'PLL_Frontend';
 		}
 
@@ -227,7 +226,8 @@ class Polylang {
 		$class = apply_filters( 'pll_context', $class );
 
 		if ( ! empty( $class ) ) {
-			$polylang = new $class( $links_model );
+			$links_model = $model->get_links_model();
+			$polylang    = new $class( $links_model );
 
 			/**
 			 * Fires after the $polylang object is created and before the API is loaded

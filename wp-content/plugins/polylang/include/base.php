@@ -8,6 +8,7 @@
  *
  * @since 1.2
  */
+#[AllowDynamicProperties]
 abstract class PLL_Base {
 	/**
 	 * Stores the plugin options.
@@ -31,14 +32,14 @@ abstract class PLL_Base {
 	/**
 	 * Registers hooks on insert / update post related actions and filters.
 	 *
-	 * @var PLL_CRUD_Posts
+	 * @var PLL_CRUD_Posts|null
 	 */
 	public $posts;
 
 	/**
 	 * Registers hooks on insert / update term related action and filters.
 	 *
-	 * @var PLL_CRUD_Terms
+	 * @var PLL_CRUD_Terms|null
 	 */
 	public $terms;
 
@@ -62,7 +63,7 @@ abstract class PLL_Base {
 		add_action( 'pll_language_defined', array( $this, 'load_strings_translations' ), 5 );
 		add_action( 'change_locale', array( $this, 'load_strings_translations' ) ); // Since WP 4.7
 		add_action( 'personal_options_update', array( $this, 'load_strings_translations' ), 1, 0 ); // Before WP, for confirmation request when changing the user email.
-
+		add_action( 'lostpassword_post', array( $this, 'load_strings_translations' ), 10, 0 ); // Password reset email.
 		// Switch_to_blog
 		add_action( 'switch_blog', array( $this, 'switch_blog' ), 10, 2 );
 	}
@@ -166,5 +167,31 @@ abstract class PLL_Base {
 		 * The 3rd test is needed when Polylang is networked activated and a new site is created.
 		 */
 		return $new_blog_id !== $prev_blog_id && in_array( POLYLANG_BASENAME, $plugins ) && get_option( 'polylang' );
+	}
+
+	/**
+	 * Check if the customize menu should be removed or not.
+	 *
+	 * @since 3.2
+	 *
+	 * @return bool True if it should be removed, false otherwise.
+	 */
+	public function should_customize_menu_be_removed() {
+		// Exit if a block theme isn't activated.
+		if ( ! function_exists( 'wp_is_block_theme' ) || ! wp_is_block_theme() ) {
+			return false;
+		}
+
+		global $wp_filter;
+		if ( empty( $wp_filter['customize_register'] ) ) {
+			return false;
+		}
+
+		$customize_register_hooks = count( array_merge( ...array_values( $wp_filter['customize_register']->callbacks ) ) );
+		if ( $customize_register_hooks > 1 ) {
+			return false;
+		}
+
+		return true;
 	}
 }

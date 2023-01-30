@@ -12,46 +12,46 @@ abstract class PLL_Admin_Base extends PLL_Base {
 	/**
 	 * Current language (used to filter the content).
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $curlang;
 
 	/**
 	 * Language selected in the admin language filter.
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $filter_lang;
 
 	/**
 	 * Preferred language to assign to new contents.
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $pref_lang;
 
 	/**
-	 * @var PLL_Filters_Links
+	 * @var PLL_Filters_Links|null
 	 */
 	public $filters_links;
 
 	/**
-	 * @var PLL_Admin_Links
+	 * @var PLL_Admin_Links|null
 	 */
 	public $links;
 
 	/**
-	 * @var PLL_Admin_Notices
+	 * @var PLL_Admin_Notices|null
 	 */
 	public $notices;
 
 	/**
-	 * @var PLL_Admin_Static_Pages
+	 * @var PLL_Admin_Static_Pages|null
 	 */
 	public $static_pages;
 
 	/**
-	 * @var PLL_Admin_Default_Term
+	 * @var PLL_Admin_Default_Term|null
 	 */
 	public $default_term;
 
@@ -67,6 +67,8 @@ abstract class PLL_Admin_Base extends PLL_Base {
 
 		// Adds the link to the languages panel in the WordPress admin menu
 		add_action( 'admin_menu', array( $this, 'add_menus' ) );
+
+		add_action( 'admin_menu', array( $this, 'remove_customize_submenu' ) );
 
 		// Setup js scripts and css styles
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -86,6 +88,9 @@ abstract class PLL_Admin_Base extends PLL_Base {
 
 		$this->notices = new PLL_Admin_Notices( $this );
 
+		$this->default_term = new PLL_Admin_Default_Term( $this );
+		$this->default_term->add_hooks();
+
 		if ( ! $this->model->get_languages_list() ) {
 			return;
 		}
@@ -93,8 +98,6 @@ abstract class PLL_Admin_Base extends PLL_Base {
 		$this->links = new PLL_Admin_Links( $this ); // FIXME needed here ?
 		$this->static_pages = new PLL_Admin_Static_Pages( $this ); // FIXME needed here ?
 		$this->filters_links = new PLL_Filters_Links( $this ); // FIXME needed here ?
-		$this->default_term = new PLL_Admin_Default_Term( $this );
-		$this->default_term->add_hooks();
 
 		// Filter admin language for users
 		// We must not call user info before WordPress defines user roles in wp-settings.php
@@ -120,7 +123,7 @@ abstract class PLL_Admin_Base extends PLL_Base {
 
 		// Only if at least one language has been created
 		if ( $this->model->get_languages_list() ) {
-			$tabs['strings'] = __( 'Strings translations', 'polylang' );
+			$tabs['strings'] = __( 'Translations', 'polylang' );
 		}
 
 		$tabs['settings'] = __( 'Settings', 'polylang' );
@@ -175,6 +178,8 @@ abstract class PLL_Admin_Base extends PLL_Base {
 			'widgets' => array( array( 'widgets' ), array( 'jquery' ), 0, 0 ),
 		);
 
+		$block_screens = array( 'widgets', 'site-editor' );
+
 		if ( ! empty( $screen->post_type ) && $this->model->is_translated_post_type( $screen->post_type ) ) {
 			$scripts['post'] = array( array( 'edit', 'upload' ), array( 'jquery', 'wp-ajax-response' ), 0, 1 );
 
@@ -184,9 +189,11 @@ abstract class PLL_Admin_Base extends PLL_Base {
 			}
 
 			// Block editor with legacy metabox in WP 5.0+.
-			if ( method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() && ! pll_use_block_editor_plugin() ) {
-				$scripts['block-editor'] = array( array( 'post' ), array( 'jquery', 'wp-ajax-response', 'wp-api-fetch', 'jquery-ui-dialog', 'wp-i18n' ), 0, 1 );
-			}
+			$block_screens[] = 'post';
+		}
+
+		if ( $this->is_block_editor( $screen ) ) {
+			$scripts['block-editor'] = array( $block_screens, array( 'jquery', 'wp-ajax-response', 'wp-api-fetch', 'jquery-ui-dialog', 'wp-i18n' ), 0, 1 );
 		}
 
 		if ( ! empty( $screen->taxonomy ) && $this->model->is_translated_taxonomy( $screen->taxonomy ) ) {
@@ -205,7 +212,20 @@ abstract class PLL_Admin_Base extends PLL_Base {
 		wp_register_style( 'polylang_admin', plugins_url( '/css/build/admin' . $suffix . '.css', POLYLANG_ROOT_FILE ), array( 'wp-jquery-ui-dialog' ), POLYLANG_VERSION );
 		wp_enqueue_style( 'polylang_dialog', plugins_url( '/css/build/dialog' . $suffix . '.css', POLYLANG_ROOT_FILE ), array( 'polylang_admin' ), POLYLANG_VERSION );
 
-		$this->localize_scripts();
+		$this->add_inline_scripts();
+	}
+
+	/**
+	 * Tells whether or not the given screen is block editor kind.
+	 * e.g. widget, site or post editor.
+	 *
+	 * @since 3.3
+	 *
+	 * @param WP_Screen $screen Screen object.
+	 * @return bool True if the screen is a block editor, false otherwise.
+	 */
+	protected function is_block_editor( $screen ) {
+		return method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() && ! pll_use_block_editor_plugin();
 	}
 
 	/**
@@ -219,18 +239,27 @@ abstract class PLL_Admin_Base extends PLL_Base {
 		if ( $this->model->get_languages_list() ) {
 			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 			wp_enqueue_script( 'pll_widgets', plugins_url( '/js/build/widgets' . $suffix . '.js', POLYLANG_ROOT_FILE ), array( 'jquery' ), POLYLANG_VERSION, true );
-			$this->localize_scripts();
+			$this->add_inline_scripts();
 		}
 	}
 
 	/**
-	 * Localize scripts.
+	 * Adds inline scripts to set the default language in JS
+	 * and localizes scripts.
 	 *
-	 * @since 2.4.0
+	 * @since 3.3
 	 *
 	 * @return void
 	 */
-	public function localize_scripts() {
+	private function add_inline_scripts() {
+		if ( wp_script_is( 'pll_block-editor', 'enqueued' ) ) {
+			$default_lang_script = 'const pllDefaultLanguage = "' . $this->options['default_lang'] . '";';
+			wp_add_inline_script(
+				'pll_block-editor',
+				$default_lang_script,
+				'before'
+			);
+		}
 		if ( wp_script_is( 'pll_widgets', 'enqueued' ) ) {
 			wp_localize_script(
 				'pll_widgets',
@@ -366,8 +395,18 @@ abstract class PLL_Admin_Base extends PLL_Base {
 			$this->curlang = $this->model->get_language( sanitize_key( $_REQUEST['lang'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
+		/**
+		 * Filters the current language used by Polylang in the admin context.
+		 *
+		 * @since 3.2
+		 *
+		 * @param PLL_Language|false|null $curlang  Instance of the current language.
+		 * @param PLL_Admin_Base          $polylang Instance of the main Polylang's object.
+		 */
+		$this->curlang = apply_filters( 'pll_admin_current_language', $this->curlang, $this );
+
 		// Inform that the admin language has been set.
-		if ( $this->curlang ) {
+		if ( $this->curlang instanceof PLL_Language ) {
 			/** This action is documented in frontend/choose-lang.php */
 			do_action( 'pll_language_defined', $this->curlang->slug, $this->curlang );
 		} else {
@@ -495,6 +534,33 @@ abstract class PLL_Admin_Base extends PLL_Base {
 					'meta'   => 'all' === $lang->slug ? array() : array( 'lang' => esc_attr( $lang->get_locale( 'display' ) ) ),
 				)
 			);
+		}
+	}
+
+	/**
+	 * Remove the customize submenu when using a block theme.
+	 *
+	 * WordPress removes the Customizer menu if a block theme is activated and no other plugins interact with it.
+	 * As Polylang interacts with the Customizer, we have to delete this menu ourselves in the case of a block theme,
+	 * unless another plugin than Polylang interacts with the Customizer.
+	 *
+	 * @since 3.2
+	 *
+	 * @return void
+	 */
+	public function remove_customize_submenu() {
+		if ( ! $this->should_customize_menu_be_removed() ) {
+			return;
+		}
+
+		global $submenu;
+
+		if ( ! empty( $submenu['themes.php'] ) ) {
+			foreach ( $submenu['themes.php'] as $submenu_item ) {
+				if ( 'customize' === $submenu_item[1] ) {
+					remove_submenu_page( 'themes.php', $submenu_item[2] );
+				}
+			}
 		}
 	}
 }

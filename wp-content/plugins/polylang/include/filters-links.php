@@ -29,14 +29,14 @@ class PLL_Filters_Links {
 	public $links_model;
 
 	/**
-	 * @var PLL_Links
+	 * @var PLL_Links|null
 	 */
 	public $links;
 
 	/**
 	 * Current language.
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $curlang;
 
@@ -163,7 +163,9 @@ class PLL_Filters_Links {
 		// In case someone calls get_term_link for the 'language' taxonomy.
 		if ( 'language' === $tax ) {
 			$lang = $this->model->get_language( $term->term_id );
-			return $this->links_model->home_url( $lang );
+			if ( $lang ) {
+				return $this->links_model->home_url( $lang );
+			}
 		}
 
 		return $link;
@@ -183,16 +185,16 @@ class PLL_Filters_Links {
 
 	/**
 	 * Modifies the post type archive links to add the language parameter
-	 * only if the post type is translated
+	 * only if the post type is translated.
 	 *
 	 * The filter was originally only on frontend but is needed on admin too for
-	 * compatibility with the archive link of the ACF link field since ACF 5.4.0
+	 * compatibility with the archive link of the ACF link field since ACF 5.4.0.
 	 *
 	 * @since 1.7.6
 	 *
-	 * @param string $link
-	 * @param string $post_type
-	 * @return string modified link
+	 * @param string $link      The post type archive permalink.
+	 * @param string $post_type Post type name.
+	 * @return string
 	 */
 	public function post_type_archive_link( $link, $post_type ) {
 		return $this->model->is_translated_post_type( $post_type ) && 'post' !== $post_type ? $this->links_model->switch_language_in_link( $link, $this->curlang ) : $link;

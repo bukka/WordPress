@@ -125,8 +125,12 @@ class PLL_Table_String extends WP_List_Table {
 	 * @return string
 	 */
 	public function column_translations( $item ) {
-		$languages = array_combine( wp_list_pluck( $this->languages, 'slug' ), wp_list_pluck( $this->languages, 'name' ) );
-		$out = '';
+		$out       = '';
+		$languages = array();
+
+		foreach ( $this->languages as $language ) {
+			$languages[ $language->slug ] = $language->name;
+		}
 
 		foreach ( $item['translations'] as $key => $translation ) {
 			$input_type = $item['multiline'] ?
@@ -211,12 +215,12 @@ class PLL_Table_String extends WP_List_Table {
 	}
 
 	/**
-	 * Sort items
+	 * Sorts registered string items.
 	 *
 	 * @since 0.6
 	 *
-	 * @param object $a The first object to compare
-	 * @param object $b The second object to compare
+	 * @param array $a The first item to compare.
+	 * @param array $b The second item to compare.
 	 * @return int -1 or 1 if $a is considered to be respectively less than or greater than $b.
 	 */
 	protected function usort_reorder( $a, $b ) {
@@ -232,7 +236,7 @@ class PLL_Table_String extends WP_List_Table {
 	}
 
 	/**
-	 * Prepares the list of items for displaying
+	 * Prepares the list of registered strings for display.
 	 *
 	 * @since 0.6
 	 *
@@ -382,7 +386,7 @@ class PLL_Table_String extends WP_List_Table {
 					continue;
 				}
 
-				$translations = array_map( 'trim', wp_unslash( $_POST['translation'][ $language->slug ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$translations = array_map( 'trim', (array) wp_unslash( $_POST['translation'][ $language->slug ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 				$mo = new PLL_MO();
 				$mo->import_from_db( $language );

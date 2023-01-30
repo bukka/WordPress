@@ -16,14 +16,14 @@ class PLL_Admin_Filters_Columns {
 	public $model;
 
 	/**
-	 * @var PLL_Admin_Links
+	 * @var PLL_Admin_Links|null
 	 */
 	public $links;
 
 	/**
 	 * Language selected in the admin language filter.
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $filter_lang;
 
@@ -301,7 +301,7 @@ class PLL_Admin_Filters_Columns {
 		}
 
 		if ( $column == $this->get_first_language_column() ) {
-			$out = sprintf( '<div class="hidden" id="lang_%d">%s</div>', intval( $term_id ), esc_html( $lang->slug ) );
+			$out .= sprintf( '<div class="hidden" id="lang_%d">%s</div>', intval( $term_id ), esc_html( $lang->slug ) );
 		}
 
 		// Link to edit term ( or a translation )

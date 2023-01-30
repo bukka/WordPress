@@ -12,7 +12,7 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 	/**
 	 * Current language (used to filter the content).
 	 *
-	 * @var PLL_Language
+	 * @var PLL_Language|null
 	 */
 	public $curlang;
 
@@ -59,7 +59,7 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 		}
 
 		// Hierarchical taxonomies
-		if ( 'edit' == $screen->base && $taxonomies = get_object_taxonomies( $screen->post_type, 'object' ) ) {
+		if ( 'edit' == $screen->base && $taxonomies = get_object_taxonomies( $screen->post_type, 'objects' ) ) {
 			// Get translated hierarchical taxonomies
 			$hierarchical_taxonomies = array();
 			foreach ( $taxonomies as $taxonomy ) {
@@ -69,7 +69,7 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 			}
 
 			if ( ! empty( $hierarchical_taxonomies ) ) {
-				$terms          = get_terms( $hierarchical_taxonomies, array( 'get' => 'all' ) );
+				$terms          = get_terms( array( 'taxonomy' => $hierarchical_taxonomies, 'get' => 'all' ) );
 				$term_languages = array();
 
 				if ( is_array( $terms ) ) {
