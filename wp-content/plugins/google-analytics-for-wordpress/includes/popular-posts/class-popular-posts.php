@@ -189,7 +189,7 @@ class MonsterInsights_Popular_Posts {
 
 		wp_enqueue_script( 'monsterinsights-popular-posts-js' );
 
-		wp_localize_script( 'monsterinsights-popular-posts-js', 'monsterinsights_pp', array(
+		monsterinsights_localize_script( 'monsterinsights-popular-posts-js', 'monsterinsights_pp', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'post_id' => get_the_ID(),
 		) );
@@ -307,10 +307,10 @@ class MonsterInsights_Popular_Posts {
 			}
 			$posts = get_posts( $posts_args );
 
-			$posts = $this->process_posts( $posts );
-
 			$this->get_cache()->save_posts_to_cache( $posts_args, $posts );
 		}
+
+		$posts = $this->process_posts( $posts );
 
 		return apply_filters( 'monsterinsights_popular_posts_posts', $posts );
 
@@ -369,6 +369,7 @@ class MonsterInsights_Popular_Posts {
 		$args = array(
 			'numberposts'         => $this->posts_count,
 			'ignore_sticky_posts' => true,
+			'fields'              => 'ids',
 		);
 		$args = wp_parse_args( $this->query_args(), $args );
 
@@ -494,7 +495,7 @@ class MonsterInsights_Popular_Posts {
 	 *
 	 * @param string $theme The theme for which  we're building the style.
 	 * @param string $object Object we're styling like title, label, background, etc.
-	 * @param array  $atts Attributes passed from shortcode/block.
+	 * @param array $atts Attributes passed from shortcode/block.
 	 * @param string $key The key of the style we're going to output.
 	 *
 	 * @return string
@@ -701,6 +702,7 @@ class MonsterInsights_Popular_Posts {
 
 		if ( apply_filters( 'monsterinsights_popular_posts_show_duplicates', true ) && count( $posts ) > 0 && count( $this->shown_posts ) > 0 && count( $returned_posts ) === 0 ) {
 			$this->shown_posts = array(); // Reset shown posts.
+
 			return $this->get_posts_to_display(); // Run the function to grab the same posts again.
 		}
 

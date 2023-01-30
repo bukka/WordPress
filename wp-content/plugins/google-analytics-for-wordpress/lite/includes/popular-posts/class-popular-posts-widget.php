@@ -38,6 +38,10 @@ class MonsterInsights_Popular_Posts_Widget extends MonsterInsights_Popular_Posts
 		add_action( 'wp', array( $this, 'maybe_auto_insert' ) );
 
 		add_action( 'widgets_init', array( $this, 'register_widget' ) );
+		add_filter( 'widget_types_to_hide_from_legacy_widget_block', array(
+			$this,
+			'remove_widget_from_legacy_widgets'
+		) );
 	}
 
 
@@ -97,7 +101,7 @@ class MonsterInsights_Popular_Posts_Widget extends MonsterInsights_Popular_Posts
 			$title_text = $this->title_text;
 		}
 
-		$html = '<div class="' . $this->get_wrapper_class( $atts ) . '">';
+		$html = '<div class="' . esc_textarea($this->get_wrapper_class( $atts )) . '">';
 		if ( $show_title ) {
 			$html .= '<h2 class="monsterinsights-widget-popular-posts-widget-title">' . wp_kses_post( $title_text ) . '</h2>';
 		}
@@ -246,6 +250,19 @@ class MonsterInsights_Popular_Posts_Widget extends MonsterInsights_Popular_Posts
 
 		return 'alpha';
 
+	}
+
+	/**
+	 * Remove this widget from legacy widgets not to have duplications.
+	 *
+	 * @param string[] $widgets An array of excluded widget-type IDs.
+	 *
+	 * @return mixed
+	 */
+	public function remove_widget_from_legacy_widgets( $widgets ) {
+		$widgets[] = 'monsterinsights-popular-posts-widget';
+
+		return $widgets;
 	}
 
 }
