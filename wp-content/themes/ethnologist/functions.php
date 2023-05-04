@@ -311,6 +311,15 @@ function ethnologist_register_aboutus() {
 }
 
 /**
+ * Disable all comments in front end.
+ */
+function ethnologist_disable_comments() {
+	if ( is_admin_bar_showing() ) {
+		remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
+	}
+}
+
+/**
  * Initialiaze all
  *
  * Action callback - init
@@ -320,8 +329,33 @@ function ethnologist_init() {
 	ethnologist_register_interviews();
 	ethnologist_register_aboutus();
 	ethnologist_editor_manage_users();
+	ethnologist_disable_comments();
 }
 add_action ( 'init', 'ethnologist_init' );
+
+/**
+ * Disable all comments in admin.
+ */
+function ethnologist_admin_disable_comments() {
+	// Redirect any user trying to access comments page
+	global $pagenow;
+
+	if ( $pagenow === 'edit-comments.php' ) {
+		wp_safe_redirect( admin_url() );
+		exit;
+	}
+
+	// Remove comments metabox from dashboard
+	remove_meta_box( 'dashboard_recent_comments', 'dashboard', 'normal' );
+
+	// Disable support for comments and trackbacks in post types
+	foreach ( get_post_types() as $post_type ) {
+		if ( post_type_supports( $post_type, 'comments' ) ) {
+			remove_post_type_support( $post_type, 'comments' );
+			remove_post_type_support( $post_type, 'trackbacks' );
+		}
+	}
+}
 
 /**
  * Initialize admin by registering string translations
@@ -382,8 +416,28 @@ function ethnologist_admin_init() {
 		pll_register_string( 'ethnologist_authorbox_desc_posts', 'Latest posts from', 'ethnologist' );
 		//pll_register_string( 'ethnologist_', '', 'ethnologist' );
 	}
+	ethnologist_admin_disable_comments();
 }
 add_action ( 'admin_init', 'ethnologist_admin_init' );
+
+// Close comments on the front-end
+add_filter( 'comments_open', '__return_false', 20, 2 );
+add_filter( 'pings_open', '__return_false', 20, 2 );
+
+// Hide existing comments
+add_filter( 'comments_array', '__return_empty_array', 10, 2 );
+
+/**
+ * Admin menu action callback.
+ *
+ * Disables comments menu.
+ */
+function ethnologist_admin_menu() {
+	remove_menu_page( 'edit-comments.php' );
+}
+
+// Remove comments page in menu
+add_action( 'admin_menu', 'ethnologist_admin_menu' );
 
 /**
  * Register a single sidebar
