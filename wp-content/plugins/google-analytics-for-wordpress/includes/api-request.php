@@ -166,7 +166,7 @@ final class MonsterInsights_API_Request {
 		$this->end    = ! empty( $args['end'] ) ? $args['end'] : '';
 
 		// We need to do this hack so that the network panel + the site_url of the main site are distinct
-		$this->site_url = is_network_admin() ? network_admin_url() : site_url();
+		$this->site_url = is_network_admin() ? network_admin_url() : home_url();
 
 		if ( monsterinsights_is_pro_version() ) {
 			$this->license = $this->network ? MonsterInsights()->license->get_network_license_key() : MonsterInsights()->license->get_site_license_key();
@@ -183,7 +183,7 @@ final class MonsterInsights_API_Request {
 	 * @return mixed $value The response to the API call.
 	 * @since 7.0.0
 	 */
-	public function request() {
+	public function request( $extra_params = [] ) {
 		// Make sure we're not blocked
 		$blocked = $this->is_blocked( $this->url );
 		if ( $blocked || is_wp_error( $blocked ) ) {
@@ -253,10 +253,12 @@ final class MonsterInsights_API_Request {
 
 		$body['network'] = $this->network ? 'network' : 'site';
 
-		$body['ip'] = ! empty( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '';
+		$body['ip'] = ! empty( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR'])) : '';
 
 		// This filter will be removed in the future.
 		$body = apply_filters( 'monsterinsights_api_request_body', $body );
+
+        $body = array_merge($body, $extra_params);
 
 		$string = http_build_query( $body, '', '&' );
 

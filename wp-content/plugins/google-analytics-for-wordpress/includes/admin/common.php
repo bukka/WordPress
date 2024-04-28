@@ -79,260 +79,25 @@ function monsterinsights_is_reports_page()
 }
 
 /**
- * Loads styles for all MonsterInsights-based Administration Screens.
+ * Determine if the current page is any of the MI admin page.
  *
- * @return null Return early if not on the proper screen.
- * @since 6.0.0
- * @access public
- *
+ * @return bool
  */
-function monsterinsights_admin_styles()
-{
-
-	$suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
-
-	// Load Common admin styles.
-	wp_register_style('monsterinsights-admin-common-style', plugins_url('assets/css/admin-common' . $suffix . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-	wp_enqueue_style('monsterinsights-admin-common-style');
-
-	// Get current screen.
-	$screen = get_current_screen();
-
-	// Bail if we're not on a MonsterInsights screen.
-	if (empty($screen->id) || strpos($screen->id, 'monsterinsights') === false) {
-		return;
+function monsterinsights_is_own_admin_page() {
+	if ( monsterinsights_is_reports_page() ) {
+		return true;
 	}
 
-	$version_path = monsterinsights_is_pro_version() ? 'pro' : 'lite';
-	$rtl          = is_rtl() ? '.rtl' : '';
-
-	// For the settings page, load the Vue app styles.
-	if (monsterinsights_is_settings_page()) {
-		if (!defined('MONSTERINSIGHTS_LOCAL_JS_URL')) {
-			wp_enqueue_style('monsterinsights-vue-style-vendors', plugins_url($version_path . '/assets/vue/css/chunk-vendors' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-			wp_enqueue_style('monsterinsights-vue-style-common', plugins_url($version_path . '/assets/vue/css/chunk-common' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-			wp_enqueue_style('monsterinsights-vue-style', plugins_url($version_path . '/assets/vue/css/settings' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-		}
-
-		// Don't load other styles on the settings page.
-		return;
+	if ( monsterinsights_is_settings_page() ) {
+		return true;
 	}
 
-	if (monsterinsights_is_reports_page()) {
-		if (!defined('MONSTERINSIGHTS_LOCAL_REPORTS_JS_URL')) {
-			wp_enqueue_style('monsterinsights-vue-style-vendors', plugins_url($version_path . '/assets/vue/css/chunk-vendors' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-			wp_enqueue_style('monsterinsights-vue-style-common', plugins_url($version_path . '/assets/vue/css/chunk-common' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-			wp_enqueue_style('monsterinsights-vue-style', plugins_url($version_path . '/assets/vue/css/reports' . $rtl . '.css', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version());
-		}
-
-		return;
+	if ( 'dashboard_page_monsterinsights-getting-started' === get_current_screen()->id ) {
+		return true;
 	}
 
-	// Tooltips
-	wp_enqueue_script('jquery-ui-tooltip');
+	return false;
 }
-
-add_action('admin_enqueue_scripts', 'monsterinsights_admin_styles');
-
-/**
- * Loads scripts for all MonsterInsights-based Administration Screens.
- *
- * @return null Return early if not on the proper screen.
- * @since 6.0.0
- * @access public
- *
- */
-function monsterinsights_admin_scripts()
-{
-
-	// Our Common Admin JS.
-	$suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
-
-	wp_register_script('monsterinsights-admin-common-script', plugins_url('assets/js/admin-common' . $suffix . '.js', MONSTERINSIGHTS_PLUGIN_FILE), array('jquery'), monsterinsights_get_asset_version(), true);
-
-	wp_enqueue_script('monsterinsights-admin-common-script');
-
-	wp_localize_script(
-		'monsterinsights-admin-common-script',
-		'monsterinsights_admin_common',
-		array(
-			'ajax'                 => admin_url('admin-ajax.php'),
-			'dismiss_notice_nonce' => wp_create_nonce('monsterinsights-dismiss-notice'),
-		)
-	);
-
-	// Get current screen.
-	$screen = get_current_screen();
-
-	// Bail if we're not on a MonsterInsights screen.
-	if (empty($screen->id) || strpos($screen->id, 'monsterinsights') === false) {
-		return;
-	}
-
-	$version_path = monsterinsights_is_pro_version() ? 'pro' : 'lite';
-
-	// For the settings page, load the Vue app.
-	if (monsterinsights_is_settings_page()) {
-		if (!defined('MONSTERINSIGHTS_LOCAL_VENDORS_JS_URL')) {
-			wp_enqueue_script('monsterinsights-vue-vendors', plugins_url($version_path . '/assets/vue/js/chunk-vendors.js', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version(), true);
-			wp_enqueue_script('monsterinsights-vue-common', plugins_url($version_path . '/assets/vue/js/chunk-common.js', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version(), true);
-		} else {
-			wp_enqueue_script('monsterinsights-vue-vendors', MONSTERINSIGHTS_LOCAL_VENDORS_JS_URL, array(), monsterinsights_get_asset_version(), true);
-			wp_enqueue_script('monsterinsights-vue-common', MONSTERINSIGHTS_LOCAL_COMMON_JS_URL, array(), monsterinsights_get_asset_version(), true);
-		}
-		$app_js_url = defined('MONSTERINSIGHTS_LOCAL_JS_URL') && MONSTERINSIGHTS_LOCAL_JS_URL ? MONSTERINSIGHTS_LOCAL_JS_URL : plugins_url($version_path . '/assets/vue/js/settings.js', MONSTERINSIGHTS_PLUGIN_FILE);
-		wp_register_script('monsterinsights-vue-script', $app_js_url, array(), monsterinsights_get_asset_version(), true);
-		wp_enqueue_script('monsterinsights-vue-script');
-		$plugins         = get_plugins();
-		$install_amp_url = false;
-		if (monsterinsights_can_install_plugins()) {
-			$amp_key = 'amp/amp.php';
-			if (array_key_exists($amp_key, $plugins)) {
-				$install_amp_url = wp_nonce_url(self_admin_url('plugins.php?action=activate&plugin=' . $amp_key), 'activate-plugin_' . $amp_key);
-			} else {
-				$install_amp_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=amp'), 'install-plugin_amp');
-			}
-		}
-		$install_woocommerce_url = false;
-		if (monsterinsights_can_install_plugins()) {
-			$woo_key = 'woocommerce/woocommerce.php';
-			if (array_key_exists($woo_key, $plugins)) {
-				$install_woocommerce_url = wp_nonce_url(self_admin_url('plugins.php?action=activate&plugin=' . $woo_key), 'activate-plugin_' . $woo_key);
-			} else {
-				$install_woocommerce_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=woocommerce'), 'install-plugin_woocommerce');
-			}
-		}
-		$install_fbia_url = false;
-		if (monsterinsights_can_install_plugins()) {
-			$fbia_key = 'fb-instant-articles/facebook-instant-articles.php';
-			if (array_key_exists($fbia_key, $plugins)) {
-				$install_fbia_url = wp_nonce_url(self_admin_url('plugins.php?action=activate&plugin=' . $fbia_key), 'activate-plugin_' . $fbia_key);
-			} else {
-				$install_fbia_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=fb-instant-articles'), 'install-plugin_fb-instant-articles');
-			}
-		}
-
-		$prepared_dimensions = array();
-		if (class_exists('MonsterInsights_Admin_Custom_Dimensions')) {
-			$dimensions          = new MonsterInsights_Admin_Custom_Dimensions();
-			$dimensions          = $dimensions->custom_dimensions();
-			$prepared_dimensions = array();
-			foreach ($dimensions as $dimension_type => $dimension) {
-				$dimension['type']     = $dimension_type;
-				$prepared_dimensions[] = $dimension;
-			}
-		}
-		$is_authed = (MonsterInsights()->auth->is_authed() || MonsterInsights()->auth->is_network_authed());
-
-		wp_localize_script(
-			'monsterinsights-vue-script',
-			'monsterinsights',
-			array(
-				'ajax'                            => admin_url('admin-ajax.php'),
-				'nonce'                           => wp_create_nonce('mi-admin-nonce'),
-				'network'                         => is_network_admin(),
-				'translations'                    => wp_get_jed_locale_data(monsterinsights_is_pro_version() ? 'ga-premium' : 'google-analytics-for-wordpress'),
-				'assets'                          => plugins_url($version_path . '/assets/vue', MONSTERINSIGHTS_PLUGIN_FILE),
-				'roles'                           => monsterinsights_get_roles(),
-				'roles_manage_options'            => monsterinsights_get_manage_options_roles(),
-				'shareasale_id'                   => monsterinsights_get_shareasale_id(),
-				'shareasale_url'                  => monsterinsights_get_shareasale_url(monsterinsights_get_shareasale_id(), ''),
-				'addons_url'                      => is_multisite() ? network_admin_url('admin.php?page=monsterinsights_network#/addons') : admin_url('admin.php?page=monsterinsights_settings#/addons'),
-				'seo_settings_page_url'           => is_multisite() ? network_admin_url('admin.php?page=monsterinsights_network#/seo') : admin_url('admin.php?page=monsterinsights_settings#/seo'),
-				'aioseo_dashboard_url'            => is_multisite() ? network_admin_url('admin.php?page=aioseo') : admin_url('admin.php?page=aioseo'),
-				'wp_plugins_page_url'             => is_multisite() ? network_admin_url('plugins.php') : admin_url('plugins.php'),
-				'email_summary_url'               => admin_url('admin.php?monsterinsights_email_preview&monsterinsights_email_template=summary'),
-				'install_amp_url'                 => $install_amp_url,
-				'install_fbia_url'                => $install_fbia_url,
-				'install_woo_url'                 => $install_woocommerce_url,
-				'dimensions'                      => $prepared_dimensions,
-				'wizard_url'                      => is_network_admin() ? network_admin_url('index.php?page=monsterinsights-onboarding') : admin_url('index.php?page=monsterinsights-onboarding'),
-				'install_plugins'                 => monsterinsights_can_install_plugins(),
-				'unfiltered_html'                 => current_user_can('unfiltered_html'),
-				'activate_nonce'                  => wp_create_nonce('monsterinsights-activate'),
-				'deactivate_nonce'                => wp_create_nonce('monsterinsights-deactivate'),
-				'install_nonce'                   => wp_create_nonce('monsterinsights-install'),
-				// Used to add notices for future deprecations.
-				'versions'                        => monsterinsights_get_php_wp_version_warning_data(),
-				'plugin_version'                  => MONSTERINSIGHTS_VERSION,
-				'is_admin'                        => true,
-				'admin_email'                     => get_option('admin_email'),
-				'site_url'                        => get_site_url(),
-				'reports_url'                     => add_query_arg('page', 'monsterinsights_reports', admin_url('admin.php')),
-				'ecommerce_report_url'            => add_query_arg('page', 'monsterinsights_reports#/ecommerce', admin_url('admin.php')),
-				'ecommerce_settings_tab_url'      => add_query_arg('page', 'monsterinsights_settings#/ecommerce', admin_url('admin.php')),
-				'first_run_notice'                => apply_filters('monsterinsights_settings_first_time_notice_hide', monsterinsights_get_option('monsterinsights_first_run_notice')),
-				'getting_started_url'             => is_network_admin() ? network_admin_url('admin.php?page=monsterinsights_network#/about') : admin_url('admin.php?page=monsterinsights_settings#/about/getting-started'),
-				'authed'                          => $is_authed,
-				'new_pretty_link_url'             => admin_url('post-new.php?post_type=pretty-link'),
-				'wpmailsmtp_admin_url'            => admin_url('admin.php?page=wp-mail-smtp'),
-				'load_headline_analyzer_settings' => monsterinsights_load_gutenberg_app() ? 'true' : 'false',
-				'exit_url'                        => add_query_arg('page', 'monsterinsights_settings', admin_url('admin.php')),
-			)
-		);
-
-		// Don't load other scripts on the settings page.
-		return;
-	}
-
-	if (monsterinsights_is_reports_page()) {
-		global $wp_version;
-		if (!defined('MONSTERINSIGHTS_LOCAL_VENDORS_JS_URL')) {
-			wp_enqueue_script('monsterinsights-vue-vendors', plugins_url($version_path . '/assets/vue/js/chunk-vendors.js', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version(), true);
-			wp_enqueue_script('monsterinsights-vue-common', plugins_url($version_path . '/assets/vue/js/chunk-common.js', MONSTERINSIGHTS_PLUGIN_FILE), array(), monsterinsights_get_asset_version(), true);
-		} else {
-			wp_enqueue_script('monsterinsights-vue-vendors', MONSTERINSIGHTS_LOCAL_VENDORS_JS_URL, array(), monsterinsights_get_asset_version(), true);
-			wp_enqueue_script('monsterinsights-vue-common', MONSTERINSIGHTS_LOCAL_COMMON_JS_URL, array(), monsterinsights_get_asset_version(), true);
-		}
-		$app_js_url = defined('MONSTERINSIGHTS_LOCAL_REPORTS_JS_URL') && MONSTERINSIGHTS_LOCAL_REPORTS_JS_URL ? MONSTERINSIGHTS_LOCAL_REPORTS_JS_URL : plugins_url($version_path . '/assets/vue/js/reports.js', MONSTERINSIGHTS_PLUGIN_FILE);
-		wp_register_script('monsterinsights-vue-reports', $app_js_url, array(), monsterinsights_get_asset_version(), true);
-		wp_enqueue_script('monsterinsights-vue-reports');
-
-		// We do not have a current auth.
-		$auth      = MonsterInsights()->auth;
-		$site_auth = $auth->get_viewname();
-		$ms_auth   = is_multisite() && $auth->get_network_viewname();
-
-		wp_localize_script(
-			'monsterinsights-vue-reports',
-			'monsterinsights',
-			array(
-				'ajax'                => admin_url('admin-ajax.php'),
-				'nonce'               => wp_create_nonce('mi-admin-nonce'),
-				'network'             => is_network_admin(),
-				'translations'        => wp_get_jed_locale_data(monsterinsights_is_pro_version() ? 'ga-premium' : 'google-analytics-for-wordpress'),
-				'assets'              => plugins_url($version_path . '/assets/vue', MONSTERINSIGHTS_PLUGIN_FILE),
-				'shareasale_id'       => monsterinsights_get_shareasale_id(),
-				'shareasale_url'      => monsterinsights_get_shareasale_url(monsterinsights_get_shareasale_id(), ''),
-				'addons_url'          => is_multisite() ? network_admin_url('admin.php?page=monsterinsights_network#/addons') : admin_url('admin.php?page=monsterinsights_settings#/addons'),
-				'timezone'            => date('e'),
-				'authed'              => $site_auth || $ms_auth,
-				'auth_connected_type' => $auth->get_connected_type(),
-				'settings_url'        => add_query_arg('page', 'monsterinsights_settings', admin_url('admin.php')),
-				// Used to add notices for future deprecations.
-				'versions'            => monsterinsights_get_php_wp_version_warning_data(),
-				'plugin_version'      => MONSTERINSIGHTS_VERSION,
-				'is_admin'            => true,
-				'admin_email'         => get_option('admin_email'),
-				'site_url'            => get_site_url(),
-				'wizard_url'          => is_network_admin() ? network_admin_url('index.php?page=monsterinsights-onboarding') : admin_url('index.php?page=monsterinsights-onboarding'),
-				'install_nonce'       => wp_create_nonce('monsterinsights-install'),
-				'activate_nonce'      => wp_create_nonce('monsterinsights-activate'),
-				'deactivate_nonce'    => wp_create_nonce('monsterinsights-deactivate'),
-				'update_settings'     => current_user_can('monsterinsights_save_settings'),
-				'migrated'            => monsterinsights_get_option('gadwp_migrated', 0),
-				'yearinreview'        => monsterinsights_yearinreview_dates(),
-			)
-		);
-
-		return;
-	}
-
-	// ublock notice
-	add_action('admin_print_footer_scripts', 'monsterinsights_settings_ublock_error_js', 9999999);
-}
-
-add_action('admin_enqueue_scripts', 'monsterinsights_admin_scripts');
 
 /**
  * Remove Assets that conflict with ours from our screens.
@@ -511,23 +276,32 @@ function monsterinsights_remove_conflicting_asset_files()
 		'tooltipster',
 		'flag-icon',
 		'bootstrap',
+		'vue.js',
+		'vuejs',
+		'vue_js',
 	);
 
 	global $wp_styles;
+	// Loop through all registered styles.
 	foreach ($wp_styles->queue as $handle) {
+		// If the source file is is not from wp-content directory.
 		if (strpos($wp_styles->registered[$handle]->src, 'wp-content') === false) {
-			return;
+			continue;
 		}
 
+		// If the handle contains monsterinsights in his name.
 		if (strpos($wp_styles->registered[$handle]->handle, 'monsterinsights') !== false) {
-			return;
+			continue;
 		}
 
+		// Loop through our listed handles.
 		foreach ($third_party as $partial) {
+			// If the handle contains conflicted style.
 			if (strpos($wp_styles->registered[$handle]->handle, $partial) !== false) {
 				wp_dequeue_style($handle); // Remove css file from MI screen
 				wp_deregister_style($handle);
 				break;
+			// If the source file contains conflicted style.
 			} else if (strpos($wp_styles->registered[$handle]->src, $partial) !== false) {
 				wp_dequeue_style($handle); // Remove css file from MI screen
 				wp_deregister_style($handle);
@@ -537,20 +311,27 @@ function monsterinsights_remove_conflicting_asset_files()
 	}
 
 	global $wp_scripts;
+	// Loop through all registered scripts.
 	foreach ($wp_scripts->queue as $handle) {
+
+		// If the source file is is not from wp-content directory.
 		if (strpos($wp_scripts->registered[$handle]->src, 'wp-content') === false) {
-			return;
+			continue;
 		}
 
+		// If the handle contains monsterinsights in his name.
 		if (strpos($wp_scripts->registered[$handle]->handle, 'monsterinsights') !== false) {
-			return;
+			continue;
 		}
 
+		// Loop through our listed handles.
 		foreach ($third_party as $partial) {
+			// If the handle contains conflicted script handle.
 			if (strpos($wp_scripts->registered[$handle]->handle, $partial) !== false) {
 				wp_dequeue_script($handle); // Remove JS file from MI screen
 				wp_deregister_script($handle);
 				break;
+			// If the source file contains conflicted script handle.
 			} else if (strpos($wp_scripts->registered[$handle]->src, $partial) !== false) {
 				wp_dequeue_script($handle); // Remove JS file from MI screen
 				wp_deregister_script($handle);
@@ -617,7 +398,7 @@ add_action('admin_enqueue_scripts', 'monsterinsights_remove_conflicting_asset_fi
 function hide_non_monsterinsights_warnings()
 {
 	// Bail if we're not on a MonsterInsights screen.
-	if (empty($_REQUEST['page']) || strpos($_REQUEST['page'], 'monsterinsights') === false) {
+	if (empty($_REQUEST['page']) || strpos(sanitize_text_field($_REQUEST['page']), 'monsterinsights') === false) {
 		return;
 	}
 
@@ -715,50 +496,6 @@ function monsterinsights_get_upgrade_link($medium = '', $campaign = '', $url = '
 	} else {
 		return esc_url($url);
 	}
-}
-
-function monsterinsights_get_url($medium = '', $campaign = '', $url = '', $escape = true)
-{
-	// Setup Campaign variables
-	$source      = monsterinsights_is_pro_version() ? 'proplugin' : 'liteplugin';
-	$medium      = !empty($medium) ? $medium : 'defaultmedium';
-	$campaign    = !empty($campaign) ? $campaign : 'defaultcampaign';
-	$content     = MONSTERINSIGHTS_VERSION;
-	$default_url = monsterinsights_is_pro_version() ? '' : 'lite/';
-	$url         = !empty($url) ? $url : 'https://www.monsterinsights.com/' . $default_url;
-
-	// Put together redirect URL
-	$url = add_query_arg(
-		array(
-			'utm_source'   => $source,   // Pro/Lite Plugin
-			'utm_medium'   => sanitize_key($medium),   // Area of MonsterInsights (example Reports)
-			'utm_campaign' => sanitize_key($campaign), // Which link (example eCommerce Report)
-			'utm_content'  => $content,  // Version number of MI
-		),
-		trailingslashit($url)
-	);
-
-	if ($escape) {
-		return esc_url($url);
-	} else {
-		return $url;
-	}
-}
-
-function monsterinsights_settings_ublock_error_js()
-{
-	echo "<script type='text/javascript'>\n";
-	echo "jQuery( document ).ready( function( $ ) {
-			if ( window.uorigindetected == null){
-			   $('#monsterinsights-ublock-origin-error').show();
-			   $('.monsterinsights-nav-tabs').hide();
-			   $('.monsterinsights-nav-container').hide();
-			   $('#monsterinsights-addon-heading').hide();
-			   $('#monsterinsights-addons').hide();
-			   $('#monsterinsights-reports').hide();
-			}
-		});";
-	echo "\n</script>";
 }
 
 function monsterinsights_ublock_notice()
@@ -947,7 +684,7 @@ function monsterinsights_maybe_add_wp_php_version_notification()
 add_action('admin_init', 'monsterinsights_maybe_add_wp_php_version_notification');
 
 /**
- * Add notification for Year In Review report for year 2021.
+ * Add notification for Year In Review report for year 2023.
  *
  * @return void
  * @since 7.13.2
@@ -956,15 +693,15 @@ add_action('admin_init', 'monsterinsights_maybe_add_wp_php_version_notification'
 function monsterinsights_year_in_review_notification()
 {
 
-	// Check if dates are between Jan 1st 2022 & 13th Jan 2022.
-	if (monsterinsights_date_is_between('2022-01-01', '2022-01-14')) {
+	// Check if dates are between Jan 1st 2023 & 14th Jan 2023.
+	if (monsterinsights_date_is_between('2023-01-01', '2023-01-14')) {
 
 		$notification['id']      = 'monsterinsights_notification_year_in_review';
 		$notification['type']    = array('basic', 'lite', 'master', 'plus', 'pro');
-		$notification['start']   = '2022-01-01';
-		$notification['end']     = '2022-01-14';
-		$notification['title']   = esc_html__('View 2021 Year in Review report!', 'google-analytics-for-wordpress');
-		$notification['content'] = esc_html__('See how your website performed this year and find tips along the way to help grow even more in 2022!', 'google-analytics-for-wordpress');
+		$notification['start']   = '2023-01-01';
+		$notification['end']     = '2023-01-14';
+		$notification['title']   = esc_html__('View 2023 Year in Review report!', 'google-analytics-for-wordpress');
+		$notification['content'] = esc_html__('See how your website performed this year and find tips along the way to help grow even more in 2024!', 'google-analytics-for-wordpress');
 		$notification['btns']    = array(
 			'learn_more' => array(
 				'url'  => esc_url(admin_url('admin.php?page=monsterinsights_reports#/year-in-review')),
@@ -979,25 +716,75 @@ function monsterinsights_year_in_review_notification()
 
 add_action('admin_init', 'monsterinsights_year_in_review_notification');
 
+/**
+ * Avoid UI errors by filtering eCommerce data when the addon is missing.
+ * For now, it will be applied only to the `yearinreview` report.
+ *
+ * @param $data Array Report data.
+ * @param $name string Report name
+ * @param $report Object Report object.
+ * @return mixed
+ */
+function monsterinsights_year_in_review_check_for_ecommerce($data, $name, $report) {
+
+	if ( $name === 'yearinreview' && ! class_exists( 'MonsterInsights_eCommerce' ) ) {
+		unset($data['data']['ecommerce']);
+	}
+
+	return $data;
+}
+add_filter('monsterinsights_vue_reports_data', 'monsterinsights_year_in_review_check_for_ecommerce', 3, 10 );
+
 
 /**
  * Dynamic dates for Year In Review report
  */
 function monsterinsights_yearinreview_dates()
 {
-	$current_date = date('Y-m-d');
-	$current_year = date('Y');
+	$current_date = wp_date('Y-m-d');
+	$current_year = wp_date('Y');
 	$report_year = $current_year - 1;
+	$report_year = 2023;
+	$next_year = 2024;
 	$show_report = false;
+
 	$next_year = (string) $report_year + 1;
-	$show_report_start_date = date('Y-m-d', strtotime("Jan 01, {$current_year}"));
-	$show_report_end_date = date('Y-m-d', strtotime("Jan 14, {$current_year}"));
-	if (($current_date >= $show_report_start_date) && ($current_date <= $show_report_end_date)) {
+	$show_report_start_date = wp_date( 'Y-m-d', strtotime( "Jan 01, " . $current_year ) );
+	$show_report_end_date = wp_date( 'Y-m-d', strtotime( "Jan 14, " . $current_year ) );
+	if (
+		$current_date >= $show_report_start_date
+		&& $current_date <= $show_report_end_date
+	) {
 		$show_report = true;
 	}
+
+	if ( function_exists( 'monsterinsights_is_debug_mode' ) && monsterinsights_is_debug_mode() ) {
+		$show_report = true;
+	}
+
 	return [
 		'report_year' => $report_year,
 		'next_year' => $next_year,
-		'show_report' => $show_report,
+		'show_report' => apply_filters( 'monsterinsights_yearinreview_show_report', $show_report ),
 	];
 }
+
+function monsterinsights_get_sitei()
+{
+    $auth_key        = defined( 'AUTH_KEY' ) ? AUTH_KEY : '';
+    $secure_auth_key = defined( 'SECURE_AUTH_KEY' ) ? SECURE_AUTH_KEY : '';
+    $logged_in_key   = defined( 'LOGGED_IN_KEY' ) ? LOGGED_IN_KEY : '';
+
+    $sitei = $auth_key . $secure_auth_key . $logged_in_key;
+    $sitei = preg_replace( '/[^a-zA-Z0-9]/', '', $sitei );
+    $sitei = sanitize_text_field( $sitei );
+    $sitei = trim( $sitei );
+    $sitei = ( strlen( $sitei ) > 30 ) ? substr( $sitei, 0, 30 ) : $sitei;
+
+    return $sitei;
+}
+
+/**
+ * Inlcude admin assets files.
+ */
+require_once __DIR__ . '/admin-assets.php';

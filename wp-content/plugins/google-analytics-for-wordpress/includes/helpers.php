@@ -8,11 +8,40 @@
  * @package MonsterInsights
  * @subpackage Helper
  * @author  Chris Christoff
+ * TODO Go through this file and remove UA and dual tracking references/usages
  */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+function monsterinsights_get_url($medium = '', $campaign = '', $url = '', $escape = true)
+{
+    // Setup Campaign variables
+    $source      = monsterinsights_is_pro_version() ? 'proplugin' : 'liteplugin';
+    $medium      = !empty($medium) ? $medium : 'defaultmedium';
+    $campaign    = !empty($campaign) ? $campaign : 'defaultcampaign';
+    $content     = MONSTERINSIGHTS_VERSION;
+    $default_url = monsterinsights_is_pro_version() ? '' : 'lite/';
+    $url         = !empty($url) ? $url : 'https://www.monsterinsights.com/' . $default_url;
+
+    // Put together redirect URL
+    $url = add_query_arg(
+        array(
+            'utm_source'   => $source,   // Pro/Lite Plugin
+            'utm_medium'   => sanitize_key($medium),   // Area of MonsterInsights (example Reports)
+            'utm_campaign' => sanitize_key($campaign), // Which link (example eCommerce Report)
+            'utm_content'  => $content,  // Version number of MI
+        ),
+        trailingslashit($url)
+    );
+
+    if ($escape) {
+        return esc_url($url);
+    } else {
+        return $url;
+    }
 }
 
 function monsterinsights_is_page_reload() {
@@ -22,7 +51,7 @@ function monsterinsights_is_page_reload() {
 	}
 
 	// IF the referrer is identical to the current page request, then it's a refresh
-	return ( $_SERVER['HTTP_REFERER'] === home_url( $_SERVER['REQUEST_URI'] ) );
+	return ( $_SERVER['HTTP_REFERER'] === home_url( $_SERVER['REQUEST_URI'] ) ); // phpcs:ignore
 }
 
 
@@ -53,8 +82,8 @@ function monsterinsights_track_user( $user_id = - 1 ) {
 	}
 
 	// or if tracking code is not entered
-	$tracking_ids = monsterinsights_get_tracking_ids();
-	if ( empty( $tracking_ids ) ) {
+	$tracking_id = monsterinsights_get_v4_id();
+	if ( empty( $tracking_id ) ) {
 		$track_user = false;
 	}
 
@@ -109,7 +138,7 @@ function monsterinsights_get_uuid() {
 	 * if the first page visited is AMP, the cookie may be in the format amp-XXXXXXXXXXXXX-XXXXXXXX
 	 */
 
-	$ga_cookie    = $_COOKIE['_ga'];
+	$ga_cookie    = sanitize_text_field($_COOKIE['_ga']);
 	$cookie_parts = explode( '.', $ga_cookie );
 	if ( is_array( $cookie_parts ) && ! empty( $cookie_parts[2] ) ) {
 		$cookie_parts = array_slice( $cookie_parts, 2 );
@@ -132,20 +161,32 @@ function monsterinsights_get_uuid() {
  * @var string $measurement_id
  *   GA4 Measurement Id (Property Id). E.g., 'G-1YS1VWHG3V'.
  *
- * @return int
+ * @return string|null
  *   Returns GA4 Session Id or NULL if cookie wasn't found.
  */
 function monsterinsights_get_browser_session_id( $measurement_id ) {
-	// Cookie name example: '_ga_1YS1VWHG3V'.
-	$cookie_name = '_ga_' . str_replace( 'G-', '', $measurement_id );
-	if ( isset( $_COOKIE[ $cookie_name ] ) ) {
-		// Cookie value example: 'GS1.1.1659710029.4.1.1659710504.0'.
-		// Session Id:                  ^^^^^^^^^^.
-		$parts = explode( '.', $_COOKIE[ $cookie_name ] );
-		return $parts[2];
+
+	if ( ! is_string( $measurement_id ) ) {
+		return null;
 	}
 
-	return null;
+	// Cookie name example: '_ga_1YS1VWHG3V'.
+	$cookie_name = '_ga_' . str_replace( 'G-', '', $measurement_id );
+
+	if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
+		return null;
+	}
+
+	// Cookie value example: 'GS1.1.1659710029.4.1.1659710504.0'.
+	// Session Id:                  ^^^^^^^^^^.
+	$cookie = sanitize_text_field( $_COOKIE[ $cookie_name ] );
+	$parts = explode( '.', $cookie );
+
+	if ( ! isset( $parts[2] ) ){
+		return null;
+	}
+
+	return $parts[2];
 }
 
 /**
@@ -190,7 +231,7 @@ function monsterinsights_get_cookie( $debug = false ) {
 		return ( $debug ) ? 'FCE' : false;
 	}
 
-	$ga_cookie    = $_COOKIE['_ga'];
+	$ga_cookie    = sanitize_text_field( $_COOKIE['_ga'] );
 	$cookie_parts = explode( '.', $ga_cookie );
 	if ( is_array( $cookie_parts ) && ! empty( $cookie_parts[2] ) ) {
 		$cookie_parts = array_slice( $cookie_parts, 2 );
@@ -209,7 +250,7 @@ function monsterinsights_get_cookie( $debug = false ) {
 
 
 function monsterinsights_generate_ga_client_id() {
-	return rand( 100000000, 999999999 ) . '.' . time();
+	return wp_rand( 100000000, 999999999 ) . '.' . time();
 }
 
 
@@ -947,7 +988,54 @@ function monsterinsights_get_api_url() {
 }
 
 function monsterinsights_get_licensing_url() {
-	return apply_filters( 'monsterinsights_get_licensing_url', 'https://www.monsterinsights.com' );
+	$licensing_website = apply_filters( 'monsterinsights_get_licensing_url', 'https://www.monsterinsights.com' );
+    return $licensing_website . '/license-api';
+}
+
+/**
+ * Queries the remote URL via wp_remote_post and returns a json decoded response.
+ *
+ * @param string $action The name of the $_POST action var.
+ * @param array  $body The content to retrieve from the remote URL.
+ * @param array  $headers The headers to send to the remote URL.
+ * @param string $return_format The format for returning content from the remote URL.
+ *
+ * @return string|bool          Json decoded response on success, false on failure.
+ * @since 6.0.0
+ */
+function monsterinsights_perform_remote_request( $action, $body = array(), $headers = array(), $return_format = 'json' ) {
+
+    $key = is_network_admin() ? MonsterInsights()->license->get_network_license_key() : MonsterInsights()->license->get_site_license_key();
+
+    // Build the body of the request.
+    $query_params = wp_parse_args(
+        $body,
+        array(
+            'tgm-updater-action'     => $action,
+            'tgm-updater-key'        => $key,
+            'tgm-updater-wp-version' => get_bloginfo( 'version' ),
+            'tgm-updater-referer'    => site_url(),
+            'tgm-updater-mi-version' => MONSTERINSIGHTS_VERSION,
+            'tgm-updater-is-pro'     => monsterinsights_is_pro_version(),
+        )
+    );
+
+    $args = [
+        'headers' => $headers,
+    ];
+
+    // Perform the query and retrieve the response.
+    $response      = wp_remote_get( add_query_arg( $query_params, monsterinsights_get_licensing_url() ), $args );
+    $response_code = wp_remote_retrieve_response_code( $response );
+    $response_body = wp_remote_retrieve_body( $response );
+
+    // Bail out early if there are any errors.
+    if ( 200 != $response_code || is_wp_error( $response_body ) ) {
+        return false;
+    }
+
+    // Return the json decoded content.
+    return json_decode( $response_body );
 }
 
 function monsterinsights_is_wp_seo_active() {
@@ -1267,44 +1355,11 @@ function monsterinsights_get_page_title() {
  * Count the number of occurrences of UA tags inserted by third-party plugins.
  *
  * @param string $body
- * @param string $type
  *
  * @return int
  */
-function monsterinsights_count_third_party_ua_codes( $body, $type = 'ua' ) {
+function monsterinsights_count_third_party_v4_codes($body) {
 	$count = 0;
-
-	// Count all potential google site verification tags
-	if ( $type === 'ua' ) {
-		$pattern = '/content="UA-[0-9-]+"/';
-
-		if ( preg_match_all( $pattern, $body, $matches ) ) {
-			$count += count( $matches[0] );
-		}
-	}
-
-	// Advanced Ads plugin (https://wpadvancedads.com)
-	// When `Ad blocker counter` setting is populated with an UA ID
-	if ( class_exists( 'Advanced_Ads' ) ) {
-		$options = Advanced_Ads::get_instance()->options();
-
-		$pattern = '/UA-[0-9-]+/';
-		if ( $type === 'ua' && isset( $options['ga-UID'] ) && preg_match( $pattern, $options['ga-UID'] ) ) {
-			++ $count;
-		}
-	}
-
-	// WP Popups plugin (https://wppopups.com/)
-	// When `Google UA Code` setting is populated with an UA Id
-	if ( function_exists( 'wppopups_setting' ) ) {
-		$code = wppopups_setting( 'ua-code' );
-
-		$pattern = '/UA-[0-9-]+/';
-		if ( $type === 'ua' && ! empty( $code ) && preg_match( $pattern, $code ) ) {
-			++ $count;
-		}
-	}
-
 	return $count;
 }
 
@@ -1327,15 +1382,6 @@ function monsterinsights_count_addon_codes( $current_code ) {
 		}
 	}
 
-	// If the performance addon is installed and its Google Optimize ID is the same as the current code, then increase the count
-	if ( class_exists( 'MonsterInsights_Performance' ) ) {
-		$container_id = monsterinsights_get_option( 'goptimize_container', '' );
-
-		if ( $container_id === $current_code ) {
-			$count ++;
-		}
-	}
-
 	return $count;
 }
 
@@ -1343,16 +1389,13 @@ function monsterinsights_count_addon_codes( $current_code ) {
  * Detect tracking code error depending on the type of tracking code
  *
  * @param string $body
- * @param string $type
  *
  * @return array
  */
-function monsterinsights_detect_tracking_code_error( $body, $type = 'ua' ) {
+function monsterinsights_detect_tracking_code_error( $body ) {
 	$errors = array();
 
-	$current_code = $type === 'ua'
-		? monsterinsights_get_ua_to_output()
-		: monsterinsights_get_v4_id_to_output();
+	$current_code = monsterinsights_get_v4_id_to_output();
 
 	$url = monsterinsights_get_url( 'notice', 'using-cache', 'https://www.wpbeginner.com/beginners-guide/how-to-clear-your-cache-in-wordpress/' );
 	// Translators: The placeholders are for making the "We noticed you're using a caching plugin" text bold.
@@ -1376,8 +1419,10 @@ function monsterinsights_detect_tracking_code_error( $body, $type = 'ua' ) {
 		return $errors;
 	}
 
-	if ( $type === 'v4' && false === strpos( $body, '__gtagTracker' ) ) {
-		$errors[] = $cache_error;
+	if ( false === strpos( $body, '__gtagTracker' ) ) {
+		if ( ! isset ( $errors ) ) {
+			$errors[] = $cache_error;
+		}
 
 		return $errors;
 	}
@@ -1387,7 +1432,7 @@ function monsterinsights_detect_tracking_code_error( $body, $type = 'ua' ) {
 	$limit += monsterinsights_count_addon_codes( $current_code );
 
 	// TODO: Need to re-evaluate this regularly when third party plugins start supporting v4
-	$limit += monsterinsights_count_third_party_ua_codes( $body, $type );
+	$limit += monsterinsights_count_third_party_v4_codes( $body );
 
 	// Count all the codes from the page.
 	$total_count = substr_count( $body, $current_code );
@@ -1399,10 +1444,21 @@ function monsterinsights_detect_tracking_code_error( $body, $type = 'ua' ) {
 	}
 
 	// Main property always has a ?id=(UA|G|GT)-XXXXXXXX script
-	$connected_type = MonsterInsights()->auth->get_connected_type();
-	if ( $type === $connected_type && strpos( $body, 'googletagmanager.com/gtag/js?id=' . $current_code ) !== false ) {
+	if ( strpos( $body, 'googletagmanager.com/gtag/js?id=' . $current_code ) !== false ) {
 		// In that case, we can safely deduct one from the total count
 		-- $total_count;
+	}
+
+	// Test for Advanced Ads plugin tracking code.
+	$pattern = '/advanced_ads_ga_UID.*?"' . $current_code . '"/m';
+	if ( preg_match_all( $pattern, $body, $matches ) ) {
+		$total_count -= count( $matches[0] );
+	}
+
+	// Test for WP Popups tracking code.
+	$pattern = '/wppopups_pro_vars.*?"' . $current_code . '"/m';
+	if ( preg_match_all( $pattern, $body, $matches ) ) {
+		$total_count -= count( $matches[0] );
 	}
 
 	if ( $total_count > $limit ) {
@@ -1449,10 +1505,7 @@ function monsterinsights_is_code_installed_frontend() {
 	if ( in_array( $response_code, $accepted_http_codes, true ) ) {
 		$body = wp_remote_retrieve_body( $request );
 
-		$errors = array_merge(
-			monsterinsights_detect_tracking_code_error( $body ),
-			monsterinsights_detect_tracking_code_error( $body, 'v4' )
-		);
+		$errors = monsterinsights_detect_tracking_code_error( $body );
 	}
 
 	return $errors;
@@ -1478,7 +1531,7 @@ function monsterinsights_menu_highlight_color() {
  * @param string $url The url to which users get redirected.
  */
 function monsterinsights_custom_track_pretty_links_redirect( $url ) {
-	if ( ! function_exists( 'monsterinsights_mp_track_event_call' ) && ! function_exists( 'monsterinsights_mp_collect_v4' ) ) {
+	if ( ! function_exists( 'monsterinsights_mp_collect_v4' ) ) {
 		return;
 	}
 
@@ -1486,7 +1539,7 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 	monsterinsights_track_pretty_links_file_download_redirect( $url );
 
 	// Try to determine if click originated on the same site.
-	$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
+	$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : '';
 	if ( ! empty( $referer ) ) {
 		$current_site_url    = get_bloginfo( 'url' );
 		$current_site_parsed = wp_parse_url( $current_site_url );
@@ -1497,9 +1550,8 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 		}
 	}
 	// Check if this is an affiliate link and use the appropriate category.
-	$ec            = 'outbound-link';
 	$inbound_paths = monsterinsights_get_option( 'affiliate_links', array() );
-	$path          = empty( $_SERVER['REQUEST_URI'] ) ? '' : $_SERVER['REQUEST_URI'];
+	$path          = empty( $_SERVER['REQUEST_URI'] ) ? '' : $_SERVER['REQUEST_URI']; // phpcs:ignore
 	if ( ! empty( $inbound_paths ) && is_array( $inbound_paths ) && ! empty( $path ) ) {
 		$found = false;
 		foreach ( $inbound_paths as $inbound_path ) {
@@ -1508,7 +1560,6 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 			}
 			if ( 0 === strpos( $path, trim( $inbound_path['path'] ) ) ) {
 				$label = ! empty( $inbound_path['label'] ) ? trim( $inbound_path['label'] ) : 'aff';
-				$ec   .= '-' . $label;
 				$found = true;
 				break;
 			}
@@ -1521,35 +1572,39 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 		return;
 	}
 
-	if ( monsterinsights_get_ua_to_output() ) {
-		$track_args = array(
-			't'  => 'event',
-			'ec' => $ec,
-			'ea' => $url,
-			'el' => 'external-redirect',
-		);
-		monsterinsights_mp_track_event_call( $track_args );
-	}
-
 	if ( monsterinsights_get_v4_id_to_output() ) {
+		// Get Pretty Links settings.
+		$pretty_track = monsterinsights_get_option( 'pretty_links_backend_track', '' );
+
+		if ( 'pretty_link' == $pretty_track ) {
+			global $prli_link;
+			$pretty_link = $prli_link->get_one_by( 'url', $url );
+			$link_url    = PrliUtils::get_pretty_link_url( $pretty_link->slug );
+		} else {
+			$link_url = $url;
+		}
+
 		$url_components = parse_url( $url );
-		$args           = array(
-			'events' => array(
-				array(
-					'link_text'   => 'external-redirect',
-					'link_url'    => $url,
-					'link_domain' => $url_components['host'],
-					'outbound'    => true,
-				),
-			),
+		$params_args    = array(
+			'link_text'   => 'external-redirect',
+			'link_url'    => $link_url,
+			'link_domain' => $url_components['host'],
+			'outbound'    => 'true',
 		);
 
 		if ( ! empty( $label ) ) {
-			$args['events'][0]['affiliate_label']   = $label;
-			$args['events'][0]['is_affiliate_link'] = true;
+			$params_args['affiliate_label']   = $label;
+			$params_args['is_affiliate_link'] = 'true';
 		}
 
-		monsterinsights_mp_collect_v4( $args );
+		monsterinsights_mp_collect_v4( array(
+			'events' => array(
+				array(
+					'name'   => 'click',
+					'params' => $params_args,
+				)
+			),
+		) );
 	}
 }
 
@@ -1711,8 +1766,8 @@ function monsterinsights_trim_text( $text, $count ) {
 function monsterinsights_tools_copy_url_to_prettylinks() {
 	global $pagenow;
 
-	$post_type                 = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
-	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? $_GET['monsterinsights_reference'] : '';
+	$post_type                 = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? sanitize_text_field( $_GET['monsterinsights_reference'] ) : '';
 
 	if ( 'post-new.php' === $pagenow && 'pretty-link' === $post_type && 'url_builder' === $monsterinsights_reference ) { ?>
 <script>
@@ -1773,8 +1828,8 @@ add_action( 'admin_footer', 'monsterinsights_tools_copy_url_to_prettylinks' );
 function monsterinsights_skip_prettylinks_welcome_screen() {
 	global $pagenow;
 
-	$post_type                 = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
-	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? $_GET['monsterinsights_reference'] : '';
+	$post_type                 = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? sanitize_text_field( $_GET['monsterinsights_reference'] ) : '';
 
 	if ( 'post-new.php' === $pagenow && 'pretty-link' === $post_type && 'url_builder' === $monsterinsights_reference ) {
 		$onboard = get_option( 'prli_onboard' );
@@ -1795,7 +1850,7 @@ add_action( 'wp_loaded', 'monsterinsights_skip_prettylinks_welcome_screen', 9 );
 function monsterinsights_restore_prettylinks_onboard_value() {
 	global $pagenow;
 
-	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
 
 	if ( 'edit.php' === $pagenow && 'pretty-link' === $post_type ) {
 		$onboard = get_option( 'monsterinsights_backup_prli_onboard_value' );
@@ -2046,6 +2101,22 @@ function monsterinsights_is_aioseo_active() {
 	return false;
 }
 
+// /**
+//  * Return FunnelKit Stripe Woo Gateway Settings URL if plugin is active.
+//  *
+//  * @return string
+//  * @since 8.24.0
+//  */
+// function monsterinsights_funnelkit_stripe_woo_gateway_dashboard_url() {
+// 	$url = '';
+
+// 	if ( class_exists( 'FKWCS_Gateway_Stripe' ) ) {
+// 		$url = is_multisite() ? network_admin_url( 'admin.php?page=wc-settings&tab=fkwcs_api_settings' ) : admin_url( 'admin.php?page=wc-settings&tab=fkwcs_api_settings' );
+// 	}
+
+// 	return $url;
+// }
+
 /**
  * Return AIOSEO Dashboard URL if plugin is active.
  *
@@ -2263,5 +2334,13 @@ if ( ! function_exists( 'current_datetime' ) ) {
 	 */
 	function current_datetime() {
 		return new DateTimeImmutable( 'now', wp_timezone() );
+	}
+}
+
+
+if ( ! function_exists( 'monsterinsights_is_authed' ) ) {
+	function monsterinsights_is_authed() {
+		$site_profile = get_option('monsterinsights_site_profile');
+		return isset($site_profile['key']);
 	}
 }

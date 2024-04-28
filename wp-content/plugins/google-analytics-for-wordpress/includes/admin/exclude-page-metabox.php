@@ -85,7 +85,7 @@ if ( ! class_exists( 'MonsterInsights_MetaBox_ExcludePage' ) ) {
 
 			register_post_meta(
 				'',
-				'_mi_skip_tracking',
+				'_monsterinsights_skip_tracking',
 				[
 					'auth_callback' => '__return_true',
 					'default'       => false,
@@ -108,13 +108,13 @@ if ( ! class_exists( 'MonsterInsights_MetaBox_ExcludePage' ) ) {
 		}
 
 		public function print_metabox_html( $post ) {
-			$skipped = (bool) get_post_meta( $post->ID, '_mi_skip_tracking', true );
+			$skipped = (bool) get_post_meta( $post->ID, '_monsterinsights_skip_tracking', true );
 			wp_nonce_field( 'monsterinsights_metabox', 'monsterinsights_metabox_nonce' );
 			?>
 			<div class="monsterinsights-metabox" id="monsterinsights-metabox-skip-tracking">
 				<div class="monsterinsights-metabox-input-checkbox">
 					<label class="">
-						<input type="checkbox" name="_mi_skip_tracking"
+						<input type="checkbox" name="_monsterinsights_skip_tracking"
 							   value="1" <?php checked( $skipped ); ?> <?php disabled( ! monsterinsights_is_pro_version() ); ?>>
 						<span
 							class="monsterinsights-metabox-input-checkbox-label"><?php _e( 'Exclude page from Google Analytics Tracking', 'google-analytics-for-wordpress' ); ?></span>
@@ -139,7 +139,7 @@ if ( ! class_exists( 'MonsterInsights_MetaBox_ExcludePage' ) ) {
                             <?php _e( 'This is a PRO feature.', 'google-analytics-for-wordpress' ); ?>
                         </span>
 					<div class="monsterinsights-metabox-pro-badge-upgrade">
-						<a href="<?php echo monsterinsights_get_upgrade_link( 'exclude-page-tracking', 'lite-metabox', "https://www.monsterinsights.com/lite/" ); ?>"
+						<a href="<?php echo monsterinsights_get_upgrade_link( 'exclude-page-tracking', 'lite-metabox', "https://www.monsterinsights.com/lite/" ); // phpcs:ignore ?>"
 						   target="_blank" rel="noopener">
 							<?php _e( 'Upgrade', 'google-analytics-for-wordpress' ); ?>
 						</a>
