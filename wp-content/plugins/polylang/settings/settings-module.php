@@ -29,9 +29,15 @@ class PLL_Settings_Module {
 	public $links_model;
 
 	/**
-	 * Stores if the module is active.
+	 * Key to use to manage the module activation state.
+	 * Possible values:
+	 * - An option key for a module that can be activated/deactivated.
+	 * - 'none' for a module that doesn't have a activation/deactivation setting.
+	 * - 'preview' for a preview module whose functionalities are available in the Pro version.
 	 *
-	 * @var bool
+	 * @var string
+	 *
+	 * @phpstan-var non-falsy-string
 	 */
 	public $active_option;
 
@@ -46,7 +52,9 @@ class PLL_Settings_Module {
 	 * Stores the module name.
 	 * It must be unique.
 	 *
-	 * @var string|null
+	 * @var string
+	 *
+	 * @phpstan-var non-falsy-string
 	 */
 	public $module;
 
@@ -90,12 +98,29 @@ class PLL_Settings_Module {
 	 *
 	 * @since 1.8
 	 *
-	 * @param object $polylang Polylang object
-	 * @param array  $args
+	 * @param object $polylang The Polylang object.
+	 * @param array  $args {
+	 *   @type string $module        Unique module name.
+	 *   @type string $title         The title of the settings module.
+	 *   @type string $description   The description of the settings module.
+	 *   @type string $active_option Optional. Key to use to manage the module activation state.
+	 *                               Possible values:
+	 *                               - An option key for a module that can be activated/deactivated.
+	 *                               - 'none' for a module that doesn't have a activation/deactivation setting.
+	 *                               - 'preview' for a preview module whose functionalities are available in the Pro version.
+	 *                               Default is 'none'.
+	 * }
+	 *
+	 * @phpstan-param array{
+	 *   module: non-falsy-string,
+	 *   title: string,
+	 *   description: string,
+	 *   active_option?: non-falsy-string
+	 * } $args
 	 */
 	public function __construct( &$polylang, $args ) {
-		$this->options = &$polylang->options;
-		$this->model = &$polylang->model;
+		$this->options     = &$polylang->options;
+		$this->model       = &$polylang->model;
 		$this->links_model = &$polylang->links_model;
 
 		$args = wp_parse_args(
@@ -103,9 +128,14 @@ class PLL_Settings_Module {
 			array(
 				'title'         => '',
 				'description'   => '',
-				'active_option' => false,
+				'active_option' => 'none',
 			)
 		);
+
+		if ( empty( $args['active_option'] ) ) {
+			// Backward compatibility.
+			$args['active_option'] = 'none';
+		}
 
 		foreach ( $args as $prop => $value ) {
 			$this->$prop = $value;
@@ -140,68 +170,72 @@ class PLL_Settings_Module {
 			'save'   => sprintf( '<button type="button" class="button button-primary save">%s</button>', esc_html__( 'Save Changes', 'polylang' ) ),
 		);
 
-		// Ajax action to save options
+		// Ajax action to save options.
 		add_action( 'wp_ajax_pll_save_options', array( $this, 'save_options' ) );
 	}
 
 	/**
-	 * Tells if the module is active
+	 * Tells if the module is active.
 	 *
 	 * @since 1.8
 	 *
 	 * @return bool
 	 */
 	public function is_active() {
-		return empty( $this->active_option ) || ! empty( $this->options[ $this->active_option ] );
+		return 'none' === $this->active_option || ( 'preview' !== $this->active_option && ! empty( $this->options[ $this->active_option ] ) );
 	}
 
 	/**
-	 * Activates the module
+	 * Activates the module.
 	 *
 	 * @since 1.8
 	 *
 	 * @return void
 	 */
 	public function activate() {
-		if ( ! empty( $this->active_option ) ) {
+		if ( 'none' !== $this->active_option && 'preview' !== $this->active_option ) {
 			$this->options[ $this->active_option ] = true;
 			update_option( 'polylang', $this->options );
 		}
 	}
 
 	/**
-	 * Deactivates the module
+	 * Deactivates the module.
 	 *
 	 * @since 1.8
 	 *
 	 * @return void
 	 */
 	public function deactivate() {
-		if ( ! empty( $this->active_option ) ) {
+		if ( 'none' !== $this->active_option && 'preview' !== $this->active_option ) {
 			$this->options[ $this->active_option ] = false;
 			update_option( 'polylang', $this->options );
 		}
 	}
 
 	/**
-	 * Protected method to display a configuration form
+	 * Protected method to display a configuration form.
 	 *
 	 * @since 1.8
 	 *
 	 * @return void
 	 */
 	protected function form() {
-		// Child classes can provide a form
+		// Child classes can provide a form.
 	}
 
 	/**
-	 * Public method returning the form if any
+	 * Public method returning the form if any.
 	 *
 	 * @since 1.8
 	 *
 	 * @return string
 	 */
 	public function get_form() {
+		if ( ! $this->is_active() ) {
+			return '';
+		}
+
 		// Read the form only once
 		if ( false === $this->form ) {
 			ob_start();
@@ -213,19 +247,19 @@ class PLL_Settings_Module {
 	}
 
 	/**
-	 * Allows child classes to validate their options before saving
+	 * Allows child classes to validate their options before saving.
 	 *
 	 * @since 1.8
 	 *
-	 * @param array $options Raw options
+	 * @param array $options Unsanitized options to save.
 	 * @return array Options
 	 */
 	protected function update( $options ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		return array(); // It's responsibility of the child class to decide what is saved
+		return array(); // It's responsibility of the child class to decide what is saved.
 	}
 
 	/**
-	 * Ajax method to save the options
+	 * Ajax method to save the options.
 	 *
 	 * @since 1.8
 	 *
@@ -254,15 +288,15 @@ class PLL_Settings_Module {
 
 			ob_start();
 
-			if ( empty( get_settings_errors() ) ) {
+			if ( empty( get_settings_errors( 'polylang' ) ) ) {
 				// Send update message
-				add_settings_error( 'general', 'settings_updated', __( 'Settings saved.', 'polylang' ), 'updated' );
-				settings_errors();
+				pll_add_notice( new WP_Error( 'settings_updated', __( 'Settings saved.', 'polylang' ), 'success' ) );
+				settings_errors( 'polylang' );
 				$x = new WP_Ajax_Response( array( 'what' => 'success', 'data' => ob_get_clean() ) );
 				$x->send();
 			} else {
 				// Send error messages
-				settings_errors();
+				settings_errors( 'polylang' );
 				$x = new WP_Ajax_Response( array( 'what' => 'error', 'data' => ob_get_clean() ) );
 				$x->send();
 			}
@@ -283,7 +317,7 @@ class PLL_Settings_Module {
 			$actions[] = 'configure';
 		}
 
-		if ( $this->active_option ) {
+		if ( 'none' !== $this->active_option && 'preview' !== $this->active_option ) {
 			$actions[] = $this->is_active() ? 'deactivate' : 'activate';
 		}
 
@@ -306,7 +340,7 @@ class PLL_Settings_Module {
 	}
 
 	/**
-	 * Default upgrade message ( to Pro version )
+	 * Default upgrade message (to Pro version).
 	 *
 	 * @since 1.9
 	 *
@@ -322,14 +356,14 @@ class PLL_Settings_Module {
 	}
 
 	/**
-	 * Allows child classes to display an upgrade message
+	 * Allows child classes to display an upgrade message.
 	 *
 	 * @since 1.9
 	 *
 	 * @return string
 	 */
 	public function get_upgrade_message() {
-		return '';
+		return 'preview' === $this->active_option ? $this->default_upgrade_message() : '';
 	}
 
 	/**

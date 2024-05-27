@@ -32,7 +32,7 @@ class PLL_Admin_Filters_Columns {
 	 *
 	 * @since 1.2
 	 *
-	 * @param object $polylang
+	 * @param object $polylang The Polylang object.
 	 */
 	public function __construct( &$polylang ) {
 		$this->links = &$polylang->links;
@@ -137,8 +137,8 @@ class PLL_Admin_Filters_Columns {
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $column  Column name
-	 * @param int    $post_id
+	 * @param string $column  Column name.
+	 * @param int    $post_id Post ID.
 	 * @return void
 	 */
 	public function post_column( $column, $post_id ) {
@@ -258,13 +258,13 @@ class PLL_Admin_Filters_Columns {
 	}
 
 	/**
-	 * Fills the language column in the 'Categories' or 'Post Tags' table
+	 * Fills the language column in the taxonomy terms list table.
 	 *
 	 * @since 0.1
 	 *
-	 * @param string $out
-	 * @param string $column  Column name
-	 * @param int    $term_id
+	 * @param string $out     Column output.
+	 * @param string $column  Column name.
+	 * @param int    $term_id Term ID.
 	 * @return string
 	 */
 	public function term_column( $out, $column, $term_id ) {
@@ -306,7 +306,7 @@ class PLL_Admin_Filters_Columns {
 
 		// Link to edit term ( or a translation )
 		if ( ( $id = $this->model->term->get( $term_id, $language ) ) && $term = get_term( $id, $taxonomy ) ) {
-			if ( $link = get_edit_term_link( $id, $taxonomy, $post_type ) ) {
+			if ( $term instanceof WP_Term && $link = get_edit_term_link( $id, $taxonomy, $post_type ) ) {
 				$flag = '';
 				if ( $id === $term_id ) {
 					$flag = $this->get_flag_html( $language );
@@ -422,19 +422,23 @@ class PLL_Admin_Filters_Columns {
 
 		foreach ( $translations as $term_id ) {
 			$level = is_taxonomy_hierarchical( $taxonomy ) ? count( get_ancestors( $term_id, $taxonomy ) ) : 0;
-			if ( $tag = get_term( $term_id, $taxonomy ) ) {
-				ob_start();
-				$wp_list_table->single_row( $tag, $level );
-				$data = ob_get_clean();
-				$x->add( array( 'what' => 'row', 'data' => $data, 'supplemental' => array( 'term_id' => $term_id ) ) );
+			$tag   = get_term( $term_id, $taxonomy );
+
+			if ( ! $tag instanceof WP_Term ) {
+				continue;
 			}
+
+			ob_start();
+			$wp_list_table->single_row( $tag, $level );
+			$data = ob_get_clean();
+			$x->add( array( 'what' => 'row', 'data' => $data, 'supplemental' => array( 'term_id' => $term_id ) ) );
 		}
 
 		$x->send();
 	}
 
 	/**
-	 * Returns the language flag or teh language slug if there is no flag.
+	 * Returns the language flag or the language slug if there is no flag.
 	 *
 	 * @since 2.8
 	 *

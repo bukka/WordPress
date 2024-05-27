@@ -4,7 +4,7 @@
  */
 
 /**
- * A generic activation / de-activation class compatble with multisite
+ * A generic activation / de-activation class compatible with multisite
  *
  * @since 1.7
  */
@@ -31,7 +31,7 @@ class PLL_Install_Base {
 		register_deactivation_hook( $plugin_basename, array( $this, 'deactivate' ) );
 
 		// Site creation on multisite.
-		add_action( 'wp_insert_site', array( $this, 'new_site' ) );
+		add_action( 'wp_initialize_site', array( $this, 'new_site' ), 50 ); // After WP (prio 10).
 	}
 
 	/**
@@ -39,19 +39,19 @@ class PLL_Install_Base {
 	 *
 	 * @since 1.7
 	 *
-	 * @return bool true if the plugin is currently beeing deactivated
+	 * @return bool true if the plugin is currently being deactivated
 	 */
 	public function is_deactivation() {
 		return isset( $_GET['action'], $_GET['plugin'] ) && 'deactivate' === $_GET['action'] && $this->plugin_basename === $_GET['plugin']; // phpcs:ignore WordPress.Security.NonceVerification
 	}
 
 	/**
-	 * Activation or deactivation for all blogs
+	 * Activation or deactivation for all blogs.
 	 *
 	 * @since 1.2
 	 *
-	 * @param string $what        Either 'activate' or 'deactivate'
-	 * @param bool   $networkwide
+	 * @param string $what        Either 'activate' or 'deactivate'.
+	 * @param bool   $networkwide Whether the plugin is (de)activated for all sites in the network or just the current site.
 	 * @return void
 	 */
 	protected function do_for_all_blogs( $what, $networkwide ) {
@@ -73,11 +73,11 @@ class PLL_Install_Base {
 	}
 
 	/**
-	 * Plugin activation for multisite
+	 * Plugin activation for multisite.
 	 *
 	 * @since 1.7
 	 *
-	 * @param bool $networkwide
+	 * @param bool $networkwide Whether the plugin is activated for all sites in the network or just the current site.
 	 * @return void
 	 */
 	public function activate( $networkwide ) {
@@ -92,15 +92,15 @@ class PLL_Install_Base {
 	 * @return void
 	 */
 	protected function _activate() {
-		// Can be overriden in child class
+		// Can be overridden in child class
 	}
 
 	/**
-	 * Plugin deactivation for multisite
+	 * Plugin deactivation for multisite.
 	 *
 	 * @since 0.1
 	 *
-	 * @param bool $networkwide
+	 * @param bool $networkwide Whether the plugin is deactivated for all sites in the network or just the current site.
 	 * @return void
 	 */
 	public function deactivate( $networkwide ) {
@@ -115,7 +115,7 @@ class PLL_Install_Base {
 	 * @return void
 	 */
 	protected function _deactivate() {
-		// Can be overriden in child class
+		// Can be overridden in child class
 	}
 
 	/**

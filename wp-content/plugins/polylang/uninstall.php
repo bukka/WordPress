@@ -23,7 +23,7 @@ class PLL_Uninstall {
 	public function __construct() {
 		global $wpdb;
 
-		// Don't do anything except if the constant PLL_REMOVE_ALL_DATA is explicitely defined and true.
+		// Don't do anything except if the constant PLL_REMOVE_ALL_DATA is explicitly defined and true.
 		if ( ! defined( 'PLL_REMOVE_ALL_DATA' ) || ! PLL_REMOVE_ALL_DATA ) {
 			return;
 		}
@@ -61,12 +61,10 @@ class PLL_Uninstall {
 		$languages = get_terms( array( 'taxonomy' => 'language', 'hide_empty' => false ) );
 
 		// Delete users options
-		foreach ( get_users( array( 'fields' => 'ID' ) ) as $user_id ) {
-			delete_user_meta( $user_id, 'pll_filter_content' );
-			delete_user_meta( $user_id, 'pll_dismissed_notices' ); // Legacy meta.
-			foreach ( $languages as $lang ) {
-				delete_user_meta( $user_id, 'description_' . $lang->slug );
-			}
+		delete_metadata( 'user', 0, 'pll_filter_content', '', true );
+		delete_metadata( 'user', 0, 'pll_dismissed_notices', '', true ); // Legacy meta.
+		foreach ( $languages as $lang ) {
+			delete_metadata( 'user', 0, "description_{$lang->slug}", '', true );
 		}
 
 		// Delete menu language switchers
@@ -84,7 +82,10 @@ class PLL_Uninstall {
 			wp_delete_post( $id, true );
 		}
 
-		// Delete the strings translations.
+		/*
+		 * Backward compatibility with Polylang < 3.4.
+		 * Delete the legacy strings translations.
+		 */
 		register_post_type( 'polylang_mo', array( 'rewrite' => false, 'query_var' => false ) );
 		$ids = get_posts(
 			array(
@@ -112,6 +113,7 @@ class PLL_Uninstall {
 			$term_ids = array_unique( $term_ids );
 			$wpdb->query( "DELETE FROM {$wpdb->terms} WHERE term_id IN ( " . implode( ',', $term_ids ) . ' )' ); // PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$wpdb->query( "DELETE FROM {$wpdb->term_taxonomy} WHERE term_id IN ( " . implode( ',', $term_ids ) . ' )' ); // PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DELETE FROM {$wpdb->termmeta} WHERE term_id IN ( " . implode( ',', $term_ids ) . " ) AND meta_key='_pll_strings_translations'" ); // PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 
 		if ( ! empty( $tt_ids ) ) {

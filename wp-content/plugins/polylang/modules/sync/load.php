@@ -7,9 +7,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
-};
+}
 
-if ( $polylang->model->get_languages_list() ) {
+if ( $polylang->model->has_languages() ) {
 	if ( $polylang instanceof PLL_Admin_Base ) {
 		$polylang->sync = new PLL_Admin_Sync( $polylang );
 	} else {
@@ -18,7 +18,7 @@ if ( $polylang->model->get_languages_list() ) {
 
 	add_filter(
 		'pll_settings_modules',
-		function( $modules ) {
+		function ( $modules ) {
 			$modules[] = 'PLL_Settings_Sync';
 			return $modules;
 		}

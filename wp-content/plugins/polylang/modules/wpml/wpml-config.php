@@ -9,6 +9,14 @@
  * The language switcher configuration is not interpreted
  *
  * @since 1.0
+ *
+ * @phpstan-type ParsedMetas array<
+ *     non-falsy-string,
+ *     array{
+ *         action: string,
+ *         encoding: 'json'|''
+ *     }
+ * >
  */
 class PLL_WPML_Config {
 	/**
@@ -37,9 +45,30 @@ class PLL_WPML_Config {
 	/**
 	 * List of rules to extract strings to translate from blocks.
 	 *
-	 * @var string[][][]|null
+	 * @var array
+	 *
+	 * @phpstan-var array{
+	 *     xpath?: array<non-empty-string, list<non-empty-string>>,
+	 *     key?: array<non-empty-string, array<array|true>>
+	 * }|null
 	 */
 	protected $parsing_rules = null;
+
+	/**
+	 * Contains the list of path in `open_basedir`.
+	 *
+	 * @var string[]|null
+	 */
+	private $open_basedir_paths;
+
+	/**
+	 * Cache for parsed metas.
+	 *
+	 * @var array
+	 *
+	 * @phpstan-var array<non-falsy-string, ParsedMetas>
+	 */
+	private $parsed_metas = array();
 
 	/**
 	 * Constructor
@@ -101,12 +130,14 @@ class PLL_WPML_Config {
 		add_filter( 'pll_copy_term_metas', array( $this, 'copy_term_metas' ), 20, 2 );
 		add_filter( 'pll_get_post_types', array( $this, 'translate_types' ), 10, 2 );
 		add_filter( 'pll_get_taxonomies', array( $this, 'translate_taxonomies' ), 10, 2 );
-		add_filter( 'pll_blocks_xpath_rules', array( $this, 'translate_blocks' ) );
-		add_filter( 'pll_blocks_rules_for_attributes', array( $this, 'translate_blocks_attributes' ) );
 
 		// Export.
 		add_filter( 'pll_post_metas_to_export', array( $this, 'post_metas_to_export' ) );
 		add_filter( 'pll_term_metas_to_export', array( $this, 'term_metas_to_export' ) );
+		add_filter( 'pll_post_meta_encodings', array( $this, 'add_post_meta_encodings' ), 20 );
+		add_filter( 'pll_term_meta_encodings', array( $this, 'add_term_meta_encodings' ), 20 );
+		add_filter( 'pll_blocks_xpath_rules', array( $this, 'translate_blocks' ) );
+		add_filter( 'pll_blocks_rules_for_attributes', array( $this, 'translate_blocks_attributes' ) );
 
 		foreach ( $this->xmls as $context => $xml ) {
 			$keys = $xml->xpath( 'admin-texts/key' );
@@ -166,34 +197,18 @@ class PLL_WPML_Config {
 	}
 
 	/**
-	 * Adds custom fields to the list of metas to copy when creating a new translation.
+	 * Adds post metas to the list of metas to copy when creating a new translation.
 	 *
 	 * @since 1.0
 	 *
-	 * @param string[] $metas The list of custom fields to copy or synchronize.
+	 * @param string[] $metas The list of post metas to copy or synchronize.
 	 * @param bool     $sync  True for sync, false for copy.
-	 * @return string[] The list of custom fields to copy or synchronize.
+	 * @return string[] The list of post metas to copy or synchronize.
+	 *
+	 * @phpstan-param array<non-falsy-string> $metas
 	 */
 	public function copy_post_metas( $metas, $sync ) {
-		foreach ( $this->xmls as $xml ) {
-			$cfs = $xml->xpath( 'custom-fields/custom-field' );
-
-			if ( ! is_array( $cfs ) ) {
-				continue;
-			}
-
-			foreach ( $cfs as $cf ) {
-				$action = $this->get_field_attribute( $cf, 'action' );
-
-				if ( 'copy' === $action || ( ! $sync && in_array( $action, array( 'translate', 'copy-once' ), true ) ) ) {
-					$metas[] = (string) $cf;
-				} else {
-					$metas = array_diff( $metas, array( (string) $cf ) );
-				}
-			}
-		}
-
-		return $metas;
+		return $this->filter_metas_to_copy( (array) $metas, 'custom-fields/custom-field', (bool) $sync );
 	}
 
 	/**
@@ -204,27 +219,11 @@ class PLL_WPML_Config {
 	 * @param string[] $metas The list of term metas to copy or synchronize.
 	 * @param bool     $sync  True for sync, false for copy.
 	 * @return string[] The list of term metas to copy or synchronize.
+	 *
+	 * @phpstan-param array<non-falsy-string> $metas
 	 */
 	public function copy_term_metas( $metas, $sync ) {
-		foreach ( $this->xmls as $xml ) {
-			$cfs = $xml->xpath( 'custom-term-fields/custom-term-field' );
-
-			if ( ! is_array( $cfs ) ) {
-				continue;
-			}
-
-			foreach ( $cfs as $cf ) {
-				$action = $this->get_field_attribute( $cf, 'action' );
-
-				if ( 'copy' === $action || ( ! $sync && in_array( $action, array( 'translate', 'copy-once' ), true ) ) ) {
-					$metas[] = (string) $cf;
-				} else {
-					$metas = array_diff( $metas, array( (string) $cf ) );
-				}
-			}
-		}
-
-		return $metas;
+		return $this->filter_metas_to_copy( (array) $metas, 'custom-term-fields/custom-term-field', (bool) $sync );
 	}
 
 	/**
@@ -248,29 +247,12 @@ class PLL_WPML_Config {
 	 * }
 	 * @return array
 	 *
-	 * @phpstan-param array<string, mixed> $keys
-	 * @phpstan-return array<string, mixed>
+	 * @phpstan-param array<non-falsy-string, mixed> $keys
+	 * @phpstan-return array<non-falsy-string, mixed>
 	 */
 	public function post_metas_to_export( $keys ) {
 		// Add keys that have the `action` attribute set to `translate`.
-		foreach ( $this->xmls as $xml ) {
-			$fields = $xml->xpath( 'custom-fields/custom-field' );
-
-			if ( ! is_array( $fields ) ) {
-				// No custom fields.
-				continue;
-			}
-
-			foreach ( $fields as $field ) {
-				$action = $this->get_field_attribute( $field, 'action' );
-
-				if ( 'translate' !== $action ) {
-					continue;
-				}
-
-				$keys[ (string) $field ] = 1;
-			}
-		}
+		$keys = $this->add_metas_to_export( (array) $keys, 'custom-fields/custom-field' );
 
 		// Deal with sub-field translations.
 		foreach ( $this->xmls as $xml ) {
@@ -318,31 +300,40 @@ class PLL_WPML_Config {
 	 * }
 	 * @return array
 	 *
-	 * @phpstan-param array<string, mixed> $keys
-	 * @phpstan-return array<string, mixed>
+	 * @phpstan-param array<non-falsy-string, mixed> $keys
+	 * @phpstan-return array<non-falsy-string, mixed>
 	 */
 	public function term_metas_to_export( $keys ) {
 		// Add keys that have the `action` attribute set to `translate`.
-		foreach ( $this->xmls as $xml ) {
-			$fields = $xml->xpath( 'custom-term-fields/custom-term-field' );
+		return $this->add_metas_to_export( (array) $keys, 'custom-term-fields/custom-term-field' );
+	}
 
-			if ( ! is_array( $fields ) ) {
-				// No custom fields.
-				continue;
-			}
+	/**
+	 * Specifies the encoding for post metas.
+	 *
+	 * @since 3.6
+	 *
+	 * @param string[] $metas An array containing meta names as array keys, and their encoding as array values.
+	 * @return string[]
+	 *
+	 * @phpstan-param array<non-falsy-string, non-falsy-string> $metas
+	 */
+	public function add_post_meta_encodings( $metas ) {
+		return $this->add_metas_encodings( (array) $metas, 'custom-fields/custom-field' );
+	}
 
-			foreach ( $fields as $field ) {
-				$action = $this->get_field_attribute( $field, 'action' );
-
-				if ( 'translate' !== $action ) {
-					continue;
-				}
-
-				$keys[ (string) $field ] = 1;
-			}
-		}
-
-		return $keys;
+	/**
+	 * Specifies the encoding for term metas.
+	 *
+	 * @since 3.6
+	 *
+	 * @param string[] $metas An array containing meta names as array keys, and their encoding as array values.
+	 * @return string[]
+	 *
+	 * @phpstan-param array<non-falsy-string, non-falsy-string> $metas
+	 */
+	public function add_term_meta_encodings( $metas ) {
+		return $this->add_metas_encodings( (array) $metas, 'custom-term-fields/custom-term-field' );
 	}
 
 	/**
@@ -426,12 +417,13 @@ class PLL_WPML_Config {
 	 * Translation management for blocks attributes.
 	 *
 	 * @since 3.3
+	 * @since 3.6 Format changed from `array<string>` to `array<non-empty-string, array|true>`.
 	 *
-	 * @param string[][] $parsing_rules Rules for blocks attributes to translate.
-	 * @return string[][] Rules completed with ones from wpml-config file.
+	 * @param array $parsing_rules Rules for blocks attributes to translate.
+	 * @return array Rules completed with ones from wpml-config file.
 	 *
-	 * @phpstan-param array<string,array<string>> $parsing_rules
-	 * @phpstan-return array<string,array<string>>
+	 * @phpstan-param array<non-empty-string, array|true> $parsing_rules
+	 * @phpstan-return array<non-empty-string, array|true>
 	 */
 	public function translate_blocks_attributes( $parsing_rules ) {
 		return array_merge( $parsing_rules, $this->get_blocks_parsing_rules( 'key' ) );
@@ -444,6 +436,11 @@ class PLL_WPML_Config {
 	 *
 	 * @param string $rule_tag Tag name to extract.
 	 * @return string[][] The rules.
+	 *
+	 * @phpstan-param 'xpath'|'key' $rule_tag
+	 * @phpstan-return (
+	 *     $rule_tag is 'xpath' ? array<non-empty-string, list<non-empty-string>> : array<non-empty-string, array<array|true>>
+	 * )
 	 */
 	protected function get_blocks_parsing_rules( $rule_tag ) {
 
@@ -460,6 +457,11 @@ class PLL_WPML_Config {
 	 * @since 3.3
 	 *
 	 * @return string[][][] Rules completed with ones from wpml-config file.
+	 *
+	 * @phpstan-return array{
+	 *     xpath?: array<non-empty-string, list<non-empty-string>>,
+	 *     key?: array<non-empty-string, array<array|true>>
+	 * }
 	 */
 	protected function extract_blocks_parsing_rules() {
 		$parsing_rules = array();
@@ -491,21 +493,53 @@ class PLL_WPML_Config {
 					switch ( $child_tag ) {
 						case 'xpath':
 							$rule = trim( (string) $child );
+
+							if ( '' !== $rule ) {
+								$parsing_rules['xpath'][ $block_name ][] = $rule;
+							}
 							break;
 
 						case 'key':
-							$rule = $this->get_field_attribute( $child, 'name' );
-							break;
-					}
+							$rule = $this->get_field_attributes( $child );
 
-					if ( '' !== $rule ) {
-						$parsing_rules[ $child_tag ][ $block_name ][] = $rule;
+							if ( empty( $rule ) ) {
+								break;
+							}
+
+							if ( isset( $parsing_rules['key'][ $block_name ] ) ) {
+								$parsing_rules['key'][ $block_name ] = $this->array_merge_recursive( $parsing_rules['key'][ $block_name ], $rule );
+							} else {
+								$parsing_rules['key'][ $block_name ] = $rule;
+							}
+							break;
 					}
 				}
 			}
 		}
 
 		return $parsing_rules;
+	}
+
+	/**
+	 * Merge two arrays recursively.
+	 * Unlike `array_merge_recursive()`, this method doesn't change the type of the values.
+	 *
+	 * @since 3.6
+	 *
+	 * @param array $array1 Array to merge into.
+	 * @param array $array2 Array to merge.
+	 * @return array
+	 */
+	protected function array_merge_recursive( array $array1, array $array2 ): array {
+		foreach ( $array2 as $key => $value ) {
+			if ( is_array( $value ) && isset( $array1[ $key ] ) && is_array( $array1[ $key ] ) ) {
+				$array1[ $key ] = $this->array_merge_recursive( $array1[ $key ], $value );
+			} else {
+				$array1[ $key ] = $value;
+			}
+		}
+
+		return $array1;
 	}
 
 	/**
@@ -580,6 +614,44 @@ class PLL_WPML_Config {
 	}
 
 	/**
+	 * Gets attributes values recursively.
+	 *
+	 * @since 3.6
+	 *
+	 * @param  SimpleXMLElement $field A XML node.
+	 * @return array An array of attributes.
+	 *
+	 * @phpstan-return array<non-empty-string, array|true>
+	 */
+	private function get_field_attributes( SimpleXMLElement $field ): array {
+		$name = $this->get_field_attribute( $field, 'name' );
+
+		if ( '' === $name ) {
+			return array();
+		}
+
+		$children = $field->children();
+
+		if ( 0 === $children->count() ) {
+			return array( $name => true );
+		}
+
+		$sub_attributes = array();
+
+		foreach ( $children as $child ) {
+			$sub = $this->get_field_attributes( $child );
+
+			if ( empty( $sub ) ) {
+				continue;
+			}
+
+			$sub_attributes[ $name ] = array_merge( $sub_attributes[ $name ] ?? array(), $sub );
+		}
+
+		return $sub_attributes;
+	}
+
+	/**
 	 * Returns all wpml-config.xml files in MU plugins.
 	 *
 	 * @since 3.3
@@ -589,7 +661,7 @@ class PLL_WPML_Config {
 	 * @phpstan-return array<string, string>
 	 */
 	private function get_mu_plugin_files() {
-		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
+		if ( ! is_readable( WPMU_PLUGIN_DIR ) || ! is_dir( WPMU_PLUGIN_DIR ) ) {
 			return array();
 		}
 
@@ -598,19 +670,19 @@ class PLL_WPML_Config {
 		// Search for top level wpml-config.xml file.
 		$file_path = WPMU_PLUGIN_DIR . '/wpml-config.xml';
 
-		if ( file_exists( $file_path ) ) {
+		if ( is_readable( $file_path ) ) {
 			$files['mu-plugins'] = $file_path;
 		}
 
 		// Search in proxy loaded MU plugins.
 		foreach ( new DirectoryIterator( WPMU_PLUGIN_DIR ) as $file_info ) {
-			if ( $file_info->isDot() || ! $file_info->isDir() ) {
+			if ( ! $this->is_dir( $file_info ) ) {
 				continue;
 			}
 
 			$file_path = $file_info->getPathname() . '/wpml-config.xml';
 
-			if ( file_exists( $file_path ) ) {
+			if ( is_readable( $file_path ) ) {
 				$files[ 'mu-plugins/' . $file_info->getFilename() ] = $file_path;
 			}
 		}
@@ -657,7 +729,7 @@ class PLL_WPML_Config {
 			$file_dir  = dirname( $plugin );
 			$file_path = sprintf( $plugin_path, $file_dir );
 
-			if ( file_exists( $file_path ) ) {
+			if ( is_readable( $file_path ) ) {
 				$files[ "plugins/{$file_dir}" ] = $file_path;
 			}
 		}
@@ -681,7 +753,7 @@ class PLL_WPML_Config {
 		$template_path = get_template_directory();
 		$file_path     = "{$template_path}/wpml-config.xml";
 
-		if ( file_exists( $file_path ) ) {
+		if ( is_readable( $file_path ) ) {
 			$files[ 'themes/' . get_template() ] = $file_path;
 		}
 
@@ -689,7 +761,7 @@ class PLL_WPML_Config {
 		$stylesheet_path = get_stylesheet_directory();
 		$file_path       = "{$stylesheet_path}/wpml-config.xml";
 
-		if ( $stylesheet_path !== $template_path && file_exists( $file_path ) ) {
+		if ( $stylesheet_path !== $template_path && is_readable( $file_path ) ) {
 			$files[ 'themes/' . get_stylesheet() ] = $file_path;
 		}
 
@@ -708,12 +780,269 @@ class PLL_WPML_Config {
 	private function get_custom_files() {
 		$file_path = PLL_LOCAL_DIR . '/wpml-config.xml';
 
-		if ( ! file_exists( $file_path ) ) {
+		if ( ! is_readable( $file_path ) ) {
 			return array();
 		}
 
 		return array(
 			'Polylang' => $file_path,
 		);
+	}
+
+	/**
+	 * Tells if the given "file info" object represents a directory.
+	 * This takes care of not triggering a `open_basedir` restriction error when the file symlinks a file that is not in
+	 * `open_basedir`.
+	 *
+	 * @see https://wordpress.org/support/topic/fatal-error-open_basedir-restricton/
+	 *
+	 * @since 3.5.1
+	 *
+	 * @param DirectoryIterator $file_info A "file info" object that we know its path (but maybe not its real path) is
+	 *                                     in `open_basedir`.
+	 * @return bool
+	 */
+	private function is_dir( DirectoryIterator $file_info ): bool {
+		if ( $file_info->isDot() ) {
+			return false;
+		}
+
+		if ( $file_info->getPathname() === $file_info->getRealPath() ) {
+			// Not a symlink: not going to trigger a `open_basedir` restriction error.
+			return $file_info->isDir();
+		}
+
+		/*
+		 * Symlink: make sure the file's real path is in `open_basedir` before checking it is a dir.
+		 * Which means that the `open_basedir` check is done only for symlinked files.
+		 */
+		return $this->is_allowed_dir( $file_info->getRealPath() ) && $file_info->isDir();
+	}
+
+	/**
+	 * Checks whether access to a given directory is allowed.
+	 * This takes into account the PHP `open_basedir` restrictions, so that Polylang does not try to access directories
+	 * it is not allowed to.
+	 *
+	 * Inspired by `WP_Automatic_Updater::is_allowed_dir()` and `wp-includes/ID3/getid3.php`.
+	 *
+	 * @since 3.5.1
+	 *
+	 * @param string $dir The directory to check.
+	 * @return bool True if access to the directory is allowed, false otherwise.
+	 */
+	private function is_allowed_dir( string $dir ): bool {
+		$dir = trim( $dir );
+
+		if ( '' === $dir ) {
+			return false;
+		}
+
+		$open_basedir_paths = $this->get_open_basedir_paths();
+
+		if ( empty( $open_basedir_paths ) ) {
+			return true;
+		}
+
+		$dir = $this->normalize_path( $dir );
+
+		foreach ( $open_basedir_paths as $path ) {
+			if ( str_starts_with( $dir, $path ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the list of paths in `open_basedir`. The purpose is to compare a formatted path to this list.
+	 * Note: all paths are suffixed by `DIRECTORY_SEPARATOR`, even paths to files.
+	 *
+	 * @since 3.5.1
+	 *
+	 * @return string[] An array of formatted paths.
+	 */
+	private function get_open_basedir_paths(): array {
+		if ( is_array( $this->open_basedir_paths ) ) {
+			return $this->open_basedir_paths;
+		}
+
+		$this->open_basedir_paths = array();
+		$open_basedir             = ini_get( 'open_basedir' ); // Can be `false` or an empty string.
+
+		if ( empty( $open_basedir ) ) {
+			return $this->open_basedir_paths;
+		}
+
+		$open_basedir_list = explode( PATH_SEPARATOR, $open_basedir );
+
+		foreach ( $open_basedir_list as $basedir ) {
+			$basedir = trim( $basedir );
+
+			if ( '' === $basedir ) {
+				continue;
+			}
+
+			$this->open_basedir_paths[] = $this->normalize_path( $basedir );
+		}
+
+		$this->open_basedir_paths = array_unique( $this->open_basedir_paths );
+
+		return $this->open_basedir_paths;
+	}
+
+	/**
+	 * Formats a path for string comparison.
+	 * 1. Slashes and back-slashes are replaced by `DIRECTORY_SEPARATOR`.
+	 * 2. The path is suffixed by `DIRECTORY_SEPARATOR` (even non-directory elements).
+	 *
+	 * @since 3.5.1
+	 *
+	 * @param string $path A file path.
+	 * @return string
+	 *
+	 * @phpstan-param non-empty-string $path
+	 * @phpstan-return non-empty-string
+	 */
+	private function normalize_path( string $path ): string {
+		$path = str_replace( array( '/', '\\' ), DIRECTORY_SEPARATOR, $path );
+
+		if ( substr( $path, -1, 1 ) !== DIRECTORY_SEPARATOR ) {
+			$path .= DIRECTORY_SEPARATOR;
+		}
+
+		return $path;
+	}
+
+	/**
+	 * Adds (or removes) meta names to the list of metas to copy or synchronize.
+	 *
+	 * @since 3.6
+	 *
+	 * @param string[] $metas The list of meta names to copy or synchronize.
+	 * @param string   $xpath Xpath to the meta fields in the xml files.
+	 * @param bool     $sync  Either sync is enabled or not.
+	 * @return string[]
+	 *
+	 * @phpstan-param array<non-falsy-string> $metas
+	 * @phpstan-param non-falsy-string $xpath
+	 */
+	private function filter_metas_to_copy( array $metas, string $xpath, bool $sync ): array {
+		$parsed_metas    = $this->parse_xml_metas( $xpath );
+		$metas_to_remove = array();
+
+		foreach ( $parsed_metas as $name => $parsed_meta ) {
+			if ( 'copy' === $parsed_meta['action'] || ( ! $sync && in_array( $parsed_meta['action'], array( 'translate', 'copy-once' ), true ) ) ) {
+				$metas[] = $name;
+			} else {
+				$metas_to_remove[] = $name;
+			}
+		}
+
+		return array_diff( $metas, $metas_to_remove );
+	}
+
+	/**
+	 * Adds meta keys to export.
+	 *
+	 * @since 3.6
+	 *
+	 * @param array  $metas {
+	 *     An array containing meta keys to translate.
+	 *     Ex: array(
+	 *      'meta_to_translate_1' => 1,
+	 *      'meta_to_translate_2' => 1,
+	 *      'meta_to_translate_3' => array( ... ),
+	 *    )
+	 * }
+	 * @param string $xpath  Xpath to the meta fields in the xml files.
+	 * @return array
+	 *
+	 * @phpstan-param array<non-falsy-string, mixed> $metas
+	 * @phpstan-param non-falsy-string $xpath
+	 * @phpstan-return array<non-falsy-string, mixed>
+	 */
+	private function add_metas_to_export( array $metas, string $xpath ) {
+		$fields = $this->parse_xml_metas( $xpath );
+
+		foreach ( $fields as $name => $field ) {
+			if ( 'translate' === $field['action'] ) {
+				$metas[ $name ] = 1;
+			}
+		}
+
+		return $metas;
+	}
+
+	/**
+	 * Adds encoding of metas.
+	 *
+	 * @since 3.6
+	 *
+	 * @param string[] $metas The list of encodings for each metas. Meta names are array keys, encodings are array values.
+	 * @param string   $xpath Xpath to the meta fields in the xml files.
+	 * @return string[]
+	 *
+	 * @phpstan-param array<non-falsy-string, non-falsy-string> $metas
+	 * @phpstan-param non-falsy-string $xpath
+	 */
+	private function add_metas_encodings( array $metas, string $xpath ): array {
+		$parsed_metas = $this->parse_xml_metas( $xpath );
+
+		foreach ( $parsed_metas as $name => $parsed_meta ) {
+			if ( ! empty( $parsed_meta['encoding'] ) ) {
+				$metas[ $name ] = $parsed_meta['encoding'];
+			}
+		}
+
+		return $metas;
+	}
+
+	/**
+	 * Parses all xml files for metas.
+	 * Results are cached for each `$xpath`.
+	 *
+	 * @since 3.6
+	 *
+	 * @param string $xpath Xpath to the meta fields in the xml files.
+	 * @return array
+	 *
+	 * @phpstan-param non-falsy-string $xpath
+	 * @phpstan-return ParsedMetas
+	 */
+	private function parse_xml_metas( string $xpath ): array {
+		if ( isset( $this->parsed_metas[ $xpath ] ) ) {
+			return $this->parsed_metas[ $xpath ];
+		}
+
+		$this->parsed_metas[ $xpath ] = array();
+
+		foreach ( $this->xmls as $xml ) {
+			$custom_fields = $xml->xpath( $xpath );
+
+			if ( ! is_array( $custom_fields ) ) {
+				continue;
+			}
+
+			foreach ( $custom_fields as $custom_field ) {
+				$name = (string) $custom_field;
+
+				if ( empty( $name ) ) {
+					continue;
+				}
+
+				$data = array(
+					'action'   => $this->get_field_attribute( $custom_field, 'action' ),
+					'encoding' => $this->get_field_attribute( $custom_field, 'encoding' ),
+				);
+
+				$data['encoding'] = 'json' === $data['encoding'] ? 'json' : ''; // Only JSON is supported for now.
+
+				$this->parsed_metas[ $xpath ][ $name ] = $data;
+			}
+		}
+
+		return $this->parsed_metas[ $xpath ];
 	}
 }

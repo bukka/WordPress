@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
-};
+}
 
 /**
  * The list of predefined languages
@@ -66,6 +66,11 @@ return array(
 		'facebook' => 'ak_GH',
 	),
 	'am' => array(
+		'code'     => 'am',
+		'locale'   => 'am',
+		'name'     => 'አማርኛ',
+		'dir'      => 'ltr',
+		'flag'     => 'et',
 		'facebook' => 'am_ET',
 	),
 	'ar' => array(
@@ -75,6 +80,14 @@ return array(
 		'dir'      => 'rtl',
 		'flag'     => 'arab',
 		'facebook' => 'ar_AR',
+		'deepl'    => 'AR',
+	),
+	'arg' => array(
+		'code'     => 'an',
+		'locale'   => 'arg',
+		'name'     => 'Aragonés',
+		'dir'      => 'ltr',
+		'flag'     => 'es',
 	),
 	'arq' => array(
 		'facebook' => 'ar_AR',
@@ -86,6 +99,7 @@ return array(
 		'dir'      => 'rtl',
 		'flag'     => 'ma',
 		'facebook' => 'ar_AR',
+		'deepl'    => 'AR',
 	),
 	'as' => array(
 		'code'     => 'as',
@@ -126,6 +140,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'bg',
 		'facebook' => 'bg_BG',
+		'deepl'    => 'BG',
 	),
 	'bn_BD' => array(
 		'code'     => 'bn',
@@ -188,6 +203,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'cz',
 		'facebook' => 'cs_CZ',
+		'deepl'    => 'CS',
 	),
 	'cy' => array(
 		'code'     => 'cy',
@@ -204,6 +220,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'dk',
 		'facebook' => 'da_DK',
+		'deepl'    => 'DA',
 	),
 	'de_AT' => array(
 		'code'     => 'de',
@@ -212,6 +229,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'at',
 		'facebook' => 'de_DE',
+		'deepl'    => 'DE',
 	),
 	'de_CH' => array(
 		'code'     => 'de',
@@ -220,6 +238,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ch',
 		'facebook' => 'de_DE',
+		'deepl'    => 'DE',
 	),
 	'de_CH_informal' => array(
 		'code'     => 'de',
@@ -229,6 +248,7 @@ return array(
 		'flag'     => 'ch',
 		'w3c'      => 'de-CH',
 		'facebook' => 'de_DE',
+		'deepl'    => 'DE',
 	),
 	'de_DE' => array(
 		'code'     => 'de',
@@ -237,6 +257,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'de',
 		'facebook' => 'de_DE',
+		'deepl'    => 'DE',
 	),
 	'de_DE_formal' => array(
 		'code'     => 'de',
@@ -246,6 +267,7 @@ return array(
 		'flag'     => 'de',
 		'w3c'      => 'de-DE',
 		'facebook' => 'de_DE',
+		'deepl'    => 'DE',
 	),
 	'dsb' => array(
 		'code'     => 'dsb',
@@ -269,6 +291,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'gr',
 		'facebook' => 'el_GR',
+		'deepl'    => 'EL',
 	),
 	'en_AU' => array(
 		'code'     => 'en',
@@ -277,6 +300,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'au',
 		'facebook' => 'en_US',
+		'deepl'    => 'EN-US',
 	),
 	'en_CA' => array(
 		'code'     => 'en',
@@ -285,6 +309,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ca',
 		'facebook' => 'en_US',
+		'deepl'    => 'EN-US',
 	),
 	'en_GB' => array(
 		'code'     => 'en',
@@ -293,6 +318,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'gb',
 		'facebook' => 'en_GB',
+		'deepl'    => 'EN-GB',
 	),
 	'en_NZ' => array(
 		'code'     => 'en',
@@ -301,6 +327,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'nz',
 		'facebook' => 'en_US',
+		'deepl'    => 'EN-US',
 	),
 	'en_US' => array(
 		'code'     => 'en',
@@ -309,6 +336,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'us',
 		'facebook' => 'en_US',
+		'deepl'    => 'EN-US',
 	),
 	'en_ZA' => array(
 		'code'     => 'en',
@@ -317,6 +345,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'za',
 		'facebook' => 'en_US',
+		'deepl'    => 'EN-US',
 	),
 	'eo' => array(
 		'code'     => 'eo',
@@ -333,6 +362,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ar',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_CL' => array(
 		'code'     => 'es',
@@ -341,6 +371,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'cl',
 		'facebook' => 'es_CL',
+		'deepl'    => 'ES',
 	),
 	'es_CO' => array(
 		'code'     => 'es',
@@ -349,6 +380,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'co',
 		'facebook' => 'es_CO',
+		'deepl'    => 'ES',
 	),
 	'es_CR' => array(
 		'code'     => 'es',
@@ -357,6 +389,16 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'cr',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
+	),
+	'es_DO' => array(
+		'code'     => 'es',
+		'locale'   => 'es_DO',
+		'name'     => 'Español',
+		'dir'      => 'ltr',
+		'flag'     => 'do',
+		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_EC' => array(
 		'code'     => 'es',
@@ -365,6 +407,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ec',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_ES' => array(
 		'code'     => 'es',
@@ -373,6 +416,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'es',
 		'facebook' => 'es_ES',
+		'deepl'    => 'ES',
 	),
 	'es_GT' => array(
 		'code'     => 'es',
@@ -381,6 +425,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'gt',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_MX' => array(
 		'code'     => 'es',
@@ -389,6 +434,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'mx',
 		'facebook' => 'es_MX',
+		'deepl'    => 'ES',
 	),
 	'es_PE' => array(
 		'code'     => 'es',
@@ -397,6 +443,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'pe',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_PR' => array(
 		'code'     => 'es',
@@ -405,6 +452,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'pr',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_UY' => array(
 		'code'     => 'es',
@@ -413,6 +461,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'uy',
 		'facebook' => 'es_LA',
+		'deepl'    => 'ES',
 	),
 	'es_VE' => array(
 		'code'     => 'es',
@@ -421,6 +470,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 've',
 		'facebook' => 'es_VE',
+		'deepl'    => 'ES',
 	),
 	'et' => array(
 		'code'     => 'et',
@@ -429,6 +479,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ee',
 		'facebook' => 'et_EE',
+		'deepl'    => 'ET',
 	),
 	'eu' => array(
 		'code'     => 'eu',
@@ -461,6 +512,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'fi',
 		'facebook' => 'fi_FI',
+		'deepl'    => 'FI',
 	),
 	'fo' => array(
 		'code'     => 'fo',
@@ -477,6 +529,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'be',
 		'facebook' => 'fr_FR',
+		'deepl'    => 'FR',
 	),
 	'fr_CA' => array(
 		'code'     => 'fr',
@@ -485,6 +538,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'quebec',
 		'facebook' => 'fr_CA',
+		'deepl'    => 'FR',
 	),
 	'fr_FR' => array(
 		'code'     => 'fr',
@@ -493,6 +547,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'fr',
 		'facebook' => 'fr_FR',
+		'deepl'    => 'FR',
 	),
 	'fuc' => array(
 		'facebook' => 'ff_NG',
@@ -588,6 +643,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'hu',
 		'facebook' => 'hu_HU',
+		'deepl'    => 'HU',
 	),
 	'hsb' => array(
 		'code'     => 'hsb',
@@ -611,6 +667,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'id',
 		'facebook' => 'id_ID',
+		'deepl'    => 'ID',
 	),
 	'ido' => array(
 		'w3c'      => 'io',
@@ -630,6 +687,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'it',
 		'facebook' => 'it_IT',
+		'deepl'    => 'IT',
 	),
 	'ja' => array(
 		'code'     => 'ja',
@@ -638,6 +696,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'jp',
 		'facebook' => 'ja_JP',
+		'deepl'    => 'JA',
 	),
 	'jv_ID' => array(
 		'code'     => 'jv',
@@ -665,6 +724,13 @@ return array(
 	'kin' => array(
 		'w3c'      => 'rw',
 		'facebook' => 'rw_RW',
+	),
+	'kir' => array(
+		'code'     => 'ky',
+		'locale'   => 'kir',
+		'name'     => 'Кыргызча',
+		'dir'      => 'ltr',
+		'flag'     => 'kg',
 	),
 	'kk' => array(
 		'code'     => 'kk',
@@ -697,6 +763,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'kr',
 		'facebook' => 'ko_KR',
+		'deepl'    => 'KO',
 	),
 	'ku' => array(
 		'facebook' => 'ku_TR',
@@ -728,6 +795,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'lt',
 		'facebook' => 'lt_LT',
+		'deepl'    => 'LT',
 	),
 	'lv' => array(
 		'code'     => 'lv',
@@ -736,6 +804,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'lv',
 		'facebook' => 'lv_LV',
+		'deepl'    => 'LV',
 	),
 	'mg_MG' => array(
 		'facebook' => 'mg_MG',
@@ -802,6 +871,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'no',
 		'facebook' => 'nb_NO',
+		'deepl'    => 'NB',
 	),
 	'ne_NP' => array(
 		'code'     => 'ne',
@@ -818,6 +888,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'be',
 		'facebook' => 'nl_BE',
+		'deepl'    => 'NL',
 	),
 	'nl_NL' => array(
 		'code'     => 'nl',
@@ -826,6 +897,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'nl',
 		'facebook' => 'nl_NL',
+		'deepl'    => 'NL',
 	),
 	'nl_NL_formal' => array(
 		'code'     => 'nl',
@@ -835,6 +907,7 @@ return array(
 		'flag'     => 'nl',
 		'w3c'      => 'nl-NL',
 		'facebook' => 'nl_NL',
+		'deepl'    => 'NL',
 	),
 	'nn_NO' => array(
 		'code'     => 'nn',
@@ -870,6 +943,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'pl',
 		'facebook' => 'pl_PL',
+		'deepl'    => 'PL',
 	),
 	'ps' => array(
 		'code'     => 'ps',
@@ -886,6 +960,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ao',
 		'facebook' => 'pt_PT',
+		'deepl'    => 'PT-PT',
 	),
 	'pt_BR' => array(
 		'code'     => 'pt',
@@ -894,6 +969,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'br',
 		'facebook' => 'pt_BR',
+		'deepl'    => 'PT-BR',
 	),
 	'pt_PT' => array(
 		'code'     => 'pt',
@@ -902,6 +978,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'pt',
 		'facebook' => 'pt_PT',
+		'deepl'    => 'PT-PT',
 	),
 	'pt_PT_ao90' => array(
 		'code'     => 'pt',
@@ -910,6 +987,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'pt',
 		'facebook' => 'pt_PT',
+		'deepl'    => 'PT-PT',
 	),
 	'rhg' => array(
 		'code'     => 'rhg',
@@ -925,6 +1003,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ro',
 		'facebook' => 'ro_RO',
+		'deepl'    => 'RO',
 	),
 	'roh' => array(
 		'w3c'      => 'rm',
@@ -937,6 +1016,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ru',
 		'facebook' => 'ru_RU',
+		'deepl'    => 'RU',
 	),
 	'sa_IN' => array(
 		'facebook' => 'sa_IN',
@@ -963,6 +1043,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'sk',
 		'facebook' => 'sk_SK',
+		'deepl'    => 'SK',
 	),
 	'skr' => array(
 		'code'     => 'skr',
@@ -978,6 +1059,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'si',
 		'facebook' => 'sl_SI',
+		'deepl'    => 'SL',
 	),
 	'sna' => array(
 		'facebook' => 'sn_ZW',
@@ -1032,6 +1114,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'se',
 		'facebook' => 'sv_SE',
+		'deepl'    => 'SV',
 	),
 	'sw' => array(
 		'code'     => 'sw',
@@ -1109,6 +1192,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'tr',
 		'facebook' => 'tr_TR',
+		'deepl'    => 'TR',
 	),
 	'tt_RU' => array(
 		'code'     => 'tt',
@@ -1139,6 +1223,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'ua',
 		'facebook' => 'uk_UA',
+		'deepl'    => 'UK',
 	),
 	'ur' => array(
 		'code'     => 'ur',
@@ -1184,6 +1269,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'cn',
 		'facebook' => 'zh_CN',
+		'deepl'    => 'ZH',
 	),
 	'zh_HK' => array(
 		'code'     => 'zh',
@@ -1192,6 +1278,7 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'hk',
 		'facebook' => 'zh_HK',
+		'deepl'    => 'ZH',
 	),
 	'zh_TW' => array(
 		'code'     => 'zh',
@@ -1200,5 +1287,6 @@ return array(
 		'dir'      => 'ltr',
 		'flag'     => 'tw',
 		'facebook' => 'zh_TW',
+		'deepl'    => 'ZH',
 	),
 );

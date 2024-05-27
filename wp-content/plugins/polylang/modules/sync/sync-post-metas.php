@@ -4,7 +4,7 @@
  */
 
 /**
- * A class to manage copy and synchronization of post metas
+ * A class to manage copy and synchronization of post metas.
  *
  * @since 2.3
  */
@@ -17,11 +17,11 @@ class PLL_Sync_Post_Metas extends PLL_Sync_Metas {
 	public $options;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @since 2.3
 	 *
-	 * @param object $polylang
+	 * @param object $polylang The Polylang object.
 	 */
 	public function __construct( &$polylang ) {
 		$this->meta_type = 'post';
@@ -38,8 +38,8 @@ class PLL_Sync_Post_Metas extends PLL_Sync_Metas {
 	 *
 	 * @since 2.3
 	 *
-	 * @param int    $from Id of the post from which we copy informations.
-	 * @param int    $to   Id of the post to which we paste informations.
+	 * @param int    $from Id of the post from which we copy information.
+	 * @param int    $to   Id of the post to which we paste information.
 	 * @param string $lang Language slug.
 	 * @param bool   $sync True if it is synchronization, false if it is a copy.
 	 * @return string[] List of meta keys.
@@ -71,7 +71,7 @@ class PLL_Sync_Post_Metas extends PLL_Sync_Metas {
 			$keys[] = '_wp_attached_file';
 			$keys[] = '_wp_attachment_metadata';
 			$keys[] = '_wp_attachment_backup_sizes';
-			$keys[] = '_wp_attachment_is_custom_header'; // Random header image
+			$keys[] = '_wp_attachment_is_custom_header'; // Random header image.
 		}
 
 		/** This filter is documented in modules/sync/sync-metas.php */
@@ -79,13 +79,13 @@ class PLL_Sync_Post_Metas extends PLL_Sync_Metas {
 	}
 
 	/**
-	 * Translates the thumbnail id
+	 * Translates the thumbnail id.
 	 *
 	 * @since 2.3
 	 *
-	 * @param int    $value Thumbnail id
-	 * @param string $key   Meta key
-	 * @param string $lang  Language code
+	 * @param int    $value Thumbnail id.
+	 * @param string $key   Meta key.
+	 * @param string $lang  Language code.
 	 * @return int
 	 */
 	public function translate_thumbnail_id( $value, $key, $lang ) {

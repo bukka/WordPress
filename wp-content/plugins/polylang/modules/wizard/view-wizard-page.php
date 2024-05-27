@@ -9,7 +9,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly.
-};
+}
 $admin_body_class = array( 'pll-wizard', 'wp-core-ui' );
 if ( is_rtl() ) {
 	$admin_body_class[] = 'rtl';
@@ -29,7 +29,7 @@ if ( is_rtl() ) {
 		);
 		?>
 		</title>
-		<script type="text/javascript">
+		<script>
 			var ajaxurl = '<?php echo esc_url( admin_url( 'admin-ajax.php', 'relative' ) ); ?>';
 		</script>
 		<?php do_action( 'admin_enqueue_scripts' ); ?>
