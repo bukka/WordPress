@@ -7,7 +7,7 @@ load_theme_textdomain('pinnacle', get_template_directory() . '/languages');
 }
 add_action( 'after_setup_theme', 'pinnacle_lang_setup' );
 //require_once locate_template('/themeoptions/options_assets/pinnacle_extension.php');          		// Options framework
-require_once locate_template('/themeoptions/redux/framework.php');          		// Options framework -- font / styling - framework
+//require_once locate_template('/themeoptions/redux/framework.php');          		// Options framework -- font / styling - framework
 require_once locate_template('/themeoptions/theme_options.php');          		// Options framework -- font / styling - the customization for Redux
 //require_once locate_template('/lib/utils.php');           		// Utility functions
 require_once locate_template('/lib/init.php');            		// Initial theme setup and constants -- menu
