@@ -10,6 +10,16 @@ error_reporting(E_ALL & ~E_DEPRECATED);
  */
 define( 'ETHNOLOGIST_STYLE_VERSION', 18 );
 
+// Include Redux theme options
+require_once __DIR__ . '/themeoptions/theme_options.php';
+
+// Include legacy pinnacle libs - TODO: get rid of
+require_once __DIR__ .  '/lib/sidebar.php';
+require_once __DIR__ .  '/lib/config.php';
+require_once __DIR__ .  '/lib/cleanup.php';
+require_once __DIR__ .  '/lib/aq_resizer.php';
+require_once __DIR__ .  '/lib/output_css.php';
+
 /**
  * Translate a string
  *
@@ -45,6 +55,13 @@ function ethnologist_view( $type, $name, $params = array(), $context = null ) {
  * Register navigation menu
  */
 function ethnologist_navmenu_register() {
+	// Original kadence menus
+	register_nav_menus(array(
+		'primary_navigation' => __( 'Primary Navigation', 'ethnologist' ),
+		'topbar_navigation' => __( 'Topbar Navigation', 'ethnologist' ),
+		'footer_navigation' => __( 'Footer Navigation', 'ethnologist' ),
+	));
+
 	require_once 'inc/class-ethnologist-nav-menus.php';
 	$nav_menus = new Ethnologist_NavMenus();
 	$nav_menu_create_only = ! defined( 'ETHNOLOGIST_MENU_CREATE_ONLY' ) ||
@@ -75,6 +92,14 @@ function ethnologist_after_setup_theme() {
 		// Theme supports wide images, galleries and videos.
 		'wide-images' => true
 	) );
+	add_theme_support('post-thumbnails');
+	add_theme_support('post-formats', array('gallery', 'image', 'video'));
+	add_theme_support( 'automatic-feed-links' );
+	add_post_type_support( 'attachment', 'page-attributes' );
+
+	add_image_size( 'widget-thumb', 60, 60, true );
+	// Tell the TinyMCE editor to use a custom stylesheet
+	add_editor_style('/assets/css/editor-style.css');
 }
 add_action( 'after_setup_theme', 'ethnologist_after_setup_theme' );
 
