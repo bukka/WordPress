@@ -25,6 +25,8 @@
 	font-weight: bold !important;
 	line-height: 120px !important;
 	font-size: 30px !important;
+	white-space: nowrap;
+	overflow: visible;
 }
 .home-page-title {
 	font-weight: bold;

@@ -8,7 +8,7 @@ error_reporting(E_ALL & ~E_DEPRECATED);
  *
  * @var int
  */
-define( 'ETHNOLOGIST_STYLE_VERSION', 18 );
+define( 'ETHNOLOGIST_STYLE_VERSION', 19 );
 
 // Include Redux theme options
 require_once __DIR__ . '/themeoptions/theme_options.php';
