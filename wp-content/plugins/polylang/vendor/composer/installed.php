@@ -3,7 +3,7 @@
         'name' => 'wpsyntex/polylang',
         'pretty_version' => '3.6.x-dev',
         'version' => '3.6.9999999.9999999-dev',
-        'reference' => 'd762db6d83067556f6270aa0f41b8e0b9b427477',
+        'reference' => 'a3b0bdc67851fdf91f76ad00d4eb7f8bcaf5d87b',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'wpsyntex/polylang' => array(
             'pretty_version' => '3.6.x-dev',
             'version' => '3.6.9999999.9999999-dev',
-            'reference' => 'd762db6d83067556f6270aa0f41b8e0b9b427477',
+            'reference' => 'a3b0bdc67851fdf91f76ad00d4eb7f8bcaf5d87b',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
