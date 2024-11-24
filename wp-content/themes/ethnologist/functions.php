@@ -17,6 +17,7 @@ require_once __DIR__ . '/themeoptions/theme_options.php';
 require_once __DIR__ .  '/lib/sidebar.php';
 require_once __DIR__ .  '/lib/config.php';
 require_once __DIR__ .  '/lib/cleanup.php';
+require_once __DIR__ .  '/lib/custom.php';
 require_once __DIR__ .  '/lib/aq_resizer.php';
 require_once __DIR__ .  '/lib/output_css.php';
 
