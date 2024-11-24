@@ -570,13 +570,11 @@ add_action( 'widgets_init', 'ethnologist_widgets_init', 20 );
  * Actions callback - wp_enqueue_scripts
  */
 function ethnologist_enqueue_scripts() {
-	// enqueue ethnologist original pinnacle style
-	wp_enqueue_style( 'ethnologist-parent-style', get_template_directory_uri() . '/style.css' );
 	// enqueue ethnologist style
 	wp_enqueue_style(
-		'ethnologist-child-style',
+		'ethnologist-style',
 		get_stylesheet_uri(),
-		array( 'ethnologist-parent-style' ),
+		array(),
 		ETHNOLOGIST_STYLE_VERSION
 	);
 
