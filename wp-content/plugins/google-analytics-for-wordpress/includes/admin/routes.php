@@ -114,6 +114,9 @@ class MonsterInsights_Rest_Routes {
 			'network_viewname'                    => $auth->get_network_viewname(),
 			'network_manual_v4'                   => $auth->get_network_manual_v4_id(),
 			'network_measurement_protocol_secret' => $auth->get_network_measurement_protocol_secret(),
+			//  Custom tracking fields (Gtag selector)
+			'gtag_selector_tracking_tag'          => monsterinsights_get_option( 'gtag_selector_tracking_tag', '' ),
+			'gtag_selector_tracking_mp'           => monsterinsights_get_option( 'gtag_selector_tracking_mp', '' ),
 		) );
 
 	}
@@ -665,7 +668,9 @@ class MonsterInsights_Rest_Routes {
 			'installed' => array_key_exists('uncanny-automator/uncanny-automator.php', $installed_plugins),
 			'basename'  => 'uncanny-automator/uncanny-automator.php',
 			'slug'      => 'uncanny-automator',
-			'setup_complete'      => (bool) get_option('automator_reporting', false),
+			'setup_complete' => class_exists( 'Uncanny_Automator\Api_Server' ) ? !! \Uncanny_Automator\Api_Server::is_automator_connected() : false,
+			'wizard_url'     => admin_url( 'edit.php?post_type=uo-recipe&page=uncanny-automator-setup-wizard' ),
+			'recipe_url'     => admin_url( 'post-new.php?post_type=uo-recipe' ),
 		);
 
 		// Pretty Links
@@ -793,41 +798,19 @@ class MonsterInsights_Rest_Routes {
 		wp_send_json( $parsed_addons );
 	}
 
+	/**
+	 * Wrapper around the monsterinsights_get_addon function.
+	 * Kept for backwards compatibility.
+	 *
+	 * @param $installed_plugins
+	 * @param $addons_type
+	 * @param $addon
+	 * @param $slug
+	 * @deprecated Use monsterinsights_get_addon instead.
+	 * @return mixed
+	 */
 	public function get_addon( $installed_plugins, $addons_type, $addon, $slug ) {
-		$active          = false;
-		$installed       = false;
-
-        $slug = apply_filters( 'monsterinsights_addon_slug', $slug );
-
-		$plugin_basename = monsterinsights_get_plugin_basename_from_slug( $slug );
-
-		if ( isset( $installed_plugins[ $plugin_basename ] ) ) {
-			$installed = true;
-
-			if ( is_multisite() && is_network_admin() ) {
-				$active = is_plugin_active_for_network( $plugin_basename );
-			} else {
-				$active = is_plugin_active( $plugin_basename );
-			}
-		}
-		if ( empty( $addon->url ) ) {
-			$addon->url = '';
-		}
-
-		$active_version = false;
-		if ( $active ) {
-			if ( ! empty( $installed_plugins[ $plugin_basename ]['Version'] ) ) {
-				$active_version = $installed_plugins[ $plugin_basename ]['Version'];
-			}
-		}
-
-		$addon->type           = $addons_type;
-		$addon->installed      = $installed;
-		$addon->active_version = $active_version;
-		$addon->active         = $active;
-		$addon->basename       = $plugin_basename;
-
-		return $addon;
+		return monsterinsights_get_addon($installed_plugins, $addons_type, $addon, $slug);
 	}
 
 	/**
@@ -1121,6 +1104,12 @@ class MonsterInsights_Rest_Routes {
 			'end'   => $end,
 		);
 
+		// User want to show compare report.
+		if ( isset( $_POST['compare_report'] ) ) {
+			$args['compare_start'] = ! empty( $_POST['compare_start'] ) ? sanitize_text_field( wp_unslash( $_POST['compare_start'] ) ) : $report->default_compare_start_date();
+			$args['compare_end']   = ! empty( $_POST['compare_end'] ) ? sanitize_text_field( wp_unslash( $_POST['compare_end'] ) ) : $report->default_compare_end_date();
+		}
+
 		if ( $isnetwork ) {
 			$args['network'] = true;
 		}
@@ -1261,6 +1250,11 @@ class MonsterInsights_Rest_Routes {
 	 * Store that the first run notice has been dismissed so it doesn't show up again.
 	 */
 	public function dismiss_first_time_notice() {
+		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'monsterinsights_save_settings' ) ) {
+			return;
+		}
 
 		monsterinsights_update_option( 'monsterinsights_first_run_notice', true );
 

@@ -3058,15 +3058,10 @@ class SiteNotes extends _wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Componen
       },
       published_template: __('Published: %s', "google-analytics-for-wordpress")
     };
+    this.categories = window.monsterinsights_gutenberg_tool_vars ? window.monsterinsights_gutenberg_tool_vars['site_notes_categories'] : [];
+    this.onToggleControlChange = this.onToggleControlChange.bind(this);
   }
   componentDidMount() {
-    this.categories = window.monsterinsights_gutenberg_tool_vars ? window.monsterinsights_gutenberg_tool_vars['site_notes_categories'] : [];
-    if (this.categories.length > 0 && this.state.category === 0) {
-      this.setState({
-        category: this.categories[0]['value']
-      }, this.saveCategoryField);
-    }
-
     // Listener to trigger a function after the post is saved.
     subscribe(() => {
       if (isSavingPost()) {
@@ -3136,12 +3131,7 @@ class SiteNotes extends _wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Componen
       checked: this.state.addSiteNote,
       help: this.texts.checkbox.help,
       label: this.texts.checkbox.label,
-      onChange: value => {
-        this.setState({
-          addSiteNote: !!value
-        }, this.saveActiveField);
-        this.refreshNoteText();
-      }
+      onChange: this.onToggleControlChange
     }), this.state.addSiteNote && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextareaControl, {
       help: "",
       label: "",
@@ -3167,6 +3157,18 @@ class SiteNotes extends _wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Componen
       __nextHasNoMarginBottom: true
     }));
   }
+  onToggleControlChange(value) {
+    // When user open site-note toggle, Set first category as selected.
+    if (value && this.state.category === 0 && this.categories.length > 0) {
+      this.setState({
+        category: this.categories[0]['value']
+      }, this.saveCategoryField);
+    }
+    this.setState({
+      addSiteNote: !!value
+    }, this.saveActiveField);
+    this.refreshNoteText();
+  }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SiteNotes);
 
@@ -3185,6 +3187,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pro_badge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/pro-badge */ "./src/plugins/metabox/components/pro-badge.js");
 /* harmony import */ var _components_page_insights_GUTENBERG_APP_VERSION__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/page-insights-GUTENBERG_APP_VERSION */ "./src/plugins/metabox/components/page-insights-Lite.js");
 /* harmony import */ var _components_site_notes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/site-notes */ "./src/plugins/metabox/components/site-notes.js");
+var _wp$editor$PluginDocu, _wp$editPost$PluginDo;
 
 const {
   ToggleControl
@@ -3199,9 +3202,7 @@ const {
 const {
   __
 } = wp.i18n;
-const {
-  PluginDocumentSettingPanel
-} = wp.editPost;
+const PluginDocumentSettingPanel = (_wp$editor$PluginDocu = wp.editor?.PluginDocumentSettingPanel) !== null && _wp$editor$PluginDocu !== void 0 ? _wp$editor$PluginDocu : (_wp$editPost$PluginDo = wp.editPost?.PluginDocumentSettingPanel) !== null && _wp$editPost$PluginDo !== void 0 ? _wp$editPost$PluginDo : wp.editSite?.PluginDocumentSettingPanel;
 const {
   useState,
   Fragment
@@ -4309,6 +4310,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_HeadlinePanelWordCount__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/HeadlinePanelWordCount */ "./src/plugins/monsterinsights-Headline-Analyzer/components/HeadlinePanelWordCount.js");
 /* harmony import */ var _components_HeadlinePanelStartEndWords__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/HeadlinePanelStartEndWords */ "./src/plugins/monsterinsights-Headline-Analyzer/components/HeadlinePanelStartEndWords.js");
 /* harmony import */ var _components_HeadlinePanelSearchPreview__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/HeadlinePanelSearchPreview */ "./src/plugins/monsterinsights-Headline-Analyzer/components/HeadlinePanelSearchPreview.js");
+var _wp$editor$PluginSide, _wp$editPost$PluginSi, _wp$editor$PluginSide2, _wp$editPost$PluginSi2;
 
 const {
   __
@@ -4321,10 +4323,8 @@ const {
 const {
   registerPlugin
 } = wp.plugins;
-const {
-  PluginSidebar,
-  PluginSidebarMoreMenuItem
-} = wp.editPost;
+const PluginSidebar = (_wp$editor$PluginSide = wp.editor?.PluginSidebar) !== null && _wp$editor$PluginSide !== void 0 ? _wp$editor$PluginSide : (_wp$editPost$PluginSi = wp.editPost?.PluginSidebar) !== null && _wp$editPost$PluginSi !== void 0 ? _wp$editPost$PluginSi : wp.editSite?.PluginSidebar;
+const PluginSidebarMoreMenuItem = (_wp$editor$PluginSide2 = wp.editor?.PluginSidebarMoreMenuItem) !== null && _wp$editor$PluginSide2 !== void 0 ? _wp$editor$PluginSide2 : (_wp$editPost$PluginSi2 = wp.editPost?.PluginSidebarMoreMenuItem) !== null && _wp$editPost$PluginSi2 !== void 0 ? _wp$editPost$PluginSi2 : wp.editSite?.PluginSidebarMoreMenuItem;
 const {
   useSelect
 } = wp.data;
@@ -4469,6 +4469,75 @@ if ('undefined' !== typeof monsterinsights_gutenberg_tool_vars && monsterinsight
     render: MonsterInsightsHeadlineAnalyzer
   });
 }
+
+/***/ }),
+
+/***/ "./node_modules/classnames/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/classnames/index.js ***!
+  \******************************************/
+/***/ ((module, exports) => {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	Copyright (c) 2018 Jed Watson.
+	Licensed under the MIT License (MIT), see
+	http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+	var nativeCodeString = '[native code]';
+
+	function classNames() {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				if (arg.length) {
+					var inner = classNames.apply(null, arg);
+					if (inner) {
+						classes.push(inner);
+					}
+				}
+			} else if (argType === 'object') {
+				if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
+					classes.push(arg.toString());
+					continue;
+				}
+
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if ( true && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {}
+}());
+
 
 /***/ }),
 
@@ -4628,92 +4697,6 @@ module.exports = window["wp"]["hooks"];
 
 "use strict";
 module.exports = window["wp"]["i18n"];
-
-/***/ }),
-
-/***/ "./node_modules/classnames/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/classnames/index.js ***!
-  \******************************************/
-/***/ ((module, exports) => {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	Copyright (c) 2018 Jed Watson.
-	Licensed under the MIT License (MIT), see
-	http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = '';
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (arg) {
-				classes = appendClass(classes, parseValue(arg));
-			}
-		}
-
-		return classes;
-	}
-
-	function parseValue (arg) {
-		if (typeof arg === 'string' || typeof arg === 'number') {
-			return arg;
-		}
-
-		if (typeof arg !== 'object') {
-			return '';
-		}
-
-		if (Array.isArray(arg)) {
-			return classNames.apply(null, arg);
-		}
-
-		if (arg.toString !== Object.prototype.toString && !arg.toString.toString().includes('[native code]')) {
-			return arg.toString();
-		}
-
-		var classes = '';
-
-		for (var key in arg) {
-			if (hasOwn.call(arg, key) && arg[key]) {
-				classes = appendClass(classes, key);
-			}
-		}
-
-		return classes;
-	}
-
-	function appendClass (value, newClass) {
-		if (!newClass) {
-			return value;
-		}
-	
-		if (value) {
-			return value + ' ' + newClass;
-		}
-	
-		return value + newClass;
-	}
-
-	if ( true && module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else if (true) {
-		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-			return classNames;
-		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {}
-}());
-
 
 /***/ }),
 
@@ -5477,31 +5460,7 @@ class Axios {
    *
    * @returns {Promise} The Promise to be fulfilled
    */
-  async request(configOrUrl, config) {
-    try {
-      return await this._request(configOrUrl, config);
-    } catch (err) {
-      if (err instanceof Error) {
-        let dummy;
-
-        Error.captureStackTrace ? Error.captureStackTrace(dummy = {}) : (dummy = new Error());
-
-        // slice off the Error: ... line
-        const stack = dummy.stack ? dummy.stack.replace(/^.+\n/, '') : '';
-
-        if (!err.stack) {
-          err.stack = stack;
-          // match without the 2 top stack lines
-        } else if (stack && !String(err.stack).endsWith(stack.replace(/^.+\n.+\n/, ''))) {
-          err.stack += '\n' + stack
-        }
-      }
-
-      throw err;
-    }
-  }
-
-  _request(configOrUrl, config) {
+  request(configOrUrl, config) {
     /*eslint no-param-reassign:0*/
     // Allow for axios('example/url'[, config]) a la fetch API
     if (typeof configOrUrl === 'string') {
@@ -6345,7 +6304,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const headersToObject = (thing) => thing instanceof _AxiosHeaders_js__WEBPACK_IMPORTED_MODULE_0__["default"] ? { ...thing } : thing;
+const headersToObject = (thing) => thing instanceof _AxiosHeaders_js__WEBPACK_IMPORTED_MODULE_0__["default"] ? thing.toJSON() : thing;
 
 /**
  * Config-specific merge-function which creates a new config-object
@@ -6610,6 +6569,9 @@ const defaults = {
     const isFormData = _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].isFormData(data);
 
     if (isFormData) {
+      if (!hasJSONContentType) {
+        return data;
+      }
       return hasJSONContentType ? JSON.stringify((0,_helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_2__["default"])(data)) : data;
     }
 
@@ -6750,7 +6712,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   VERSION: () => (/* binding */ VERSION)
 /* harmony export */ });
-const VERSION = "1.6.8";
+const VERSION = "1.6.5";
 
 /***/ }),
 
