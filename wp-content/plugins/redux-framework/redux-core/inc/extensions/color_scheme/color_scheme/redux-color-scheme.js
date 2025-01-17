@@ -1,5 +1,4 @@
 /* global redux, redux_ajax_script,redux_change, reduxColorSchemeAfterUpdateHTML */
-// noinspection JSUnresolvedReference
 
 ( function ( $ ) {
 	'use strict';
@@ -14,10 +13,10 @@
 	redux.field_objects.color_scheme.default_params = {};
 
 	redux.field_objects.color_scheme.hexToRGBA = function ( hex, alpha ) {
-		let result;
-		let r;
-		let b;
-		let g;
+		var result;
+		var r;
+		var b;
+		var g;
 
 		if ( null === hex ) {
 			result = '';
@@ -41,8 +40,8 @@
 
 		$( selector ).each(
 			function () {
-				const el                            = $( this );
-				let parent                          = el;
+				var el                              = $( this );
+				var parent                          = el;
 				redux.field_objects.color_scheme.el = el;
 
 				if ( ! el.hasClass( 'redux-field-container' ) ) {
@@ -70,16 +69,16 @@
 	};
 
 	redux.field_objects.color_scheme.qtip = function ( el ) {
-		let tooltips;
-		let shadow;
-		let rounded;
-		let color;
-		let style;
-		let myPos;
-		let atPos;
-		let classes;
+		var tooltips;
+		var shadow;
+		var rounded;
+		var color;
+		var style;
+		var myPos;
+		var atPos;
+		var classes;
 
-		let destroy = false;
+		var destroy = false;
 
 		if ( false === redux.field_objects.color_scheme.showTooltips ) {
 			destroy = true;
@@ -125,8 +124,8 @@
 
 		$( 'li.redux-cs-qtip' ).each(
 			function () {
-				const content = $( this ).attr( 'qtip-content' );
-				const title   = $( this ).attr( 'qtip-title' );
+				var content = $( this ).attr( 'qtip-content' );
+				var title   = $( this ).attr( 'qtip-title' );
 
 				if ( '' === content && '' === title ) {
 					return;
@@ -176,15 +175,15 @@
 	};
 
 	redux.field_objects.color_scheme.setAccordions = function ( el ) {
-		let accordionSection;
-		let isOpen;
+		var accordionSection;
+		var isOpen;
 
-		const ulContainer = el.find( 'ul.redux-scheme-layout' );
+		var ulContainer = el.find( 'ul.redux-scheme-layout' );
 
-		const openIcon  = ulContainer.data( 'open-icon' );
-		const closeIcon = ulContainer.data( 'close-icon' );
+		var openIcon  = ulContainer.data( 'open-icon' );
+		var closeIcon = ulContainer.data( 'close-icon' );
 
-		const isAccordion = Boolean( el.find( '.redux-color-scheme-container' ).data( 'accordion' ) );
+		var isAccordion = Boolean( el.find( '.redux-color-scheme-container' ).data( 'accordion' ) );
 
 		if ( true === isAccordion ) {
 			accordionSection = el.find( '.redux-color-scheme-accordion-section' );
@@ -205,7 +204,7 @@
 			el.find( '.redux-color-scheme-accordion' ).on(
 				'click',
 				function ( e ) {
-					let nextAccordion;
+					var nextAccordion;
 
 					e.preventDefault();
 
@@ -229,8 +228,8 @@
 	};
 
 	redux.field_objects.color_scheme.modInit = function ( el ) {
-		let select2_handle;
-		let select2_params;
+		var select2_handle;
+		var select2_params;
 
 		redux.field_objects.color_scheme.nonce        = el.find( '.redux-color-scheme-container' ).data( 'nonce' );
 		redux.field_objects.color_scheme.fieldID      = el.find( '.redux-color-scheme-container' ).data( 'id' );
@@ -280,8 +279,7 @@
 		el.find( '#redux-' + redux.field_objects.color_scheme.fieldID + '-tooltip-checkbox' ).on(
 			'change',
 			function () {
-				const checked = $( this ).is( ':checked' );
-
+				var checked = $( this ).is( ':checked' );
 				$( this ).val( checked );
 
 				redux.field_objects.color_scheme.showTooltips = checked;
@@ -291,7 +289,7 @@
 	};
 
 	redux.field_objects.color_scheme.import = function ( el ) {
-		const fieldID = redux.field_objects.color_scheme.fieldID;
+		var fieldID = redux.field_objects.color_scheme.fieldID;
 
 		el.find( '.redux-import-scheme-button' ).on(
 			'click',
@@ -303,16 +301,17 @@
 		document.getElementById( 'redux-color-scheme-upload-file' ).addEventListener(
 			'change',
 			function () {
-				const file_to_read = document.getElementById( 'redux-color-scheme-upload-file' ).files[0];
+				var file_to_read = document.getElementById( 'redux-color-scheme-upload-file' ).files[0];
+				console.log( file_to_read );
 
 				if ( 'application/json' === file_to_read.type ) {
-					const fileread = new FileReader();
+					var fileread = new FileReader();
 
 					fileread.readAsText( file_to_read );
 
 					fileread.onload = function () {
-						const content = fileread.result;
-						let data;
+						var content = fileread.result;
+						var data;
 
 						data = {
 							action: 'redux_color_schemes',
@@ -362,6 +361,13 @@
 										return false;
 									}
 								);
+
+								// Successful import.
+								if ( true === response.result ) {
+									console.log( 'yes' );
+								} else {
+									console.log( 'no' );
+								}
 							}
 						);
 					};
@@ -375,12 +381,12 @@
 	};
 
 	redux.field_objects.color_scheme.delete = function ( el ) {
-		const field_id = redux.field_objects.color_scheme.fieldID;
+		var field_id = redux.field_objects.color_scheme.fieldID;
 
 		el.find( '#redux-' + field_id + '-delete-scheme-button' ).on(
 			'click',
 			function ( event ) {
-				let select_name;
+				var select_name;
 
 				// Prevent default action.
 				event.preventDefault();
@@ -434,8 +440,8 @@
 				$( '#redux-' + field_id + '-delete-scheme-yes' ).on(
 					'click',
 					function () {
-						let data;
-						let wait_msg;
+						var data;
+						var wait_msg;
 
 						// If selected scheme name is valid...
 						if ( select_name ) {
@@ -554,17 +560,17 @@
 	};
 
 	redux.field_objects.color_scheme.save = function ( el ) {
-		const field_id = redux.field_objects.color_scheme.fieldID;
+		var field_id = redux.field_objects.color_scheme.fieldID;
 
 		el.find( '#redux-' + field_id + '-save-scheme-button' ).on(
 			'click',
 			function ( event ) {
-				let input_text;
-				let scheme_name;
-				let data;
-				let wait_msg;
+				var input_text;
+				var scheme_name;
+				var data;
+				var wait_msg;
 
-				let arrData = [];
+				var arrData = [];
 
 				event.preventDefault();
 
@@ -616,13 +622,14 @@
 				// Enum through them all and collect data.
 				el.find( '.redux-scheme-layout-container' ).each(
 					function () {
-						const obj   = $( this ).children( '.redux-color-scheme' );
-						const title = obj.data( 'title' );
-						const id    = obj.data( 'id' );
-						const color = obj.data( 'hex-color' );
-						const alpha = obj.data( 'alpha' );
-						const rgba  = obj.data( 'rgba' );
-						const group = obj.data( 'group' );
+						var obj = $( this ).children( '.redux-color-scheme' );
+
+						var title = obj.data( 'title' );
+						var id    = obj.data( 'id' );
+						var color = obj.data( 'hex-color' );
+						var alpha = obj.data( 'alpha' );
+						var rgba  = obj.data( 'rgba' );
+						var group = obj.data( 'group' );
 
 						// Push data into the array.
 						arrData.push(
@@ -738,9 +745,9 @@
 	};
 
 	redux.field_objects.color_scheme.selectChange = function ( el ) {
-		let selected;
+		var selected;
 
-		const field_id = redux.field_objects.color_scheme.fieldID;
+		var field_id = redux.field_objects.color_scheme.fieldID;
 
 		// Fade out the colour pickers.
 		el.find( 'ul.redux-scheme-layout' ).fadeOut();
@@ -759,13 +766,13 @@
 	};
 
 	redux.field_objects.color_scheme.updateSchemeHTML = function ( selected, el ) {
-		let field_class;
-		let data;
+		var field_class;
+		var data;
 
-		const field_id = redux.field_objects.color_scheme.fieldID;
+		var field_id = redux.field_objects.color_scheme.fieldID;
 
 		// Get default wait msg.
-		const wait_msg = el.find( '#redux-' + field_id + '-scheme-wait-message h1' ).html();
+		var wait_msg = el.find( '#redux-' + field_id + '-scheme-wait-message h1' ).html();
 
 		// Display appended msg.
 		$.blockUI(
@@ -828,70 +835,70 @@
 	redux.field_objects.color_scheme.initColorPicker = function ( el ) {
 
 		// Get field ID.
-		const field_id = redux.field_objects.color_scheme.fieldID;
+		var field_id = redux.field_objects.color_scheme.fieldID;
 
 		// Get the color scheme container.
-		let colorpickerInput = el.find( '.redux-color-scheme' );
+		var colorpickerInput = el.find( '.redux-color-scheme' );
 
 		// Get alpha value and sanitize it.
-		let currentAlpha = colorpickerInput.data( 'current-alpha' );
+		var currentAlpha = colorpickerInput.data( 'current-alpha' );
 
 		// Get colour value and sanitize it.
-		let currentColor = colorpickerInput.data( 'current-color' );
+		var currentColor = colorpickerInput.data( 'current-color' );
 
-		let outputTransparent = colorpickerInput.data( 'output-transparent' );
+		var outputTransparent = colorpickerInput.data( 'output-transparent' );
 
 		// Color picker arguments.
-		const container = redux.field_objects.color_scheme.el.find( '.redux-color-scheme-container' );
+		var container = redux.field_objects.color_scheme.el.find( '.redux-color-scheme-container' );
 
 		// Get, decode and parse palette.
-		let palette = container.data( 'palette' );
+		var palette = container.data( 'palette' );
 
-		let pickerGap = container.data( 'picker-gap' );
+		var pickerGap = container.data( 'picker-gap' );
 
-		let pickerFontSize = container.data( 'picker-font-size' );
+		var pickerFontSize = container.data( 'picker-font-size' );
 
 		// Get and sanitize show input argument.
-		let showInput = container.data( 'show-input' );
+		var showInput = container.data( 'show-input' );
 
 		// Get and sanitize show initial argument.
-		let showInitial = container.data( 'show-initial' );
+		var showInitial = container.data( 'show-initial' );
 
 		// Get and sanitize show alpha argument.
-		let showAlpha = container.data( 'show-alpha' );
+		var showAlpha = container.data( 'show-alpha' );
 
 		// Get and sanitize allow empty argument.
-		let allowEmpty = container.data( 'allow-empty' );
+		var allowEmpty = container.data( 'allow-empty' );
 
 		// Get and sanitize show palette argument.
-		let showPalette = container.data( 'show-palette' );
+		var showPalette = container.data( 'show-palette' );
 
 		// Get and sanitize show palette only argument.
-		let showPaletteOnly = container.data( 'show-palette-only' );
+		var showPaletteOnly = container.data( 'show-palette-only' );
 
 		// Get and sanitize show selection palette argument.
-		let showSelectionPalette = container.data( 'show-selection-palette' );
+		var showSelectionPalette = container.data( 'show-selection-palette' );
 
 		// Get max palette size.
-		let maxPaletteSize = Number( container.data( 'max-palette-size' ) );
+		var maxPaletteSize = Number( container.data( 'max-palette-size' ) );
 
 		// Get and sanitize clickout fires change argument.
-		let clickoutFiresChange = container.data( 'clickout-fires-change' );
+		var clickoutFiresChange = container.data( 'clickout-fires-change' );
 
 		// Get choose button text.
-		let chooseText = String( container.data( 'choose-text' ) );
+		var chooseText = String( container.data( 'choose-text' ) );
 
 		// Get cancel button text.
-		let cancelText = String( container.data( 'cancel-text' ) );
+		var cancelText = String( container.data( 'cancel-text' ) );
 
 		// Get and sanitize show buttons argument.
-		let showButtons = container.data( 'show-buttons' );
+		var showButtons = container.data( 'show-buttons' );
 
 		// Get container class.
-		let containerClass = String( container.data( 'container-class' ) );
+		var containerClass = String( container.data( 'container-class' ) );
 
 		// Get replacer class.
-		let replacerClass = String( container.data( 'replacer-class' ) );
+		var replacerClass = String( container.data( 'replacer-class' ) );
 
 		// Picker gap css.
 		el.find( 'li.redux-scheme-layout' ).css( 'width', pickerGap );
@@ -957,12 +964,12 @@
 
 				// On change.
 				change: function ( color ) {
-					let colorVal;
-					let alphaVal;
-					let rgbaVal;
-					let blockID;
-					let dataBlock;
-					let rawData;
+					var colorVal;
+					var alphaVal;
+					var rgbaVal;
+					var blockID;
+					var dataBlock;
+					var rawData;
 
 					if ( null === color ) {
 						if ( true === outputTransparent ) {

@@ -22,7 +22,7 @@ if ( ! class_exists( 'Redux_Repeater' ) ) {
 		 *
 		 * @var string
 		 */
-		private string $repeater_values;
+		private $repeater_values;
 
 		/**
 		 * Set defaults.

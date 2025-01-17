@@ -7,8 +7,6 @@
  * @class   Redux_Extension_Repeater
  *
  * @version 4.3.13
- *
- * @noinspection PhpIgnoredClassAliasDeclaration
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,14 +25,14 @@ if ( ! class_exists( 'Redux_Extension_Repeater' ) ) {
 		 *
 		 * @var string
 		 */
-		public static string $version = '4.3.13';
+		public static $version = '4.3.13';
 
 		/**
 		 * Extension friendly name.
 		 *
 		 * @var string
 		 */
-		public string $extension_name = 'Repeater';
+		public $extension_name = 'Repeater';
 
 		/**
 		 * Class Constructor. Defines the args for the extensions class
@@ -52,6 +50,6 @@ if ( ! class_exists( 'Redux_Extension_Repeater' ) ) {
 			$this->add_field( 'repeater' );
 		}
 	}
-
-	class_alias( Redux_Extension_Repeater::class, 'ReduxFramework_Extension_repeater' );
 }
+
+class_alias( 'Redux_Extension_Repeater', 'ReduxFramework_Extension_repeater' );

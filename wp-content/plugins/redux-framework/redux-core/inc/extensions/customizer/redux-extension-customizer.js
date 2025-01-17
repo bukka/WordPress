@@ -12,8 +12,8 @@
 	);
 
 	redux.customizer.init = function () {
-		let reduxChange;
-		let redux_initFields;
+		var reduxChange;
+		var redux_initFields;
 
 		$( 'body' ).addClass( redux.customizer.body_class );
 
@@ -60,9 +60,9 @@
 				function () {
 					setTimeout(
 						function () {
-							const $parent = $( document.getElementById( 'customize-controls' ) );
-							const $data   = $parent.serialize();
-							const nonce   = $( '.redux-customizer-nonce' ).data( 'nonce' );
+							var $parent = $( document.getElementById( 'customize-controls' ) );
+							var $data   = $parent.serialize();
+							var nonce   = $( '.redux-customizer-nonce' ).data( 'nonce' );
 
 							$.ajax(
 								{
@@ -127,10 +127,10 @@
 	};
 
 	redux.customizer.resize = function ( el ) {
-		let width;
-		let test;
-		let id;
-		let parentId;
+		var width;
+		var test;
+		var id;
+		var parentId;
 
 		if ( el.attr( 'data-width' ) ) {
 			redux.customizer.width = el.attr( 'data-width' );
@@ -144,7 +144,6 @@
 		if ( $( 'body' ).width() < 640 ) {
 			width = '';
 		}
-
 		if ( '' !== width ) {
 			test = $( '#' + el.attr( 'aria-owns' ) );
 
@@ -186,15 +185,15 @@
 	};
 
 	redux.customizer.save = function ( $obj ) {
-		const $parent = $obj.hasClass( 'redux-field' ) ? $obj : $obj.parents( '.redux-field-container:first' );
+		var $parent = $obj.hasClass( 'redux-field' ) ? $obj : $obj.parents( '.redux-field-container:first' );
 		redux.customizer.inputSave( $parent );
 	};
 
 	redux.customizer.inputSave = function ( $parent ) {
-		let $id;
-		let $nData;
-		let $key;
-		let $control;
+		var $id;
+		var $nData;
+		var $key;
+		var $control;
 
 		if ( ! $parent.hasClass( 'redux-field-container' ) ) {
 			$parent = $parent.parents( '[class^="redux-field-container"]' );
@@ -218,7 +217,6 @@
 		);
 
 		$key = $parent.parent().find( '.redux-customizer-input' ).data( 'key' );
-
 		if ( $nData[$key] ) {
 			$nData = $nData[$key];
 		}

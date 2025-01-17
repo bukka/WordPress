@@ -122,11 +122,9 @@ if ( ! class_exists( 'Redux_Tabbed', false ) ) {
 				}
 			}
 
-			$default = $field['default'] ?? null;
+			$default = $field['default'] ?? '';
 
-			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-			// $value = isset( $this->parent->options[ $orig_field_id ] ) && 0 !== (int) $this->parent->options[ $orig_field_id ] ? $this->parent->options[ $orig_field_id ] : $default;
-			$value = $this->parent->options[ $orig_field_id ] ?? $default;
+			$value = isset( $this->parent->options[ $orig_field_id ] ) && 0 !== (int) $this->parent->options[ $orig_field_id ] ? $this->parent->options[ $orig_field_id ] : $default;
 
 			$this->parent->render_class->field_input( $field, $value );
 
@@ -197,8 +195,6 @@ if ( ! class_exists( 'Redux_Tabbed', false ) ) {
 		 * @since ReduxFramework 0.0.4
 		 */
 		public function enqueue() {
-			wp_print_styles( 'editor-buttons' );
-
 			wp_enqueue_script(
 				'redux-field-tabbed',
 				Redux_Core::$url . 'inc/extensions/tabbed/tabbed/redux-tabbed' . Redux_Functions::is_min() . '.js',

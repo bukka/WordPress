@@ -5,8 +5,6 @@
  * @class Redux_Core
  * @version 4.0.0
  * @package Redux Framework
- *
- * @noinspection PhpIgnoredClassAliasDeclaration
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +25,7 @@ if ( ! class_exists( 'Redux_Extension_Options_Object', false ) ) {
 		 *
 		 * @var string
 		 */
-		public static string $version = '4.0.0';
+		public static $version = '4.0.0';
 
 		/**
 		 * Set the name of the field.  Ideally, this will also be your extension's name.
@@ -35,14 +33,14 @@ if ( ! class_exists( 'Redux_Extension_Options_Object', false ) ) {
 		 *
 		 * @var string
 		 */
-		private string $field_name = 'options_object';
+		private $field_name = 'options_object';
 
 		/**
 		 * Is field bit.
 		 *
 		 * @var bool
 		 */
-		public bool $is_field = false;
+		public $is_field = false;
 
 		/**
 		 * Class Constructor. Defines the args for the extensions class

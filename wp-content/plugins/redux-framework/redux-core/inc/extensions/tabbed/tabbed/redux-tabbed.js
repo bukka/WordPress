@@ -1,5 +1,4 @@
 /*global redux*/
-// noinspection JSUnresolvedReference
 
 /**
  * Tabbed
@@ -11,13 +10,13 @@
 (function ( $ ) {
 	'use strict';
 
-	let reduxObject;
+	var reduxObject;
 
 	redux.field_objects        = redux.field_objects || {};
 	redux.field_objects.tabbed = redux.field_objects.tabbed || {};
 
 	redux.field_objects.tabbed.getOptName = function ( el ) {
-		let optName;
+		var optName;
 
 		optName = el.parents().find( '.redux-ajax-security' ).data( 'opt-name' );
 
@@ -37,8 +36,8 @@
 
 		$( selector ).each(
 			function () {
-				const el   = $( this );
-				let parent = el;
+				var el     = $( this );
+				var parent = el;
 
 				if ( ! el.hasClass( 'redux-field-container' ) ) {
 					parent = el.parents( '.redux-field-container:first' );
@@ -58,24 +57,20 @@
 
 				el.find( '.redux-tabbed' ).each(
 					function () {
-						const $this    = el;
-						const links    = $this.find( '.redux-tabbed-nav a' );
-						const contents = $this.find( '.redux-tabbed-content' );
+						var $this    = el;
+						var links    = $this.find( '.redux-tabbed-nav a' );
+						var contents = $this.find( '.redux-tabbed-content' );
 
 						$.redux.initFields();
 
 						links.on(
 							'click',
 							function ( e ) {
-								let link;
-								let index;
-								let content;
-
 								e.preventDefault();
 
-								link    = $( this );
-								index   = link.index();
-								content = contents.eq( index );
+								var link    = $( this );
+								var	index   = link.index();
+								var content = contents.eq( index );
 
 								link.addClass( 'redux-tabbed-active' ).siblings().removeClass( 'redux-tabbed-active' );
 								content.removeClass( 'hidden' ).siblings().addClass( 'hidden' );
@@ -90,16 +85,16 @@
 	};
 
 	redux.field_objects.tabbed.check_parents_dependencies = function ( id ) {
-		let show = '';
+		var show = '';
 
 		if ( reduxObject.required_child.hasOwnProperty( id ) ) {
 			$.each(
 				reduxObject.required_child[id],
 				function ( i, parentData ) {
-					let parentValue;
-					let value;
-					let idx;
-					let x;
+					var parentValue;
+					var value;
+					var idx;
+					var x;
 
 					i   = null;
 					idx = $( '#' + reduxObject.args.opt_name + '-' + parentData.parent );
@@ -300,7 +295,7 @@
 									//$( this ).prevUntil( 'fieldset' ).removeClass( 'hide' );
 									$( this ).parents( '.redux-tab-field' ).removeClass( 'hide' );
 									//console.log($( '#' + reduxObject.args.opt_name + '-' + child ));
-	//console.log($( '#' + reduxObject.args.opt_name + '-' + child ).children().first());
+//console.log($( '#' + reduxObject.args.opt_name + '-' + child ).children().first());
 									if ( reduxObject.required.hasOwnProperty( child ) ) {
 										$.redux.check_dependencies( $( '#' + reduxObject.args.opt_name + '-' + child ).children().first() );
 									}

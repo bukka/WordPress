@@ -23,21 +23,21 @@ if ( ! class_exists( 'Redux_Welcome', false ) ) {
 		 *
 		 * @var string The capability users should have to view the page
 		 */
-		public string $minimum_capability = 'manage_options';
+		public $minimum_capability = 'manage_options';
 
 		/**
 		 * Display version.
 		 *
 		 * @var string
 		 */
-		public string $display_version = '';
+		public $display_version = '';
 
 		/**
 		 * Is loaded.
 		 *
 		 * @var bool
 		 */
-		public bool $redux_loaded = false;
+		public $redux_loaded = false;
 
 		/**
 		 * Get things started
@@ -176,7 +176,7 @@ if ( ! class_exists( 'Redux_Welcome', false ) ) {
 		public function actions() {
 			?>
 			<p class="redux-actions">
-				<a href="https://devs.redux.io/" class="docs button button-primary">Docs</a>
+				<a href="http://devs.redux.io/" class="docs button button-primary">Docs</a>
 				<a
 					href="https://wordpress.org/support/view/plugin-reviews/redux-framework?filter=5#postform"
 					class="review-us button button-primary"
@@ -215,10 +215,8 @@ if ( ! class_exists( 'Redux_Welcome', false ) ) {
 				?>
 				<script>
 					!function( d, s, id ) {
-						let js;
-						const fjs = d.getElementsByTagName( s )[0],
-
-						p = /^http:/.test( d.location ) ? 'http' : 'https';
+						var js, fjs = d.getElementsByTagName( s )[0],
+							p = /^http:/.test( d.location ) ? 'http' : 'https';
 						if ( !d.getElementById( id ) ) {
 							js = d.createElement( s );
 							js.id = id;

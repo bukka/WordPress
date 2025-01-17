@@ -6,8 +6,6 @@
  * @author  Dovy Paukstys (dovy)
  * @class   Redux_Extension_Widget_Areas
  * @version 4.3.20
- *
- * @noinspection PhpIgnoredClassAliasDeclaration
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,20 +22,20 @@ if ( ! class_exists( 'Redux_Extension_Widget_Areas' ) ) {
 		 *
 		 * @var string
 		 */
-		public static string $version = '4.3.20';
+		public static $version = '4.3.20';
 
 		/**
 		 * Extension Friendly name.
 		 *
 		 * @var string
 		 */
-		public string $extension_name = 'Widget Areas';
+		public $extension_name = 'Widget Areas';
 
 
 		/**
 		 * Redux_Extension_Widget_Areas constructor.
 		 *
-		 * @param ReduxFramework $redux ReduxFramework object pointer.
+		 * @param object $redux ReduxFramework object pointer.
 		 */
 		public function __construct( $redux ) {
 			parent::__construct( $redux, __FILE__ );
@@ -54,6 +52,6 @@ if ( ! class_exists( 'Redux_Extension_Widget_Areas' ) ) {
 			add_action( 'wp_ajax_redux_delete_widget_area', array( $widget_areas, 'redux_delete_widget_area_area' ) );
 		}
 	}
-
-	class_alias( Redux_Extension_Widget_Areas::class, 'ReduxFramework_extension_widget_areas' );
 }
+
+class_alias( 'Redux_Extension_Widget_Areas', 'ReduxFramework_extension_widget_areas' );

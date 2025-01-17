@@ -32,7 +32,7 @@ if ( ! class_exists( 'Redux_Datetime', false ) ) {
 				'num-of-months' => 1,
 
 				// DO NOT CHANGE THESE!!!!
-				// It will make this file's JavaScript sister
+				// It will make this file's javascript sister
 				// cry like a deflowered virgin on prom night.
 				'timezone-list' => null,
 				'timezone'      => '0',
@@ -144,10 +144,10 @@ if ( ! class_exists( 'Redux_Datetime', false ) ) {
 
 			// Set placeholder based on mode.
 			if ( true === $split ) {
-				$date_placeholder = $this->field['placeholder']['date'] ?? esc_html__( 'Date', 'redux-framework' );
-				$time_placeholder = $this->field['placeholder']['time'] ?? esc_html__( 'Time', 'redux-framework' );
+				$date_placeholder = $this->field['placeholder']['date'] ?? __( 'Date', 'your-domain-here' );
+				$time_placeholder = $this->field['placeholder']['time'] ?? __( 'Time', 'your-domain-here' );
 			} else {
-				$date_placeholder = $this->field['placeholder'] ?? esc_html__( 'Date / Time', 'redux-framework' );
+				$date_placeholder = $this->field['placeholder'] ?? __( 'Date / Time', 'your-domain-here' );
 			}
 
 			// Output defaults to div, so JS can read it.

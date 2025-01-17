@@ -22,14 +22,14 @@ if ( ! class_exists( 'Redux_Extension_Google_Maps' ) ) {
 		 *
 		 * @var string
 		 */
-		public static string $version = '4.4.19';
+		public static $version = '4.4.0';
 
 		/**
 		 * Extension friendly name.
 		 *
 		 * @var string
 		 */
-		public string $extension_name = 'Google Maps';
+		public $extension_name = 'Google Maps';
 
 		/**
 		 * ReduxFramework_extension_google_maps constructor.

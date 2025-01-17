@@ -5,8 +5,6 @@
  * @package     ReduxFramework/Fields
  * @author      Dovy Paukstys & Kevin Provance (kprovance)
  * @version     4.0.0
- *
- * @noinspection PhpIgnoredClassAliasDeclaration
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -44,7 +42,7 @@ if ( ! class_exists( 'Redux_Select', false ) ) {
 		public function render() {
 			$sortable = ( isset( $this->field['sortable'] ) && true === (bool) $this->field['sortable'] ) ? ' select2-sortable' : '';
 
-			if ( ! empty( $sortable ) ) { // Dummy proofing :P.
+			if ( ! empty( $sortable ) ) { // Dummy proofing  :P.
 				$this->field['multi'] = true;
 			}
 
@@ -79,7 +77,7 @@ if ( ! class_exists( 'Redux_Select', false ) ) {
 					}
 				}
 
-				// The First one obtained with AJAX.
+				// First one get with AJAX.
 				$ajax = false;
 				if ( isset( $this->field['ajax'] ) && $this->field['ajax'] ) {
 					$ajax = true;

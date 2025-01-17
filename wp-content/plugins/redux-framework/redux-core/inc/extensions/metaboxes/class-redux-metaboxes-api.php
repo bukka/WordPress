@@ -27,56 +27,56 @@ if ( ! class_exists( 'Redux_Metaboxes' ) ) {
 		 *
 		 * @var array
 		 */
-		public static array $boxes = array();
+		public static $boxes = array();
 
 		/**
 		 * Sections array.
 		 *
 		 * @var array
 		 */
-		public static array $sections = array();
+		public static $sections = array();
 
 		/**
 		 * Fields array.
 		 *
 		 * @var array
 		 */
-		public static array $fields = array();
+		public static $fields = array();
 
 		/**
 		 * Priority array.
 		 *
 		 * @var array
 		 */
-		public static array $priority = array();
+		public static $priority = array();
 
 		/**
 		 * Errors array.
 		 *
 		 * @var array
 		 */
-		public static array $errors = array();
+		public static $errors = array();
 
 		/**
 		 * Init array.
 		 *
 		 * @var array
 		 */
-		public static array $init = array();
+		public static $init = array();
 
 		/**
 		 * Args array.
 		 *
 		 * @var array
 		 */
-		public static array $args = array();
+		public static $args = array();
 
 		/**
 		 * Code has run flag.
 		 *
 		 * @var bool
 		 */
-		public static bool $has_run = false;
+		public static $has_run = false;
 
 		/**
 		 * Class load.

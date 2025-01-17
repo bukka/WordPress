@@ -19,58 +19,58 @@ if ( ! class_exists( 'Redux_Color_Scheme_Functions' ) ) {
 		/**
 		 * ReduxFramework object.
 		 *
-		 * @var null|ReduxFramework
+		 * @var object
 		 */
-		public static ?ReduxFramework $parent;
+		public static $parent;
 
 		/**
 		 * Field ID
 		 *
-		 * @var string|null
+		 * @var string
 		 */
-		public static ?string $field_id;
+		public static $field_id;
 
 		/**
 		 * Field class.
 		 *
-		 * @var string|null
+		 * @var string
 		 */
-		public static ?string $field_class;
+		public static $field_class;
 
 		/**
 		 * Field array.
 		 *
-		 * @var array|null
+		 * @var string
 		 */
-		public static ?array $field;
+		public static $field;
 
 		/**
 		 * WP Upload directory.
 		 *
-		 * @var string|null
+		 * @var string
 		 */
-		public static ?string $upload_dir = '';
+		public static $upload_dir;
 
 		/**
 		 * WP Upload URI
 		 *
-		 * @var string|null
+		 * @var string
 		 */
-		public static ?string $upload_url = '';
+		public static $upload_url;
 
 		/**
 		 * Select fields.
 		 *
-		 * @var array|null
+		 * @var array
 		 */
-		public static ?array $select;
+		public static $select;
 
 		/**
 		 * Class init.
 		 *
-		 * @param ReduxFramework $redux ReduxFramework object.
+		 * @param object $redux ReduxFramework object.
 		 */
-		public static function init( ReduxFramework $redux ) {
+		public static function init( $redux ) {
 			self::$parent = $redux;
 
 			if ( empty( self::$field_id ) ) {
@@ -121,13 +121,13 @@ if ( ! class_exists( 'Redux_Color_Scheme_Functions' ) ) {
 
 			if ( is_dir( $upload_dir ) ) {
 				if ( file_exists( $cur_scheme_file ) ) {
-					$data = Redux_Core::$filesystem->execute( 'get_contents', $cur_scheme_file );
+					$data = self::$parent->filesystem->execute( 'get_contents', $cur_scheme_file );
 					if ( ! empty( $data ) ) {
 						$data = json_decode( $data, true );
 
 						update_option( self::get_scheme_key(), $data );
 
-						Redux_Core::$filesystem->execute( 'delete', $cur_scheme_file );
+						self::$parent->filesystem->execute( 'delete', $cur_scheme_file );
 					}
 				}
 			}
@@ -204,17 +204,17 @@ if ( ! class_exists( 'Redux_Color_Scheme_Functions' ) ) {
 		/**
 		 * Get color scheme field.
 		 *
-		 * @param ReduxFramework|null $redux pointer.
+		 * @param object|array $redux ReduxFramework pointer.
 		 *
 		 * @return mixed
 		 */
-		public static function get_field( ReduxFramework $redux = null ) {
-			if ( ! is_null( $redux ) ) {
+		public static function get_field( $redux = array() ) {
+			if ( ! empty( $redux ) ) {
 				self::$parent = $redux;
 			}
 
-			if ( isset( $redux->field_sections['color_scheme'] ) ) {
-				return reset( $redux->field_sections['color_scheme'] );
+			if ( isset( $parent->field_sections['color_scheme'] ) ) {
+				return reset( $parent->field_sections['color_scheme'] );
 			}
 
 			$arr = self::$parent;
@@ -222,6 +222,7 @@ if ( ! class_exists( 'Redux_Color_Scheme_Functions' ) ) {
 			foreach ( $arr as $part => $bla ) {
 				if ( 'sections' === $part ) {
 					foreach ( $bla as $field ) {
+
 						foreach ( $field as $arg => $val ) {
 							if ( 'fields' === $arg ) {
 								foreach ( $val as $v ) {

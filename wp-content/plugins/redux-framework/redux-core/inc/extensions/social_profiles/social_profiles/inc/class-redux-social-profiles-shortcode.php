@@ -19,16 +19,16 @@ if ( ! class_exists( 'Redux_Social_Profiles_Shortcode' ) ) {
 		/**
 		 * ReduxFramework object pointer.
 		 *
-		 * @var ReduxFramework
+		 * @var null
 		 */
-		private ReduxFramework $parent;
+		private $parent;
 
 		/**
 		 * Field ID.
 		 *
 		 * @var string
 		 */
-		private string $field_id;
+		private $field_id;
 
 		/**
 		 * Redux_Social_Profiles_Shortcode constructor.

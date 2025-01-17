@@ -19,7 +19,7 @@ class Redux_Full_Package implements themecheck {
 	 *
 	 * @var array $error Error storage.
 	 */
-	protected array $error = array();
+	protected $error = array();
 
 	/**
 	 * Check files.

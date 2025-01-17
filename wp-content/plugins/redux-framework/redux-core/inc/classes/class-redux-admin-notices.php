@@ -27,7 +27,7 @@ if ( ! class_exists( 'Redux_Admin_Notices', false ) ) {
 		 * @var array
 		 * @access private
 		 */
-		private static array $notices = array();
+		private static $notices = array();
 
 		/**
 		 * Redux_Admin_Notices constructor.
@@ -142,24 +142,20 @@ if ( ! class_exists( 'Redux_Admin_Notices', false ) ) {
 							}
 							?>
 							<script>
-								document.addEventListener(
-									'DOMContentLoaded',
-									function () {
-										$( document.body ).on(
-											'click', '.redux-notice.is-dismissible .notice-dismiss', function ( e ) {
-												e.preventDefault();
-												let $data = $( this ).parent().find( '.dismiss_data' );
-												$.post(
-													ajaxurl, {
-														action: 'redux_hide_admin_notice',
-														id: $data.attr( 'id' ),
-														nonce: $data.val()
-													}
-												);
-											}
-										);
-									}
-								)
+								jQuery( document ).ready( function( $ ) {
+									$( document.body ).on(
+										'click', '.redux-notice.is-dismissible .notice-dismiss', function( e ) {
+											e.preventDefault();
+											var $data = $( this ).parent().find( '.dismiss_data' );
+											$.post(
+												ajaxurl, {
+													action: 'redux_hide_admin_notice',
+													id: $data.attr( 'id' ),
+													nonce: $data.val()
+												}
+											);
+										} );
+								} );
 							</script>
 							<?php
 

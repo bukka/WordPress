@@ -84,6 +84,7 @@ if ( ! class_exists( 'Redux_Shortcodes' ) ) {
 			}
 		}
 
+
 		/**
 		 * Get shortcode data.
 		 *

@@ -19,191 +19,114 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		/**
 		 * Class instance.
 		 *
-		 * @var null|Redux_Core
+		 * @var object
 		 */
-		public static ?Redux_Core $instance = null;
+		public static $instance;
 
 		/**
 		 * Project version
 		 *
 		 * @var string
 		 */
-		public static string $version;
+		public static $version;
 
 		/**
 		 * Project directory.
 		 *
 		 * @var string.
 		 */
-		public static string $dir;
+		public static $dir;
 
 		/**
 		 * Project URL.
 		 *
 		 * @var string.
 		 */
-		public static string $url;
+		public static $url;
 
 		/**
 		 * Base directory path.
 		 *
 		 * @var string
 		 */
-		public static string $redux_path;
+		public static $redux_path;
 
 		/**
 		 * Absolute direction path to WordPress upload directory.
 		 *
-		 * @var string
+		 * @var null
 		 */
-		public static string $upload_dir = '';
+		public static $upload_dir = null;
 
 		/**
 		 * Full URL to WordPress upload directory.
 		 *
-		 * @var null|string
+		 * @var string
 		 */
-		public static ?string $upload_url = '';
+		public static $upload_url = null;
 
 		/**
 		 * Set when Redux is run as a plugin.
 		 *
 		 * @var bool
 		 */
-		public static bool $is_plugin = true;
+		public static $is_plugin = true;
 
 		/**
 		 * Indicated in_theme or in_plugin.
 		 *
 		 * @var string
 		 */
-		public static string $installed = '';
+		public static $installed = '';
 
 		/**
 		 * Set when Redux is run as a plugin.
 		 *
 		 * @var bool
 		 */
-		public static bool $as_plugin = false;
+		public static $as_plugin = false;
 
 		/**
 		 * Set when Redux is embedded within a theme.
 		 *
 		 * @var bool
 		 */
-		public static bool $in_theme = false;
+		public static $in_theme = false;
 
 		/**
 		 * Pointer to an updated Google fonts array.
 		 *
-		 * @var array|null
+		 * @var array
 		 */
-		public static ?array $updated_google_fonts = array();
+		public static $google_fonts = array();
 
 		/**
 		 * List of files calling Redux.
 		 *
-		 * @var array|null
+		 * @var array
 		 */
-		public static ?array $callers = array();
+		public static $callers = array();
 
 		/**
 		 * Pointer to _SERVER global.
 		 *
-		 * @var array|null
+		 * @var null
 		 */
-		public static ?array $server = array();
-
-		/**
-		 * Field folding information for localization.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $required = array();
-
-		/**
-		 * Field child-folding information for localization.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $required_child = array();
-
-		/**
-		 * Array of fields to be folded.
-		 *
-		 * @var array|null
-		 */
-		public static ?array $folds = array();
-
-		/**
-		 * Array of fields that didn't pass the fold dependency test and are hidden.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $fields_hidden = array();
-
-		/**
-		 * Values to generate google font CSS.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $typography = array();
-
-		/**
-		 * Validation ran flag.
-		 *
-		 * @var bool
-		 */
-		public static bool $validation_ran = false;
-
-		/**
-		 * No output flag.
-		 *
-		 * @var bool
-		 */
-		public static bool $no_output = false;
-
-		/**
-		 * Array of fonts used by the panel for localization.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $fonts = array();
-
-		/**
-		 * Array of Google fonts used by the panel for localization.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $google_array = array();
-
-		/**
-		 * Array of various font groups used within the typography field.
-		 *
-		 * @var null|array
-		 */
-		public static ?array $font_groups = array();
-
-		/**
-		 * File system object used for I/O file operations.  Done the WordPress way.
-		 *
-		 * @var null|object
-		 */
-		public static ?object $filesystem;
+		public static $server = null;
 
 		/**
 		 * Pointer to the third party fixes class.
 		 *
-		 * @var Redux_ThirdParty_Fixes
+		 * @var null
 		 */
-		public static Redux_ThirdParty_Fixes $third_party_fixes;
+		public static $third_party_fixes = null;
 
 		/**
 		 * Redux Welcome screen object.
 		 *
-		 * @var Redux_Welcome
+		 * @var null
 		 */
-		public static Redux_Welcome $welcome;
+		public static $welcome = null;
 
 		/**
 		 * Creates instance of class.
@@ -211,7 +134,7 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		 * @return Redux_Core
 		 * @throws Exception Comment.
 		 */
-		public static function instance(): ?Redux_Core {
+		public static function instance() {
 			if ( ! self::$instance ) {
 				self::$instance = new self();
 
@@ -312,9 +235,9 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		/**
 		 * Code to execute on a framework __construct.
 		 *
-		 * @param ReduxFramework $redux Pointer to ReduxFramework object.
+		 * @param object $redux Pointer to ReduxFramework object.
 		 */
-		public static function core_construct( ReduxFramework $redux ) {
+		public static function core_construct( $redux ) {
 			self::$third_party_fixes = new Redux_ThirdParty_Fixes( $redux );
 
 			Redux_ThemeCheck::get_instance();

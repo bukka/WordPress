@@ -21,24 +21,24 @@ if ( ! class_exists( 'Redux_Social_Profiles' ) ) {
 		/**
 		 * Field ID.
 		 *
-		 * @var null|string
+		 * @var mixed|string
 		 */
-		public ?string $field_id;
+		public $field_id = '';
 
 		/**
 		 * Panel opt_name.
 		 *
-		 * @var null|string
+		 * @var string
 		 */
-		public ?string $opt_name;
+		public $opt_name = '';
 
 		/**
 		 * Defaults array.
 		 *
-		 * @var null|array
+		 * @var array
 		 */
 
-		private ?array $defaults = array();
+		private $defaults = array();
 
 		/**
 		 * Set defaults.

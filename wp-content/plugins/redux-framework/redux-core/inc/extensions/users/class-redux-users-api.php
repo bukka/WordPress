@@ -26,49 +26,49 @@ if ( ! class_exists( 'Redux_Users' ) ) {
 		 *
 		 * @var array
 		 */
-		public static array $profiles = array();
+		public static $profiles = array();
 
 		/**
 		 * Sections array.
 		 *
 		 * @var array
 		 */
-		public static array $sections = array();
+		public static $sections = array();
 
 		/**
 		 * Fields array.
 		 *
 		 * @var array
 		 */
-		public static array $fields = array();
+		public static $fields = array();
 
 		/**
 		 * Priority array.
 		 *
 		 * @var array
 		 */
-		public static array $priority = array();
+		public static $priority = array();
 
 		/**
 		 * Errors array.
 		 *
 		 * @var array
 		 */
-		public static array $errors = array();
+		public static $errors = array();
 
 		/**
 		 * Init array.
 		 *
 		 * @var array
 		 */
-		public static array $init = array();
+		public static $init = array();
 
 		/**
 		 * Args array.
 		 *
 		 * @var array
 		 */
-		public static array $args = array();
+		public static $args = array();
 
 		/**
 		 * Load.
@@ -89,12 +89,11 @@ if ( ! class_exists( 'Redux_Users' ) ) {
 			$pagenows = array( 'user-new.php', 'profile.php', 'user-edit.php' );
 
 			if ( ! empty( self::$sections ) && in_array( $pagenow, $pagenows, true ) ) {
-				$instances = Redux::all_instances();
+				$instances = ReduxFrameworkInstances::get_all_instances();
 
 				foreach ( self::$fields as $opt_name => $fields ) {
 					if ( ! isset( $instances[ $opt_name ] ) ) {
 						Redux::set_args( $opt_name, array( 'menu_type' => 'hidden' ) );
-
 						Redux::set_sections(
 							$opt_name,
 							array(

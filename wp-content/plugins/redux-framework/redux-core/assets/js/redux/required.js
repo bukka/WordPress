@@ -1,5 +1,4 @@
 /* global redux */
-// noinspection JSUnresolvedReference
 
 ( function ( $ ) {
 	'use strict';
@@ -17,7 +16,7 @@
 	};
 
 	$.redux.checkRequired = function ( el ) {
-		let body;
+		var body;
 
 		$.redux.required();
 
@@ -57,10 +56,10 @@
 				$.each(
 					window['redux_' + redux.opt_names[x].replace( /\-/g, '_' )].folds,
 					function ( i, v ) {
-						let div;
-						let rawTable;
-						let inTabbed   = false;
-						const fieldset = $( '#' + redux.opt_names[x] + '-' + i );
+						var div;
+						var rawTable;
+						var inTabbed = false;
+						var fieldset = $( '#' + redux.opt_names[x] + '-' + i );
 
 						if ( fieldset.find( '*' ).hasClass( 'in-tabbed' ) ) {
 							inTabbed = true;
@@ -117,8 +116,8 @@
 	};
 
 	$.redux.getContainerValue = function ( id ) {
-		let theId;
-		let value;
+		var theId;
+		var value;
 
 		theId = $( '#' + redux.optName.args.opt_name + '-' + id );
 		value = theId.serializeForm();
@@ -135,11 +134,11 @@
 	};
 
 	$.redux.check_dependencies = function ( variable ) {
-		let current;
-		let id;
-		let container;
-		let isHidden;
-		let inTabbed = false;
+		var current;
+		var id;
+		var container;
+		var isHidden;
+		var inTabbed = false;
 
 		if ( null === redux.optName.required ) {
 			return;
@@ -171,14 +170,14 @@
 		$.each(
 			redux.optName.required[id],
 			function ( child ) {
-				let div;
-				let rawTable;
-				let tr;
-				let tabbed = false;
+				var div;
+				var rawTable;
+				var tr;
+				var tabbed = false;
 
-				const current       = $( this );
-				let show            = false;
-				const childFieldset = $( '#' + redux.optName.args.opt_name + '-' + child );
+				var current       = $( this );
+				var show          = false;
+				var childFieldset = $( '#' + redux.optName.args.opt_name + '-' + child );
 
 				if ( childFieldset.find( '*' ).hasClass( 'in-tabbed' ) ) {
 					tabbed = true;
@@ -211,10 +210,10 @@
 					}
 
 					if ( childFieldset.hasClass( 'redux-container-content' ) ) {
-						$( '#heading-' + child ).hide().removeClass( 'hide' ).css( 'display', '' );
-						$( '#subheading-' + child ).hide().removeClass( 'hide' ).css( 'display', '' );
-						$( '#content-' + child ).hide().removeClass( 'hide' ).css( 'display', '' );
-						$( '#submessage-' + child ).hide().removeClass( 'hide' ).css( 'display', '' );
+						$( '#heading-' + child ).hide().removeClass( 'hide' ).css( 'display', '');
+						$( '#subheading-' + child ).hide().removeClass( 'hide' ).css( 'display', '');
+						$( '#content-' + child ).hide().removeClass( 'hide' ).css( 'display', '');
+						$( '#submessage-' + child ).hide().removeClass( 'hide' ).css( 'display', '');
 					}
 
 					if ( childFieldset.hasClass( 'redux-container-info' ) ) {
@@ -273,11 +272,11 @@
 	};
 
 	$.redux.required_recursive_hide = function ( id ) {
-		let div;
-		let rawTable;
-		let toFade;
-		let theId;
-		let inTabbed = false;
+		var div;
+		var rawTable;
+		var toFade;
+		var theId;
+		var inTabbed = false;
 
 		theId = $( '#' + redux.optName.args.opt_name + '-' + id );
 
@@ -341,14 +340,14 @@
 	};
 
 	$.redux.check_parents_dependencies = function ( id ) {
-		let show = '';
+		var show = '';
 
 		if ( redux.optName.required_child.hasOwnProperty( id ) ) {
 			$.each(
 				redux.optName.required_child[id],
 				function ( i, parentData ) {
-					let parentValue;
-					let parent;
+					var parentValue;
+					var parent;
 
 					parent = $( '#' + redux.optName.args.opt_name + '-' + parentData.parent );
 
@@ -375,10 +374,10 @@
 	};
 
 	$.redux.check_dependencies_visibility = function ( parentValue, data ) {
-		let show        = false;
-		let checkValue  = data.checkValue;
-		const operation = data.operation;
-		let arr;
+		var show       = false;
+		var checkValue = data.checkValue;
+		var operation  = data.operation;
+		var arr;
 
 		if ( $.isPlainObject( parentValue ) ) {
 			parentValue = Object.keys( parentValue ).map(
@@ -534,16 +533,16 @@
 				if ( Array.isArray( checkValue ) ) {
 					$( checkValue ).each(
 						function ( idx, val ) {
-							let breakMe   = false;
-							const toFind  = val[0];
-							const findVal = val[1];
+							var breakMe = false;
+							var toFind  = val[0];
+							var findVal = val[1];
 
 							idx = null;
 
 							$( parentValue ).each(
 								function ( i, v ) {
-									const toMatch  = v[0];
-									const matchVal = v[1];
+									var toMatch  = v[0];
+									var matchVal = v[1];
 
 									i = null;
 

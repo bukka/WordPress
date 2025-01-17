@@ -18,21 +18,21 @@ class Redux_Autoloader {
 	 *
 	 * @var string
 	 */
-	protected string $prefix;
+	protected $prefix;
 
 	/**
 	 * String length of the prefix.
 	 *
 	 * @var int
 	 */
-	protected int $prefix_length;
+	protected $prefix_length;
 
 	/**
 	 * Path to validate.
 	 *
 	 * @var string
 	 */
-	protected string $path;
+	protected $path;
 
 	/**
 	 * Autoloader constructor.

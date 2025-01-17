@@ -3,9 +3,9 @@
 (function ( $ ) {
 	'use strict';
 
-	let l10n;
-	let reduxObject;
-	let ajaxDone = false;
+	var l10n;
+	var reduxObject;
+	var ajaxDone = false;
 
 	redux.field_objects              = redux.field_objects || {};
 	redux.field_objects.custom_fonts = redux.field_objects.custom_fonts || {};
@@ -20,8 +20,8 @@
 		// Enum instances of our object.
 		$( selector ).each(
 			function () {
-				const el   = $( this );
-				let parent = el;
+				var el     = $( this );
+				var parent = el;
 
 				if ( ! el.hasClass( 'redux-field-container' ) ) {
 					parent = el.parents( '.redux-field-container:first' );
@@ -44,7 +44,7 @@
 	};
 
 	redux.field_objects.custom_fonts.modInit = function ( el ) {
-		const optName = $( '.redux-ajax-security' ).data( 'opt-name' );
+		var optName = $( '.redux-ajax-security' ).data( 'opt-name' );
 
 		l10n = redux_custom_fonts_l10;
 
@@ -57,10 +57,10 @@
 		el.find( '.checkbox' ).on(
 			'click',
 			function () {
-				let val = 0;
-				let checkName;
-				let checkVal;
-				let opVal;
+				var val = 0;
+				var checkName;
+				var checkVal;
+				var opVal;
 
 				checkName = $( this ).attr( 'id' );
 
@@ -110,9 +110,9 @@
 		el.find( '.fontDelete' ).on(
 			'click',
 			function ( e ) {
-				let data;
+				var data;
 
-				const parent = $( this ).parents( 'td:first' );
+				var parent = $( this ).parents( 'td:first' );
 
 				e.preventDefault();
 
@@ -126,7 +126,7 @@
 					ajaxurl,
 					data,
 					function ( response ) {
-						let rowCount;
+						var rowCount;
 
 						response = JSON.parse( response );
 
@@ -152,7 +152,7 @@
 	};
 
 	redux.field_objects.custom_fonts.startTimer = function ( el, status ) {
-		let cur_data;
+		var cur_data;
 
 		$.ajax(
 			{
@@ -165,7 +165,7 @@
 
 				},
 				success: function ( data ) {
-					let msg;
+					var msg;
 
 					if ( false === ajaxDone ) {
 						setTimeout( redux.field_objects.custom_fonts.startTimer( el, status ), 500 );
@@ -189,7 +189,7 @@
 	};
 
 	redux.field_objects.custom_fonts.add_font = function ( el, event, selector ) {
-		let frame;
+		var frame;
 
 		event.preventDefault();
 
@@ -222,14 +222,14 @@
 		frame.on(
 			'select',
 			function () {
-				let nonce;
-				let data;
-				let status;
-				let conversion;
+				var nonce;
+				var data;
+				var status;
+				var conversion;
 
 				// Grab the selected attachment.
-				const attachment = frame.state().get( 'selection' ).first();
-				const error      = selector.find( '.font-error' );
+				var attachment = frame.state().get( 'selection' ).first();
+				var error      = selector.find( '.font-error' );
 
 				error.slideUp();
 				error.find( 'span' ).text( '' );
@@ -311,14 +311,14 @@
 
 		// This shouldn't have been run...
 		if ( ! selector.find( '.remove-image' ).addClass( 'hide' ) ) {
-			return null;
+			return;
 		}
 	};
 
 	redux.field_objects.custom_fonts.sleep = function ( milliseconds ) {
-		const start = new Date().getTime();
+		var start = new Date().getTime();
 
-		let i;
+		var i;
 
 		for ( i = 0; i < 1e7; i += 1 ) {
 			if ( ( new Date().getTime() - start ) > milliseconds ) {

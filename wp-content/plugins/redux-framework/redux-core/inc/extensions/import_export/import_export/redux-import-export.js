@@ -1,5 +1,4 @@
 /* global jQuery, document, redux, ajaxurl, ImportExport */
-// noinspection JSUnresolvedReference
 
 (function ( $ ) {
 	'use strict';
@@ -8,8 +7,7 @@
 	redux.field_objects.import_export = redux.field_objects.import_export || {};
 
 	redux.field_objects.import_export.copy_text = function ( $text ) {
-		const copyFrom = document.createElement( 'textarea' );
-
+		var copyFrom = document.createElement( 'textarea' );
 		document.body.appendChild( copyFrom );
 		copyFrom.textContent = $text;
 		copyFrom.select();
@@ -18,8 +16,8 @@
 	};
 
 	redux.field_objects.import_export.get_options = function ( $secret ) {
-		const $el = $( '#redux-export-code-copy' );
-		const url = ajaxurl + '?download=0&action=redux_download_options-' + redux.optName.args.opt_name + '&secret=' + $secret;
+		var $el = $( '#redux-export-code-copy' );
+		var url = ajaxurl + '?download=0&action=redux_download_options-' + redux.optName.args.opt_name + '&secret=' + $secret;
 
 		$el.addClass( 'disabled' ).attr( 'disabled', 'disabled' );
 		$el.text( $el.data( 'copy' ) );
@@ -45,11 +43,11 @@
 
 		$( selector ).each(
 			function () {
-				let textBox1;
-				let textBox2;
+				var textBox1;
+				var textBox2;
 
-				const el   = $( this );
-				let parent = el;
+				var el     = $( this );
+				var parent = el;
 
 				if ( ! el.hasClass( 'redux-field-container' ) ) {
 					parent = el.parents( '.redux-field-container:first' );
@@ -80,8 +78,7 @@
 						$( this ).find( '#redux-import-code-button' ).on(
 							'click',
 							function () {
-								const $el = $( '#redux-import-code-wrapper' );
-
+								var $el = $( '#redux-import-code-wrapper' );
 								if ( $el.is( ':visible' ) ) {
 									$( '#import-link-value' ).val( '' );
 									$( '#redux-import-link-wrapper' ).fadeOut(
@@ -141,14 +138,13 @@
 						document.getElementById( 'redux-import-upload-file' ).addEventListener(
 							'change',
 							function () {
-								const file_to_read = document.getElementById( 'redux-import-upload-file' ).files[0];
-								const fileread     = new FileReader();
+								var file_to_read = document.getElementById( 'redux-import-upload-file' ).files[0];
+								var fileread     = new FileReader();
 
 								$( '#redux-import-upload span' ).text( ': ' + file_to_read.name );
 
 								fileread.onload = function () {
-									const content = fileread.result;
-
+									var content = fileread.result;
 									$( '#import-code-value' ).val( content );
 								};
 
@@ -159,8 +155,8 @@
 						$( this ).find( '#redux-export-code-copy' ).on(
 							'click',
 							function ( e ) {
-								const $el     = $( '#redux-export-code' );
-								const $secret = $( this ).data( 'secret' );
+								var $el     = $( '#redux-export-code' );
+								var $secret = $( this ).data( 'secret' );
 
 								e.preventDefault();
 								if ( ! ! window.onbeforeunload ) {
@@ -182,9 +178,9 @@
 						$( this ).find( 'textarea' ).on(
 							'focusout',
 							function () {
-								const $id      = $( this ).attr( 'id' );
-								const $el      = $( this );
-								let $container = $el;
+								var $id        = $( this ).attr( 'id' );
+								var $el        = $( this );
+								var $container = $el;
 
 								if ( 'import-link-value' === $id || 'import-code-value' === $id ) {
 									$container = $( this ).parent();

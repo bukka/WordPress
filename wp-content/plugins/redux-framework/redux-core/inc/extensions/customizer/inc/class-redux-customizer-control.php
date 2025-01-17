@@ -20,7 +20,7 @@ if ( ! class_exists( 'Redux_Customizer_Control', false ) ) {
 		 *
 		 * @var string
 		 */
-		public string $redux_id = '';
+		public $redux_id = '';
 
 		/**
 		 * Field render.

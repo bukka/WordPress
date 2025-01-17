@@ -1,14 +1,13 @@
 /* jshint unused:false */
 /* global redux */
-// noinspection JSUnresolvedReference
 
-const confirmOnPageExit = function ( e ) {
+var confirmOnPageExit = function( e ) {
 
 	// Return; // ONLY FOR DEBUGGING.
 	// If we haven't been passed the event get the window.event.
 	'use strict';
 
-	let message;
+	var message;
 
 	e = e || window.event;
 
@@ -28,17 +27,17 @@ const confirmOnPageExit = function ( e ) {
 function redux_change( variable ) {
 	'use strict';
 
-	(function ( $ ) {
-		let rContainer;
-		let parentID;
-		let id;
-		let th;
-		let li;
-		let subParent;
-		let errorCount;
-		let errorsLeft;
-		let warningCount;
-		let warningsLeft;
+	(function( $ ) {
+		var rContainer;
+		var parentID;
+		var id;
+		var th;
+		var li;
+		var subParent;
+		var errorCount;
+		var errorsLeft;
+		var warningCount;
+		var warningsLeft;
 
 		variable = $( variable );
 

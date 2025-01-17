@@ -1,17 +1,16 @@
-/* global redux_change, redux, tinymce, quicktags, QTags, reduxRepeaterAccordionActivate, reduxRepeaterAccordionBeforeActivate */
-// noinspection JSUnresolvedReference
+/* global redux_change, redux, reduxRepeaterAccordionActivate, reduxRepeaterAccordionBeforeActivate */
 
 ( function ( $ ) {
 	'use strict';
 
-	let reduxObject;
-	let panelsClosed;
+	var reduxObject;
+	var panelsClosed;
 
 	redux.field_objects          = redux.field_objects || {};
 	redux.field_objects.repeater = redux.field_objects.repeater || {};
 
 	redux.field_objects.repeater.getOptName = function ( el ) {
-		let optName;
+		var optName;
 
 		optName = el.parents().find( '.redux-ajax-security' ).data( 'opt-name' );
 
@@ -33,11 +32,11 @@
 
 		$( selector ).each(
 			function () {
-				let gid;
-				let blank;
+				var gid;
+				var blank;
 
-				const el   = $( this );
-				let parent = el;
+				var el     = $( this );
+				var parent = el;
 
 				if ( ! el.hasClass( 'redux-field-container' ) ) {
 					parent = el.parents( '.redux-field-container:first' );
@@ -92,15 +91,12 @@
 		el.find( '.redux-repeaters-add' ).on(
 			'click',
 			function () {
-				let parent;
-				let count;
-				let gid;
-				let id;
-				let newSlide;
-				let html;
-				let editorSettings;
-
-				const items = [];
+				var parent;
+				var count;
+				var gid;
+				var id;
+				var newSlide;
+				var html;
 
 				redux_change( $( this ) );
 
@@ -142,43 +138,8 @@
 
 				newSlide.find( '.ui-accordion-content' ).html( html );
 
-				if ( newSlide.find( '.redux-container-editor' ) ) {
-					const firstEditorId = $( '.redux-repeater-accordion-repeater' ).find( '.redux-container-editor:first' ).attr( 'data-id' );
-
-					if ( window.tinyMCEPreInit && window.tinyMCEPreInit.mceInit && window.tinyMCEPreInit.mceInit[firstEditorId] ) {
-						editorSettings = window.tinyMCEPreInit.mceInit[firstEditorId];
-					}
-
-					$.each(
-						newSlide.find( '.redux-container-editor' ),
-						function () {
-							// Grab an editor id.
-							let quicktagsSetting;
-
-							items.push( $( this ).attr( 'data-id' ) );
-
-							// Grab an editor settings from wp_editor
-							// Grab a quicktags settings.
-							quicktagsSetting    = QTags.getInstance( firstEditorId ).settings;
-							quicktagsSetting.id = items[items.length - 1];
-						}
-					);
-				}
-
 				// Append to the accordion.
 				$( parent ).append( newSlide );
-
-				// Render tinymce !
-				if ( newSlide.find( '.redux-container-editor' ) ) {
-					$.each(
-						items,
-						function ( i, new_editor_id ) {
-							tinymce.createEditor( new_editor_id, editorSettings ).render();
-							quicktags( new_editor_id );
-							QTags._buttonsInit();
-						}
-					);
-				}
 
 				// Reorder.
 				redux.field_objects.repeater.sort_repeaters( newSlide );
@@ -190,7 +151,7 @@
 				newSlide.find( '.redux-repeater-accordion-repeater:last .bind_title' ).on(
 					'change keyup',
 					function ( event ) {
-						let value;
+						var value;
 
 						if ( $( event.target ).find( ':selected' ).text().length > 0 ) {
 							value = $( event.target ).find( ':selected' ).text();
@@ -222,15 +183,15 @@
 	};
 
 	redux.field_objects.repeater.remove = function ( el ) {
-		let x;
+		var x;
 
 		// Handler to remove the given repeater.
 		el.find( '.redux-repeaters-remove' ).on(
 			'click',
 			function () {
-				let parent;
-				let gid;
-				let count;
+				var parent;
+				var gid;
+				var count;
 
 				redux_change( $( this ) );
 
@@ -271,7 +232,7 @@
 		el.find( '.redux-repeater-accordion-repeater .bind_title' ).on(
 			'change keyup',
 			function ( event ) {
-				let value;
+				var value;
 
 				if ( $( event.target ).find( ':selected' ).text().length > 0 ) {
 					value = $( event.target ).find( ':selected' ).text();
@@ -285,10 +246,10 @@
 	};
 
 	redux.field_objects.repeater.setAccordion = function ( el, gid ) {
-		let active;
-		let accordion;
+		var active;
+		var accordion;
 
-		const base = el.find( '.redux-repeater-accordion' );
+		var base = el.find( '.redux-repeater-accordion' );
 
 		panelsClosed = Boolean( base.data( 'panels-closed' ) );
 
@@ -305,10 +266,10 @@
 				active: active,
 
 				beforeActivate: function ( event ) {
-					let a;
-					let relName;
-					let optName;
-					let bracket;
+					var a;
+					var relName;
+					var optName;
+					var bracket;
 
 					a       = $( this ).next( '.redux-repeaters-add' );
 					relName = a.attr( 'data-name' );
@@ -322,10 +283,10 @@
 					}
 				},
 				activate: function ( event, ui ) {
-					let a;
-					let relName;
-					let optName;
-					let bracket;
+					var a;
+					var relName;
+					var optName;
+					var bracket;
 
 					$.redux.initFields();
 
@@ -381,12 +342,12 @@
 
 		selector.find( '.redux-repeater-accordion-repeater' ).each(
 			function ( idx ) {
-				let header;
-				let split;
-				let content;
+				var header;
+				var split;
+				var content;
 
-				const id  = $( this ).attr( 'data-sortid' );
-				let input = $( this ).find( '.redux-field .repeater[name*=\'[' + id + ']\']' );
+				var id    = $( this ).attr( 'data-sortid' );
+				var input = $( this ).find( '.redux-field .repeater[name*=\'[' + id + ']\']' );
 
 				input.each(
 					function () {
@@ -424,20 +385,20 @@
 	};
 
 	redux.field_objects.repeater.check_parents_dependencies = function ( id ) {
-		let show      = '';
-		const current = id;
-		const dash    = current.lastIndexOf( '-' );
-		const index   = current.substring( dash + 1 );
-		const fixedId = current.replace( index, '99999' );
+		var show    = '';
+		var current = id;
+		var dash    = current.lastIndexOf( '-' );
+		var index   = current.substring( dash + 1 );
+		var fixedId = current.replace( index, '99999' );
 
 		if ( reduxObject.required_child.hasOwnProperty( fixedId ) ) {
 			$.each(
 				reduxObject.required_child[fixedId],
 				function ( i, parentData ) {
-					let parentValue;
-					let value;
-					let idx;
-					let x;
+					var parentValue;
+					var value;
+					var idx;
+					var x;
 
 					i   = null;
 					idx = $( '#' + reduxObject.args.opt_name + '-' + parentData.parent + '-' + index );
@@ -484,17 +445,18 @@
 	redux_hook(
 		$.redux,
 		'required',
-		function () {
-			let reduxObj;
+		function ( returnValue, originalFunction ) {
+			var reduxObj;
 
 			reduxObj = redux.field_objects.repeater.getOptName( $( '.redux-container-repeater' ) );
 
 			$.each(
 				reduxObj.folds,
 				function ( i, v ) {
-					let fieldset;
-					let div;
-					let rawTable;
+
+					var fieldset;
+					var div;
+					var rawTable;
 
 					if ( i.indexOf( '-99999' ) !== - 1 ) {
 						i = i.replace( '-99999', '' );
@@ -541,13 +503,13 @@
 		$.redux,
 		'check_dependencies',
 		function ( returnValue, originalFunction, variable ) {
-			let current;
-			let id;
-			let container;
-			let is_hidden;
-			let dash;
-			let idNoIndex;
-			let index;
+			var current;
+			var id;
+			var container;
+			var is_hidden;
+			var dash;
+			var idNoIndex;
+			var index;
 
 			if ( $( variable ).hasClass( 'in-repeater' ) ) {
 				current   = $( variable );
@@ -560,10 +522,10 @@
 
 				$.each(
 					reduxObject.required[idNoIndex],
-					function ( child ) {
-						let current;
-						let show;
-						let childFieldset;
+					function ( child, dependents ) {
+						var current;
+						var show;
+						var childFieldset;
 
 						if ( child.indexOf( '99999' ) !== - 1 ) {
 							child = child.replace( '99999', index );
