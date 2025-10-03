@@ -774,7 +774,9 @@ add_filter( 'pll_translation_url', 'ethnologist_translation_url', 10, 2 );
  */
 function ethnologist_url( $url ) {
 
-	return str_replace( parse_url( $url, PHP_URL_HOST ), $_SERVER['SERVER_NAME'], $url );
+	$host = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+
+	return str_replace( parse_url( $url, PHP_URL_HOST ), $host, $url );
 }
 add_filter( 'pll_redirect_home', 'ethnologist_url', 10, 1 );
 add_filter( 'pll_translation_url', 'ethnologist_url', 10, 1 );
